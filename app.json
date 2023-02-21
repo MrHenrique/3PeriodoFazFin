@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "FazFinDB",
+    "slug": "FazFinDB",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "android": {
+      "package": "com.gustavosros4.FazFinDB"
+    }
+  }
+}
