@@ -1,13 +1,26 @@
 {
   "expo": {
-    "name": "FazFinDB",
+    "name": "FazFin",
     "slug": "FazFinDB",
-    "version": "1.0.0",
+    "version": "1.2.0",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain"
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
     "android": {
       "package": "com.gustavosros4.FazFinDB"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4546f443-e252-4015-ac51-5f61f0f2047d"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.gustavosros4.FazFinDB"
     }
   }
 }

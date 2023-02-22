@@ -1,13 +1,17 @@
 import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
+import { useContext } from "react";
 const screenWidth = Dimensions.get("window").width;
+import { AuthContext } from "../../../contexts/auth";
 function BezierChartDespesas() {
+  const { precoCF } = useContext(AuthContext);
+  const despesas = Number(precoCF);
   const data = {
-    labels: ["Julho", "Agosto", "Setembro", "Outubro"],
+    labels: ["Agosto", "Setembro", "Outubro", "Novembro"],
     datasets: [
       {
-        data: [3500, 3450, 3200, 2500],
+        data: [0, 0, 0, despesas],
         strokeWidth: 2,
         color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
       },

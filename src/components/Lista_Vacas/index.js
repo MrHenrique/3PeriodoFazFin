@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import {
   View,
   TextInput,
@@ -6,40 +6,119 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
+  Alert,
 } from "react-native";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
-import { dataVacas } from "./vacas";
-import Graficodetalhesvacas from "../Graficos/Graficodetalhesvacas"
+import getRebVacas from "../../Realm/getRebVacas";
+import Graficodetalhesvacas from "../Graficos/Graficodetalhesvacas";
 import Modal from "react-native-modal";
 import { scale, verticalScale } from "react-native-size-matters";
-import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Feather } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
+import writeUpdVaca from "../../Realm/writeUpdVaca";
+import { AuthContext } from "../../contexts/auth";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 const ScreenWidth = Dimensions.get("screen").width;
 const ScreenHeight = Dimensions.get("screen").height;
 
-function Lista_vacas({ textobarrapesquisa }) {
-  const [List, setList] = useState(dataVacas);
-  const [Searchtext, setSearchtext] = useState('');
+function Lista_vacas({ textobarrapesquisa, idrebanho }) {
+  const { precoCFReb, GrafVaca } = useContext(AuthContext);
+  async function fetchVaca() {
+    try {
+      const datavacas = await getRebVacas(idrebanho);
+      //console.log(datavacas, "DATVASs")
+      setList(datavacas);
+      setdata(datavacas);
+      setisInfoeditable(false);
+      var gasto = precoCFReb / datavacas.length;
+      setGastoReb(gasto);
+    } catch (e) {}
+  }
 
+  useFocusEffect(
+    useCallback(() => {
+      fetchVaca();
+    }, [])
+  );
+  const [gastoReb, setGastoReb] = useState(0);
+  const [List, setList] = useState();
+  const [data, setdata] = useState();
+  const [Searchtext, setSearchtext] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
   const [isInfoeditable, setisInfoeditable] = useState(false);
   const [Details, setDetails] = useState([]);
+  const [macho, setmacho] = useState("");
+  const [femea, setfemea] = useState("");
 
-  {/*Verifica a barra de pesquisa e salva na state*/ }
+  const [nomeVaca, setnomeVaca] = useState("");
+  const [genero, setgenero] = useState();
+  const [nascimentoVaca, setnascimentoVaca] = useState("");
+  const [brincoVaca, setbrincoVaca] = useState("");
+  const [IdVaca, setIdVaca] = useState("");
+  const [descVaca, setdescVaca] = useState("");
+  const [resultL, setResultL] = useState(0);
+  var infoedited = false;
+  function getResultL(item) {
+    var resultLeite = 0;
+    for (var i in item.receitas) {
+      resultLeite += item.receitas[i].prodL * item.receitas[i].precoL;
+    }
+    return resultLeite;
+  }
+
+  function setInputs(item) {
+    verificagenero();
+    setnomeVaca(item.nomeVaca);
+    setgenero(item.genero);
+    setnascimentoVaca(item.nascimentoVaca);
+    setbrincoVaca(item.brincoVaca);
+    setdescVaca(item.descVaca);
+    var idvaca = item._id;
+    setIdVaca(idvaca);
+    const resultLeite = getResultL(item);
+    setResultL(resultLeite);
+    GrafVaca(resultLeite - gastoReb);
+    console.log(IdVaca, "IDVACA");
+    console.log(item._id, "IDVACA");
+    //console.log(genero, "Initialized info 2")
+  }
+  function UpdateinfoVaca() {
+    const data2mod = {
+      _id: IdVaca,
+      nomeVaca: nomeVaca,
+      nascimentoVaca: nascimentoVaca,
+      brincoVaca: brincoVaca,
+      descVaca: descVaca,
+      genero: genero,
+    };
+    writeUpdVaca(data2mod);
+    fetchVaca();
+    toggleModal();
+    console.log(genero, "Update info");
+  }
+
+  //console.log(List);
+  {
+    /*Verifica a barra de pesquisa e salva na state*/
+  }
   useEffect(() => {
-    setSearchtext(textobarrapesquisa)
+    setSearchtext(textobarrapesquisa);
   }, [textobarrapesquisa]);
-  {/*Verifica o state da barra de pesquisa, se ouver mudanca atualiza a lista*/ }
+  {
+    /*Verifica o state da barra de pesquisa, se ouver mudanca atualiza a lista*/
+  }
   useEffect(() => {
-    setSearchtext(textobarrapesquisa)
-    if (Searchtext === '') {
-      setList(dataVacas);
+    setSearchtext(textobarrapesquisa);
+    if (Searchtext === "") {
+      setList(data);
     } else {
       setList(
-        dataVacas.filter(item => {
-          if (item.name.toLowerCase().indexOf(Searchtext.toLowerCase()) > -1 || item.etiqueta.toLowerCase().indexOf(Searchtext.toLowerCase()) > -1) {
+        data.filter((item) => {
+          if (
+            item.nomeVaca.toLowerCase().indexOf(Searchtext.toLowerCase()) > -1
+          ) {
             return true;
           } else {
             return false;
@@ -49,24 +128,48 @@ function Lista_vacas({ textobarrapesquisa }) {
     }
   }, [Searchtext]);
 
-
   function toggleModal() {
+    if (isModalVisible === false) {
+      setisInfoeditable(false);
+    }
     setModalVisible(!isModalVisible);
+  }
+  function CanContinue() {
+    if (isInfoeditable === true) {
+      return true;
+    } else {
+      return false;
+    }
   }
   function editarinfos() {
     setisInfoeditable(!isInfoeditable);
+    Alert.alert(
+      "Editar Informações da Vaca",
+      "logo apos confirme no botao confirmar alterações"
+    );
   }
-  function verificagenero(a) {
-    if (Details.genero === a) { return "check-square" }
-    return "square"
+
+  function verificagenero() {
+    if (Details.genero === 1) {
+      setgenero(1);
+      setmacho("check-square");
+      setfemea("square");
+    } else {
+      () => setgenero(0);
+      setmacho("square");
+      setfemea("check-square");
+    }
   }
+
   function Contasvaca(a) {
     if (a == 1) return Details.lucro;
     else if (a == 2) return Details.gasto;
     else if (a == 3) return Details.media;
   }
-
-
+  function getResultNumber(item) {
+    const result = (getResultL(item) - gastoReb).toFixed(2);
+    return result;
+  }
   return (
     <View style={styles.Tudocont}>
       <View>
@@ -79,60 +182,105 @@ function Lista_vacas({ textobarrapesquisa }) {
           onBackButtonPress={() => {
             toggleModal();
           }}
-          onBackdropPress={() => {
-            toggleModal();
-          }}
           Style={{ margin: 0 }}
           statusBarTranslucent
-        ><ScrollView>
-            <View style={{ paddingBottom: verticalScale(70), }}>
+        >
+          <ScrollView>
+            <View style={{ paddingBottom: verticalScale(70) }}>
               <View style={styles.containermodal}>
                 {/*NOME DA VACA E IMAGEM*/}
                 <View style={styles.Vacaavatar}>
                   <TextInput
                     style={styles.textavatar}
-                    value={Details.name}
-                    editable={isInfoeditable} />
-                  <MaterialCommunityIcons name="cow" size={verticalScale(60)} color="white" />
+                    value={nomeVaca}
+                    editable={isInfoeditable}
+                    onChangeText={setnomeVaca}
+                  />
+                  <MaterialCommunityIcons
+                    name="cow"
+                    size={verticalScale(60)}
+                    color="white"
+                  />
                 </View>
                 {/*Sexo*/}
-                <View style={[styles.containerinfos, { flexDirection: "row", justifyContent: "space-around" }]}>
+                <View
+                  style={[
+                    styles.containerinfos,
+                    { flexDirection: "row", justifyContent: "space-around" },
+                  ]}
+                >
                   <View>
-                    <Text style={styles.tituloinfo} >Macho</Text>
-                    <Feather name={verificagenero(1)} size={scale(25)} color="white" />
+                    <TouchableOpacity
+                      onPress={() => {
+                        setgenero(1),
+                          setmacho("check-square"),
+                          setfemea("square");
+                      }}
+                      disabled={!isInfoeditable}
+                    >
+                      <Text style={styles.tituloinfo}>Macho</Text>
+                      <Feather name={macho} size={scale(25)} color="white" />
+                    </TouchableOpacity>
                   </View>
-                  <View>
-                    <Text style={styles.tituloinfo} >Fêmea</Text>
-                    <Feather name={verificagenero(0)} size={scale(25)} color="white" />
-                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setgenero(0),
+                        setfemea("check-square"),
+                        setmacho("square");
+                    }}
+                    disabled={!isInfoeditable}
+                  >
+                    <View>
+                      <Text style={styles.tituloinfo}>Fêmea</Text>
+                      <Feather name={femea} size={scale(25)} color="white" />
+                    </View>
+                  </TouchableOpacity>
                 </View>
                 {/*Data de Nascimento*/}
                 <View style={styles.containerinfos}>
                   <Text style={styles.tituloinfo}>Data de Nascimento:</Text>
                   <TextInput
                     style={styles.detalhe}
-                    value={Details.anonasc}
-                    editable={isInfoeditable} />
+                    value={nascimentoVaca}
+                    editable={isInfoeditable}
+                    onChangeText={setnascimentoVaca}
+                    keyboardType="number-pad"
+                  />
                 </View>
                 {/*Indentificação*/}
                 <View style={styles.containerinfos}>
                   <Text style={styles.tituloinfo}>Indentificação(brinco):</Text>
                   <TextInput
                     style={styles.detalhe}
-                    value={Details.etiqueta}
-                    editable={isInfoeditable} />
+                    value={brincoVaca}
+                    editable={isInfoeditable}
+                    onChangeText={setbrincoVaca}
+                    keyboardType="number-pad"
+                  />
                 </View>
                 {/*Descrição*/}
                 <View style={styles.containerinfos}>
                   <Text style={styles.tituloinfo}>Descrição:</Text>
                   <TextInput
                     style={styles.detalhe}
-                    value={Details.descricao}
+                    value={descVaca}
                     editable={isInfoeditable}
-                    multiline={true} />
+                    onChangeText={setdescVaca}
+                    multiline={true}
+                  />
                 </View>
-
-                <View style={{ backgroundColor: "rgba(15, 109, 0, 0.7)", marginTop: verticalScale(10), }}>
+                <View style={styles.containerinfos}>
+                  <Text style={styles.tituloinfo}>Resultado:</Text>
+                  <Text style={styles.detalhe}>
+                    R${(resultL - gastoReb).toFixed(2)}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    backgroundColor: "rgba(15, 109, 0, 0.7)",
+                    marginTop: verticalScale(10),
+                  }}
+                >
                   <Graficodetalhesvacas />
                 </View>
 
@@ -143,6 +291,21 @@ function Lista_vacas({ textobarrapesquisa }) {
                   }}
                 >
                   <Text style={styles.texteditar}>Editar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.botaoeditar,
+                    {
+                      backgroundColor:
+                        CanContinue() === true ? "#004513" : "#0f6d00b3",
+                    },
+                  ]}
+                  onPress={() => {
+                    UpdateinfoVaca();
+                  }}
+                  disabled={!CanContinue()}
+                >
+                  <Text style={styles.texteditar}>Confirmar modificações</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -159,18 +322,36 @@ function Lista_vacas({ textobarrapesquisa }) {
       </View>
       <FlatList
         data={List}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         renderItem={({ item, index }) => (
           <View style={styles.containerVacas}>
             <TouchableOpacity
               activeOpacity={0.5}
-              style={[styles.cardVacas, { backgroundColor: index % 2 === 0 ? "#0F6D00" : "#004513" }]}
+              style={[
+                styles.cardVacas,
+                { backgroundColor: index % 2 === 0 ? "#0F6D00" : "#004513" },
+              ]}
               onPress={() => {
-                toggleModal();
                 setDetails(item);
+                setInputs(item);
+                toggleModal();
               }}
             >
-              <Text style={styles.textVacas}>{item.name}</Text>
+              <Text style={styles.textVacas}>{item.nomeVaca}</Text>
+              <View style={styles.containerRendimento}>
+                <Text style={{ color: "#fff", fontSize: scale(14) }}>
+                  Rendimento:
+                </Text>
+                <Text
+                  style={{
+                    color: getResultNumber(item) >= 0 ? "#0FFF50" : "#FF3131",
+                    fontWeight: "bold",
+                    fontSize: scale(15),
+                  }}
+                >
+                  R${getResultNumber(item)}
+                </Text>
+              </View>
             </TouchableOpacity>
           </View>
         )}
@@ -181,6 +362,7 @@ function Lista_vacas({ textobarrapesquisa }) {
 
 const styles = StyleSheet.create({
   containerVacas: {
+    flex: 1,
     margin: 5,
     alignItems: "center",
   },
@@ -200,7 +382,8 @@ const styles = StyleSheet.create({
     paddingTop: "5%",
     paddingBottom: "1%",
     width: windowWidth,
-    paddingBottom: verticalScale(80),
+    paddingBottom:
+      ScreenHeight >= 800 ? verticalScale(135) : verticalScale(110),
   },
   containermodal: {
     backgroundColor: "#005f1d",
@@ -237,11 +420,13 @@ const styles = StyleSheet.create({
   },
 
   botaovoltar: {
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
+    backgroundColor: "#00641c",
     width: scale(300),
     height: verticalScale(40),
     alignItems: "center",
     justifyContent: "center",
+    borderColor: "#111",
+    borderWidth: scale(2),
     borderRadius: 18,
     position: "absolute",
     top: ScreenHeight >= 800 ? verticalScale(633) : verticalScale(605),
@@ -263,25 +448,30 @@ const styles = StyleSheet.create({
   },
   texteditar: {
     fontSize: verticalScale(16),
-    color: 'white',
+    color: "white",
   },
   contasvaca: {
     width: "100%",
-    padding: 10,
+    padding: verticalScale(10),
   },
   text: {
-    fontSize: 18,
+    fontSize: verticalScale(18),
     textAlign: "center",
     backgroundColor: "#f2f2f2",
   },
   rendimento: {
-    fontSize: 25,
+    fontSize: verticalScale(25),
     textAlign: "center",
   },
   rendimentototal: {
-    fontSize: 25,
+    fontSize: verticalScale(25),
     textAlign: "center",
     color: "#080",
+  },
+  containerRendimento: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "80%",
   },
 });
 

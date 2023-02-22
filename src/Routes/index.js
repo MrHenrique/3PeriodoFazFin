@@ -5,7 +5,9 @@ import {
   Ionicons,
   MaterialCommunityIcons,
   MaterialIcons,
-  Entypo,Fontisto
+  Entypo,
+  Fontisto,
+  AntDesign,
 } from "@expo/vector-icons";
 import CadastroFaz from "../pages/CadastroFaz";
 import StackRoutes from "../Routes/stackRoutes";
@@ -17,9 +19,8 @@ import Manejo from "../pages/Manejo";
 import Leite from "../pages/Leite";
 import GeralReb from "../pages/GeralReb";
 import FinanceiroFaz from "../pages/FinanceiroFaz";
-import Alimentacao from "../pages/Alimentacao";
-import Cadastrolista from '../pages/Cadastro-listas';
-import Hometeste from '../pages/Hometeste';
+import CadastroVaca from "../pages/CadastroVaca";
+import FinanceiroReb from "../pages/FinanceiroReb";
 const Drawer = createDrawerNavigator();
 function Routes() {
   return (
@@ -57,8 +58,8 @@ function Routes() {
         options={{
           title: "Cadastro de fazendas",
           drawerIcon: ({ focused, size, color }) => (
-            <Entypo
-              name={focused ? "address" : "address"}
+            <Ionicons
+              name={focused ? "ios-trail-sign" : "ios-trail-sign-outline"}
               size={size}
               color={color}
             />
@@ -124,6 +125,20 @@ function Routes() {
         }}
       />
       <Drawer.Screen
+        name="FinanceiroReb"
+        component={FinanceiroReb}
+        options={{
+          title: "Financeiro Rebanho",
+          drawerIcon: ({ focused, size, color }) => (
+            <AntDesign
+              name={focused ? "linechart" : "linechart"}
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
         name="Vacas"
         component={PageListavacas}
         options={{
@@ -180,50 +195,6 @@ function Routes() {
           ),
         }}
       />
-      <Drawer.Screen
-        name="Alimentacao"
-        component={Alimentacao}
-        options={{
-          title: "Alimentacao",
-          drawerIcon: ({ focused, size, color }) => (
-            <Entypo
-              name={focused ? "address" : "address"}
-              size={size}
-              color={color}
-            />
-          ),
-        }}
-      />
-       <Drawer.Screen
-        name="Hometeste"
-        component={Hometeste}
-        initialParams={{'idfaz':''}}
-        options={{
-          title: "Hometeste",
-          drawerIcon: ({ focused, size, color }) => (
-            <Entypo
-              name={focused ? "address" : "address"}
-              size={size}
-              color={color}
-            />
-          ),
-        }}
-      />
-       <Drawer.Screen
-        name="Cadastrolista"
-        component={Cadastrolista}
-        initialParams={{'idfaz':''}}
-        options={{
-          title: "Cadastrolista",
-          drawerIcon: ({ focused, size, color }) => (
-            <Entypo
-              name={focused ? "address" : "address"}
-              size={size}
-              color={color}
-            />
-          ),
-        }}
-      />  
     </Drawer.Navigator>
   );
 }

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -8,17 +8,37 @@ import {
   ImageBackground,
   SafeAreaView,
   ScrollView,
+  FlatList,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import BezierChartFaturamento from "../../../components/Graficos/BezierChartFaturamento";
 import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
+import { AuthContext } from "../../../contexts/auth";
 function Faturamento() {
+  const { precoCF, listaAli, listaLeite, precoLeite } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
   function toggleModal() {
     setModalVisible(!isModalVisible);
   }
   const imgbg1 = "../../../../assets/bg2.jpg";
+  const renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity style={styles.listaDet}>
+        <Text style={styles.tituloBotao}>
+          {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+  function getReceitas() {
+    if (typeof precoLeite !== "undefined") {
+      return Number(precoLeite);
+    } else {
+      return 0;
+    }
+  }
+  const receitas = getReceitas();
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -32,13 +52,13 @@ function Faturamento() {
             toggleModal();
           }}
         >
-          <Text style={styles.texto}>Total de Faturamento:</Text>
-          <Text style={styles.textoValorPos}>R$ 5000,00</Text>
+          <Text style={styles.texto}>Total de receitas:</Text>
+          <Text style={styles.textoValorPos}>R${receitas.toFixed(2)}</Text>
           <View style={styles.lineStyle} />
+          <Text style={styles.preGraf}>Clique no gráfico para mais detalhes.</Text>
           <View style={styles.containerChart}>
             <BezierChartFaturamento />
           </View>
-
           <Modal
             isVisible={isModalVisible}
             coverScreen={true}
@@ -47,84 +67,13 @@ function Faturamento() {
             animationOut="slideOutDown"
           >
             <View style={styles.modalContainer}>
-              <Text style={styles.tituloModal}>Detalhes de Faturamento:</Text>
-              <ScrollView style={styles.modalScroll}>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 09/10 - R$ 500,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet2}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 19/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 18/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet2}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 17/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 16/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet2}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 15/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 14/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet2}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 13/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 12/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet2}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 11/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 10/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet2}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 09/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 08/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet2}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 07/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 06/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-              </ScrollView>
+              <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
+              <FlatList
+                style={styles.scroll}
+                data={listaLeite}
+                renderItem={renderItem}
+                keyExtractor={(item) => item._id}
+              />
             </View>
             <TouchableOpacity
               style={styles.botaopressM}
@@ -147,6 +96,11 @@ function Faturamento() {
   );
 }
 const styles = StyleSheet.create({
+  preGraf:{
+    color: 'white',
+    alignSelf: 'center',
+
+  },
   modalContainer: {
     backgroundColor: "rgba(234,242,215,1)",
     position: "absolute",
@@ -199,7 +153,7 @@ const styles = StyleSheet.create({
   },
   imgbg: {
     flex: 1,
-    objectFit: "cover",
+    resizeMode: "cover",
     padding: verticalScale(10),
   },
   textoValorNeg: {
@@ -228,7 +182,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
-    top: verticalScale(603),
+    top: verticalScale(583),
     position: "absolute",
   },
   listaDet: {
@@ -250,6 +204,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     marginVertical: verticalScale(5),
+  },
+  scroll: {
+    height: verticalScale(525),
   },
 });
 export default Faturamento;
