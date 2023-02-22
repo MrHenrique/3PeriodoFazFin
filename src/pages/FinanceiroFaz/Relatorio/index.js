@@ -1,7 +1,8 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   View,
+  FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -13,11 +14,67 @@ import { useNavigation } from "@react-navigation/native";
 import PieChartFaz from "../../../components/Graficos/PieChart";
 import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
+import { AuthContext } from "../../../contexts/auth";
 function Relatorio() {
+  const precoTotal = precoLeite - precoCF;
+  const { precoCF, listaAli, listaLeite, precoLeite } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
   function toggleModal() {
     setModalVisible(!isModalVisible);
   }
+  const renderItem2 = ({ item }) => {
+    return (
+      <TouchableOpacity style={styles.listaDet}>
+        <Text style={styles.tituloBotao}>
+          {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+  const renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity style={styles.listaDet}>
+        <Text style={styles.tituloBotao}>
+          {item.tipoAlim} - R$
+          {((item.valorAli / item.qtdAli) * item.consumoAli).toFixed(2)}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+  function Color(total) {
+    let color;
+    if (total > 0) {
+      color = styles.textoValorPos;
+      return color;
+    } else {
+      color = styles.textoValorNeg;
+      return color;
+    }
+  }
+  function getDespesas() {
+    if (typeof precoCF !== "undefined") {
+      return Number(precoCF);
+    } else {
+      return 0;
+    }
+  }
+  function getReceitas() {
+    if (typeof precoLeite !== "undefined") {
+      return Number(precoLeite);
+    } else {
+      return 0;
+    }
+  }
+  function getTotal(despesas, receitas) {
+    if (despesas !== "0" || receitas !== "0") {
+      return Number(receitas - despesas);
+    } else {
+      return 0;
+    }
+  }
+  const total = getTotal(getDespesas(), getReceitas());
+  const despesas = getDespesas();
+  const receitas = getReceitas();
   const imgbg1 = "../../../../assets/bg5.jpg";
   const navigation = useNavigation();
   return (
@@ -32,15 +89,18 @@ function Relatorio() {
             toggleModal();
           }}
         >
-          <Text style={styles.texto}>Total de Faturamento:</Text>
-          <Text style={styles.textoValorPos}>R$ 5000,00</Text>
+          <Text style={styles.texto}>Total de receitas:</Text>
+          <Text style={styles.textoValorPos}>R$ {receitas.toFixed(2)}</Text>
           <View style={styles.lineStyle} />
           <Text style={styles.texto}>Total de despesas:</Text>
-          <Text style={styles.textoValorNeg}>R$ 2500,00</Text>
+          <Text style={styles.textoValorNeg}>R${despesas.toFixed(2)}</Text>
           <View style={styles.lineStyle} />
           <Text style={styles.texto}>Balanço final:</Text>
-          <Text style={styles.textoValorPos}>R$ 2500,00</Text>
+          <Text style={Color()}>R${total.toFixed(2)}</Text>
           <View style={styles.lineStyle} />
+          <Text style={styles.preGraf}>
+            Clique no gráfico para mais detalhes.
+          </Text>
           <View style={styles.containerChart}>
             <PieChartFaz />
           </View>
@@ -53,112 +113,20 @@ function Relatorio() {
             animationOut="slideOutDown"
           >
             <View style={styles.modalContainer}>
-              <Text style={styles.tituloModal}>Detalhes de Faturamento:</Text>
-              <ScrollView style={styles.modalScroll}>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 09/10 - R$ 500,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet2}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 19/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 18/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet2}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 17/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 16/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet2}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 15/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 14/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet2}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 13/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 12/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet2}>
-                  <Text style={styles.tituloBotao}>
-                    {"Produção Leite 165l 11/10 - R$ 555,00"}
-                  </Text>
-                </TouchableOpacity>
-              </ScrollView>
-              <Text style={styles.tituloModal}>Detalhes de Despesas:</Text>
-              <ScrollView style={styles.modalScroll}>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Ração Vialac 10 kg 19/10 - R$ 25,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet2}>
-                  <Text style={styles.tituloBotao}>
-                    {"Ração Vialac 10 kg 18/10 - R$ 25,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Visita Veterinário 18/10 - R$ 2306,90"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet2}>
-                  <Text style={styles.tituloBotao}>
-                    {"Ração Vialac 10 kg 17/10 - R$ 25,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Ração Vialac 10 kg 16/10 - R$ 25,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet2}>
-                  <Text style={styles.tituloBotao}>
-                    {"Prata Aerocid 16/10 - R$ 22,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Ração Vialac 10 kg 15/10 - R$ 25,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet2}>
-                  <Text style={styles.tituloBotao}>
-                    {"Ração Vialac 10 kg 14/10 - R$ 25,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet}>
-                  <Text style={styles.tituloBotao}>
-                    {"Ração Vialac 10 kg 13/10 - R$ 25,00"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.listaDet2}>
-                  <Text style={styles.tituloBotao}>
-                    {"Ciprolac Anti Mastite 13/10 - R$ 21,10"}
-                  </Text>
-                </TouchableOpacity>
-              </ScrollView>
+              <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
+              <FlatList
+                style={styles.scroll}
+                data={listaLeite}
+                renderItem={renderItem2}
+                keyExtractor={(item) => item._id}
+              />
+              <Text style={styles.tituloModal}>Detalhes de despesas:</Text>
+              <FlatList
+                style={styles.scroll}
+                data={listaAli}
+                renderItem={renderItem}
+                keyExtractor={(item) => item._id}
+              />
             </View>
             <TouchableOpacity
               style={styles.botaopressM}
@@ -181,6 +149,10 @@ function Relatorio() {
   );
 }
 const styles = StyleSheet.create({
+  preGraf: {
+    color: "white",
+    alignSelf: "center",
+  },
   modalContainer: {
     backgroundColor: "rgba(234,242,215,1)",
     position: "absolute",
@@ -199,7 +171,7 @@ const styles = StyleSheet.create({
   },
   containerChart: {
     position: "absolute",
-    top: verticalScale(250),
+    top: verticalScale(280),
   },
   botaopress: {
     borderRadius: 20,
@@ -233,7 +205,7 @@ const styles = StyleSheet.create({
   },
   imgbg: {
     flex: 1,
-    objectFit: "cover",
+    resizeMode: "cover",
     padding: verticalScale(10),
   },
   textoValorNeg: {
@@ -262,7 +234,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
-    top: verticalScale(603),
+    top: verticalScale(583),
     position: "absolute",
   },
   listaDet: {
@@ -284,6 +256,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     marginVertical: verticalScale(5),
+  },
+  scroll: {
+    height: verticalScale(245),
   },
 });
 export default Relatorio;

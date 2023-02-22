@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Header from "../../components/Header";
+import { AuthContext } from "../../contexts/auth";
 import {
   Text,
   SafeAreaView,
@@ -11,21 +12,51 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
+import uuid from "react-native-uuid";
+import writeReb from "../../Realm/writeReb";
 import { scale, verticalScale } from "react-native-size-matters";
 import { useNavigation } from "@react-navigation/native";
-function CadastroReb() {
-  const CadSucess = () => {
-    Alert.alert("Cadastro com sucesso!");
-  };
-  const [nomereb, setNomereb] = useState("");
-  const [QtdAni, setQtdAni] = useState("");
-  function cadReb() {
-    const data = {
-      nomereb,
-      QtdAni,
-    };
-    console.log(data);
+
+function CadastroReb({}) {
+  const [nomeReb, setNomeReb] = useState("");
+  const [QtdAni, setQtdAni] = useState(0);
+  const { fazID } = useContext(AuthContext);
+
+  //Escrever no Banco
+
+  function genVacas() {
+    const proximasvacas = [];
+    for (let i = 0; i <= QtdAni; i++) {
+      if (QtdAni == i) {
+      } else {
+        proximasvacas.push({
+          _id: uuid.v4(),
+          nomeVaca: "vaca" + i,
+          nascimentoVaca: "2022",
+          brincoVaca: " 00 " + i,
+          genero: 1,
+          receitas: [],
+          descVaca: "Descricao vazia",
+          createdAt: new Date(),
+        });
+      }
+    }
+    return proximasvacas;
   }
+
+  async function handleAddReb() {
+    await writeReb(
+      {
+        _id: uuid.v4(),
+        nomeReb,
+        createdAt: new Date(),
+        vacas: genVacas(QtdAni),
+      },
+      fazID
+    );
+    navigation.navigate("GeralFaz");
+  }
+
   const navigation = useNavigation();
   const imgbg1 = "../../../assets/bg6.jpg";
   return (
@@ -35,28 +66,33 @@ function CadastroReb() {
         source={require(imgbg1)}
         imageStyle={{ opacity: 0.6 }}
       >
-        <Header title={"Cadastro Rebanho"} />
         <Image
           style={styles.logo}
           source={require("../../../assets/FazFin.png")}
         />
         <View style={styles.viewtext}>
-          <Text style={styles.texto}>Nome do Rebanho</Text>
+          <Text style={styles.texto}>Nome do rebanho:</Text>
           <TextInput
             style={styles.campoTexto}
-            onChangeText={setNomereb}
-            value={nomereb}
-            placeholder="Ex: Vaca solteira"
+            onChangeText={setNomeReb}
+            value={nomeReb}
+            placeholder="Ex: Vacas solteiras"
           ></TextInput>
-          <Text style={styles.texto}>Quantidade de animais</Text>
+          <Text style={styles.texto}>Quantidade de animais:</Text>
           <TextInput
             style={styles.campoTexto}
             onChangeText={setQtdAni}
             value={QtdAni}
+            keyboardType="number-pad"
             placeholder="Quantos animais no rebanho?"
           ></TextInput>
         </View>
-        <TouchableOpacity style={styles.botaopress} onPress={CadSucess}>
+        <TouchableOpacity
+          style={styles.botaopress}
+          onPress={() => {
+            handleAddReb();
+          }}
+        >
           <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -76,7 +112,7 @@ const styles = StyleSheet.create({
   },
   imgbg: {
     flex: 1,
-    objectFit: "cover",
+    resizeMode: "cover",
     width: "100%",
   },
   logo: {

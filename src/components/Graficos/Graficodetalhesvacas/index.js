@@ -1,15 +1,19 @@
 import { LineChart } from "react-native-chart-kit";
 import { scale, verticalScale } from "react-native-size-matters";
+import { AuthContext } from "../../../contexts/auth";
+import { useContext } from "react";
 function Graficodetalhesvacas() {
+  const { grafVaca } = useContext(AuthContext);
+  const resultado = Number(grafVaca);
   const data = {
-    labels: ["	Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez", ],
+    labels: ["Ago", "Set", "Out", "Nov"],
     datasets: [
       {
-        data: [1000, 1200, 400, 6000, 3500, 7000, 6200, 1400, 8000, 500, 2990, 5000],
-        strokeWidth: 2.6
-      }
+        data: [0, 0, 0, resultado],
+        strokeWidth: 3,
+      },
     ],
-    legend: ["LUCRO DO ANIMAL"] 
+    legend: ["LUCRO DO ANIMAL"],
   };
   const chartConfig = {
     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -17,7 +21,6 @@ function Graficodetalhesvacas() {
     backgroundGradientFromOpacity: 0,
     backgroundGradientTo: "#08130d00",
     backgroundGradientToOpacity: 0,
-
   };
   return (
     <LineChart
@@ -26,6 +29,7 @@ function Graficodetalhesvacas() {
       height={verticalScale(300)}
       chartConfig={chartConfig}
       verticalLabelRotation={-90}
+      xLabelsOffset={verticalScale(7)}
       bezier
     />
   );

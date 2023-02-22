@@ -11,8 +11,9 @@ import PagelancaContas from "../pages/PagelancaContas";
 import PageListavacas from "../pages/PageListavacas";
 import FinanceiroFaz from "../pages/FinanceiroFaz";
 import Alimentacao from "../pages/Alimentacao";
-import Cadastrolista from '../pages/Cadastro-listas';
-import Hometeste from '../pages/Hometeste';
+import CadastroVaca from "../pages/CadastroVaca";
+import FinanceiroReb from "../pages/FinanceiroReb";
+
 const Stack = createNativeStackNavigator();
 function StackRoutes() {
   return (
@@ -81,6 +82,14 @@ function StackRoutes() {
         }}
       />
       <Stack.Screen
+        name="CadastroVaca"
+        component={CadastroVaca}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
         name="FinanceiroFaz"
         component={FinanceiroFaz}
         options={{
@@ -96,14 +105,11 @@ function StackRoutes() {
         }}
       />
       <Stack.Screen
-        name="HomeScreen"
-        component={Hometeste}
-        initialParams={{ idfaz: "" }}
-      />
-      <Stack.Screen
-        name="Cadastro"
-        component={Cadastrolista}
-        initialParams={{ idfaz: "" }}
+        name="FinanceiroReb"
+        component={FinanceiroReb}
+        options={{
+          headerShown: false,
+        }}
       />
     </Stack.Navigator>
   );

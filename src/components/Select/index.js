@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   TouchableOpacity,
   Text,
@@ -11,8 +11,7 @@ import {
 import { scale, verticalScale } from "react-native-size-matters";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
-
-const { height, width } = Dimensions.get("window");
+import { AuthContext } from "../../contexts/auth";
 const Touchable = (
   text = "Selecione sua fazenda",
   onPress,
@@ -25,7 +24,11 @@ const Touchable = (
         <Text style={styles.touchableText}>
           {selected === null ? text : selected?.[objValue]}
         </Text>
-        <MaterialCommunityIcons name="chevron-right" color="white" size={verticalScale(30)} />
+        <MaterialCommunityIcons
+          name="chevron-right"
+          color="white"
+          size={verticalScale(30)}
+        />
       </TouchableOpacity>
     );
   };
@@ -57,7 +60,11 @@ const Option = (item, value, selected, objKey, onPress) => {
           {item?.[value]}
         </Text>
         {selected?.[objKey] === item?.[objKey] ? (
-          <MaterialCommunityIcons name="check" size={verticalScale(30)} color="white" />
+          <MaterialCommunityIcons
+            name="check"
+            size={verticalScale(30)}
+            color="white"
+          />
         ) : null}
       </TouchableOpacity>
     );
@@ -71,8 +78,8 @@ const Select = ({
   touchableText = "Select",
   title = "",
   data = [],
-  objKey = "id",
-  objValue = "name",
+  objKey = "",
+  objValue = "",
 }) => {
   const [visible, setVisible] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -95,15 +102,22 @@ const Select = ({
   function toggleSelect(item) {
     if (item?.[objKey] === selected?.[objKey]) {
       setSelected(null);
+      var Rebid = "";
+      RebanhoID(Rebid);
     } else {
       setSelected(item);
       setVisible(false);
+      if (typeof item._id !== "undefined") {
+        var Rebid = item._id;
+        RebanhoID(Rebid);
+      }
     }
   }
+  const { RebanhoID } = useContext(AuthContext);
   return (
     <>
       <TouchableComponent />
-      <Modal visible={visible} animationType="fade" >
+      <Modal visible={visible} animationType="fade">
         <SafeAreaView style={{ flex: 1 }}>
           <View style={styles.header}>
             <View style={styles.titleContainer}>

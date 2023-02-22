@@ -99,13 +99,13 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   Texto: {
-    fontSize: scale(35),
+    fontSize: scale(30),
     fontWeight: "bold",
     color: "#fff",
   },
   imagem: {
-    width: scale(40),
-    height: scale(40),
+    width: scale(30),
+    height: scale(30),
   },
   voltar: {
     borderRadius: 20,
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   imgbg: {
     flex: 1,
-    objectFit: "cover",
+    resizeMode: "cover",
     width: "100%",
   },
 

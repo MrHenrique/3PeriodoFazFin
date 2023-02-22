@@ -22,14 +22,17 @@ export const rebanhos = [
   {
     name: "Vacas Solteiras",
     code: "1",
+    _id: "teste"
   },
   {
     name: "Bezerros",
     code: "2",
+    _id: "teste"
   },
   {
     name: "Vacas Paridas",
     code: "3",
+    _id: "teste"
   },
 ];
 export const racao = [

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {verticalScale,scale} from "react-native-size-matters";
+import { verticalScale, scale } from "react-native-size-matters";
 import {
   Text,
   SafeAreaView,
@@ -12,21 +12,23 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import uuid from "react-native-uuid";
+import writeFarm from "../../Realm/writeFarm";
 function CadastroFaz() {
   const [nomefaz, setNomefaz] = useState("");
   const [proprietario, setProprietario] = useState("");
   const [tipoprod, setTipoprod] = useState("");
-  function cadFaz() {
-    const data = {
+  //Escrever no Banco
+  async function handleAddFarm() {
+    await writeFarm({
+      _id: uuid.v4(),
       nomefaz,
       proprietario,
       tipoprod,
-    };
-    console.log(data);
+      createdAt: new Date(),
+    });
+    navigation.navigate("Home")
   }
-  const CadSucess = () => {
-    Alert.alert("Cadastro com sucesso!");
-  };
   const navigation = useNavigation();
   const imgbg1 = "../../../assets/backgroundCad.jpg";
   return (
@@ -60,10 +62,10 @@ function CadastroFaz() {
             style={styles.campoTexto}
             onChangeText={setTipoprod}
             value={tipoprod}
-            placeholder="Ex: Pecuaria Leiteira"
+            placeholder="Ex: Pecuária Leiteira"
           ></TextInput>
         </View>
-        <TouchableOpacity style={styles.botaopress} onPress={CadSucess}>
+        <TouchableOpacity style={styles.botaopress} onPress={handleAddFarm}>
           <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -83,7 +85,7 @@ const styles = StyleSheet.create({
   },
   imgbg: {
     flex: 1,
-    objectFit: "cover",
+    resizeMode: "cover",
     width: "100%",
   },
   logo: {
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
     height: verticalScale(90),
     width: verticalScale(90),
     position: "absolute",
-    top: verticalScale(75),
+    top: verticalScale(30),
     alignSelf: "center",
   },
   texto: {
@@ -104,7 +106,7 @@ const styles = StyleSheet.create({
   viewtext: {
     alignSelf: "center",
     position: "absolute",
-    top: verticalScale(225),
+    top: verticalScale(150),
   },
   campoTexto: {
     backgroundColor: "#ffffff",
