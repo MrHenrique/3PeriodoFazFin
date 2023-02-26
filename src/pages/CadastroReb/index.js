@@ -71,7 +71,7 @@ function CadastroReb({}) {
           source={require("../../../assets/FazFin.png")}
         />
         <View style={styles.viewtext}>
-          <Text style={styles.texto}>Nome do rebanho:</Text>
+          <Text style={styles.texto}>Nome do rebanho:asdsad</Text>
           <TextInput
             style={styles.campoTexto}
             onChangeText={setNomeReb}
