@@ -10,7 +10,11 @@ import {
   Alert,
   FlatList,
   List,
+  Button,
+  Platform,
+  StatusBar,
 } from "react-native";
+import DateTimePicker from '@react-native-community/datetimepicker';
 import uuid from "react-native-uuid";
 import Header from "../../components/Header";
 import writeLeite from "../../Realm/writeLeite";
@@ -62,7 +66,7 @@ function Leite({ navigation }) {
         precoL,
         prodL,
         description,
-        createdAt: new Date(),
+        createdAt: new Date(date),
       },
       vacaID
     );
@@ -88,6 +92,35 @@ function Leite({ navigation }) {
   const [listaVaca, setListaVaca] = useState([]);
   const [lista, setLista] = useState(listaVaca);
   const [searchText, setSearchText] = useState("");
+
+  // Códido para pegar a data ....
+
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+  const [text, setText] = useState("Teste");
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'IOS');
+    setDate(currentDate);
+
+    let tempDate = new Date(currentDate);
+    let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
+    let fTime = 'Hours: ' + tempDate.getHours() + ' | Minutes: ' + tempDate.getMinutes();
+    setText(fDate + '\n' + fTime)
+
+    console.log(fDate + ' (' + fTime + ')')
+  }
+
+  const showMode = ( currentMode ) => {
+    setShow(true);
+    setMode(currentMode);
+  }
+
+  //Fim do código da data .....
+
+
   //-----------------------------
   function CanContinue(vacaID) {
     if (typeof vacaID == "undefined" || vacaID == "") {
@@ -141,6 +174,30 @@ function Leite({ navigation }) {
             placeholder="Exemplo: Leite 22/11 Vaca Araçá"
           />
         </View>
+
+        {/*Data*/}
+        <View style={styles.containerinfos}>
+          <Text style={styles.tituloinfo}>{ text }</Text>
+          <View style={styles.containerinfos}>
+            <Button title="DatePicker" onPress={() => showMode('date')}/>
+          </View>
+          <View style={styles.containerinfos}>
+            <Button title="TimePicker" onPress={() => showMode('time')}/>
+          </View>
+
+          { show && ( 
+            <DateTimePicker 
+            testID = "dateTimePicker"
+            value = {date}
+            mode = {mode}
+            is24Hour = {true}
+            display="default"
+            onChange={onChange}
+          />)}
+
+          <StatusBar style = "auto" />
+        </View>
+
         {/*Preco do leite*/}
         <View style={styles.containerinfos}>
           <Text style={styles.tituloinfo}>Preço atual do leite(R$):</Text>
@@ -447,6 +504,9 @@ const styles = StyleSheet.create({
     top: verticalScale(575),
     position: "absolute",
   },
+  dateComponente: {
+    width: 350
+  }
 });
 
 export default Leite;
