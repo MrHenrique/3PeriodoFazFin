@@ -8,6 +8,57 @@ export const Fazenda = {
     tipoprod: "string",
     createdAt: "date",
     rebanhos: "RebanhoSchema[]",
+    estoque: "EstoqueSchema[]",
+  },
+};
+export const EstoqueSchema = {
+  name: "EstoqueSchema",
+  primaryKey: "_id",
+  properties: {
+    _id: "string",
+    entradaEstoque: "EstoqueEntrada[]",
+    atualEstoque: "AtualEstoque[]",
+    assignee: {
+      type: "linkingObjects",
+      objectType: "Farm",
+      property: "estoque",
+    },
+  },
+};
+export const EstoqueEntrada = {
+  name: "EstoqueEntrada",
+  primaryKey: "_id",
+  properties: {
+    _id: "string",
+    nomeProd: "string",
+    createdAt: "date",
+    valorCompra: "float",
+    volumeProd: "float",
+    pesoProd: "float",
+    obserProd: "string",
+    assignee: {
+      type: "linkingObjects",
+      objectType: "EstoqueSchema",
+      property: "entradaEstoque",
+    },
+  },
+};
+export const AtualEstoque = {
+  name: "AtualEstoque",
+  primaryKey: "_id",
+  properties: {
+    _id: "string",
+    nomeProd: "string",
+    createdAt: "date",
+    valorCompra: "float",
+    volumeProd: "float",
+    pesoProd: "float",
+    obserProd: "string",
+    assignee: {
+      type: "linkingObjects",
+      objectType: "EstoqueSchema",
+      property: "atualEstoque",
+    },
   },
 };
 export const RebanhoSchema = {
@@ -19,10 +70,29 @@ export const RebanhoSchema = {
     createdAt: "date",
     vacas: "VacasSchema[]",
     gastos: "GastosSchema[]",
+    estoqueConsumo: "EstoqueConsumoSchema[]",
     assignee: {
       type: "linkingObjects",
       objectType: "Farm",
       property: "rebanhos",
+    },
+  },
+};
+export const EstoqueConsumoSchema = {
+  name: "EstoqueConsumoSchema",
+  primaryKey: "_id",
+  properties: {
+    _id: "string",
+    nomeProd: "string",
+    createdAt: "date",
+    valorCompra: "float",
+    volumeProd: "float",
+    pesoProd: "float",
+    obserProd: "string",
+    assignee: {
+      type: "linkingObjects",
+      objectType: "RebanhoSchema",
+      property: "estoqueConsumo",
     },
   },
 };

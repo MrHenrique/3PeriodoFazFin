@@ -13,11 +13,18 @@ import FinanceiroFaz from "../pages/FinanceiroFaz";
 import Alimentacao from "../pages/Alimentacao";
 import CadastroVaca from "../pages/CadastroVaca";
 import FinanceiroReb from "../pages/FinanceiroReb";
-
+import TesteEstoque from "../pages/TesteEstoque/TesteEstoque";
 const Stack = createNativeStackNavigator();
 function StackRoutes() {
   return (
     <Stack.Navigator>
+      <Stack.Screen
+        name="TesteEstoque"
+        component={TesteEstoque}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="Home"
         component={Home}

@@ -21,6 +21,7 @@ import GeralReb from "../pages/GeralReb";
 import FinanceiroFaz from "../pages/FinanceiroFaz";
 import CadastroVaca from "../pages/CadastroVaca";
 import FinanceiroReb from "../pages/FinanceiroReb";
+import TesteEstoque from "../pages/TesteEstoque/TesteEstoque";
 const Drawer = createDrawerNavigator();
 function Routes() {
   return (
@@ -186,6 +187,20 @@ function Routes() {
         component={Manejo}
         options={{
           title: "Manejo",
+          drawerIcon: ({ focused, size, color }) => (
+            <Fontisto
+              name={focused ? "injection-syringe" : "injection-syringe"}
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="TesteEstoque"
+        component={TesteEstoque}
+        options={{
+          title: "TesteEstoque",
           drawerIcon: ({ focused, size, color }) => (
             <Fontisto
               name={focused ? "injection-syringe" : "injection-syringe"}
