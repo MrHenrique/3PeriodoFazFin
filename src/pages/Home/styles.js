@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   },
   botaopress: {
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.btngreen,
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
@@ -40,14 +40,14 @@ const styles = StyleSheet.create({
   },
   botaopress2: {
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.btngreen,
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
     top: verticalScale(300),
   },
   disabledbutton: {
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.btndarkgreen,
     ...Buttons.btnLargeRounded,
     alignItems: "center",
     justifyContent: "center",

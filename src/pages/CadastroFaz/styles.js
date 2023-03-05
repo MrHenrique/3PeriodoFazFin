@@ -37,12 +37,12 @@ const styles = StyleSheet.create({
     },
     botaopress: {
         ...Buttons.btnLargeRounded,
-      backgroundColor: Colors.green,
+      backgroundColor: Colors.btngreen,
       top: verticalScale(175),
     },
     botaopress2: {
         ...Buttons.btnLargeRounded,
-      backgroundColor: Colors.green,
+      backgroundColor: Colors.btngreen,
       top: verticalScale(185),
     },
     tituloBotao: {
