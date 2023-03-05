@@ -10,7 +10,7 @@ async function getAllLeiteReb(rebID) {
         testes.push(data[0].vacas[i].receitas[j]);
       }
     }
-    return testes;
+    return testes.sort((a, b) => a.createdAt - b.createdAt);
   } catch (e) {
     Alert.alert("Error", e.message);
   }

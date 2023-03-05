@@ -26,7 +26,7 @@ function FaturamentoReb() {
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
-          {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
+          {item.createdAt.toString()} - R$ {(item.prodL * item.precoL).toFixed(2)}
         </Text>
       </TouchableOpacity>
     );

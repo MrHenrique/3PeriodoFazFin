@@ -98,7 +98,7 @@ function Leite({ navigation }) {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
-  const [text, setText] = useState("Teste");
+  const [text, setText] = useState(new Date().getDate().toString().padStart(2, '0') + '/' + (new Date().getMonth() + 1).toString().padStart(2, '0') + '/' + new Date().getFullYear().toString().padStart(2, '0'));
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -106,11 +106,10 @@ function Leite({ navigation }) {
     setDate(currentDate);
 
     let tempDate = new Date(currentDate);
-    let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
-    let fTime = 'Hours: ' + tempDate.getHours() + ' | Minutes: ' + tempDate.getMinutes();
-    setText(fDate + '\n' + fTime)
+    let fDate = tempDate.getDate().toString().padStart(2, '0') + '/' + (tempDate.getMonth() + 1).toString().padStart(2, '0') + '/' + tempDate.getFullYear();
+    setText(fDate)
 
-    console.log(fDate + ' (' + fTime + ')')
+    console.log(fDate)
   }
 
   const showMode = ( currentMode ) => {
@@ -163,8 +162,31 @@ function Leite({ navigation }) {
   return (
     <View style={styles.container}>
       <Header />
-      {/*Descrição*/}
       <ScrollView>
+        {/*Data*/}
+        <View style={styles.containerinfos}>
+          <Text style={styles.tituloinfo}>{ text }</Text>
+          <View >
+            <TouchableOpacity 
+              style={{backgroundColor: "blue", borderRadius: 20}}
+              onPress={() => showMode('date')}>
+              <Text style={styles.tituloinfo}>Selecione a data:</Text>
+            </TouchableOpacity>
+          </View>
+
+          { show && ( 
+            <DateTimePicker 
+            testID = "dateTimePicker"
+            value = {date}
+            mode = {mode}
+            display="default"
+            onChange={onChange}
+          />)}
+
+          <StatusBar style = "auto" />
+        </View>
+
+        {/*Descrição*/}
         <View style={styles.containerinfos}>
           <Text style={styles.tituloinfo}>Descrição:</Text>
           <TextInput
@@ -175,28 +197,6 @@ function Leite({ navigation }) {
           />
         </View>
 
-        {/*Data*/}
-        <View style={styles.containerinfos}>
-          <Text style={styles.tituloinfo}>{ text }</Text>
-          <View style={styles.containerinfos}>
-            <Button title="DatePicker" onPress={() => showMode('date')}/>
-          </View>
-          <View style={styles.containerinfos}>
-            <Button title="TimePicker" onPress={() => showMode('time')}/>
-          </View>
-
-          { show && ( 
-            <DateTimePicker 
-            testID = "dateTimePicker"
-            value = {date}
-            mode = {mode}
-            is24Hour = {true}
-            display="default"
-            onChange={onChange}
-          />)}
-
-          <StatusBar style = "auto" />
-        </View>
 
         {/*Preco do leite*/}
         <View style={styles.containerinfos}>
