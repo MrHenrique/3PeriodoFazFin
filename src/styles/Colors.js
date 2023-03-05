@@ -1,5 +1,6 @@
 const Colors = {
     green: "rgba(15, 109, 0, 1)",
+    btngreen: "rgba(15, 109, 0, 0.9)",
     darkgreen: "#004513",
     red: "rgba(255, 0, 0, 1)",
     darkred: "#800000",
@@ -10,7 +11,7 @@ const Colors = {
     white: "rgba(255, 255, 255, 1)",
     darkwhite: "#FFFFFF",
     black: "rgba(0, 0, 0, 1)",
-    Cyan: "#006773",
+    Cyan: "rgba(0,103,115,1)",
 
 }
 export default Colors;

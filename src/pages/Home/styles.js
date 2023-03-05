@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     top: verticalScale(290),
+    
   },
   botaopress2: {
     ...Buttons.btnLargeRounded,
