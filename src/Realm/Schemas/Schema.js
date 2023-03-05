@@ -70,6 +70,7 @@ export const GastosSchema = {
     qtdAli: "float?",
     valorAli: "float?",
     consumoAli: "float?",
+    createdAt: "date",
     assignee: {
       type: "linkingObjects",
       objectType: "RebanhoSchema",
