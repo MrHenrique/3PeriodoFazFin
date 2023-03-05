@@ -4,7 +4,9 @@ import {
   RebanhoSchema,
   VacasSchema,
   GastosSchema,
-  EstoqueSchema,
+  EstoqueEntradaSchema,
+  AtualEstoqueSchema,
+  EstoqueConsumoSchema,
 } from "../../src/Realm/Schemas/Schema";
 import Realm from "realm";
 
@@ -17,8 +19,10 @@ export const getRealm = async () =>
       RebanhoSchema,
       VacasSchema,
       GastosSchema,
-      EstoqueSchema,
+      EstoqueEntradaSchema,
+      AtualEstoqueSchema,
+      EstoqueConsumoSchema,
     ],
-    schemaVersion: 4,
+    schemaVersion: 10,
     deleteRealmIfMigrationNeeded: true,
   });

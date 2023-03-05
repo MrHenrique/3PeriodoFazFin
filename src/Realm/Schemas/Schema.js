@@ -8,55 +8,42 @@ export const Fazenda = {
     tipoprod: "string",
     createdAt: "date",
     rebanhos: "RebanhoSchema[]",
-    estoque: "EstoqueSchema[]",
+    entradaEstoque: "EstoqueEntradaSchema[]",
+    atualEstoque: "AtualEstoqueSchema[]",
   },
 };
-export const EstoqueSchema = {
-  name: "EstoqueSchema",
-  primaryKey: "_id",
-  properties: {
-    _id: "string",
-    entradaEstoque: "EstoqueEntrada[]",
-    atualEstoque: "AtualEstoque[]",
-    assignee: {
-      type: "linkingObjects",
-      objectType: "Farm",
-      property: "estoque",
-    },
-  },
-};
-export const EstoqueEntrada = {
-  name: "EstoqueEntrada",
+export const EstoqueEntradaSchema = {
+  name: "EstoqueEntradaSchema",
   primaryKey: "_id",
   properties: {
     _id: "string",
     nomeProd: "string",
     createdAt: "date",
     valorCompra: "float",
-    volumeProd: "float",
-    pesoProd: "float",
-    obserProd: "string",
+    volumeProd: "float?",
+    pesoProd: "float?",
+    obserProd: "string?",
     assignee: {
       type: "linkingObjects",
-      objectType: "EstoqueSchema",
+      objectType: "Farm",
       property: "entradaEstoque",
     },
   },
 };
-export const AtualEstoque = {
-  name: "AtualEstoque",
+export const AtualEstoqueSchema = {
+  name: "AtualEstoqueSchema",
   primaryKey: "_id",
   properties: {
     _id: "string",
     nomeProd: "string",
     createdAt: "date",
     valorCompra: "float",
-    volumeProd: "float",
-    pesoProd: "float",
-    obserProd: "string",
+    volumeProd: "float?",
+    pesoProd: "float?",
+    obserProd: "string?",
     assignee: {
       type: "linkingObjects",
-      objectType: "EstoqueSchema",
+      objectType: "Farm",
       property: "atualEstoque",
     },
   },
@@ -86,9 +73,9 @@ export const EstoqueConsumoSchema = {
     nomeProd: "string",
     createdAt: "date",
     valorCompra: "float",
-    volumeProd: "float",
-    pesoProd: "float",
-    obserProd: "string",
+    volumeProd: "float?",
+    pesoProd: "float?",
+    obserProd: "string?",
     assignee: {
       type: "linkingObjects",
       objectType: "RebanhoSchema",

@@ -13,14 +13,12 @@ const data = [
   { label: "Farmácia", value: "1" },
   { label: "Alimentos", value: "2" },
 ];
-const tipoProdutos = (value) => {
-  const { TipoProd } = useContext(AuthContext);
-  var tipoProduto = value;
-  TipoProd(tipoProduto);
-};
 const DropdownComponent = () => {
+  const { TipoProd } = useContext(AuthContext);
   const [value, setValue] = useState(1);
   const [isFocus, setIsFocus] = useState(false);
+  var tipoProduto = value;
+  TipoProd(tipoProduto);
   const renderLabel = () => {
     if (value || isFocus) {
       return (
@@ -53,13 +51,10 @@ const DropdownComponent = () => {
           setIsFocus(false);
         }}
       />
-      {tipoProdutos(value)}
     </View>
   );
 };
-
 export default DropdownComponent;
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",

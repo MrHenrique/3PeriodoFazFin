@@ -1,21 +1,73 @@
-import React, { useState, useContext } from "react";
-import { View, StyleSheet, Text, TextInput, FlatList } from "react-native";
+import React, { useState, useContext, useCallback } from "react";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import Header from "../../components/Header";
 import { useNavigation } from "@react-navigation/native";
 import DropdownComponent from "../../components/Dropdown/TipoProd";
-
+import uuid from "react-native-uuid";
 import { AuthContext } from "../../contexts/auth";
-
+import writeEstoqueEntrada from "../../Realm/writeEstoqueEntrada";
+import getAllEstoque from "../../Realm/getAllEstoque";
 function TesteEstoque() {
   const navigation = useNavigation();
   //estados
+  const [listaEstoque, setListaEstoque] = useState([]);
   const [nomeProd, setNomeProd] = useState("");
-  const [valorCompra, setValorCompra] = useState();
-  const [volumeProd, setVolumeProd] = useState();
-  const [pesoProd, setPesoProd] = useState();
+  const [valorCompraI, setValorCompra] = useState("");
+  const [volumeProdI, setVolumeProd] = useState("");
+  const [pesoProdI, setPesoProd] = useState("");
   const [obserProd, setObserProd] = useState("");
   const { tipoProd } = useContext(AuthContext);
-
+  const { fazID } = useContext(AuthContext);
+  async function handleAddEstoqueEntrada() {
+    if (tipoProd == 1) {
+      let valorCompra = Number(valorCompraI);
+      let volumeProd = Number(volumeProdI);
+      await writeEstoqueEntrada(
+        {
+          _id: uuid.v4(),
+          nomeProd,
+          valorCompra,
+          volumeProd,
+          obserProd,
+          createdAt: new Date(),
+        },
+        fazID
+      );
+    }
+    if (tipoProd == 2) {
+      let valorCompra = Number(valorCompraI);
+      let pesoProd = Number(pesoProdI);
+      await writeEstoqueEntrada(
+        {
+          _id: uuid.v4(),
+          nomeProd,
+          valorCompra,
+          pesoProd,
+          obserProd,
+          createdAt: new Date(),
+        },
+        fazID
+      );
+    }
+  }
+  //Buscar no banco
+  async function fetchData(fazID) {
+    const dataEstoque = await getAllEstoque(fazID);
+    setListaEstoque(dataEstoque);
+  }
+  useFocusEffect(
+    useCallback(() => {
+      fetchData(fazID);
+    }, [])
+  );
+  console.log(listaEstoque);
   const TextInputTipo = () => {
     console.log(tipoProd);
     if (tipoProd == 1) {
@@ -24,10 +76,11 @@ function TesteEstoque() {
           <Text style={styles.font}>Volume do produto:</Text>
           <TextInput
             style={styles.font}
-            value={volumeProd}
+            value={volumeProdI}
             onChangeText={setVolumeProd}
             placeholder="200"
             keyboardType="decimal-pad"
+            inputMode="decimal"
           />
         </View>
       );
@@ -37,10 +90,11 @@ function TesteEstoque() {
         <Text style={styles.font}>Peso do produto:</Text>
         <TextInput
           style={styles.font}
-          value={pesoProd}
+          value={pesoProdI}
           onChangeText={setPesoProd}
           placeholder="60"
           keyboardType="decimal-pad"
+          inputMode="decimal"
         />
       </View>
     );
@@ -58,14 +112,16 @@ function TesteEstoque() {
           onChangeText={setNomeProd}
           placeholder="Prata"
           keyboardType="default"
+          inputMode="text"
         />
         <Text style={styles.font}>Preço do produto:</Text>
         <TextInput
           style={styles.font}
-          value={valorCompra}
+          value={valorCompraI}
           onChangeText={setValorCompra}
           placeholder="50,00"
           keyboardType="decimal-pad"
+          inputMode="decimal"
         />
         <DropdownComponent />
         {TextInputTipo()}
@@ -76,7 +132,11 @@ function TesteEstoque() {
           onChangeText={setObserProd}
           placeholder="Produto comprado em ..."
           keyboardType="default"
+          inputMode="text"
         />
+        <TouchableOpacity onPress={handleAddEstoqueEntrada}>
+          <Text>{"Cadastrar"}</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
