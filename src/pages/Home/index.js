@@ -51,34 +51,38 @@ function Home({ navigation }) {
         source={require(imgbg1)}
         imageStyle={{ opacity: 0.6 }}
       >
-        <Image
-          style={styles.logo}
-          source={require("../../../assets/FazFin.png")}
-        />
-        <Text style={styles.title}>Bem-vindo(a)</Text>
-        <View style={styles.select}>
-          <Text style={styles.subtitle}>Sua fazenda:</Text>
-          <SelectFaz
-            touchableText="Selecione sua fazenda"
-            title="Fazendas"
-            objKey="_id"
-            objValue="nomefaz"
-            data={listaFaz}
+        <View style={styles.containerlogin}>
+          <Image
+            style={styles.logo}
+            source={require("../../../assets/FazFin.png")}
           />
+          <Text style={styles.title}>Bem-vindo(a)</Text>
+          <View style={styles.select}>
+            <Text style={styles.subtitle}>Sua fazenda:</Text>
+            <SelectFaz
+              touchableText="Selecione sua fazenda"
+              title="Fazendas"
+              objKey="_id"
+              objValue="nomefaz"
+              data={listaFaz}
+            />
+          </View>
+          <View style={styles.containerbotoes}>
+            <TouchableOpacity
+              disabled={CanContinue(fazID)}
+              style={DisabledStyle(fazID)}
+              onPress={() => navigation.navigate("GeralFaz")}
+            >
+              <Text style={styles.tituloBotao}>{"Continuar"}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.botaopress}
+              onPress={() => navigation.navigate("CadastroFaz")}
+            >
+              <Text style={styles.tituloBotao}>{"Cadastrar fazenda"}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <TouchableOpacity
-          style={styles.botaopress}
-          onPress={() => navigation.navigate("CadastroFaz")}
-        >
-          <Text style={styles.tituloBotao}>{"Cadastrar fazenda"}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          disabled={CanContinue(fazID)}
-          style={DisabledStyle(fazID)}
-          onPress={() => navigation.navigate("GeralFaz")}
-        >
-          <Text style={styles.tituloBotao}>{"Continuar"}</Text>
-        </TouchableOpacity>
       </ImageBackground>
     </SafeAreaView>
   );

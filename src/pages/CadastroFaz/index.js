@@ -27,7 +27,7 @@ function CadastroFaz() {
       tipoprod,
       createdAt: new Date(),
     });
-    navigation.navigate("Home")
+    navigation.navigate("Home");
   }
   const navigation = useNavigation();
   const imgbg1 = "../../../assets/backgroundCad.jpg";
@@ -38,12 +38,14 @@ function CadastroFaz() {
         source={require(imgbg1)}
         imageStyle={{ opacity: 0.6 }}
       >
-        <Image
-          style={styles.logo}
-          source={require("../../../assets/FazFin.png")}
-        />
-        <View style={styles.viewtext}>
-          <Text style={styles.texto}>Nome da fazenda</Text>
+        <View style={styles.containergeral}>
+          <Image
+            style={styles.logo}
+            source={require("../../../assets/FazFin.png")}
+          />
+          <Text style={[styles.texto, { marginTop: verticalScale(40) }]}>
+            Nome da fazenda
+          </Text>
           <TextInput
             style={styles.campoTexto}
             onChangeText={setNomefaz}
@@ -64,20 +66,21 @@ function CadastroFaz() {
             value={tipoprod}
             placeholder="Ex: Pecuária Leiteira"
           ></TextInput>
+          <View style={styles.containerbotao}>
+            <TouchableOpacity
+              style={styles.botaopress2}
+              onPress={() => navigation.navigate("Home")}
+            >
+              <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.botaopress} onPress={handleAddFarm}>
+              <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <TouchableOpacity style={styles.botaopress} onPress={handleAddFarm}>
-          <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.botaopress2}
-          onPress={() => navigation.navigate("Home")}
-        >
-          <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-        </TouchableOpacity>
       </ImageBackground>
     </SafeAreaView>
   );
 }
-
 
 export default CadastroFaz;

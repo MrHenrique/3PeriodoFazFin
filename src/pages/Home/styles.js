@@ -18,11 +18,13 @@ const styles = StyleSheet.create({
     width: verticalScale(150),
     top: verticalScale(30),
     alignSelf: "center",
+    marginBottom: verticalScale(10),
   },
   title: {
     ...Fonts.Title,
     color: Colors.white,
     top: verticalScale(25),
+    marginBottom: verticalScale(30),
   },
   subtitle: {
     ...Fonts.txtLarge,
@@ -32,35 +34,35 @@ const styles = StyleSheet.create({
   botaopress: {
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.btngreen,
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    top: verticalScale(290),
-    
+    marginBottom: verticalScale(10),
   },
   botaopress2: {
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.btngreen,
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    top: verticalScale(300),
+    flexDirection: "row-reverse",
   },
   disabledbutton: {
-    backgroundColor: Colors.btndarkgreen,
     ...Buttons.btnLargeRounded,
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    top: verticalScale(300),
+    backgroundColor: Colors.btndarkgreen,
+    opacity: 0.4
   },
   tituloBotao: {
     ...Fonts.txtMediumBold,
     color: Colors.white,
   },
   select: {
-    top: verticalScale(100),
     alignSelf: "center",
+  },
+  containerlogin: {
+    flex: 1,
+    margin: scale(15),
+    borderRadius: 10,
+    backgroundColor: Colors.darkgreenTransparent,
+  },
+  containerbotoes: {
+    flex: 1,
+    padding: verticalScale(10),
+    flexDirection: "column-reverse",
   },
 });
 export default styles;

@@ -4,8 +4,8 @@ export const rounded = {
   borderRadius: 10,
 };
 export const btnLarge = {
-  width: scale(300),
   height: verticalScale(40),
+  width: scale(300),
   alignItems: "center",
   justifyContent: "center",
   alignSelf: "center",
