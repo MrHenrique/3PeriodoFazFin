@@ -1,13 +1,13 @@
 import { getRealm } from "./realm";
 import { Alert } from "react-native";
-async function getAllEstoque(fazID) {
+async function getAllEstoqueEntrada(fazID) {
   let testes = [];
   const realm = await getRealm();
   try {
     const data = realm.objects("Farm").filtered(`_id= '${fazID}'`);
-    for (var i in data[0].atualEstoque) {
+    for (var i in data[0].entradaEstoque) {
       {
-        testes.push(data[0].atualEstoque[i]);
+        testes.push(data[0].entradaEstoque[i]);
       }
     }
     return testes;
@@ -16,4 +16,4 @@ async function getAllEstoque(fazID) {
   }
   realm.close();
 }
-export default getAllEstoque;
+export default getAllEstoqueEntrada;
