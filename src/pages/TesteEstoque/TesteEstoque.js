@@ -5,6 +5,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import Header from "../../components/Header";
@@ -19,21 +20,26 @@ function TesteEstoque() {
   //estados
   const [listaEstoque, setListaEstoque] = useState([]);
   const [nomeProd, setNomeProd] = useState("");
-  const [valorCompraI, setValorCompra] = useState("");
+  const [valorProdI, setValorProd] = useState("");
   const [volumeProdI, setVolumeProd] = useState("");
   const [pesoProdI, setPesoProd] = useState("");
   const [obserProd, setObserProd] = useState("");
+  const [qtdProdI, setQtdProd] = useState("");
   const { tipoProd } = useContext(AuthContext);
   const { fazID } = useContext(AuthContext);
+  //Gravar dados no banco
   async function handleAddEstoqueEntrada() {
+    //checar se cadastro é relacionado a tipo 1 ou 2 (farmácia/alimentos)
     if (tipoProd == 1) {
-      let valorCompra = Number(valorCompraI);
+      let valorProd = Number(valorProdI);
       let volumeProd = Number(volumeProdI);
+      let qtdProd = Number(qtdProdI);
       await writeEstoqueEntrada(
         {
           _id: uuid.v4(),
           nomeProd,
-          valorCompra,
+          valorProd,
+          qtdProd,
           volumeProd,
           obserProd,
           createdAt: new Date(),
@@ -42,14 +48,16 @@ function TesteEstoque() {
       );
     }
     if (tipoProd == 2) {
-      let valorCompra = Number(valorCompraI);
+      let valorProd = Number(valorProdI);
       let pesoProd = Number(pesoProdI);
+      let qtdProd = Number(qtdProdI);
       await writeEstoqueEntrada(
         {
           _id: uuid.v4(),
           nomeProd,
-          valorCompra,
+          valorProd,
           pesoProd,
+          qtdProd,
           obserProd,
           createdAt: new Date(),
         },
@@ -68,8 +76,8 @@ function TesteEstoque() {
     }, [])
   );
   console.log(listaEstoque);
+  //Checar tipo de input farmacia/alimentos e deixar visivel somente o campo relacionado (volume/peso)
   const TextInputTipo = () => {
-    console.log(tipoProd);
     if (tipoProd == 1) {
       return (
         <View>
@@ -99,7 +107,15 @@ function TesteEstoque() {
       </View>
     );
   };
-
+  const renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity>
+        <Text>
+          {item.nomeProd} - R$ {(item.valorProd * item.qtdProd).toFixed(2)}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
   return (
     <View style={styles.container}>
       <Header />
@@ -114,16 +130,25 @@ function TesteEstoque() {
           keyboardType="default"
           inputMode="text"
         />
+        <DropdownComponent />
         <Text style={styles.font}>Preço do produto:</Text>
         <TextInput
           style={styles.font}
-          value={valorCompraI}
-          onChangeText={setValorCompra}
+          value={valorProdI}
+          onChangeText={setValorProd}
           placeholder="50,00"
           keyboardType="decimal-pad"
           inputMode="decimal"
         />
-        <DropdownComponent />
+        <Text style={styles.font}>Quantidade de produtos comprados:</Text>
+        <TextInput
+          style={styles.font}
+          value={qtdProdI}
+          onChangeText={setQtdProd}
+          placeholder="10"
+          keyboardType="decimal-pad"
+          inputMode="decimal"
+        />
         {TextInputTipo()}
         <Text style={styles.font}>Observações:</Text>
         <TextInput
@@ -134,9 +159,21 @@ function TesteEstoque() {
           keyboardType="default"
           inputMode="text"
         />
-        <TouchableOpacity onPress={handleAddEstoqueEntrada}>
-          <Text>{"Cadastrar"}</Text>
+        <TouchableOpacity
+          style={styles.botao}
+          onPress={handleAddEstoqueEntrada}
+        >
+          <Text style={styles.font}>{"Cadastrar"}</Text>
         </TouchableOpacity>
+
+        <View>
+          <Text>Detalhes de receitas:</Text>
+          <FlatList
+            data={listaEstoque}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id}
+          ></FlatList>
+        </View>
       </View>
     </View>
   );
@@ -150,6 +187,14 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
     alignSelf: "center",
+  },
+  botao: {
+    backgroundColor: "green",
+    alignSelf: "center",
+    height: "100%",
+    width: "100%",
+    maxHeight: 50,
+    maxWidth: 200,
   },
 });
 export default TesteEstoque;

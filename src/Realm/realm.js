@@ -23,6 +23,6 @@ export const getRealm = async () =>
       AtualEstoqueSchema,
       EstoqueConsumoSchema,
     ],
-    schemaVersion: 10,
+    schemaVersion: 11,
     deleteRealmIfMigrationNeeded: true,
   });

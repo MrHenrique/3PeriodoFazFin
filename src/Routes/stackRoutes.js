@@ -19,19 +19,20 @@ function StackRoutes() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="TesteEstoque"
-        component={TesteEstoque}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
         name="Home"
         component={Home}
         options={{
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="TesteEstoque"
+        component={TesteEstoque}
+        options={{
+          headerShown: false,
+        }}
+      />
+
       <Stack.Screen
         name="CadastroFaz"
         component={CadastroFaz}
