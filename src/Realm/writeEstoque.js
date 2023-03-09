@@ -7,7 +7,7 @@ const writeEstoque = async (data,fazID,nomeProd) => {
     realm.write(() => {
       const farm = realm.objects("Farm").filtered(`_id= '${fazID}'`);
       realm.delete(realm.objects("AtualEstoqueSchema").filtered(`nomeProd= '${nomeProd}'`))
-      createdEstoque = realm.create("AtualEstoqueSchema", data,);
+      createdEstoque = realm.create("AtualEstoqueSchema", data);
       farm[0].atualEstoque.push(createdEstoque);
     });
     return createdEstoque;

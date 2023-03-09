@@ -10,18 +10,18 @@ import {
   Alert,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import Header from "../../components/Header";
+import Header from "../../../components/Header";
 import { useNavigation } from "@react-navigation/native";
-import DropdownComponent from "../../components/Dropdown/TipoProd";
+import DropdownComponent from "../../../components/Dropdown/TipoProd";
 import uuid from "react-native-uuid";
-import { AuthContext } from "../../contexts/auth";
-import writeEstoqueEntrada from "../../Realm/writeEstoqueEntrada";
-import getAllEstoqueEntrada from "../../Realm/getAllEstoqueEntrada";
-import writeEstoque from "../../Realm/writeEstoque";
-import getAllEstoque from "../../Realm/getAllEstoque";
-import getAllEstoqueFiltered from "../../Realm/getAllEstoqueFiltered";
+import { AuthContext } from "../../../contexts/auth";
+import writeEstoqueEntrada from "../../../Realm/writeEstoqueEntrada";
+import getAllEstoqueEntrada from "../../../Realm/getAllEstoqueEntrada";
+import writeEstoque from "../../../Realm/writeEstoque";
+import getAllEstoque from "../../../Realm/getAllEstoque";
+import getAllEstoqueFiltered from "../../../Realm/getAllEstoqueFiltered";
 import Modal from "react-native-modal";
-function TesteEstoque() {
+function EntradaEstoque() {
   const navigation = useNavigation();
   //estados
   const [listaEstoque, setListaEstoque] = useState([]);
@@ -108,6 +108,9 @@ function TesteEstoque() {
         let valorProd = Number(valorProdI);
         let pesoProd = Number(pesoProdI);
         let qtdProd = Number(qtdProdI);
+        valorProd = valorProd + listaEstoqueFiltered.valorProd;
+        pesoProd = pesoProd + listaEstoqueFiltered.pesoProd;
+        qtdProd = qtdProd + listaEstoqueFiltered.qtdProd;
         await writeEstoque(
           {
             nomeProd,
@@ -221,7 +224,9 @@ function TesteEstoque() {
   async function fetchDataEntrada(fazID) {
     const dataEstoqueEntrada = await getAllEstoqueEntrada(fazID);
     setListaEstoqueEntrada(dataEstoqueEntrada);
+    console.log(dataEstoqueEntrada);
   }
+
   useFocusEffect(
     useCallback(() => {
       fetchDataEntrada(fazID);
@@ -288,7 +293,7 @@ function TesteEstoque() {
           <Text style={styles.font}>
             Nome {item.nomeProd} - Quantidade {item.qtdProd.toFixed(0)} - Media
             de preço - R$
-            {((item.valorProd * item.qtdProd) / item.qtdProd).toFixed(2)} -
+            {(item.valorProd / item.qtdProd).toFixed(2)} -
             Categoria {categoriaProd}
           </Text>
         </TouchableOpacity>
@@ -381,23 +386,6 @@ function TesteEstoque() {
         >
           <Text style={styles.font}>{"Cadastrar"}</Text>
         </TouchableOpacity>
-
-        <View>
-          <Text style={styles.font}>Estoques:</Text>
-          <FlatList
-            data={listaEstoque}
-            renderItem={renderItemEstoque}
-            keyExtractor={(item) => item._id}
-          ></FlatList>
-        </View>
-        <View>
-          <Text style={styles.font}>Detalhes de receitas:</Text>
-          <FlatList
-            data={listaEstoqueEntrada}
-            renderItem={renderItemEntrada}
-            keyExtractor={(item) => item._id}
-          ></FlatList>
-        </View>
       </View>
     </View>
   );
@@ -421,4 +409,4 @@ const styles = StyleSheet.create({
     maxWidth: 200,
   },
 });
-export default TesteEstoque;
+export default EntradaEstoque;

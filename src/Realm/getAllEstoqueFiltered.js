@@ -10,7 +10,6 @@ async function getAllEstoqueFiltered(fazID, name) {
       return nome.nomeProd == stringNome;
     });
     testes.push(dataEstoque[0]);
-    console.log(testes[0])
     return testes[0];
   } catch (e) {
     Alert.alert("Error", e.message);

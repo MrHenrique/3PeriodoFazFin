@@ -19,9 +19,8 @@ import Manejo from "../pages/Manejo";
 import Leite from "../pages/Leite";
 import GeralReb from "../pages/GeralReb";
 import FinanceiroFaz from "../pages/FinanceiroFaz";
-import CadastroVaca from "../pages/CadastroVaca";
 import FinanceiroReb from "../pages/FinanceiroReb";
-import TesteEstoque from "../pages/TesteEstoque/TesteEstoque";
+import Estoque from "../pages/Estoque";
 const Drawer = createDrawerNavigator();
 function Routes() {
   return (
@@ -197,13 +196,13 @@ function Routes() {
         }}
       />
       <Drawer.Screen
-        name="TesteEstoque"
-        component={TesteEstoque}
+        name="Estoque"
+        component={Estoque}
         options={{
-          title: "TesteEstoque",
+          title: "Estoque",
           drawerIcon: ({ focused, size, color }) => (
             <Fontisto
-              name={focused ? "injection-syringe" : "injection-syringe"}
+              name={focused ? "shopping-store" : "shopping-store"}
               size={size}
               color={color}
             />
