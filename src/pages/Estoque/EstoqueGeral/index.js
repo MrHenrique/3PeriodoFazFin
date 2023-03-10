@@ -107,13 +107,32 @@ function EstoqueGeral() {
       );
     }
   };
-  console.log(filterEstoque);
   const renderItemEstoque = ({ item }) => {
     const categoriaProd = TipoAfter(item);
     const imgCateg = CategImg(categoriaProd);
-
+    function tipoRelatorio(categoriaProd) {
+      if (categoriaProd == "Alimentos") {
+        return (
+          <View style={styles.containerlist}>
+            <Text style={styles.font}>
+              Peso em estoque :{" "}
+              {(item.pesoProd / item.qtdProd) * item.qtdProd} KG
+            </Text>
+          </View>
+        );
+      } else {
+        return (
+          <View style={styles.containerlist}>
+            <Text style={styles.font}>
+              Volume em estoque :{" "}
+              {(item.volumeProd / item.qtdProd) * item.qtdProd} ml
+            </Text>
+          </View>
+        );
+      }
+    }
     return (
-      <View>
+      <View style={styles.containerlist}>
         <TouchableOpacity onPress={() => EstoqueClick(item)}>
           <View style={styles.modalContainer}>
             <View style={styles.containerItem}>{imgCateg}</View>
@@ -130,10 +149,38 @@ function EstoqueGeral() {
           </View>
         </TouchableOpacity>
         {shouldShow ? (
-          <Text style={styles.font}>
-            Media de preço - R$
-            {(item.valorProd / item.qtdProd).toFixed(2)}
-          </Text>
+          <ScrollView>
+            <View style={styles.containerlist}>
+              <Text style={styles.font}>Nome do item : {item.nomeProd}</Text>
+            </View>
+            <View style={styles.containerlist}>
+              <Text style={styles.font}>
+                Categoria do item : {categoriaProd}
+              </Text>
+            </View>
+            <View style={styles.containerlist}>
+              <Text style={styles.font}>Itens em estoque : {item.qtdProd}</Text>
+            </View>
+            {tipoRelatorio(categoriaProd)}
+            <View style={styles.containerlist}>
+              <Text style={styles.font}>
+                Média de preço por item : R$
+                {(item.valorProd / item.qtdProd).toFixed(2)}
+              </Text>
+            </View>
+            <View style={styles.containerlist}>
+              <Text style={styles.font}>
+                Valor total em estoque : R$
+                {((item.valorProd / item.qtdProd) * item.qtdProd).toFixed(2)}
+              </Text>
+            </View>
+            <View style={styles.containerlist}>
+              <Text style={styles.font}>Data da ultima compra :</Text>
+            </View>
+            <View style={styles.containerlist}>
+              <Text style={styles.font}>Observações : {item.obserProd}</Text>
+            </View>
+          </ScrollView>
         ) : null}
       </View>
     );
@@ -191,6 +238,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#004513",
+  },
+  containerlist: {
+    padding: 5,
   },
   modalContainer: {
     flex: 1,
