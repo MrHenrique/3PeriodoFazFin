@@ -20,11 +20,12 @@ function EstoqueGeral() {
   //estados
   const [listaEstoque, setListaEstoque] = useState([]);
   const [oldListaEstoque, setOldListaEstoque] = useState([]);
-  const [filterEstoque, setFilterEstoque] = useState(null);
+  const [filterEstoque, setFilterEstoque] = useState(false);
   const [listaEstoqueEntrada, setListaEstoqueEntrada] = useState([]);
   const { fazID } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
   const [shouldShow, setShouldShow] = useState(false);
+  const [nome, setNome] = useState();
   function nameItem(item) {
     const nome = item.nomeProd;
     return nome;
@@ -69,18 +70,22 @@ function EstoqueGeral() {
       return categoriaProd;
     }
   };
-  const FilterEstoqueData = (item) => {
+  async function EstoqueClick(item) {
+    setNome(nameItem(item));
     setFilterEstoque(!filterEstoque);
-    const nome = nameItem(item);
+    setShouldShow(!shouldShow);
+  }
+  useEffect(() => {
+    FilterEstoqueData(nome);
+  }, [filterEstoque]);
+  const FilterEstoqueData = () => {
     if (filterEstoque == true) {
       setOldListaEstoque(listaEstoque);
       setListaEstoque(
         listaEstoque.filter((estoque) => estoque.nomeProd === nome)
       );
-      setShouldShow(!shouldShow);
     } else {
       setListaEstoque(oldListaEstoque);
-      setShouldShow(!shouldShow);
     }
   };
   const CategImg = (categoriaProd) => {
@@ -109,7 +114,7 @@ function EstoqueGeral() {
 
     return (
       <View>
-        <TouchableOpacity onPress={() => FilterEstoqueData(item)}>
+        <TouchableOpacity onPress={() => EstoqueClick(item)}>
           <View style={styles.modalContainer}>
             <View style={styles.containerItem}>{imgCateg}</View>
             <View style={styles.containerText}>
