@@ -25,6 +25,7 @@ function EstoqueGeral() {
   const { fazID } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
   const [shouldShow, setShouldShow] = useState(false);
+  const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
   const [nome, setNome] = useState();
   function nameItem(item) {
     const nome = item.nomeProd;
@@ -88,6 +89,17 @@ function EstoqueGeral() {
       setListaEstoque(oldListaEstoque);
     }
   };
+  const EstoqueValorTotal = () => {
+    let Valor = 0;
+    let ValorTotal = 0;
+    let x = 0;
+    while (x < listaEstoque.length) {
+      Valor = listaEstoque[x].qtdProd * listaEstoque[x].valorProd;
+      x = x + 1;
+      ValorTotal = ValorTotal + Valor;
+    }
+    return ValorTotal;
+  };
   const CategImg = (categoriaProd) => {
     if (categoriaProd == "Alimentos") {
       return (
@@ -115,8 +127,8 @@ function EstoqueGeral() {
         return (
           <View style={styles.containerlist}>
             <Text style={styles.font}>
-              Peso em estoque :{" "}
-              {(item.pesoProd / item.qtdProd) * item.qtdProd} KG
+              Peso em estoque : {(item.pesoProd / item.qtdProd) * item.qtdProd}{" "}
+              KG
             </Text>
           </View>
         );
@@ -169,12 +181,6 @@ function EstoqueGeral() {
               </Text>
             </View>
             <View style={styles.containerlist}>
-              <Text style={styles.font}>
-                Valor total em estoque : R$
-                {((item.valorProd / item.qtdProd) * item.qtdProd).toFixed(2)}
-              </Text>
-            </View>
-            <View style={styles.containerlist}>
               <Text style={styles.font}>Data da ultima compra :</Text>
             </View>
             <View style={styles.containerlist}>
@@ -187,43 +193,53 @@ function EstoqueGeral() {
   };
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => {
-          toggleModal();
-        }}
-      >
-        <Text style={styles.font}>Relatorio de Compras</Text>
-      </TouchableOpacity>
-      <Modal
-        isVisible={isModalVisible}
-        coverScreen={true}
-        backdropColor={"rgba(234,242,215,0.8)"}
-        animationIn="slideInUp"
-        animationOut="slideOutDown"
-      >
-        <View style={styles.container}>
-          <Text style={styles.font}>Compras:</Text>
+        <View>
+          <Text style={styles.font}>Valor de produtos em Estoque</Text>
+          <Text style={styles.font}>R$ {EstoqueValorTotal().toFixed(2)}</Text>
+        </View>
+      <View>
+        <TouchableOpacity
+          onPress={() => setShouldShowDetalhes(!shouldShowDetalhes)}
+        >
+          <Text style={styles.font}>Produtos cadastrados</Text>
+        </TouchableOpacity>
+        {shouldShowDetalhes ? (
           <FlatList
-            data={listaEstoqueEntrada}
-            renderItem={renderItemEntrada}
+            data={listaEstoque}
+            renderItem={renderItemEstoque}
             keyExtractor={(item) => item._id}
           ></FlatList>
-          <TouchableOpacity
-            onPress={() => {
-              toggleModal();
-            }}
-          >
-            <Text style={styles.font}>Voltar</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-      <View>
-        <Text style={styles.font}>Estoque:</Text>
-        <FlatList
-          data={listaEstoque}
-          renderItem={renderItemEstoque}
-          keyExtractor={(item) => item._id}
-        ></FlatList>
+        ) : null}
+        <TouchableOpacity
+          onPress={() => {
+            toggleModal();
+          }}
+        >
+          <Text style={styles.font}>Relatorio de Compras</Text>
+        </TouchableOpacity>
+        <Modal
+          isVisible={isModalVisible}
+          coverScreen={true}
+          backdropColor={"rgba(234,242,215,0.8)"}
+          animationIn="slideInUp"
+          animationOut="slideOutDown"
+        >
+          <View style={styles.container}>
+            <Text style={styles.font}>Compras:</Text>
+            <FlatList
+              data={listaEstoqueEntrada}
+              renderItem={renderItemEntrada}
+              keyExtractor={(item) => item._id}
+            ></FlatList>
+            <TouchableOpacity
+              onPress={() => {
+                toggleModal();
+              }}
+            >
+              <Text style={styles.font}>Voltar</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
         <TouchableOpacity
           style={styles.botao}
           onPress={() => navigation.navigate("GeralFaz")}
