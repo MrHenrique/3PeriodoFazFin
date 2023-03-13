@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
     width: verticalScale(150),
     top: verticalScale(30),
     alignSelf: "center",
-    marginBottom: verticalScale(10),
   },
   title: {
     ...Fonts.Title,
@@ -52,6 +51,7 @@ const styles = StyleSheet.create({
   },
   select: {
     alignSelf: "center",
+    marginTop: verticalScale(15),
   },
   containerlogin: {
     flex: 1,

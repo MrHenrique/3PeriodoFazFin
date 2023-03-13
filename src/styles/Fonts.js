@@ -16,7 +16,6 @@ export const txtSmall = {
 export const txtMedium = {
   fontSize: verticalScale(14),
   textAlign: "center",
-  fontWeight: "bold",
   alignSelf: "center",
 };
 export const txtLarge = {
