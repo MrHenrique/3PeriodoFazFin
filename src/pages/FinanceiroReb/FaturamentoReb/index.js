@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   ScrollView,
   FlatList,
+  TextInput,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import BezierChartFaturamentoReb from "../../../components/Graficos/BezierChartFaturamentoReb";
@@ -18,6 +19,27 @@ import { AuthContext } from "../../../contexts/auth";
 function FaturamentoReb() {
   const { precoCFReb, listaAliReb, listaLeiteReb, precoLeiteReb } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [searchDate, setSearchDate] = useState('');
+  const [lista, setLista] = useState(listaLeiteReb);
+
+  //teste filtro data
+  useEffect(() => {
+    if (searchDate === '') {
+      setLista(listaLeiteReb);
+    } else {
+      setLista(
+        listaLeiteReb.filter(item => {
+          const itemDate = new Date(item.createdAt); // converte a string de data do item para um objeto Date
+          const searchDateObj = new Date(searchDate); // converte a string de busca para um objeto Date
+          return itemDate.getDate() === searchDateObj.getDate() + 1 // verifica se o dia é igual
+            && itemDate.getMonth() === searchDateObj.getMonth() // verifica se o mês é igual
+            && itemDate.getFullYear() === searchDateObj.getFullYear(); // verifica se o ano é igual
+        })
+      );
+    }
+  }, [searchDate]);
+  //FIM
+
   function toggleModal() {
     setModalVisible(!isModalVisible);
   }
@@ -26,7 +48,7 @@ function FaturamentoReb() {
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
-          {item.createdAt.toString()} - R$ {(item.prodL * item.precoL).toFixed(2)}
+          {item.createdAt.toString()} - {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
         </Text>
       </TouchableOpacity>
     );
@@ -68,11 +90,17 @@ function FaturamentoReb() {
           >
             <View style={styles.modalContainer}>
               <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
+              <TextInput
+                placeholder="(YYYY-MM-DD)"
+                placeholderTextColor="#888"
+                value={searchDate}
+                onChangeText={setSearchDate}
+              />
               <FlatList
                 style={styles.scroll}
-                data={listaLeiteReb}
+                data={lista}
                 renderItem={renderItem}
-                keyExtractor={(item) => item._id}
+                keyExtractor={item => item._id}
               />
             </View>
             <TouchableOpacity
