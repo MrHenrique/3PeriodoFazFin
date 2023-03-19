@@ -10,9 +10,12 @@ import {
   ScrollView,
   FlatList,
   TextInput,
+  Platform,
+  StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import BezierChartFaturamentoReb from "../../../components/Graficos/BezierChartFaturamentoReb";
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
 import { AuthContext } from "../../../contexts/auth";
@@ -21,6 +24,33 @@ function FaturamentoReb() {
   const [isModalVisible, setModalVisible] = useState(false);
   const [searchDate, setSearchDate] = useState('');
   const [lista, setLista] = useState(listaLeiteReb);
+
+  //Data
+
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date"); 
+  const [show, setShow] = useState(false);
+  const [text, setText] = useState('Selecione a Data');
+  
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'IOS');
+    setSearchDate(currentDate);
+
+    let tempDate = new Date(currentDate);
+    let fDate = tempDate.getDate().toString().padStart(2, '0') + '/' + (tempDate.getMonth() + 1).toString().padStart(2, '0') + '/' + tempDate.getFullYear();
+    setText(fDate)
+
+    console.log(fDate)
+  }
+
+  const showMode = ( currentMode ) => {
+    setShow(true);
+    setMode(currentMode);
+  }
+
+
 
   //teste filtro data
   useEffect(() => {
@@ -31,7 +61,7 @@ function FaturamentoReb() {
         listaLeiteReb.filter(item => {
           const itemDate = new Date(item.createdAt); // converte a string de data do item para um objeto Date
           const searchDateObj = new Date(searchDate); // converte a string de busca para um objeto Date
-          return itemDate.getDate() === searchDateObj.getDate() + 1 // verifica se o dia é igual
+          return itemDate.getDate() === searchDateObj.getDate() // verifica se o dia é igual
             && itemDate.getMonth() === searchDateObj.getMonth() // verifica se o mês é igual
             && itemDate.getFullYear() === searchDateObj.getFullYear(); // verifica se o ano é igual
         })
@@ -48,7 +78,7 @@ function FaturamentoReb() {
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
-          {item.createdAt.toString()} - {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
+          {item.createdAt.getDate().toString().padStart(2, 0)}/{(item.createdAt.getMonth() + 1 ).toString().padStart(2, 0)}/{item.createdAt.getFullYear().toString()} - {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
         </Text>
       </TouchableOpacity>
     );
@@ -90,12 +120,38 @@ function FaturamentoReb() {
           >
             <View style={styles.modalContainer}>
               <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
-              <TextInput
-                placeholder="(YYYY-MM-DD)"
-                placeholderTextColor="#888"
-                value={searchDate}
-                onChangeText={setSearchDate}
-              />
+              {/*data*/}
+              <View style={styles.containerinfos}>
+                <View style={{flexDirection: 'row'}}>
+                  <TouchableOpacity 
+                    style={{flex: 1, backgroundColor: "gray", borderRadius: 30, width: '50%', height: 30}}
+                    onPress={() => showMode('date')}>
+                    <Text style={{ textAlign: "center"}}>{text}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                    style={{flex: 1, backgroundColor: "#888", borderRadius: 30, width: '50%', height: 30}}
+                    onPress={() => {
+                      setSearchDate('')
+                      setText('Selecione a Data')
+                      }
+                    }>
+                    <Text style={{ textAlign: "center"}}>Limpar</Text>
+                  </TouchableOpacity>
+                </View>
+
+                { show && ( 
+                  <DateTimePicker 
+                  testID = "dateTimePicker"
+                  value = {date}
+                  mode = {mode}
+                  display="default"
+                  onChange={onChange}
+                />)}
+
+                <StatusBar style = "auto" />
+              </View>
+
+
               <FlatList
                 style={styles.scroll}
                 data={lista}
