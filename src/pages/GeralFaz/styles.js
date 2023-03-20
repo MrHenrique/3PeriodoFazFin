@@ -7,46 +7,111 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.Cyan,
   },
+
   containergeral: {
     flex: 1,
     margin: scale(15),
   },
+
+  geralfaz: {
+    flex: 1,
+  },
+
   imgbg: {
     flex: 1,
     resizeMode: "cover",
     width: "100%",
   },
+
+  bolareceita: {
+    width: scale(10),
+    height: scale(10),
+    borderRadius: 50,
+    backgroundColor: Colors.neongreen,
+    marginEnd: scale(5),
+  },
+
+  boladespesa: {
+    width: scale(10),
+    height: scale(10),
+    borderRadius: 50,
+    backgroundColor: Colors.red,
+    marginEnd: scale(5),
+  },
+
   bannerButton: {
-    borderRadius: 30,
-    height: verticalScale(150),
-    width: scale(300),
-    alignSelf: "center",
+    flex: 0.7,
     backgroundColor: Colors.btngreen,
     justifyContent: "center",
-    marginBottom: verticalScale(35),
+    borderRadius: 10,
   },
+
   bannerText: {
     color: Colors.grey,
     ...Fonts.txtMedium,
-    margin: verticalScale(5),
     alignSelf: "center",
   },
-  textoBannerT: {
-    textAlign: "center",
-    fontSize: scale(15),
+
+  textoBannerCat: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    overflow: "hidden",
   },
+
+  textoBannerTitulo: {
+    ...Fonts.txtLargeBold,
+    color: Colors.white,
+    paddingBottom: verticalScale(20),
+  },
+
   textoBanner: {
     color: Colors.white,
-    fontSize: scale(17),
+    ...Fonts.txtMedium,
   },
+
   textoBannerRec: {
-    color: "#0FFF50",
-    fontSize: scale(17),
+    ...Fonts.txtLarge,
+    color: Colors.white,
   },
+
   textoBannerDes: {
-    color: "#FF3131",
-    fontSize: scale(17),
+    ...Fonts.txtLarge,
+    color: Colors.white,
   },
+
+  containerGeralFinan: {
+    marginLeft: scale(40),
+    marginRight: scale(40),
+  },
+
+  textoBannerRes: {
+    color: Colors.grey,
+    ...Fonts.txtSmall,
+    position: "absolute",
+    top: verticalScale(-10),
+    left: scale(0),
+  },
+
+  textResultsPrice: {
+    color: Colors.white,
+    textAlign: "center",
+    alignSelf: "center",
+  },
+
+  textoRS: {
+    ...Fonts.txtXLarge,
+    color: Colors.white,
+  },
+
+  containerSaldoTotal: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderBottomWidth: 1,
+    width: "100%",
+    overflow: "hidden",
+  },
+
   botaoPress3: {
     borderRadius: 20,
     backgroundColor: Colors.btngreen,
@@ -56,11 +121,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
   },
+
   tituloBotao2: {
     fontSize: scale(16),
     fontWeight: "bold",
     color: Colors.white,
   },
+
   botaopress: {
     borderRadius: 20,
     backgroundColor: Colors.btngreen,
@@ -70,6 +137,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
   },
+
   botaopress4: {
     borderRadius: 20,
     backgroundColor: Colors.btngreen,
@@ -80,6 +148,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     opacity: 0.3,
   },
+
   botaopress2: {
     borderRadius: 20,
     backgroundColor: Colors.btngreen,
@@ -88,20 +157,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
+    marginTop: verticalScale(10),
   },
+
   tituloBotao: {
     fontSize: verticalScale(14),
     fontWeight: "bold",
     color: Colors.white,
   },
+
   viewtext: {
     alignSelf: "center",
   },
+
   texto: {
     fontSize: verticalScale(20),
     color: Colors.white,
     alignSelf: "center",
   },
+
   containerbotoes: {
     flex: 1,
     padding: verticalScale(10),
@@ -109,3 +183,17 @@ const styles = StyleSheet.create({
   },
 });
 export default styles;
+
+export function Color(total) {
+  let color;
+  if (total > 0) {
+    color = Colors.neongreen;
+    return color;
+  } else if (total < 0) {
+    color = Colors.red;
+    return color;
+  } else {
+    color = Colors.white;
+    return color;
+  }
+}

@@ -16,7 +16,9 @@ import { DespesasTotais } from "../../components/Calculos DB/DespesasTotais";
 import getAllGastos from "../../Realm/getAllGastos";
 import getAllLeite from "../../Realm/getAllLeite";
 import { ReceitasTotais } from "../../components/Calculos DB/ReceitasTotais";
-import styles from "./sytles";
+import { Color } from "./styles";
+import styles from "./styles";
+import { JumpingTransition } from "react-native-reanimated";
 function GeralFaz({ navigation }) {
   const [listaReb, setListaReb] = useState([]);
   const [dataGasto, setDataGastos] = useState([]);
@@ -103,15 +105,13 @@ function GeralFaz({ navigation }) {
       return Style;
     }
   }
-  function Color(total) {
-    let color;
-    if (total > 0) {
-      color = styles.textoBannerRec;
-      return color;
-    } else {
-      color = styles.textoBannerDes;
-      return color;
-    }
+  function setSize(text, width) {
+    var fontSize = width / text.toString().length;
+    console.log(text.toString().length);
+    var maxSize = width / 10;
+    console.log("max" + maxSize);
+    fontSize = Math.min(fontSize, maxSize);
+    return fontSize;
   }
   const imgbg1 = "../../../assets/bg4.jpg";
   return (
@@ -122,26 +122,67 @@ function GeralFaz({ navigation }) {
         imageStyle={{ opacity: 0.6 }}
       >
         <View style={styles.containergeral}>
-          <TouchableOpacity
-            style={styles.bannerButton}
-            onPress={() => navigation.navigate("FinanceiroFaz")}
-          >
-            <Text style={styles.textoBannerT}>
-              <Text style={styles.textoBanner}>{"Receitas: "}</Text>
-              <Text style={styles.textoBannerRec}>R${receitas.toFixed(2)}</Text>
-            </Text>
-            <Text style={styles.textoBannerT}>
-              <Text style={styles.textoBanner}>{"Despesas: "}</Text>
-              <Text style={styles.textoBannerDes}>R${despesas.toFixed(2)}</Text>
-            </Text>
-            <Text style={styles.textoBannerT}>
-              <Text style={styles.textoBanner}>{"Resultado: "}</Text>
-              <Text style={Color(total)}>R${total.toFixed(2)}</Text>
-            </Text>
-            <Text style={styles.bannerText}>
-              {"Clique aqui para mais detalhes"}
-            </Text>
-          </TouchableOpacity>
+          <View style={styles.geralfaz}>
+            <TouchableOpacity
+              style={styles.bannerButton}
+              onPress={() => navigation.navigate("FinanceiroFaz")}
+            >
+              <Text style={styles.textoBannerTitulo}>
+                Visão Geral da Fazenda
+              </Text>
+              <View style={styles.containerGeralFinan}>
+                <Text style={styles.textoBannerRes}>{"Saldo Total: "}</Text>
+
+                <View
+                  style={[
+                    styles.containerSaldoTotal,
+                    { borderBottomColor: Color(total) },
+                  ]}
+                >
+                  <Text style={styles.textoRS}>R$ </Text>
+                  <Text
+                    style={[
+                      styles.textResultsPrice,
+                      { fontSize: setSize(total.toFixed(2), 250) },
+                    ]}
+                  >
+                    {total.toFixed(2)}
+                  </Text>
+                </View>
+                <View style={styles.textoBannerCat}>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <View style={styles.bolareceita}></View>
+                    <Text style={styles.textoBanner}>{"Receitas"}</Text>
+                  </View>
+                  <Text
+                    style={[
+                      styles.textoBannerRec,
+                      { fontSize: setSize(receitas.toFixed(2), 200) },
+                    ]}
+                  >
+                    {receitas.toFixed(2)}
+                  </Text>
+                </View>
+                <View style={styles.textoBannerCat}>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <View style={styles.boladespesa}></View>
+                    <Text style={styles.textoBanner}>{"Despesas "}</Text>
+                  </View>
+                  <Text
+                    style={[
+                      styles.textoBannerDes,
+                      { fontSize: setSize(despesas.toFixed(2), 200) },
+                    ]}
+                  >
+                    {despesas.toFixed(2)}
+                  </Text>
+                </View>
+                <Text style={styles.bannerText}>
+                  {"Clique aqui para mais detalhes"}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
             style={styles.botaoPress3}
             onPress={() => navigation.navigate("CadastroReb")}
