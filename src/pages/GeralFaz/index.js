@@ -107,9 +107,7 @@ function GeralFaz({ navigation }) {
   }
   function setSize(text, width) {
     var fontSize = width / text.toString().length;
-    console.log(text.toString().length);
     var maxSize = width / 10;
-    console.log("max" + maxSize);
     fontSize = Math.min(fontSize, maxSize);
     return fontSize;
   }
