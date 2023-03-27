@@ -11,12 +11,20 @@ const styles = StyleSheet.create({
   containergeral: {
     flex: 1,
     margin: scale(15),
+    justifyContent: "space-around",
   },
-
+  containercadastrarreb: {
+    flex: 1.2,
+    marginTop: scale(-50),
+  },
   geralfaz: {
-    flex: 1,
+    flex: 1.8,
   },
-
+  viewtext: {
+    flex: 1,
+    alignSelf: "center",
+    marginTop: scale(-75),
+  },
   imgbg: {
     flex: 1,
     resizeMode: "cover",
@@ -113,13 +121,9 @@ const styles = StyleSheet.create({
   },
 
   botaoPress3: {
-    borderRadius: 20,
+    flex: 0.3,
+    ...Buttons.btnLargeRounded,
     backgroundColor: Colors.btngreen,
-    width: scale(300),
-    height: verticalScale(75),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
   },
 
   tituloBotao2: {
@@ -150,13 +154,9 @@ const styles = StyleSheet.create({
   },
 
   botaopress2: {
-    borderRadius: 20,
+    ...Buttons.btnLargeRounded,
     backgroundColor: Colors.btngreen,
-    width: scale(300),
-    height: verticalScale(40),
     alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
     marginTop: verticalScale(10),
   },
 
@@ -164,10 +164,6 @@ const styles = StyleSheet.create({
     fontSize: verticalScale(14),
     fontWeight: "bold",
     color: Colors.white,
-  },
-
-  viewtext: {
-    alignSelf: "center",
   },
 
   texto: {

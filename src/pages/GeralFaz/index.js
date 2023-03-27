@@ -181,12 +181,15 @@ function GeralFaz({ navigation }) {
               </View>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={styles.botaoPress3}
-            onPress={() => navigation.navigate("CadastroReb")}
-          >
-            <Text style={styles.tituloBotao2}>{"Cadastrar rebanhos"}</Text>
-          </TouchableOpacity>
+          <View style={styles.containercadastrarreb}>
+            <TouchableOpacity
+              style={styles.botaoPress3}
+              onPress={() => navigation.navigate("CadastroReb")}
+            >
+              <Text style={styles.tituloBotao2}>{"Cadastrar rebanhos"}</Text>
+            </TouchableOpacity>
+          </View>
+
           <View style={styles.viewtext}>
             <Text style={styles.texto}>Selecionar rebanho</Text>
             <Select
