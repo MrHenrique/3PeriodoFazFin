@@ -161,15 +161,13 @@ const styles = StyleSheet.create({
   },
 
   tituloBotao: {
-    fontSize: verticalScale(14),
-    fontWeight: "bold",
+    ...Fonts.txtMediumBold,
     color: Colors.white,
   },
 
   texto: {
-    fontSize: verticalScale(20),
+    ...Fonts.txtLargeBold,
     color: Colors.white,
-    alignSelf: "center",
   },
 
   containerbotoes: {
