@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     color: Colors.black,
     textAlign: "center",
+    ...Fonts.txtMediumBold,
     borderRadius: 20,
     width: scale(300),
     height: verticalScale(40),
