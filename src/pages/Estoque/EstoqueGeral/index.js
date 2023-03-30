@@ -27,10 +27,12 @@ function EstoqueGeral() {
   const [shouldShow, setShouldShow] = useState(false);
   const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
   const [nome, setNome] = useState();
+  //Funcao, recebe item e retorna nome
   function nameItem(item) {
     const nome = item.nomeProd;
     return nome;
   }
+  //abrir e fechar modal, chama funcao buscando dados no DB de entrada, modal troca de estado
   function toggleModal() {
     fetchDataEntrada(fazID);
     setModalVisible(!isModalVisible);
@@ -45,11 +47,13 @@ function EstoqueGeral() {
     const dataEstoqueEntrada = await getAllEstoqueEntrada(fazID);
     setListaEstoqueEntrada(dataEstoqueEntrada);
   }
+  //Chama funcao buscando dados do estoque ao focar em página
   useFocusEffect(
     useCallback(() => {
       fetchDataEstoque(fazID);
     }, [])
   );
+  //renderiza flat list com transações de entrada
   const renderItemEntrada = ({ item }) => {
     return (
       <ScrollView>
@@ -61,6 +65,7 @@ function EstoqueGeral() {
       </ScrollView>
     );
   };
+  //recebe volume ou peso, e retorna a categoria do produto
   const TipoAfter = (item) => {
     if (item.volumeProd > 0) {
       const categoriaProd = "Remédios";
@@ -71,14 +76,17 @@ function EstoqueGeral() {
       return categoriaProd;
     }
   };
+  //recebe e define estado para nome, troca estado de filtrar estoque e mostrar codigo html de detalhes do produto
   async function EstoqueClick(item) {
     setNome(nameItem(item));
     setFilterEstoque(!filterEstoque);
     setShouldShow(!shouldShow);
   }
+  //chama funcao de filtrar estoque caso estado filterestoque mude
   useEffect(() => {
     FilterEstoqueData(nome);
   }, [filterEstoque]);
+  //funcao filtrar estoque, recebe estado nome e filtra estoque de acordo com o mesmo, define lista pré filtro em estado oldlistaestoque
   const FilterEstoqueData = () => {
     if (filterEstoque == true) {
       setOldListaEstoque(listaEstoque);
