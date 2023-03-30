@@ -2,7 +2,7 @@ import { getRealm } from "./realm";
 import { Alert } from "react-native";
 
 let createdReceitas;
-const writeLeite = async (data, vacaID) => {
+const writeLeite = async (data, farmID) => {
   const realm = await getRealm();
   try {
     realm.write(() => {

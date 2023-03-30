@@ -53,9 +53,17 @@ function AuthProvider({ children }) {
   function GrafVaca(data) {
     SetGrafVaca(data);
   }
+  const [tipoProd, SetTipoProd] = useState();
+  function TipoProd(dataProd) {
+    SetTipoProd(dataProd);
+  }
   return (
     <AuthContext.Provider
-      value={{GrafVaca,grafVaca,
+      value={{
+        GrafVaca,
+        grafVaca,
+        TipoProd,
+        tipoProd,
         FazendaID,
         fazID,
         RebanhoID,
