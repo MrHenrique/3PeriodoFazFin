@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -9,15 +9,113 @@ import {
   SafeAreaView,
   ScrollView,
   FlatList,
+  TextInput,
+  Platform,
+  StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import BezierChartFaturamentoReb from "../../../components/Graficos/BezierChartFaturamentoReb";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
 import { AuthContext } from "../../../contexts/auth";
 function FaturamentoReb() {
   const { precoCFReb, listaAliReb, listaLeiteReb, precoLeiteReb } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [lista, setLista] = useState(listaLeiteReb);
+  const [startDate, setStartDate] = useState('');  //Filtro Intervalo entre datas
+  const [textStartDate, setTextStartDate] = useState('Data Inicial'); //Filtro Intervalo entre datas
+  const [endDate, setEndDate] = useState(''); //Filtro Intervalo entre datas
+  const [textEndDate, setTextEndDate] = useState('Data Final'); //Filtro Intervalo entre datas
+  const [specificDate, setSpecificDate] = useState(null);
+  const [textSpecificDate, setTextSpecificDate] = useState('Data Especifica'); //Filtro data especifica
+  const [isStartDatePickerVisible, setIsStartDatePickerVisible] = useState(false);
+  const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
+  const [isSpecificDatePickerVisible, setIsSpecificDatePickerVisible] = useState(false);
+
+  //Codigo do DateTimePickerModal 
+  //Data Inicial
+  const showStartDatePicker = () => {
+    setIsStartDatePickerVisible(true);
+  };
+  const hideStartDatePicker = () => {
+    setIsStartDatePickerVisible(false);
+  };
+  const handleStartDateConfirm = (dateStart) => {
+    let tempDateStart = new Date(dateStart);
+    let fDateStart = tempDateStart.getDate().toString().padStart(2, '0') + '/' + (tempDateStart.getMonth() + 1).toString().padStart(2, '0') + '/' + tempDateStart.getFullYear();
+    setTextStartDate(fDateStart)
+
+    setStartDate(dateStart);
+    hideStartDatePicker();
+  };
+
+  //Data Final
+  const showEndDatePicker = () => {
+    setIsEndDatePickerVisible(true);
+  };
+  const hideEndDatePicker = () => {
+    setIsEndDatePickerVisible(false);
+  };
+  const handleEndDateConfirm = (dateEnd) => {
+    let tempDateEnd = new Date(dateEnd);
+    let fDateEnd = tempDateEnd.getDate().toString().padStart(2, '0') + '/' + (tempDateEnd.getMonth() + 1).toString().padStart(2, '0') + '/' + tempDateEnd.getFullYear();
+    setTextEndDate(fDateEnd)
+    setEndDate(dateEnd);
+    hideEndDatePicker();
+  };
+
+  //Data especifica
+  const showSpecificDatePicker = () => {
+    setIsSpecificDatePickerVisible(true);
+  };
+  const hideSpecificDatePicker = () => {
+    setIsSpecificDatePickerVisible(false);
+  };
+  const handleSpecificDateConfirm = (selectedDate) => {
+    let tempSpecificDate = new Date(selectedDate);
+    let fSpecificDate = tempSpecificDate.getDate().toString().padStart(2, '0') + '/' + (tempSpecificDate.getMonth() + 1) .toString().padStart(2, '0') + '/' + tempSpecificDate.getFullYear().toString().padStart(2, '0');
+    setTextSpecificDate(fSpecificDate);
+    setSpecificDate(selectedDate);
+    hideSpecificDatePicker();
+  };
+  //FIM
+
+  //Código para retornar uma lista do intevalo selecionado pelo usuário (FILTRO INTERVALO ENTRE DATAS)
+  const filtrarIntervalo = () => {
+    const listaFiltradaIntervalo = listaLeiteReb.filter((item) =>{ //pega todos os itens da lista que foi puxada da (listaLeiteReb)
+      const itemDataDeCriacao = new Date(item.createdAt); //cria uma nova data com a data do (createdAt do item) e atribui a variavel itemDataDeCriacao
+      const dataInicio = new Date(startDate); //pega a data de inicio escolhida pelo usuario
+      const dataFim = new Date(endDate); //pega a data final escolhida pelo usuario
+      return (itemDataDeCriacao.getDate() >= dataInicio.getDate() 
+            && itemDataDeCriacao.getMonth() >= dataInicio.getMonth()
+            && itemDataDeCriacao.getFullYear() >= dataInicio.getFullYear()) &&
+              (itemDataDeCriacao.getDate() <= dataFim.getDate() 
+            && itemDataDeCriacao.getMonth() <= dataFim.getMonth()
+            && itemDataDeCriacao.getFullYear() <= dataFim.getFullYear()) // vai verificar se o intervalo de datas escolhida pelo usuario contém na listaLeiteReb
+    });
+    setLista(listaFiltradaIntervalo);
+  }
+
+  //Código para retornar uma lista com a data Especifica selecionada pelo usuario (FILTRO POR DATA ESPECIFICA)
+  useEffect(() => {
+    if (specificDate === null) {
+      setLista(listaLeiteReb);
+    } else {
+      setLista(
+        listaLeiteReb.filter(item => {
+          const itemDataDeCriacao = new Date(item.createdAt); // converte a string de data do item para um objeto Date
+          const specificDateObj = new Date(specificDate); // converte a string de busca para um objeto Date
+          return itemDataDeCriacao.getDate() === specificDateObj.getDate() // verifica se o dia é igual
+            && itemDataDeCriacao.getMonth() === specificDateObj.getMonth() // verifica se o mês é igual
+            && itemDataDeCriacao.getFullYear() === specificDateObj.getFullYear(); // verifica se o ano é igual
+        })
+      );
+    }
+  }, [specificDate]);
+  //FIM
+
   function toggleModal() {
     setModalVisible(!isModalVisible);
   }
@@ -26,7 +124,7 @@ function FaturamentoReb() {
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
-          {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
+          {item.createdAt.getDate().toString().padStart(2, 0)}/{(item.createdAt.getMonth() + 1 ).toString().padStart(2, 0)}/{item.createdAt.getFullYear().toString()} - {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
         </Text>
       </TouchableOpacity>
     );
@@ -68,11 +166,70 @@ function FaturamentoReb() {
           >
             <View style={styles.modalContainer}>
               <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
+
+
+
+              {/*Filtro intervalo entre datas*/}
+              <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity 
+                  style={{flex: 1, backgroundColor: "gray", borderRadius: 30, width: '50%', height: 30}}
+                  onPress={showStartDatePicker}>
+                  <Text style={{ textAlign: "center"}} >{textStartDate}</Text>
+                </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={isStartDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleStartDateConfirm}
+                  onCancel={hideStartDatePicker}
+                />
+
+                <TouchableOpacity 
+                  style={{flex: 1, backgroundColor: "#888", borderRadius: 30, width: '50%', height: 30}}
+                  onPress={showEndDatePicker}>
+                  <Text style={{ textAlign: "center"}} >{textEndDate}</Text>
+                </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={isEndDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleEndDateConfirm}
+                  onCancel={hideEndDatePicker}
+                />
+                <TouchableOpacity 
+                  style={{flex: 1, backgroundColor: "gray", borderRadius: 30, width: '50%', height: 30}}
+                  onPress={filtrarIntervalo}>
+                  <Text style={{ textAlign: "center"}} >Filtrar</Text>
+                </TouchableOpacity>
+              </View>
+
+              {/*Filtro data especifica*/}
+              <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity 
+                  style={{flex: 1, backgroundColor: "gray", borderRadius: 30, width: '50%', height: 30}}
+                  onPress={showSpecificDatePicker}>
+                  <Text style={{ textAlign: "center"}} >{textSpecificDate}</Text>
+                </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={isSpecificDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleSpecificDateConfirm}
+                  onCancel={hideSpecificDatePicker}
+                />
+                <TouchableOpacity 
+                  style={{flex: 1, backgroundColor: "gray", borderRadius: 30, width: '50%', height: 30}}
+                  onPress={() => {
+                    setSpecificDate(null);
+                    setTextSpecificDate('Selecione a Data')
+                    }
+                  }>
+                  <Text style={{ textAlign: "center"}} >Limpar</Text>
+                </TouchableOpacity>
+              </View>
+
               <FlatList
                 style={styles.scroll}
-                data={listaLeiteReb}
+                data={lista}
                 renderItem={renderItem}
-                keyExtractor={(item) => item._id}
+                keyExtractor={item => item._id}
               />
             </View>
             <TouchableOpacity

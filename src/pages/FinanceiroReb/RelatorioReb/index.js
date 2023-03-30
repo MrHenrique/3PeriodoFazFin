@@ -23,19 +23,21 @@ function RelatorioReb() {
     setModalVisible(!isModalVisible);
   }
   const renderItem2 = ({ item }) => {
+    console.log(item)
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
-          {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
+        {item.createdAt.getDate().toString().padStart(2, '0')}/{(item.createdAt.getMonth() + 1).toString().padStart(2, '0')}/{item.createdAt.getFullYear()} - {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
         </Text>
       </TouchableOpacity>
     );
   };
   const renderItem = ({ item }) => {
+    console.log(item.createdAt)
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
-          {item.tipoAlim} - R$
+          {item.createdAt.getDate().toString().padStart(2, '0')}/{(item.createdAt.getMonth() + 1).toString().padStart(2, '0')}/{item.createdAt.getFullYear()} - {item.tipoAlim} - R$
           {((item.valorAli / item.qtdAli) * item.consumoAli).toFixed(2)}
         </Text>
       </TouchableOpacity>
