@@ -16,6 +16,9 @@ import { DespesasTotais } from "../../components/Calculos DB/DespesasTotais";
 import getAllGastos from "../../Realm/getAllGastos";
 import getAllLeite from "../../Realm/getAllLeite";
 import { ReceitasTotais } from "../../components/Calculos DB/ReceitasTotais";
+import { Color } from "./styles";
+import styles from "./styles";
+import { JumpingTransition } from "react-native-reanimated";
 function GeralFaz({ navigation }) {
   const [listaReb, setListaReb] = useState([]);
   const [dataGasto, setDataGastos] = useState([]);
@@ -102,15 +105,11 @@ function GeralFaz({ navigation }) {
       return Style;
     }
   }
-  function Color(total) {
-    let color;
-    if (total > 0) {
-      color = styles.textoBannerRec;
-      return color;
-    } else {
-      color = styles.textoBannerDes;
-      return color;
-    }
+  function setSize(text, width) {
+    var fontSize = width / text.toString().length;
+    var maxSize = width / 10;
+    fontSize = Math.min(fontSize, maxSize);
+    return fontSize;
   }
   const imgbg1 = "../../../assets/bg4.jpg";
   return (
@@ -120,164 +119,105 @@ function GeralFaz({ navigation }) {
         source={require(imgbg1)}
         imageStyle={{ opacity: 0.6 }}
       >
-        <TouchableOpacity
-          style={styles.bannerButton}
-          onPress={() => navigation.navigate("FinanceiroFaz")}
-        >
-          <Text style={styles.textoBannerT}>
-            <Text style={styles.textoBanner}>{"Receitas: "}</Text>
-            <Text style={styles.textoBannerRec}>R${receitas.toFixed(2)}</Text>
-          </Text>
-          <Text style={styles.textoBannerT}>
-            <Text style={styles.textoBanner}>{"Despesas: "}</Text>
-            <Text style={styles.textoBannerDes}>R${despesas.toFixed(2)}</Text>
-          </Text>
-          <Text style={styles.textoBannerT}>
-            <Text style={styles.textoBanner}>{"Resultado: "}</Text>
-            <Text style={Color(total)}>R${total.toFixed(2)}</Text>
-          </Text>
-          <Text style={styles.bannerText}>
-            {"Clique aqui para mais detalhes"}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.botaoPress3}
-          onPress={() => navigation.navigate("CadastroReb")}
-        >
-          <Text style={styles.tituloBotao2}>{"Cadastrar rebanhos"}</Text>
-        </TouchableOpacity>
-        <View style={styles.viewtext}>
-          <Text style={styles.texto}>Selecionar rebanho</Text>
-          <Select
-            touchableText="Selecione seu rebanho"
-            title="Rebanhos"
-            objKey="_id"
-            objValue="nomeReb"
-            data={listaReb}
-          />
+        <View style={styles.containergeral}>
+          <View style={styles.geralfaz}>
+            <TouchableOpacity
+              style={styles.bannerButton}
+              onPress={() => navigation.navigate("FinanceiroFaz")}
+            >
+              <Text style={styles.textoBannerTitulo}>
+                Visão Geral da Fazenda
+              </Text>
+              <View style={styles.containerGeralFinan}>
+                <Text style={styles.textoBannerRes}>{"Saldo Total: "}</Text>
+
+                <View
+                  style={[
+                    styles.containerSaldoTotal,
+                    { borderBottomColor: Color(total) },
+                  ]}
+                >
+                  <Text style={styles.textoRS}>R$ </Text>
+                  <Text
+                    style={[
+                      styles.textResultsPrice,
+                      { fontSize: setSize(total.toFixed(2), 250) },
+                    ]}
+                  >
+                    {total.toFixed(2)}
+                  </Text>
+                </View>
+                <View style={styles.textoBannerCat}>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <View style={styles.bolareceita}></View>
+                    <Text style={styles.textoBanner}>{"Receitas"}</Text>
+                  </View>
+                  <Text
+                    style={[
+                      styles.textoBannerRec,
+                      { fontSize: setSize(receitas.toFixed(2), 200) },
+                    ]}
+                  >
+                    {receitas.toFixed(2)}
+                  </Text>
+                </View>
+                <View style={styles.textoBannerCat}>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <View style={styles.boladespesa}></View>
+                    <Text style={styles.textoBanner}>{"Despesas "}</Text>
+                  </View>
+                  <Text
+                    style={[
+                      styles.textoBannerDes,
+                      { fontSize: setSize(despesas.toFixed(2), 200) },
+                    ]}
+                  >
+                    {despesas.toFixed(2)}
+                  </Text>
+                </View>
+                <Text style={styles.bannerText}>
+                  {"Clique aqui para mais detalhes"}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.containercadastrarreb}>
+            <TouchableOpacity
+              style={styles.botaoPress3}
+              onPress={() => navigation.navigate("CadastroReb")}
+            >
+              <Text style={styles.tituloBotao2}>{"Cadastrar rebanhos"}</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.viewtext}>
+            <Text style={styles.texto}>Selecionar rebanho</Text>
+            <Select
+              touchableText="Selecione seu rebanho"
+              title="Rebanhos"
+              objKey="_id"
+              objValue="nomeReb"
+              data={listaReb}
+            />
+          </View>
+          <View style={styles.containerbotoes}>
+            <TouchableOpacity
+              style={styles.botaopress2}
+              onPress={() => navigation.navigate("Home")}
+            >
+              <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              disabled={CanContinue(rebID)}
+              style={DisabledStyle(rebID)}
+              onPress={() => navigation.navigate("GeralReb")}
+            >
+              <Text style={styles.tituloBotao}>{"Continuar"}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <TouchableOpacity
-          disabled={CanContinue(rebID)}
-          style={DisabledStyle(rebID)}
-          onPress={() => navigation.navigate("GeralReb")}
-        >
-          <Text style={styles.tituloBotao}>{"Continuar"}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.botaopress2}
-          onPress={() => navigation.navigate("Home")}
-        >
-          <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-        </TouchableOpacity>
       </ImageBackground>
     </SafeAreaView>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#006773",
-  },
-  imgbg: {
-    flex: 1,
-    resizeMode: "cover",
-    width: "100%",
-  },
-  bannerButton: {
-    borderRadius: 30,
-    height: verticalScale(150),
-    width: scale(300),
-    alignSelf: "center",
-    backgroundColor: "rgba(15,109,0,0.9)",
-    justifyContent: "center",
-    position: "absolute",
-    top: verticalScale(75),
-  },
-  bannerText: {
-    color: "#fff",
-    fontSize: scale(12  ),
-    margin: verticalScale(5),
-    alignSelf: "center",
-  },
-  textoBannerT: {
-    textAlign: 'center',
-    fontSize: scale(15),
-  },
-  textoBanner: {
-    color: "#fff",
-    fontSize: scale(17),
-  },
-  textoBannerRec: {
-    color: "#0FFF50",
-    fontSize: scale(17),
-  },
-  textoBannerDes: {
-    color: "#FF3131",
-    fontSize: scale(17),
-  },
-  botaoPress3: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(75),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    top: verticalScale(250),
-    position: "absolute",
-  },
-  tituloBotao2: {
-    fontSize: scale(16),
-    fontWeight: "bold",
-    color: "#fff",
-  },
-  botaopress: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    top: verticalScale(575),
-    position: "absolute",
-  },
-  botaopress4: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.4)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    top: verticalScale(575),
-    position: "absolute",
-  },
-  botaopress2: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    top: verticalScale(625),
-    position: "absolute",
-  },
-  tituloBotao: {
-    fontSize: verticalScale(14),
-    fontWeight: "bold",
-    color: "#fff",
-  },
-  viewtext: {
-    alignSelf: "center",
-    position: "absolute",
-    top: verticalScale(350),
-  },
-  texto: {
-    fontSize: verticalScale(20),
-    color: "#ffffff",
-    alignSelf: "center",
-  },
-});
 export default GeralFaz;

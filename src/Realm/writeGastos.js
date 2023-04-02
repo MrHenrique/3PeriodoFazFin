@@ -10,6 +10,7 @@ const writeGastos = async (data, rebID) => {
       reb.gastos.push(createdGastos);
     });
     Alert.alert("Dados cadastrados com sucesso!");
+    console.log(createdGastos);
     return createdGastos;
   } catch (e) {
     Alert.alert("Erro", e.message);

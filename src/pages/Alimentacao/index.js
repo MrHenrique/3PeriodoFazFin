@@ -6,6 +6,9 @@ import {
   StyleSheet,
   ScrollView,
   View,
+  Button,
+  Platform,
+  StatusBar,
 } from "react-native";
 import Header from "../../components/Header";
 import { scale, verticalScale } from "react-native-size-matters";
@@ -16,6 +19,7 @@ import { AuthContext } from "../../contexts/auth";
 import getAllVacas from "../../Realm/getAllVacas";
 import getAllGastosReb from "../../Realm/getAllGastosReb";
 import writeGastoVaca from "../../Realm/writeGastoVaca";
+import DateTimePicker from '@react-native-community/datetimepicker';
 function Alimentacao({ navigation }) {
   const [tipoAlim, setTipoAlim] = useState("");
   const [qtdAliS, setQtdAliS] = useState("");
@@ -23,6 +27,10 @@ function Alimentacao({ navigation }) {
   const [consumoAliS, setConsumoAliS] = useState("");
   const [dataV, setDataV] = useState([]);
   const { rebID } = useContext(AuthContext);
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+  const [text, setText] = useState(new Date().getDate().toString().padStart(2, '0') + '/' + (new Date().getMonth() + 1).toString().padStart(2, '0') + '/' + new Date().getFullYear().toString().padStart(2, '0'));
   const totalVaca = (
     (Number(valorAliS) / Number(qtdAliS)) *
     Number(consumoAliS)
@@ -37,6 +45,9 @@ function Alimentacao({ navigation }) {
     const gastos2 = gastos.map((gastos) => gastos + gastosVaca);
     await writeGastoVaca(rebID, gastos2);
   }
+  
+  
+
   async function handleAddGastos() {
     const qtdAli = Number(qtdAliS);
     const valorAli = Number(valorAliS);
@@ -44,23 +55,68 @@ function Alimentacao({ navigation }) {
     await writeGastos(
       {
         _id: uuid.v4(),
-        createdAt: new Date(),
+        createdAt: new Date(date),
         tipoAlim,
         qtdAli,
         valorAli,
         consumoAli,
       },
       rebID
-    );
-    navigation.navigate("Contas");
-    setTipoAlim("");
-    setQtdAliS("");
-    setValorAliS("");
-    setConsumoAliS("");
-  }
-  return (
+      );
+      navigation.navigate("Contas");
+      setTipoAlim("");
+      setQtdAliS("");
+      setValorAliS("");
+      setConsumoAliS("");
+    }
+    
+      // Códido para pegar a data ....
+    
+      const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === 'IOS');
+        setDate(currentDate);
+    
+        let tempDate = new Date(currentDate);
+        let fDate = tempDate.getDate().toString().padStart(2, '0') + '/' + (tempDate.getMonth() + 1).toString().padStart(2, '0') + '/' + tempDate.getFullYear();
+        setText(fDate)
+    
+        console.log(fDate)
+      }
+    
+      const showMode = ( currentMode ) => {
+        setShow(true);
+        setMode(currentMode);
+      }
+    
+      //Fim do código da data .....
+    
+    return (
     <ScrollView style={styles.container}>
       <Header />
+       {/*Data*/}
+       <View style={styles.containerinfos}>
+          <Text style={styles.tituloinfo}>{ text }</Text>
+          <View >
+            <TouchableOpacity 
+              style={{backgroundColor: "blue", borderRadius: 20}}
+              onPress={() => showMode('date')}>
+              <Text style={styles.tituloinfo}>Selecione a data:</Text>
+            </TouchableOpacity>
+          </View>
+
+          { show && ( 
+            <DateTimePicker 
+            testID = "dateTimePicker"
+            value = {date}
+            mode = {mode}
+            display="default"
+            onChange={onChange}
+          />)}
+
+          <StatusBar style = "auto" />
+        </View>
+
       <View style={styles.containerinfos}>
         <Text style={styles.tituloBotao3}>Qual o trato?</Text>
         <TextInput

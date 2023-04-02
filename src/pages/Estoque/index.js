@@ -7,7 +7,7 @@ import Header from "../../components/Header";
 import { AuthContext } from "../../contexts/auth";
 import EstoqueGeral from "./EstoqueGeral";
 import EntradaEstoque from "./EntradaEstoque";
-const FirstRoute = () => <EstoqueGeral />;
+const FirstRoute = () => <EntradaEstoque />;
 
 const SecondRoute = () => <EstoqueGeral />;
 

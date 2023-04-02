@@ -302,7 +302,6 @@ function EntradaEstoque() {
   };
   return (
     <View style={styles.container}>
-      <Header />
       <TouchableOpacity
         onPress={() => {
           toggleModal();
