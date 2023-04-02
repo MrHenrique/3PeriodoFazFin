@@ -44,6 +44,7 @@ function FaturamentoReb() {
     setLista(listaFiltradaMes);
   }, [filtroMes]);
 
+
   //Codigo do DateTimePickerModal 
   //Data Inicial
   const showStartDatePicker = () => {

@@ -7,6 +7,7 @@ import React, {
   } from "react";
   import { StyleSheet, Text, View } from "react-native";
   import { Dropdown } from "react-native-element-dropdown";
+  import { scale, verticalScale } from "react-native-size-matters";
   import { AuthContext } from "../../contexts/auth";
 
   const data = [
@@ -67,8 +68,13 @@ import React, {
   export default DropdownComponentMes;
   const styles = StyleSheet.create({
     container: {
+        width: scale(300),
+        height: verticalScale(120),
+        justifyContent: 'center',
+        alignSelf: 'center',
+      borderRadius: 20,  
       backgroundColor: "#C0C0C0",
-      padding: 16,
+      padding: 30,
     },
     dropdown: {
       margin: 16,
