@@ -57,9 +57,15 @@ function AuthProvider({ children }) {
   function TipoProd(dataProd) {
     SetTipoProd(dataProd);
   }
+  const [filtroMes, setFiltroMes] = useState();
+  function FiltroMes(mesFiltro) {
+    setFiltroMes(mesFiltro);
+  }
   return (
     <AuthContext.Provider
       value={{
+        FiltroMes,
+        filtroMes,
         GrafVaca,
         grafVaca,
         TipoProd,

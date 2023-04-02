@@ -30,7 +30,12 @@ function Alimentacao({ navigation }) {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
-  const [text, setText] = useState(new Date().getDate().toString().padStart(2, '0') + '/' + (new Date().getMonth() + 1).toString().padStart(2, '0') + '/' + new Date().getFullYear().toString().padStart(2, '0'));
+  const [text, setText] = useState(
+    new Date().getDate().toString().padStart(2, '0') + 
+    '/' + 
+    (new Date().getMonth() + 1).toString().padStart(2, '0') + 
+    '/' + 
+    new Date().getFullYear().toString().padStart(2, '0'));
   const totalVaca = (
     (Number(valorAliS) / Number(qtdAliS)) *
     Number(consumoAliS)

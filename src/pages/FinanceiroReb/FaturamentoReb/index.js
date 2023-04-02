@@ -15,8 +15,8 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import BezierChartFaturamentoReb from "../../../components/Graficos/BezierChartFaturamentoReb";
-import DateTimePicker from '@react-native-community/datetimepicker';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DropdownComponentMes from "../../../components/Dropdown/FiltroMes";
 import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
 import { AuthContext } from "../../../contexts/auth";
@@ -33,6 +33,16 @@ function FaturamentoReb() {
   const [isStartDatePickerVisible, setIsStartDatePickerVisible] = useState(false);
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
   const [isSpecificDatePickerVisible, setIsSpecificDatePickerVisible] = useState(false);
+  const { filtroMes } = useContext(AuthContext); 
+
+  //Filtro por mês
+  useEffect(() => {
+    const listaFiltradaMes = listaLeiteReb.filter((item) =>{ //pega todos os itens da lista que foi puxada da (listaLeiteReb)
+      const itemDataDeCriacao = new Date(item.createdAt); //cria uma nova data com a data do (createdAt do item) e atribui a variavel itemDataDeCriacao
+      return itemDataDeCriacao.getMonth() === filtroMes - 1; // verifica se o mês do item é igual ao escolhido pelo usuário
+    });
+    setLista(listaFiltradaMes);
+  }, [filtroMes]);
 
   //Codigo do DateTimePickerModal 
   //Data Inicial
@@ -44,9 +54,12 @@ function FaturamentoReb() {
   };
   const handleStartDateConfirm = (dateStart) => {
     let tempDateStart = new Date(dateStart);
-    let fDateStart = tempDateStart.getDate().toString().padStart(2, '0') + '/' + (tempDateStart.getMonth() + 1).toString().padStart(2, '0') + '/' + tempDateStart.getFullYear();
+    let fDateStart = tempDateStart.getDate().toString().padStart(2, '0') + 
+    '/' + 
+    (tempDateStart.getMonth() + 1).toString().padStart(2, '0') + 
+    '/' + 
+    tempDateStart.getFullYear();
     setTextStartDate(fDateStart)
-
     setStartDate(dateStart);
     hideStartDatePicker();
   };
@@ -60,7 +73,11 @@ function FaturamentoReb() {
   };
   const handleEndDateConfirm = (dateEnd) => {
     let tempDateEnd = new Date(dateEnd);
-    let fDateEnd = tempDateEnd.getDate().toString().padStart(2, '0') + '/' + (tempDateEnd.getMonth() + 1).toString().padStart(2, '0') + '/' + tempDateEnd.getFullYear();
+    let fDateEnd = tempDateEnd.getDate().toString().padStart(2, '0') + 
+      '/' + 
+      (tempDateEnd.getMonth() + 1).toString().padStart(2, '0') + 
+      '/' + 
+      tempDateEnd.getFullYear();
     setTextEndDate(fDateEnd)
     setEndDate(dateEnd);
     hideEndDatePicker();
@@ -75,7 +92,12 @@ function FaturamentoReb() {
   };
   const handleSpecificDateConfirm = (selectedDate) => {
     let tempSpecificDate = new Date(selectedDate);
-    let fSpecificDate = tempSpecificDate.getDate().toString().padStart(2, '0') + '/' + (tempSpecificDate.getMonth() + 1) .toString().padStart(2, '0') + '/' + tempSpecificDate.getFullYear().toString().padStart(2, '0');
+    let fSpecificDate = tempSpecificDate.getDate().toString().padStart(2, '0') + 
+    '/' + 
+
+    (tempSpecificDate.getMonth() + 1) .toString().padStart(2, '0') + 
+    '/' + 
+    tempSpecificDate.getFullYear().toString().padStart(2, '0');
     setTextSpecificDate(fSpecificDate);
     setSpecificDate(selectedDate);
     hideSpecificDatePicker();
@@ -87,13 +109,11 @@ function FaturamentoReb() {
     const listaFiltradaIntervalo = listaLeiteReb.filter((item) =>{ //pega todos os itens da lista que foi puxada da (listaLeiteReb)
       const itemDataDeCriacao = new Date(item.createdAt); //cria uma nova data com a data do (createdAt do item) e atribui a variavel itemDataDeCriacao
       const dataInicio = new Date(startDate); //pega a data de inicio escolhida pelo usuario
+        dataInicio.setHours(0, 0, 0);  //ajusta o horario para 00:00:00 para garantir que a data de inicio seja no começo do dia.
       const dataFim = new Date(endDate); //pega a data final escolhida pelo usuario
-      return (itemDataDeCriacao.getDate() >= dataInicio.getDate() 
-            && itemDataDeCriacao.getMonth() >= dataInicio.getMonth()
-            && itemDataDeCriacao.getFullYear() >= dataInicio.getFullYear()) &&
-              (itemDataDeCriacao.getDate() <= dataFim.getDate() 
-            && itemDataDeCriacao.getMonth() <= dataFim.getMonth()
-            && itemDataDeCriacao.getFullYear() <= dataFim.getFullYear()) // vai verificar se o intervalo de datas escolhida pelo usuario contém na listaLeiteReb
+        dataFim.setHours(23, 59, 59); //ajusta o horario para 23:59:59 para garantir que a data final sejá no final do dia.
+      return (itemDataDeCriacao.getTime() >= dataInicio.getTime() &&
+        itemDataDeCriacao.getTime() <= dataFim.getTime());
     });
     setLista(listaFiltradaIntervalo);
   }
@@ -124,7 +144,9 @@ function FaturamentoReb() {
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
-          {item.createdAt.getDate().toString().padStart(2, 0)}/{(item.createdAt.getMonth() + 1 ).toString().padStart(2, 0)}/{item.createdAt.getFullYear().toString()} - {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
+          {item.createdAt.getDate().toString().padStart(2, 0)}/
+          {(item.createdAt.getMonth() + 1 ).toString().padStart(2, 0)}/
+          {item.createdAt.getFullYear().toString()} - {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
         </Text>
       </TouchableOpacity>
     );
@@ -168,7 +190,7 @@ function FaturamentoReb() {
               <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
 
 
-
+            <DropdownComponentMes />
               {/*Filtro intervalo entre datas*/}
               <View style={{flexDirection: 'row'}}>
                 <TouchableOpacity 
@@ -218,7 +240,8 @@ function FaturamentoReb() {
                   style={{flex: 1, backgroundColor: "gray", borderRadius: 30, width: '50%', height: 30}}
                   onPress={() => {
                     setSpecificDate(null);
-                    setTextSpecificDate('Selecione a Data')
+                    setTextSpecificDate('Selecione a Data');
+                    setLista(listaLeiteReb);
                     }
                   }>
                   <Text style={{ textAlign: "center"}} >Limpar</Text>
