@@ -8,6 +8,46 @@ export const Fazenda = {
     tipoprod: "string",
     createdAt: "date",
     rebanhos: "RebanhoSchema[]",
+    entradaEstoque: "EstoqueEntradaSchema[]",
+    atualEstoque: "AtualEstoqueSchema[]",
+  },
+};
+export const EstoqueEntradaSchema = {
+  name: "EstoqueEntradaSchema",
+  primaryKey: "_id",
+  properties: {
+    _id: "string",
+    nomeProd: "string",
+    createdAt: "date",
+    valorProd: "float",
+    qtdProd: "float",
+    volumeProd: "float?",
+    pesoProd: "float?",
+    obserProd: "string?",
+    assignee: {
+      type: "linkingObjects",
+      objectType: "Farm",
+      property: "entradaEstoque",
+    },
+  },
+};
+export const AtualEstoqueSchema = {
+  name: "AtualEstoqueSchema",
+  primaryKey: "nomeProd",
+  properties: {
+    _id: "string",
+    nomeProd: "string",
+    createdAt: "date",
+    valorProd: "float",
+    qtdProd: "float",
+    volumeProd: "float?",
+    pesoProd: "float?",
+    obserProd: "string?",
+    assignee: {
+      type: "linkingObjects",
+      objectType: "Farm",
+      property: "atualEstoque",
+    },
   },
 };
 export const RebanhoSchema = {
@@ -19,10 +59,30 @@ export const RebanhoSchema = {
     createdAt: "date",
     vacas: "VacasSchema[]",
     gastos: "GastosSchema[]",
+    estoqueConsumo: "EstoqueConsumoSchema[]",
     assignee: {
       type: "linkingObjects",
       objectType: "Farm",
       property: "rebanhos",
+    },
+  },
+};
+export const EstoqueConsumoSchema = {
+  name: "EstoqueConsumoSchema",
+  primaryKey: "_id",
+  properties: {
+    _id: "string",
+    nomeProd: "string",
+    createdAt: "date",
+    valorProd: "float",
+    qtdProd: "float",
+    volumeProd: "float?",
+    pesoProd: "float?",
+    obserProd: "string?",
+    assignee: {
+      type: "linkingObjects",
+      objectType: "RebanhoSchema",
+      property: "estoqueConsumo",
     },
   },
 };

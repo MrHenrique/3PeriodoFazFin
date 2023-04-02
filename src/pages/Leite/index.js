@@ -14,7 +14,7 @@ import {
   Platform,
   StatusBar,
 } from "react-native";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from "@react-native-community/datetimepicker";
 import uuid from "react-native-uuid";
 import Header from "../../components/Header";
 import writeLeite from "../../Realm/writeLeite";
@@ -98,30 +98,41 @@ function Leite({ navigation }) {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
-  const [text, setText] = useState(new Date().getDate().toString().padStart(2, '0') + '/' + (new Date().getMonth() + 1).toString().padStart(2, '0') + '/' + new Date().getFullYear().toString().padStart(2, '0'));
+  const [text, setText] = useState(
+    new Date().getDate().toString().padStart(2, "0") +
+      "/" +
+      (new Date().getMonth() + 1).toString().padStart(2, "0") +
+      "/" +
+      new Date().getFullYear().toString().padStart(2, "0")
+  );
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'IOS');
+    setShow(Platform.OS === "IOS");
     setDate(currentDate);
 
     let tempDate = new Date(currentDate);
-    let fDate = tempDate.getDate().toString().padStart(2, '0') + '/' + (tempDate.getMonth() + 1).toString().padStart(2, '0') + '/' + tempDate.getFullYear();
-    setText(fDate)
+    let fDate =
+      tempDate.getDate().toString().padStart(2, "0") +
+      "/" +
+      (tempDate.getMonth() + 1).toString().padStart(2, "0") +
+      "/" +
+      tempDate.getFullYear();
+    setText(fDate);
 
-    console.log(fDate)
-  }
+    console.log(fDate);
+  };
 
-  const showMode = ( currentMode ) => {
+  const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
-  }
+  };
 
   //Fim do código da data .....
 
-
   //-----------------------------
   function CanContinue(vacaID) {
+    console.log(vacaID);
     if (typeof vacaID == "undefined" || vacaID == "") {
       const CanContinue = true;
       return CanContinue;
@@ -165,25 +176,30 @@ function Leite({ navigation }) {
       <ScrollView>
         {/*Data*/}
         <View style={styles.containerinfos}>
-          <Text style={styles.tituloinfo}>{ text }</Text>
-          <View >
-            <TouchableOpacity 
-              style={{backgroundColor: "blue", borderRadius: 20}}
-              onPress={() => showMode('date')}>
+          <Text style={styles.tituloinfo}>{text}</Text>
+          <View>
+            <TouchableOpacity
+              style={{
+                backgroundColor: "grey",
+                borderRadius: 20,
+              }}
+              onPress={() => showMode("date")}
+            >
               <Text style={styles.tituloinfo}>Selecione a data:</Text>
             </TouchableOpacity>
           </View>
 
-          { show && ( 
-            <DateTimePicker 
-            testID = "dateTimePicker"
-            value = {date}
-            mode = {mode}
-            display="default"
-            onChange={onChange}
-          />)}
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode={mode}
+              display="default"
+              onChange={onChange}
+            />
+          )}
 
-          <StatusBar style = "auto" />
+          <StatusBar style="auto" />
         </View>
 
         {/*Descrição*/}
@@ -196,7 +212,6 @@ function Leite({ navigation }) {
             placeholder="Exemplo: Leite 22/11 Vaca Araçá"
           />
         </View>
-
 
         {/*Preco do leite*/}
         <View style={styles.containerinfos}>
@@ -505,8 +520,8 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   dateComponente: {
-    width: 350
-  }
+    width: 350,
+  },
 });
 
 export default Leite;
