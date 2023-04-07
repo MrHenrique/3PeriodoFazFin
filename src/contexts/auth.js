@@ -61,9 +61,15 @@ function AuthProvider({ children }) {
   function FiltroMes(mesFiltro) {
     setFiltroMes(mesFiltro);
   }
+  const [listaFiltrada, setListaFiltrada] = useState([]);
+  function ListaFiltrada(listaFiltrada) {
+    setListaFiltrada(listaFiltrada);
+  }
   return (
     <AuthContext.Provider
       value={{
+        ListaFiltrada,
+        listaFiltrada,
         FiltroMes,
         filtroMes,
         GrafVaca,

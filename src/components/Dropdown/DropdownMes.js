@@ -1,30 +1,28 @@
 import React, {
     useState,
     useContext,
-    useFocusEffect,
-    useCallback,
-    useEffect,
   } from "react";
   import { StyleSheet, Text, View } from "react-native";
   import { Dropdown } from "react-native-element-dropdown";
   import { scale, verticalScale } from "react-native-size-matters";
   import { AuthContext } from "../../contexts/auth";
 
-  const data = [
-    { label: "Janeiro", value: "1" },
-    { label: "Fevereiro", value: "2" },
-    { label: "Março", value: "3" },
-    { label: "Abril", value: "4" },
-    { label: "Maio", value: "5" },
-    { label: "Junho", value: "6" },
-    { label: "Julho", value: "7" },
-    { label: "Agosto", value: "8" },
-    { label: "Setembro", value: "9" },
-    { label: "Outubro", value: "10" },
-    { label: "Novembro", value: "11" },
-    { label: "Dezembro", value: "12" },
-  ];
+
   const DropdownComponentMes = () => {
+    const data = [
+      { label: "Janeiro", value: "1" },
+      { label: "Fevereiro", value: "2" },
+      { label: "Março", value: "3" },
+      { label: "Abril", value: "4" },
+      { label: "Maio", value: "5" },
+      { label: "Junho", value: "6" },
+      { label: "Julho", value: "7" },
+      { label: "Agosto", value: "8" },
+      { label: "Setembro", value: "9" },
+      { label: "Outubro", value: "10" },
+      { label: "Novembro", value: "11" },
+      { label: "Dezembro", value: "12" },
+    ];
     const { FiltroMes } = useContext(AuthContext);
     const [value, setValue] = useState(1);
     const [isFocus, setIsFocus] = useState(false);
