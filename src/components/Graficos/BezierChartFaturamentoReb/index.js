@@ -2,13 +2,22 @@ import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 import { AuthContext } from "../../../contexts/auth";
-import { useContext, useState } from "react";
+import { useContext, useState , useEffect } from "react";
 const screenWidth = Dimensions.get("window").width;
 function BezierChartFaturamentoReb() {
   const { precoLeiteReb, listaLeiteReb } = useContext(AuthContext);
   const receitas = Number(precoLeiteReb);
 
   const [listaTeste, setListaTeste] = useState(listaLeiteReb);
+
+  useEffect(() => {
+    const listaTeste = listaLeiteReb.filter((item) =>{ //pega todos os itens da lista que foi puxada da (listaLeiteReb)
+      const itemDataDeCriacao = new Date(item.createdAt); //cria uma nova data com a data do (createdAt do item) e atribui a variavel itemDataDeCriacao
+      return (itemDataDeCriacao.getMonth() === 2) || (itemDataDeCriacao.getMonth() === 3); // verifica se o mês do item é igual ao escolhido pelo usuário
+    });
+    setListaTeste(listaTeste);
+  }, [1]);
+
 
 
   const receitasPorMes = {
@@ -28,7 +37,7 @@ function BezierChartFaturamentoReb() {
 
   //Percorre todos as produçoes de leite
   listaLeiteReb.forEach((item) => {
-    const valor = (item.prodL * item.precoL) //Pega a produção e multioplica pelo valor
+    const valor = (item.prodL * item.precoL) //Pega a produção e multiplica pelo valor
     const mes = item.createdAt.getMonth();  // cria uma variavel que se iguala ao mes de criação do item
 
     receitasPorMes[mes] += valor; //Soma todos os valores do mês
@@ -36,6 +45,7 @@ function BezierChartFaturamentoReb() {
 
   console.log(receitasPorMes);
 
+  /*
   //Teste
   const totalAbril = listaLeiteReb.reduce((total, item) => {
     if (item.createdAt.getMonth() == 3){
@@ -43,14 +53,39 @@ function BezierChartFaturamentoReb() {
     }
     return total;
   }, 0);
-  //FIM
-
   console.log(totalAbril);
+  //FIM*/
+
+  function getNomeDoMes(mes) {
+    const meses = {
+      0: 'Jan',
+      1: 'Fev',
+      2: 'Mar',
+      3: 'Abr',
+      4: 'Mai',
+      5: 'Jun',
+      6: 'Jul',
+      7: 'Ago',
+      8: 'Set',
+      9: 'Out',
+      10: 'Nov',
+      11: 'Dez'
+    };
+    return meses[mes];
+  }
+
+//Pega todos os os valores por mês e joga no array (valores)
+const valores = [];
+for (let i = 0; i < 12; i++) {
+    valores.push(receitasPorMes[i]);
+}
+
   const data = {
-    labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Nov", "Dez"],
+    labels: Object.keys(receitasPorMes) //pega as chaves do objeto (receitasPorMes)
+    .map((mes) => getNomeDoMes(parseInt(mes))),//retorna o nome do mês referente a chave do (receitasPorMes)
     datasets: [
       {
-        data: Object.values(receitasPorMes),  // retorna um array com os valores de todas as propriedades do objeto (receitasPorMes)
+        data: valores,  // retorna um array com os valores de todas as propriedades do objeto (receitasPorMes)
         strokeWidth: 2,
         color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
       },
@@ -67,7 +102,7 @@ function BezierChartFaturamentoReb() {
       width={screenWidth}
       height={verticalScale(330)}
       chartConfig={chartConfig}
-      verticalLabelRotation={40}
+      verticalLabelRotation={60}
       fromZero={true}
       bezier
     />
