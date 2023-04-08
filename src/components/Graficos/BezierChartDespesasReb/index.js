@@ -5,10 +5,8 @@ import { AuthContext } from "../../../contexts/auth";
 import { useContext } from "react";
 const screenWidth = Dimensions.get("window").width;
 function BezierChartDespesasReb() {
-  const { precoCFReb, listaAliReb } = useContext(AuthContext);
-  const despesas = Number(precoCFReb);
-
-  const despesasPorMes = {
+  const { listaAliReb } = useContext(AuthContext);
+  const despesasPorMesReb = {
     0: 0, //Janeiro
     1: 0, //Fevereiro
     2: 0, //Marco
@@ -22,15 +20,6 @@ function BezierChartDespesasReb() {
     10: 0, //Novembro
     11: 0, //Dezembro
   };
-
-  //Percorre todos as despesas
-  listaAliReb.forEach((item) => {
-    const valor = (item.valorAli / item.qtdAli) * item.consumoAli;
-    const mes = item.createdAt.getMonth(); // cria uma variavel que se iguala ao mes de criação do item
-
-    despesasPorMes[mes] += valor; //Soma todos as despesas do mês
-  });
-
   function getNomeDoMes(mes) {
     const meses = {
       0: "Jan",
@@ -49,18 +38,26 @@ function BezierChartDespesasReb() {
     return meses[mes];
   }
 
+  //Percorre todos as despesas
+  listaAliReb.forEach((item) => {
+    const valor = (item.valorAli / item.qtdAli) * item.consumoAli;
+    const mes = item.createdAt.getMonth(); // cria uma variavel que se iguala ao mes de criação do item
+
+    despesasPorMesReb[mes] += valor; //Soma todos as despesas do mês
+  });
+
   //Pega todos os os valores por mês e joga no array (valores)
   const valores = [];
   for (let i = 0; i < 12; i++) {
-    valores.push(despesasPorMes[i]);
+    valores.push(despesasPorMesReb[i]);
   }
-  
+
   const data = {
-    labels: Object.keys(despesasPorMes) //pega as chaves do objeto (despesasPorMes)
-      .map((mes) => getNomeDoMes(parseInt(mes))), //retorna o nome do mês referente a chave do (despesasPorMes)],
+    labels: Object.keys(despesasPorMesReb) //pega as chaves do objeto (despesasPorMesReb)
+      .map((mes) => getNomeDoMes(parseInt(mes))), //retorna o nome do mês referente a chave do (despesasPorMesReb)
     datasets: [
       {
-        data: Object.values(despesasPorMes),
+        data: Object.values(despesasPorMesReb),
         strokeWidth: 2,
         color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
       },
@@ -71,7 +68,6 @@ function BezierChartDespesasReb() {
     backgroundGradientFromOpacity: 0,
     backgroundGradientToOpacity: 0,
   };
-  //console.log(listaAliReb);
   return (
     <LineChart
       data={data}

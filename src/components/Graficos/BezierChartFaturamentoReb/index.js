@@ -6,7 +6,7 @@ import { useContext, useState, useEffect } from "react";
 const screenWidth = Dimensions.get("window").width;
 function BezierChartFaturamentoReb() {
   const { listaLeiteReb } = useContext(AuthContext);
-  const receitasPorMes = {
+  const receitasPorMesReb = {
     0: 0, //Janeiro
     1: 0, //Fevereiro
     2: 0, //Marco
@@ -43,7 +43,7 @@ function BezierChartFaturamentoReb() {
     const valor = item.prodL * item.precoL; //Pega a produção e multiplica pelo valor
     const mes = item.createdAt.getMonth(); // cria uma variavel que se iguala ao mes de criação do item
 
-    receitasPorMes[mes] += valor; //Soma todos os valores do mês
+    receitasPorMesReb[mes] += valor; //Soma todos os valores do mês
   });
 
   /*
@@ -60,15 +60,15 @@ function BezierChartFaturamentoReb() {
   //Pega todos os os valores por mês e joga no array (valores)
   const valores = [];
   for (let i = 0; i < 12; i++) {
-    valores.push(receitasPorMes[i]);
+    valores.push(receitasPorMesReb[i]);
   }
 
   const data = {
-    labels: Object.keys(receitasPorMes) //pega as chaves do objeto (receitasPorMes)
-      .map((mes) => getNomeDoMes(parseInt(mes))), //retorna o nome do mês referente a chave do (receitasPorMes)
+    labels: Object.keys(receitasPorMesReb) //pega as chaves do objeto (receitasPorMesReb)
+      .map((mes) => getNomeDoMes(parseInt(mes))), //retorna o nome do mês referente a chave do (receitasPorMesReb)
     datasets: [
       {
-        data: valores, // retorna um array com os valores de todas as propriedades do objeto (receitasPorMes)
+        data: valores, // retorna um array com os valores de todas as propriedades do objeto (receitasPorMesReb)
         strokeWidth: 2,
         color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
       },
