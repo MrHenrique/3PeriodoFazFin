@@ -65,9 +65,15 @@ function AuthProvider({ children }) {
   function ListaFiltrada(listaFiltrada) {
     setListaFiltrada(listaFiltrada);
   }
+  const [listaReceitaVacas, setListaReceitaVacas] = useState([]);
+  function ListaReceitaVacas(receitaVacas) {
+    setListaReceitaVacas(receitaVacas);
+  }
   return (
     <AuthContext.Provider
       value={{
+        ListaReceitaVacas,
+        listaReceitaVacas,
         ListaFiltrada,
         listaFiltrada,
         FiltroMes,
