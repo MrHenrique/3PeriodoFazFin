@@ -2,19 +2,32 @@ import { LineChart } from "react-native-chart-kit";
 import { scale, verticalScale } from "react-native-size-matters";
 import { AuthContext } from "../../../contexts/auth";
 import { useContext, useState } from "react";
-import {
-  Modal,
-  Text,
-  TouchableOpacity,
-  View,
-  SafeAreaView,
-} from "react-native";
+import { Modal, Text, TouchableOpacity, View, FlatList } from "react-native";
 import { StyleSheet } from "react-native";
 function Graficodetalhesvacas() {
   const { grafVaca, listaReceitaVacas } = useContext(AuthContext);
-
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedMonth, setSelectedMonth] = useState(0);
+  const [mesSelecionado, setMesSelecionado] = useState(0);
+
+  //Cria um novo array com as receitas do mes selecionado quando clicado em um ponto do grafico.
+  const receitasDoMesSelecionado = listaReceitaVacas.filter((item) => {
+    const dataCriacao = new Date(item.createdAt);
+    return dataCriacao.getMonth() === mesSelecionado;
+  });
+
+  //Cria um texto com a Data e o Valor daquela produção, usado na flatList
+  const renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity>
+        <Text style={styles.flatListContent}>
+          {item.createdAt.getDate().toString().padStart(2, 0)}/
+          {(item.createdAt.getMonth() + 1).toString().padStart(2, 0)}/
+          {item.createdAt.getFullYear().toString()} -- R${" "}
+          {(item.prodL * item.precoL).toFixed(2)}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   const resultado = Number(grafVaca);
   const receitasPorVaca = {
@@ -92,24 +105,30 @@ function Graficodetalhesvacas() {
         xLabelsOffset={verticalScale(7)}
         bezier
         onDataPointClick={({ value, index }) => {
-          setSelectedMonth(index);
+          setMesSelecionado(index); //passa o indice do ponto clicado para a variavel mesSelecionado
           setModalVisible(true);
         }}
       />
-      <Modal visible={modalVisible} animationType="fade" transparent={true}>
+      <Modal visible={modalVisible} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>
-              Detalhes de {data.labels[selectedMonth]}
+              Detalhes de {data.labels[mesSelecionado]}
             </Text>
             <TouchableOpacity onPress={() => setModalVisible(false)}>
               <Text style={styles.modalCloseButton}>X</Text>
             </TouchableOpacity>
           </View>
           <Text style={styles.modalContent}>
-            Receitas em {data.labels[selectedMonth]}: R${" "}
-            {data.datasets[0].data[selectedMonth].toFixed(2)}
+            Receitas em {data.labels[mesSelecionado]}: R${" "}
+            {data.datasets[0].data[mesSelecionado].toFixed(2)}
           </Text>
+          <FlatList
+            style={styles.flatListContainer}
+            data={receitasDoMesSelecionado}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id}
+          />
         </View>
       </Modal>
     </>
@@ -117,7 +136,7 @@ function Graficodetalhesvacas() {
 }
 const styles = StyleSheet.create({
   modalContainer: {
-    flex: 0.4,
+    flex: 0.7,
     backgroundColor: "#fea",
     borderRadius: 10,
     margin: 20,
@@ -144,6 +163,19 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     fontSize: 18,
+    paddingBottom: 15,
+  },
+  flatListContainer: {
+    borderRadius: 10,
+    backgroundColor: "#ffaa41",
+    //width: "90%",
+    paddingHorizontal: 10,
+  },
+  flatListContent: {
+    fontSize: 16,
+    paddingVertical: 2,
+    borderBottomWidth: 0.5,
+    textAlign: "center",
   },
 });
 export default Graficodetalhesvacas;
