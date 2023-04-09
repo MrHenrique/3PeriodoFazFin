@@ -1,9 +1,21 @@
 import { LineChart } from "react-native-chart-kit";
 import { scale, verticalScale } from "react-native-size-matters";
 import { AuthContext } from "../../../contexts/auth";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import {
+  Modal,
+  Text,
+  TouchableOpacity,
+  View,
+  SafeAreaView,
+} from "react-native";
+import { StyleSheet } from "react-native";
 function Graficodetalhesvacas() {
   const { grafVaca, listaReceitaVacas } = useContext(AuthContext);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedMonth, setSelectedMonth] = useState(0);
+
   const resultado = Number(grafVaca);
   const receitasPorVaca = {
     0: 0, //Janeiro
@@ -70,15 +82,68 @@ function Graficodetalhesvacas() {
     backgroundGradientToOpacity: 0,
   };
   return (
-    <LineChart
-      data={data}
-      width={scale(280)}
-      height={verticalScale(300)}
-      chartConfig={chartConfig}
-      verticalLabelRotation={-90}
-      xLabelsOffset={verticalScale(7)}
-      bezier
-    />
+    <>
+      <LineChart
+        data={data}
+        width={scale(280)}
+        height={verticalScale(300)}
+        chartConfig={chartConfig}
+        verticalLabelRotation={-90}
+        xLabelsOffset={verticalScale(7)}
+        bezier
+        onDataPointClick={({ value, index }) => {
+          setSelectedMonth(index);
+          setModalVisible(true);
+        }}
+      />
+      <Modal visible={modalVisible} animationType="fade" transparent={true}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>
+              Detalhes de {data.labels[selectedMonth]}
+            </Text>
+            <TouchableOpacity onPress={() => setModalVisible(false)}>
+              <Text style={styles.modalCloseButton}>X</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.modalContent}>
+            Receitas em {data.labels[selectedMonth]}: R${" "}
+            {data.datasets[0].data[selectedMonth].toFixed(2)}
+          </Text>
+        </View>
+      </Modal>
+    </>
   );
 }
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 0.4,
+    backgroundColor: "#fea",
+    borderRadius: 10,
+    margin: 20,
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "50%",
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 20,
+  },
+  modalCloseButton: {
+    color: "#ffaa41",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  modalContent: {
+    fontSize: 18,
+  },
+});
 export default Graficodetalhesvacas;

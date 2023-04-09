@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { scale, verticalScale } from "react-native-size-matters";
@@ -22,8 +22,11 @@ const DropdownComponentMes = () => {
   const { FiltroMes } = useContext(AuthContext);
   const [value, setValue] = useState(13); // colocado == 13 porque estava dando erro e buscando o janeiro quando colocado "1"
   const [isFocus, setIsFocus] = useState(false);
-  var mesEscolhido = value;
-  FiltroMes(mesEscolhido);
+
+  useEffect(() => {
+    FiltroMes(value);
+  }, [value, FiltroMes]);
+
   const renderLabel = () => {
     if (value || isFocus) {
       return (
