@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   campoTexto: {
-    ...Fonts.txtSmall,
+    ...Fonts.txtMediumBold,
     ...TextInput.TextInputLargeRounded,
     backgroundColor: Colors.white,
     color: Colors.black,
