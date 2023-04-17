@@ -117,6 +117,18 @@ function EntradaEstoque() {
       }
     }
   }
+  //botões de + e -
+  const [valorQtd, setValorQtd] = useState("0");
+  //mais
+  const maisButton = () => {
+    setValorQtd((parseInt(valorQtd) + 1).toString());
+  };
+  //menos
+  const menosButton = () => {
+    if (valorQtd >= 1) {
+      setValorQtd((parseInt(valorQtd) - 1).toString());
+    }
+  };
   //Buscar no banco filtrando por nome
   async function fetchDataEstoqueFiltered(fazID, nomeProd) {
     const dataEstoqueFiltered = await getAllEstoqueFiltered(fazID, nomeProd);
@@ -255,14 +267,20 @@ function EntradaEstoque() {
           inputMode="decimal"
         />
         <Text style={styles.font}>Quantidade de produtos comprados:</Text>
-        <TextInput
-          style={styles.font}
-          value={qtdProdI}
-          onChangeText={setQtdProd}
-          placeholder="10"
-          keyboardType="decimal-pad"
-          inputMode="decimal"
-        />
+        <View style={styles.containerMaisMenos}>
+          <TouchableOpacity style={styles.button} onPress={menosButton}>
+            <Text style={styles.buttonText}>-</Text>
+          </TouchableOpacity>
+          <TextInput
+            style={styles.font}
+            value={valorQtd}
+            onChangeText={(valor) => (setQtdProd(valor), setValorQtd(valor))}
+            keyboardType="numeric"
+          />
+          <TouchableOpacity style={styles.button} onPress={maisButton}>
+            <Text style={styles.buttonText}>+</Text>
+          </TouchableOpacity>
+        </View>
         {TextInputTipo()}
         <Text style={styles.font}>Observações:</Text>
         <TextInput
@@ -299,6 +317,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
     alignSelf: "center",
+    textAlign: 'center',
   },
   botao: {
     backgroundColor: "green",
@@ -307,6 +326,20 @@ const styles = StyleSheet.create({
     width: "100%",
     maxHeight: 50,
     maxWidth: 200,
+  },
+  containerMaisMenos: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "center",
+  },
+  button: {
+    backgroundColor: "lightgray",
+    padding: 8,
+    borderRadius: 4,
+  },
+  buttonText: {
+    fontSize: 24,
+    fontWeight: "bold",
   },
 });
 export default EntradaEstoque;
