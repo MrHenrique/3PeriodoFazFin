@@ -5,28 +5,20 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  FlatList,
-  ScrollView,
   Alert,
 } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
-import Header from "../../../components/Header";
+
 import { useNavigation } from "@react-navigation/native";
 import DropdownComponent from "../../../components/Dropdown/TipoProd";
 import uuid from "react-native-uuid";
 import { AuthContext } from "../../../contexts/auth";
 import writeEstoqueEntrada from "../../../Realm/writeEstoqueEntrada";
-import getAllEstoqueEntrada from "../../../Realm/getAllEstoqueEntrada";
 import writeEstoque from "../../../Realm/writeEstoque";
-import getAllEstoque from "../../../Realm/getAllEstoque";
 import getAllEstoqueFiltered from "../../../Realm/getAllEstoqueFiltered";
-import Modal from "react-native-modal";
 function EntradaEstoque() {
   const navigation = useNavigation();
   //estados
-  const [listaEstoque, setListaEstoque] = useState([]);
   const [listaEstoqueFiltered, setListaEstoqueFiltered] = useState([]);
-  const [listaEstoqueEntrada, setListaEstoqueEntrada] = useState([]);
   const [nomeProd, setNomeProd] = useState("");
   const [valorProdI, setValorProd] = useState("");
   const [volumeProdI, setVolumeProd] = useState("");
@@ -35,12 +27,6 @@ function EntradaEstoque() {
   const [qtdProdI, setQtdProd] = useState("");
   const { tipoProd } = useContext(AuthContext);
   const { fazID } = useContext(AuthContext);
-  const [isModalVisible, setModalVisible] = useState(false);
-  function toggleModal() {
-    setModalVisible(!isModalVisible);
-    fetchDataEntrada(fazID);
-    fetchDataEstoque(fazID);
-  }
   //Gravar dados em Estoque principal
   async function handleAddEstoque() {
     //checar se produto já existe
@@ -139,12 +125,6 @@ function EntradaEstoque() {
   useEffect(() => {
     fetchDataEstoqueFiltered(fazID, nomeProd);
   }, [nomeProd]);
-  console.log(listaEstoqueFiltered);
-  //Buscar no banco estoque
-  async function fetchDataEstoque(fazID) {
-    const dataEstoque = await getAllEstoque(fazID);
-    setListaEstoque(dataEstoque);
-  }
   //Gravar dados de transações de entrada no banco
   async function handleAddEstoqueEntrada() {
     //checar se produto já existe
@@ -220,19 +200,6 @@ function EntradaEstoque() {
     }
     handleAddEstoque();
   }
-  //Buscar no banco Transações de entrada
-  async function fetchDataEntrada(fazID) {
-    const dataEstoqueEntrada = await getAllEstoqueEntrada(fazID);
-    setListaEstoqueEntrada(dataEstoqueEntrada);
-    console.log(dataEstoqueEntrada);
-  }
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchDataEntrada(fazID);
-      fetchDataEstoque(fazID);
-    }, [])
-  );
   //Checar tipo de input farmacia/alimentos e deixar visivel somente o campo relacionado (volume/peso)
   const TextInputTipo = () => {
     if (tipoProd == 1) {
@@ -264,81 +231,8 @@ function EntradaEstoque() {
       </View>
     );
   };
-  const TipoAfter = (item) => {
-    if (item.volumeProd > 0) {
-      const categoriaProd = "Remédios";
-      return categoriaProd;
-    }
-    if (item.pesoProd > 0) {
-      const categoriaProd = "Alimentos";
-      return categoriaProd;
-    }
-  };
-  const renderItemEntrada = ({ item }) => {
-    return (
-      <ScrollView>
-        <TouchableOpacity>
-          <Text style={styles.font}>
-            {item.nomeProd} - R$ {(item.valorProd * item.qtdProd).toFixed(2)}
-          </Text>
-        </TouchableOpacity>
-      </ScrollView>
-    );
-  };
-  const renderItemEstoque = ({ item }) => {
-    const categoriaProd = TipoAfter(item);
-    return (
-      <ScrollView>
-        <TouchableOpacity>
-          <Text style={styles.font}>
-            Nome {item.nomeProd} - Quantidade {item.qtdProd.toFixed(0)} - Media
-            de preço - R$
-            {(item.valorProd / item.qtdProd).toFixed(2)} -
-            Categoria {categoriaProd}
-          </Text>
-        </TouchableOpacity>
-      </ScrollView>
-    );
-  };
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => {
-          toggleModal();
-        }}
-      >
-        <Text style={styles.font}>Teste</Text>
-      </TouchableOpacity>
-      <Modal
-        isVisible={isModalVisible}
-        coverScreen={true}
-        backdropColor={"rgba(234,242,215,0.8)"}
-        animationIn="slideInUp"
-        animationOut="slideOutDown"
-      >
-        <View style={styles.container}>
-          <Text style={styles.font}>Detalhes de receitas:</Text>
-          <FlatList
-            data={listaEstoqueEntrada}
-            renderItem={renderItemEntrada}
-            keyExtractor={(item) => item._id}
-          ></FlatList>
-          <Text style={styles.font}>Estoques:</Text>
-          <FlatList
-            data={listaEstoque}
-            renderItem={renderItemEstoque}
-            keyExtractor={(item) => item._id}
-          ></FlatList>
-          <TouchableOpacity
-            onPress={() => {
-              toggleModal();
-            }}
-          >
-            <Text style={styles.font}>Teste</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-
       <Text style={styles.font}>Cadastro de Produto</Text>
       <View>
         <Text style={styles.font}>Nome do produto:</Text>
@@ -384,6 +278,13 @@ function EntradaEstoque() {
           onPress={handleAddEstoqueEntrada}
         >
           <Text style={styles.font}>{"Cadastrar"}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.botao}
+          onPress={() => navigation.navigate("GeralFaz")}
+        >
+          <Text style={styles.font}>{"Voltar"}</Text>
         </TouchableOpacity>
       </View>
     </View>
