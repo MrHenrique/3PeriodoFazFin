@@ -16,7 +16,7 @@ function PreviewFinanceiro({ Titulo, Id }) {
   const [dataGasto, setDataGastos] = useState([]);
   const [dataReceitas, setDataReceitas] = useState([]);
   async function fetchDataReceitas(fazID) {
-    console.log(Id);
+    // console.log(Id);
     var dataRec;
     switch (Id) {
       case 1:
