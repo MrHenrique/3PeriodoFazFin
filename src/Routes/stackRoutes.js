@@ -14,6 +14,7 @@ import Alimentacao from "../pages/Alimentacao";
 import CadastroVaca from "../pages/CadastroVaca";
 import FinanceiroReb from "../pages/FinanceiroReb";
 import Estoque from "../pages/Estoque";
+import SelectFazPage from "../pages/SelectFazPage";
 const Stack = createNativeStackNavigator();
 function StackRoutes() {
   return (
@@ -21,6 +22,13 @@ function StackRoutes() {
       <Stack.Screen
         name="Home"
         component={Home}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="SelectFazPage"
+        component={SelectFazPage}
         options={{
           headerShown: false,
         }}

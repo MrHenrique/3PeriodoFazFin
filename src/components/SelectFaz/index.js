@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   TouchableOpacity,
   Text,
@@ -83,6 +83,19 @@ const SelectFaz = ({
 }) => {
   const [visible, setVisible] = useState(false);
   const [selected, setSelected] = useState(null);
+
+  useEffect(() => {
+    if (data.length === 1) {
+      setSelected(data[0]);
+      var Fazid = data[0]._id;
+      FazendaID(Fazid);
+      var FazProp = data[0].proprietario;
+      FazendaProp(FazProp);
+      setVisible(false);
+      console.log(Fazid)
+    }
+  }, [data]);
+
   const { TouchableComponent } = touchableComponent(
     touchableText,
     () => setVisible(true),
@@ -102,24 +115,24 @@ const SelectFaz = ({
   function toggleSelect(item) {
     if (item?.[objKey] === selected?.[objKey]) {
       setSelected(null);
-      var Fazid = ""
-      var Rebid = ""
+      var Fazid = "";
+      var Rebid = "";
       FazendaID(Fazid);
-      RebanhoID(Rebid)
+      RebanhoID(Rebid);
     } else {
       setSelected(item);
       setVisible(false);
       if (typeof item._id !== "undefined") {
         var Fazid = item._id;
         FazendaID(Fazid);
-        var Rebid = ""
-        RebanhoID(Rebid)
+        var Rebid = "";
+        RebanhoID(Rebid);
         var FazProp = item.proprietario;
         FazendaProp(FazProp);
       }
     }
   }
-  const { FazendaID, FazendaProp,RebanhoID } = useContext(AuthContext);
+  const { FazendaID, FazendaProp, RebanhoID } = useContext(AuthContext);
   return (
     <>
       <TouchableComponent />

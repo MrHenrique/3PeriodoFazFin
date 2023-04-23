@@ -24,7 +24,7 @@ function EntradaEstoque() {
   const [volumeProdI, setVolumeProd] = useState("");
   const [pesoProdI, setPesoProd] = useState("");
   const [obserProd, setObserProd] = useState("");
-  const [qtdProdI, setQtdProd] = useState("");
+  const [qtdProdI, setQtdProd] = useState(0);
   const { tipoProd } = useContext(AuthContext);
   const { fazID } = useContext(AuthContext);
   //Gravar dados em Estoque principal
@@ -118,15 +118,14 @@ function EntradaEstoque() {
     }
   }
   //botões de + e -
-  const [valorQtd, setValorQtd] = useState("0");
   //mais
   const maisButton = () => {
-    setValorQtd((parseInt(valorQtd) + 1).toString());
+    setQtdProd((parseInt(qtdProdI) + 1).toString());
   };
   //menos
   const menosButton = () => {
-    if (valorQtd >= 1) {
-      setValorQtd((parseInt(valorQtd) - 1).toString());
+    if (qtdProdI >= 1) {
+      setQtdProd((parseInt(qtdProdI) - 1).toString());
     }
   };
   //Buscar no banco filtrando por nome
@@ -273,8 +272,8 @@ function EntradaEstoque() {
           </TouchableOpacity>
           <TextInput
             style={styles.font}
-            value={valorQtd}
-            onChangeText={(valor) => (setQtdProd(valor), setValorQtd(valor))}
+            value={qtdProdI}
+            onChangeText={(valor) => setQtdProd(valor)}
             keyboardType="numeric"
           />
           <TouchableOpacity style={styles.button} onPress={maisButton}>
