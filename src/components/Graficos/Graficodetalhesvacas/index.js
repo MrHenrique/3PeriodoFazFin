@@ -4,30 +4,13 @@ import { AuthContext } from "../../../contexts/auth";
 import { useContext, useState } from "react";
 import { Modal, Text, TouchableOpacity, View, FlatList } from "react-native";
 import { StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 function Graficodetalhesvacas() {
   const { grafVaca, listaReceitaVacas } = useContext(AuthContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible1, setModalVisible1] = useState(false);
   const [mesSelecionado, setMesSelecionado] = useState(0);
-
-  //Cria um novo array com as receitas do mes selecionado quando clicado em um ponto do grafico.
-  const receitasDoMesSelecionado = listaReceitaVacas.filter((item) => {
-    const dataCriacao = new Date(item.createdAt);
-    return dataCriacao.getMonth() === mesSelecionado;
-  });
-
-  //Cria um texto com a Data e o Valor daquela produção, usado na flatList
-  const renderItem = ({ item }) => {
-    return (
-      <TouchableOpacity>
-        <Text style={styles.flatListContent}>
-          {item.createdAt.getDate().toString().padStart(2, 0)}/
-          {(item.createdAt.getMonth() + 1).toString().padStart(2, 0)}/
-          {item.createdAt.getFullYear().toString()} -- R${" "}
-          {(item.prodL * item.precoL).toFixed(2)}
-        </Text>
-      </TouchableOpacity>
-    );
-  };
+  const [itemSelecionado, setItemSelecionado] = useState(null);
 
   const resultado = Number(grafVaca);
   const receitasPorVaca = {
@@ -75,6 +58,37 @@ function Graficodetalhesvacas() {
   for (let i = 0; i < 12; i++) {
     valores.push(receitasPorVaca[i]);
   }
+
+  //Cria um novo array com as receitas do mes selecionado quando clicado em um ponto do grafico.
+  const receitasDoMesSelecionado = listaReceitaVacas.filter((item) => {
+    const dataCriacao = new Date(item.createdAt);
+    return dataCriacao.getMonth() === mesSelecionado;
+  });
+
+  /*//Teste
+  const getItemValue = (key) => {
+    const item = receitasDoMesSelecionado.find((item) => item._id === key);
+    return item ? "Aqui deu" : '';
+  };*/
+
+  //Cria um texto com a Data e o Valor daquela produção, usado na flatList
+  const renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          setModalVisible1(true);
+          setItemSelecionado(item);
+        }}
+      >
+        <Text style={styles.flatListContent}>
+          {item.createdAt.getDate().toString().padStart(2, 0)}/
+          {(item.createdAt.getMonth() + 1).toString().padStart(2, 0)}/
+          {item.createdAt.getFullYear().toString()} -- R${" "}
+          {(item.prodL * item.precoL).toFixed(2)}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   const data = {
     labels: Object.keys(receitasPorVaca) //pega as chaves do objeto (receitasPorVaca)
@@ -131,6 +145,42 @@ function Graficodetalhesvacas() {
           />
         </View>
       </Modal>
+
+      <Modal visible={modalVisible1} animationType="slide" transparent={true}>
+        <SafeAreaView
+          style={{ flex: 1 }}
+          onTouchStart={() => setModalVisible1(false)}
+        >
+          <View style={styles.modalContainer1}>
+            <View style={styles.modalHeader1}>
+              <Text style={styles.modalTitle1}>Detalhes</Text>
+              <TouchableOpacity onPress={() => setModalVisible1(false)}>
+                <Text style={styles.modalCloseButton1}>X</Text>
+              </TouchableOpacity>
+            </View>
+            {itemSelecionado && (
+              <>
+                <Text style={styles.modalContent1}>
+                  <Text style={{ fontWeight: "bold" }}>Preço:</Text> R${" "}
+                  {itemSelecionado.precoL.toFixed(2)}
+                </Text>
+                <Text style={styles.modalContent1}>
+                  <Text style={{ fontWeight: "bold" }}>Quantidade:</Text>{" "}
+                  {itemSelecionado.prodL}
+                </Text>
+                <Text style={styles.modalContent1}>
+                  <Text style={{ fontWeight: "bold" }}>Data:</Text>{" "}
+                  {itemSelecionado.createdAt.toLocaleDateString()}
+                </Text>
+                <Text style={styles.modalContent1}>
+                  <Text style={{ fontWeight: "bold" }}>Hora:</Text>{" "}
+                  {itemSelecionado.createdAt.toLocaleTimeString()}
+                </Text>
+              </>
+            )}
+          </View>
+        </SafeAreaView>
+      </Modal>
     </>
   );
 }
@@ -176,6 +226,37 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderBottomWidth: 0.5,
     textAlign: "center",
+  },
+
+  //Modal1
+  modalContainer1: {
+    flex: 0.2,
+    backgroundColor: "#fea",
+    borderRadius: 10,
+    margin: 20,
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    //marginTop: "50%",
+  },
+  modalHeader1: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 20,
+  },
+  modalCloseButton1: {
+    color: "#ffaa41",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  modalTitle1: {
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  modalContent1: {
+    fontSize: 16,
   },
 });
 export default Graficodetalhesvacas;
