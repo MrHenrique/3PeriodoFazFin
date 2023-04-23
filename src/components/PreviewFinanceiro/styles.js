@@ -3,22 +3,8 @@ import { Buttons, Colors, Fonts } from "../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.Cyan,
-  },
-
-  containergeral: {
-    flex: 1,
-    margin: scale(15),
-    justifyContent: "space-around",
-  },
-  containercadastrarreb: {
-    flex: 1.2,
-    marginTop: scale(-50),
-  },
   geralfaz: {
-    flex: 1.8,
+    flex: 1,
   },
   viewtext: {
     flex: 1,
@@ -48,7 +34,7 @@ const styles = StyleSheet.create({
   },
 
   bannerButton: {
-    flex: 0.7,
+    flex: 1,
     backgroundColor: Colors.btngreen,
     justifyContent: "center",
     borderRadius: 10,

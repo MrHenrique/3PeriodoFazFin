@@ -5,7 +5,9 @@ import styles from "./styles";
 import { Color } from "./styles";
 //DB
 import getAllGastos from "../../Realm/getAllGastos";
+import getAllGastosReb from "../../Realm/getAllGastosReb";
 import getAllLeite from "../../Realm/getAllLeite";
+import getAllLeiteReb from "../../Realm/getAllLeiteReb";
 import { ReceitasTotais } from "../../components/Calculos DB/ReceitasTotais";
 import { DespesasTotais } from "../../components/Calculos DB/DespesasTotais";
 //--
@@ -42,6 +44,7 @@ function PreviewFinanceiro({ Titulo, Id }) {
     var dataGas;
     switch (Id) {
       case 1:
+        console.log("fazenda");
         dataGas = await getAllGastos(fazID);
         setDataGastos(dataGas);
         ListaAli(dataGas);
@@ -49,6 +52,7 @@ function PreviewFinanceiro({ Titulo, Id }) {
         PrecoCF(precoCF);
         break;
       case 2:
+        console.log("rebanho");
         dataGas = await getAllGastosReb(rebID);
         setDataGastos(dataGas);
         ListaAliReb(dataGas);
@@ -77,21 +81,50 @@ function PreviewFinanceiro({ Titulo, Id }) {
     ListaLeite,
     precoLeite,
     PrecoLeite,
+    ListaAliReb,
+    PrecoCFReb,
+    precoCFReb,
+    ListaLeiteReb,
+    PrecoLeiteReb,
+    precoLeiteReb,
   } = useContext(AuthContext);
 
   //Funcoes para validar e renderizar
   function getDespesas() {
-    if (typeof precoCF !== "undefined") {
-      return Number(precoCF);
-    } else {
-      return 0;
+    switch (Id) {
+      case 1:
+        if (typeof precoCF !== "undefined") {
+          return Number(precoCF);
+        } else {
+          return 0;
+        }
+        break;
+      case 2:
+        if (typeof precoCFReb !== "undefined") {
+          console.log(precoCFReb);
+          return Number(precoCFReb);
+        } else {
+          return 0;
+        }
+        break;
     }
   }
   function getReceitas() {
-    if (typeof precoLeite !== "undefined") {
-      return Number(precoLeite);
-    } else {
-      return 0;
+    switch (Id) {
+      case 1:
+        if (typeof precoLeite !== "undefined") {
+          return Number(precoLeite);
+        } else {
+          return 0;
+        }
+        break;
+      case 2:
+        if (typeof precoLeiteReb !== "undefined") {
+          return Number(precoLeiteReb);
+        } else {
+          return 0;
+        }
+        break;
     }
   }
   function getTotal(despesas, receitas) {
@@ -181,9 +214,5 @@ function PreviewFinanceiro({ Titulo, Id }) {
       </TouchableOpacity>
     </View>
   );
-
-  function newFunction() {
-    return nextPage();
-  }
 }
 export default PreviewFinanceiro;
