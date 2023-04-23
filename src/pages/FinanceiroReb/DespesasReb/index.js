@@ -24,8 +24,8 @@ function DespesasReb() {
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
-          {item.tipoAlim} - R$
-          {((item.valorAli / item.qtdAli) * item.consumoAli).toFixed(2)}
+          {item.nomeProd} - R$
+          {(item.valorProd * item.qtdProd).toFixed(2)}
         </Text>
       </TouchableOpacity>
     );

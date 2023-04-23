@@ -58,8 +58,7 @@ export const RebanhoSchema = {
     nomeReb: "string",
     createdAt: "date",
     vacas: "VacasSchema[]",
-    gastos: "GastosSchema[]",
-    estoqueConsumo: "EstoqueConsumoSchema[]",
+    despesas: "DespesasSchema[]",
     assignee: {
       type: "linkingObjects",
       objectType: "Farm",
@@ -67,8 +66,8 @@ export const RebanhoSchema = {
     },
   },
 };
-export const EstoqueConsumoSchema = {
-  name: "EstoqueConsumoSchema",
+export const DespesasSchema = {
+  name: "DespesasSchema",
   primaryKey: "_id",
   properties: {
     _id: "string",
@@ -82,7 +81,7 @@ export const EstoqueConsumoSchema = {
     assignee: {
       type: "linkingObjects",
       objectType: "RebanhoSchema",
-      property: "estoqueConsumo",
+      property: "despesas",
     },
   },
 };
@@ -118,23 +117,6 @@ export const VacasSchema = {
       type: "linkingObjects",
       objectType: "RebanhoSchema",
       property: "vacas",
-    },
-  },
-};
-export const GastosSchema = {
-  name: "GastosSchema",
-  primaryKey: "_id",
-  properties: {
-    _id: "string",
-    tipoAlim: "string?",
-    qtdAli: "float?",
-    valorAli: "float?",
-    consumoAli: "float?",
-    createdAt: "date",
-    assignee: {
-      type: "linkingObjects",
-      objectType: "RebanhoSchema",
-      property: "gastos",
     },
   },
 };

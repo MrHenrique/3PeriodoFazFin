@@ -3,10 +3,9 @@ import {
   Fazenda,
   RebanhoSchema,
   VacasSchema,
-  GastosSchema,
   EstoqueEntradaSchema,
   AtualEstoqueSchema,
-  EstoqueConsumoSchema,
+  DespesasSchema,
 } from "../../src/Realm/Schemas/Schema";
 import Realm from "realm";
 
@@ -18,11 +17,10 @@ export const getRealm = async () =>
       Fazenda,
       RebanhoSchema,
       VacasSchema,
-      GastosSchema,
+      DespesasSchema,
       EstoqueEntradaSchema,
       AtualEstoqueSchema,
-      EstoqueConsumoSchema,
     ],
-    schemaVersion: 1,
+    schemaVersion: 2,
     deleteRealmIfMigrationNeeded: true,
   });

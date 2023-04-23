@@ -41,6 +41,7 @@ function EstoqueGeral() {
   async function fetchDataEstoque(fazID) {
     const dataEstoque = await getAllEstoque(fazID);
     setListaEstoque(dataEstoque);
+    console.log(listaEstoque);
   }
   //Buscar no banco Transações de entrada
   async function fetchDataEntrada(fazID) {

@@ -1,9 +1,7 @@
 export function DespesasTotais(dataGastos) {
   var testes = 0;
   for (var i in dataGastos) {
-    testes +=
-      (dataGastos[i].valorAli / dataGastos[i].qtdAli) *
-      dataGastos[i].consumoAli;
+    testes += dataGastos[i].valorProd * dataGastos[i].qtdProd;
   }
 
   const precoCF = testes.toFixed(2);
