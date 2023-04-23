@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import DropdownComponentMes from "./DropdownMes";
+import DropdownComponentMes from "../Dropdown/DropdownMes";
 import { AuthContext } from "../../contexts/auth";
 
 function FiltrosData() {
@@ -27,7 +27,10 @@ function FiltrosData() {
   const [isSpecificDatePickerVisible, setIsSpecificDatePickerVisible] =
     useState(false);
 
-  ListaFiltrada(lista);
+  useEffect(() => {
+    ListaFiltrada(lista);
+  }, [lista])
+  
 
   //Codigo do DateTimePickerModal
   //Data Inicial
@@ -146,7 +149,7 @@ function FiltrosData() {
     <SafeAreaView style={styles.container}>
       <DropdownComponentMes />
       {/*Filtro intervalo entre datas*/}
-      <View style={{ flexDirection: "row" }}>
+      <View style={{ flexDirection: "row", /*marginBottom: 32*/}}>
         <TouchableOpacity
           style={{
             flex: 1,
@@ -240,88 +243,8 @@ function FiltrosData() {
 }
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#006773",
     flex: 1,
-  },
-  botaopress: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    top: verticalScale(530),
-    position: "absolute",
-  },
-  tituloBotao: {
-    fontSize: verticalScale(14),
-    fontWeight: "bold",
-    color: "#fff",
-  },
-  tituloModal: {
-    fontSize: verticalScale(20),
-    fontWeight: "bold",
-    color: "rgba(0, 69, 19, 0.95)",
-    margin: verticalScale(5),
-    alignSelf: "center",
-  },
-  imgbg: {
-    flex: 1,
-    resizeMode: "cover",
-    padding: verticalScale(10),
-  },
-  textoValorNeg: {
-    color: "#FF3131",
-    fontWeight: "bold",
-    fontSize: verticalScale(30),
-    marginLeft: scale(20),
-  },
-  texto: {
-    color: "#ffffff",
-    fontWeight: "bold",
-    fontSize: verticalScale(25),
-    marginLeft: scale(20),
-  },
-  textoValorPos: {
-    color: "#0FFF50",
-    fontWeight: "bold",
-    fontSize: verticalScale(30),
-    marginLeft: scale(20),
-  },
-  botaopressM: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    top: verticalScale(583),
-    position: "absolute",
-  },
-  listaDet: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.95)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    marginVertical: verticalScale(5),
-  },
-  listaDet2: {
-    borderRadius: 20,
-    backgroundColor: "rgba(0, 69, 19, 0.95)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    marginVertical: verticalScale(5),
-  },
-  scroll: {
-    height: verticalScale(525),
+    padding: 20,
   },
 });
 

@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import BezierChartFaturamentoReb from "../../../components/Graficos/BezierChartFaturamentoReb";
-import FiltrosData from "../../../components/Dropdown/FiltrosData";
+import FiltrosData from "../../../components/Filtros/FiltrosData";
 import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
 import { AuthContext } from "../../../contexts/auth";
