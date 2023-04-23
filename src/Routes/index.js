@@ -21,6 +21,7 @@ import GeralReb from "../pages/GeralReb";
 import FinanceiroFaz from "../pages/FinanceiroFaz";
 import FinanceiroReb from "../pages/FinanceiroReb";
 import Estoque from "../pages/Estoque";
+import SelectFazPage from "../pages/SelectFazPage";
 const Drawer = createDrawerNavigator();
 function Routes() {
   return (
@@ -41,6 +42,20 @@ function Routes() {
       <Drawer.Screen
         name="HomeDrawer"
         component={StackRoutes}
+        options={{
+          title: "Bem vindo.",
+          drawerIcon: ({ focused, size, color }) => (
+            <Ionicons
+              name={focused ? "home" : "home-outline"}
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="SelectFazPage"
+        component={SelectFazPage}
         options={{
           title: "Bem vindo.",
           drawerIcon: ({ focused, size, color }) => (

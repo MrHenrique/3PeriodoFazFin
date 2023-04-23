@@ -201,30 +201,32 @@ function EstoqueGeral() {
   };
   return (
     <View style={styles.container}>
-        <View>
-          <Text style={styles.font}>Valor de produtos em Estoque</Text>
-          <Text style={styles.font}>R$ {EstoqueValorTotal().toFixed(2)}</Text>
-        </View>
       <View>
-        <TouchableOpacity
-          onPress={() => setShouldShowDetalhes(!shouldShowDetalhes)}
-        >
-          <Text style={styles.font}>Produtos cadastrados</Text>
-        </TouchableOpacity>
-        {shouldShowDetalhes ? (
-          <FlatList
-            data={listaEstoque}
-            renderItem={renderItemEstoque}
-            keyExtractor={(item) => item._id}
-          ></FlatList>
-        ) : null}
-        <TouchableOpacity
+        <Text style={styles.font}>Valor de produtos em Estoque</Text>
+        <Text style={styles.font}>R$ {EstoqueValorTotal().toFixed(2)}</Text>
+      </View>
+      <View>
+      <TouchableOpacity
           onPress={() => {
             toggleModal();
           }}
         >
           <Text style={styles.font}>Relatorio de Compras</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setShouldShowDetalhes(!shouldShowDetalhes)}
+        >
+          <Text style={styles.font}>Produtos cadastrados</Text>
+        </TouchableOpacity>
+        {shouldShowDetalhes ? (
+          <View>
+            <FlatList
+              data={listaEstoque}
+              renderItem={renderItemEstoque}
+              keyExtractor={(item) => item._id}
+            ></FlatList>
+          </View>
+        ) : null}
         <Modal
           isVisible={isModalVisible}
           coverScreen={true}
