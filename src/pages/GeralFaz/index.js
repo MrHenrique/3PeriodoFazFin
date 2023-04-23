@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   SafeAreaView,
+  Image,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import getAllReb from "../../Realm/getAllReb";
@@ -12,7 +13,6 @@ import { scale, verticalScale } from "react-native-size-matters";
 import Select from "../../components/Select";
 import { AuthContext } from "../../contexts/auth";
 import styles from "./styles";
-import PreviewFinanceiro from "../../components/PreviewFinanceiro";
 function GeralFaz({ navigation }) {
   const [listaReb, setListaReb] = useState([]);
 
@@ -50,12 +50,6 @@ function GeralFaz({ navigation }) {
       return Style;
     }
   }
-  function setSize(text, width) {
-    var fontSize = width / text.toString().length;
-    var maxSize = width / 10;
-    fontSize = Math.min(fontSize, maxSize);
-    return fontSize;
-  }
   const imgbg1 = "../../../assets/bg4.jpg";
   return (
     <SafeAreaView style={styles.container}>
@@ -65,17 +59,12 @@ function GeralFaz({ navigation }) {
         imageStyle={{ opacity: 0.6 }}
       >
         <View style={styles.containergeral}>
-          <View style={styles.geralfaz}>
-            <PreviewFinanceiro Titulo={"Visão Geral da Fazenda"} Id={1} />
-          </View>
-
-          <View style={styles.containercadastrarreb}>
-            <TouchableOpacity
-              style={styles.botaoPress3}
-              onPress={() => navigation.navigate("CadastroReb")}
-            >
-              <Text style={styles.tituloBotao2}>{"Cadastrar rebanhos"}</Text>
-            </TouchableOpacity>
+        
+          <View style={styles.containerlogo}>
+            <Image
+              style={styles.logo}
+              source={require("../../../assets/FazFin.png")}
+            />
           </View>
 
           <View style={styles.viewtext}>
@@ -88,6 +77,16 @@ function GeralFaz({ navigation }) {
               data={listaReb}
             />
           </View>
+
+          <View style={styles.containercadastrarreb}>
+            <TouchableOpacity
+              style={styles.botaoPress3}
+              onPress={() => navigation.navigate("CadastroReb")}
+            >
+              <Text style={styles.tituloBotao2}>{"Cadastrar rebanhos"}</Text>
+            </TouchableOpacity>
+          </View>
+
           <View style={styles.containerbotoes}>
             <TouchableOpacity
               style={styles.botaopress2}

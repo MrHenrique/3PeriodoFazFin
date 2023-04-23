@@ -12,39 +12,23 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: scale(15),
     justifyContent: "space-around",
+    backgroundColor: Colors.darkgreenTransparent,
+    borderRadius: 10,
   },
   containercadastrarreb: {
-    flex: 1.2,
-    marginTop: scale(-50),
-  },
-  geralfaz: {
-    flex: 1.8,
+    flex: 1.5,
+    bottom: 0,
+    justifyContent: "center",
   },
   viewtext: {
-    flex: 1,
+    flex: 1.2,
     alignSelf: "center",
-    marginTop: scale(-75),
+    justifyContent: "center",
   },
   imgbg: {
     flex: 1,
     resizeMode: "cover",
     width: "100%",
-  },
-
-  bolareceita: {
-    width: scale(10),
-    height: scale(10),
-    borderRadius: 50,
-    backgroundColor: Colors.neongreen,
-    marginEnd: scale(5),
-  },
-
-  boladespesa: {
-    width: scale(10),
-    height: scale(10),
-    borderRadius: 50,
-    backgroundColor: Colors.red,
-    marginEnd: scale(5),
   },
 
   bannerButton: {
@@ -171,9 +155,22 @@ const styles = StyleSheet.create({
   },
 
   containerbotoes: {
-    flex: 1,
     padding: verticalScale(10),
     flexDirection: "column-reverse",
+  },
+  containerlogo: {
+    flex: 1,
+    marginBottom: verticalScale(50),
+    justifyContent: "center",
+    marginTop: verticalScale(10),
+  },
+
+  logo: {
+    resizeMode: "contain",
+    height: verticalScale(150),
+    width: verticalScale(150),
+    top: verticalScale(30),
+    alignSelf: "center",
   },
 });
 export default styles;
