@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
   containerPreview: {
     flex: 0.6,
     justifyContent: "flex-start",
-    flexDirection: "column-reverse",
     // backgroundColor: Colors.white,
     paddingBottom: scale(5),
   },
@@ -66,9 +65,9 @@ const styles = StyleSheet.create({
     paddingBottom: verticalScale(10),
   },
   nextPreview: {
+    
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.btngreen,
-    marginBottom: scale(10),
   },
   textPreview: {
     ...Fonts.txtLargeBold,
