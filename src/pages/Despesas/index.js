@@ -3,9 +3,10 @@ import { StyleSheet, useWindowDimensions } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import Header from "../../components/Header";
 import Outros from "./Outros";
-const FirstRoute = () => <Outros/> ;
+import SaidaEstoque from "./SaidaEstoque";
+const FirstRoute = () => <SaidaEstoque />;
 
-const SecondRoute = () =><Outros/>;
+const SecondRoute = () => <Outros />;
 const renderScene = SceneMap({
   first: FirstRoute,
   second: SecondRoute,

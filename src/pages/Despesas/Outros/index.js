@@ -11,7 +11,7 @@ export default function Outros() {
   const navigation = useNavigation();
   const [valorProdString, setValorProd] = useState("");
   const [nomeProd, setNomeProd] = useState("");
-  const { rebID } = useContext(AuthContext);
+  const { rebID} = useContext(AuthContext);
   async function handleAddGastos() {
       const valorProd = Number(valorProdString);
       await writeGastos(
@@ -28,7 +28,6 @@ export default function Outros() {
   }
   return (
     <>
-      <EstoqueOptions />
       <View>
         <Text>Cadastro de outras despesas.</Text>
         <View>

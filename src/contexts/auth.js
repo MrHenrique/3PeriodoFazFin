@@ -57,6 +57,14 @@ function AuthProvider({ children }) {
   function TipoProd(dataProd) {
     SetTipoProd(dataProd);
   }
+  const [idEstoqueSaida, SetIdEstoqueSaida] = useState();
+  function IdEstoqueSaida(dataID) {
+    SetIdEstoqueSaida(dataID);
+  }
+  const [tipoEstoqueSaida, SetTipoEstoqueSaida] = useState();
+  function TipoEstoqueSaida(dataTipo) {
+    SetTipoEstoqueSaida(dataTipo);
+  }
   return (
     <AuthContext.Provider
       value={{
@@ -86,6 +94,10 @@ function AuthProvider({ children }) {
         precoCFReb,
         listaAliReb,
         ListaAliReb,
+        idEstoqueSaida,
+        IdEstoqueSaida,
+        tipoEstoqueSaida,
+        TipoEstoqueSaida,
       }}
     >
       {children}

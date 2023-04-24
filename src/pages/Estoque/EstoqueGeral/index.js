@@ -41,7 +41,6 @@ function EstoqueGeral() {
   async function fetchDataEstoque(fazID) {
     const dataEstoque = await getAllEstoque(fazID);
     setListaEstoque(dataEstoque);
-    console.log(listaEstoque);
   }
   //Buscar no banco Transações de entrada
   async function fetchDataEntrada(fazID) {
@@ -99,11 +98,12 @@ function EstoqueGeral() {
     }
   };
   const EstoqueValorTotal = () => {
+    console.log(listaEstoque);
     let Valor = 0;
     let ValorTotal = 0;
     let x = 0;
     while (x < listaEstoque.length) {
-      Valor = listaEstoque[x].qtdProd * listaEstoque[x].valorProd;
+      Valor = listaEstoque[x].valorProd;
       x = x + 1;
       ValorTotal = ValorTotal + Valor;
     }
@@ -159,7 +159,6 @@ function EstoqueGeral() {
             <View style={styles.containerItem}>{imgCateg}</View>
             <View style={styles.containerText}>
               <Text style={styles.Text}>{item.nomeProd}</Text>
-              <Text style={styles.Text}>{item.qtdProd.toFixed(0)}</Text>
             </View>
             <MaterialCommunityIcons
               name={"arrow-down-right"}
@@ -182,13 +181,19 @@ function EstoqueGeral() {
             <View style={styles.containerlist}>
               <Text style={styles.font}>Itens em estoque : {item.qtdProd}</Text>
             </View>
-            {tipoRelatorio(categoriaProd)}
-            <View style={styles.containerlist}>
-              <Text style={styles.font}>
-                Média de preço por item : R$
-                {(item.valorProd / item.qtdProd).toFixed(2)}
-              </Text>
-            </View>
+            {item.qtdProd > 0 ? (
+              <View>
+                {tipoRelatorio(categoriaProd)}
+                <View style={styles.containerlist}>
+                  <Text style={styles.font}>
+                    Média de preço por item : R$
+                    {(item.valorProd / item.qtdProd).toFixed(2)}
+                  </Text>
+                </View>
+              </View>
+            ) : (
+              <></>
+            )}
             <View style={styles.containerlist}>
               <Text style={styles.font}>Data da ultima compra :</Text>
             </View>
@@ -207,7 +212,7 @@ function EstoqueGeral() {
         <Text style={styles.font}>R$ {EstoqueValorTotal().toFixed(2)}</Text>
       </View>
       <View>
-      <TouchableOpacity
+        <TouchableOpacity
           onPress={() => {
             toggleModal();
           }}

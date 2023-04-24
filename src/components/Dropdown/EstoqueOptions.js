@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from "react";
+import React, { useState, useContext, useCallback, useEffect } from "react";
 
 import { useFocusEffect } from "@react-navigation/native";
 import getAllEstoque from "../../Realm/getAllEstoque";
@@ -10,21 +10,33 @@ const EstoqueOptions = () => {
   const [value, setValue] = useState(1);
   const [isFocus, setIsFocus] = useState(false);
   const [listaEstoque, setListaEstoque] = useState([]);
-  const { fazID } = useContext(AuthContext);
+  const { fazID, IdEstoqueSaida, tipoEstoqueSaida } = useContext(AuthContext);
+
+  const fetchDataEstoque = useCallback(async () => {
+    const dataEstoque = await getAllEstoque(fazID);
+    let filteredDataEstoque = [];
+
+    if (tipoEstoqueSaida === 1) {
+      filteredDataEstoque = dataEstoque.filter((obj) => obj.pesoProd != null);
+      setValue(1);
+    } else if (tipoEstoqueSaida === 2) {
+      filteredDataEstoque = dataEstoque.filter((obj) => obj.volumeProd != null);
+      setValue(1);
+    }
+
+    setListaEstoque(filteredDataEstoque);
+  }, [tipoEstoqueSaida]);
+
+  useEffect(() => {
+    fetchDataEstoque();
+  }, [fetchDataEstoque]);
+
   const data = listaEstoque.map((item, index) => ({
     label: item.nomeProd,
     value: String(index + 1),
+    _id: item._id,
   }));
-  async function fetchDataEstoque(fazID) {
-    const dataEstoque = await getAllEstoque(fazID);
-    setListaEstoque(dataEstoque);
-  }
-  //Chama funcao buscando dados do estoque ao focar em página
-  useFocusEffect(
-    useCallback(() => {
-      fetchDataEstoque(fazID);
-    }, [])
-  );
+
   const renderLabel = () => {
     if (value || isFocus) {
       return (
@@ -48,12 +60,14 @@ const EstoqueOptions = () => {
         maxHeight={300}
         labelField="label"
         valueField="value"
+        idField="_id"
         placeholder={"Clique aqui"}
         value={value}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={(item) => {
           setValue(item.value);
+          IdEstoqueSaida(item._id);
           setIsFocus(false);
         }}
       />
