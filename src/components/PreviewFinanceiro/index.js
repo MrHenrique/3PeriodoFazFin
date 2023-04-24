@@ -44,7 +44,7 @@ function PreviewFinanceiro({ Titulo, Id }) {
     var dataGas;
     switch (Id) {
       case 1:
-        console.log("fazenda");
+        // console.log("fazenda");
         dataGas = await getAllGastos(fazID);
         setDataGastos(dataGas);
         ListaAli(dataGas);
@@ -52,7 +52,7 @@ function PreviewFinanceiro({ Titulo, Id }) {
         PrecoCF(precoCF);
         break;
       case 2:
-        console.log("rebanho");
+        // console.log("rebanho");
         dataGas = await getAllGastosReb(rebID);
         setDataGastos(dataGas);
         ListaAliReb(dataGas);
@@ -101,7 +101,7 @@ function PreviewFinanceiro({ Titulo, Id }) {
         break;
       case 2:
         if (typeof precoCFReb !== "undefined") {
-          console.log(precoCFReb);
+          // console.log(precoCFReb);
           return Number(precoCFReb);
         } else {
           return 0;
