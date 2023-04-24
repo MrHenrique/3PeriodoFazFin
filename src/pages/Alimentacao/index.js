@@ -135,6 +135,7 @@ function Alimentacao({ navigation }) {
         <Text style={styles.tituloBotao3}>{"Quantidade consumida(KG)?"}</Text>
         <TextInput
           style={styles.input}
+          keyboardType="number-pad"
           onChangeText={setConsumoAliS}
           value={consumoAliS}
           placeholder="Exemplo: 0.5"
@@ -144,6 +145,7 @@ function Alimentacao({ navigation }) {
         <Text style={styles.tituloBotao3}>{"Qual o peso da saca(KG)?"}</Text>
         <TextInput
           style={styles.input}
+          keyboardType="number-pad"
           onChangeText={setQtdAliS}
           value={qtdAliS}
           placeholder="Exemplo: 50"
@@ -153,6 +155,7 @@ function Alimentacao({ navigation }) {
         <Text style={styles.tituloBotao3}>{"Valor por saca(R$)?"}</Text>
         <TextInput
           style={styles.input}
+          keyboardType="number-pad"
           onChangeText={setValorAliS}
           value={valorAliS}
           placeholder="Exemplo: 120"
