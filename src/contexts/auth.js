@@ -68,57 +68,58 @@ function AuthProvider({ children }) {
   const [listaReceitaVacas, setListaReceitaVacas] = useState([]);
   function ListaReceitaVacas(receitaVacas) {
     setListaReceitaVacas(receitaVacas);
-  const [idEstoqueSaida, SetIdEstoqueSaida] = useState();
-  function IdEstoqueSaida(dataID) {
-    SetIdEstoqueSaida(dataID);
+    const [idEstoqueSaida, SetIdEstoqueSaida] = useState();
+    function IdEstoqueSaida(dataID) {
+      SetIdEstoqueSaida(dataID);
+    }
+    const [tipoEstoqueSaida, SetTipoEstoqueSaida] = useState();
+    function TipoEstoqueSaida(dataTipo) {
+      SetTipoEstoqueSaida(dataTipo);
+    }
+    return (
+      <AuthContext.Provider
+        value={{
+          ListaReceitaVacas,
+          listaReceitaVacas,
+          ListaFiltrada,
+          listaFiltrada,
+          FiltroMes,
+          filtroMes,
+          GrafVaca,
+          grafVaca,
+          TipoProd,
+          tipoProd,
+          FazendaID,
+          fazID,
+          RebanhoID,
+          rebID,
+          FazendaProp,
+          fazProp,
+          PrecoCF,
+          precoCF,
+          listaAli,
+          ListaAli,
+          ListaLeite,
+          listaLeite,
+          PrecoLeite,
+          precoLeite,
+          ListaLeiteReb,
+          listaLeiteReb,
+          PrecoLeiteReb,
+          precoLeiteReb,
+          PrecoCFReb,
+          precoCFReb,
+          listaAliReb,
+          ListaAliReb,
+          idEstoqueSaida,
+          IdEstoqueSaida,
+          tipoEstoqueSaida,
+          TipoEstoqueSaida,
+        }}
+      >
+        {children}
+      </AuthContext.Provider>
+    );
   }
-  const [tipoEstoqueSaida, SetTipoEstoqueSaida] = useState();
-  function TipoEstoqueSaida(dataTipo) {
-    SetTipoEstoqueSaida(dataTipo);
-  }
-  return (
-    <AuthContext.Provider
-      value={{
-        ListaReceitaVacas,
-        listaReceitaVacas,
-        ListaFiltrada,
-        listaFiltrada,
-        FiltroMes,
-        filtroMes,
-        GrafVaca,
-        grafVaca,
-        TipoProd,
-        tipoProd,
-        FazendaID,
-        fazID,
-        RebanhoID,
-        rebID,
-        FazendaProp,
-        fazProp,
-        PrecoCF,
-        precoCF,
-        listaAli,
-        ListaAli,
-        ListaLeite,
-        listaLeite,
-        PrecoLeite,
-        precoLeite,
-        ListaLeiteReb,
-        listaLeiteReb,
-        PrecoLeiteReb,
-        precoLeiteReb,
-        PrecoCFReb,
-        precoCFReb,
-        listaAliReb,
-        ListaAliReb,
-        idEstoqueSaida,
-        IdEstoqueSaida,
-        tipoEstoqueSaida,
-        TipoEstoqueSaida,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
 }
 export default AuthProvider;
