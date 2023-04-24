@@ -5,8 +5,8 @@ async function getAllGastosReb(rebID) {
   const realm = await getRealm();
   try {
     const data = realm.objects("RebanhoSchema").filtered(`_id= '${rebID}'`);
-    for (var i in data[0].gastos) {
-      testes.push(data[0].gastos[i]);
+    for (var i in data[0].despesas) {
+      testes.push(data[0].despesas[i]);
     }
     return testes.sort((a, b) => a.createdAt - b.createdAt);
   } catch (e) {

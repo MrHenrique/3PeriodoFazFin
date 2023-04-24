@@ -22,6 +22,7 @@ import FinanceiroFaz from "../pages/FinanceiroFaz";
 import FinanceiroReb from "../pages/FinanceiroReb";
 import Estoque from "../pages/Estoque";
 import SelectFazPage from "../pages/SelectFazPage";
+import Despesas from "../pages/Despesas";
 const Drawer = createDrawerNavigator();
 function Routes() {
   return (
@@ -43,7 +44,7 @@ function Routes() {
         name="HomeDrawer"
         component={StackRoutes}
         options={{
-          title: "Bem vindo.",
+          title: "Login",
           drawerIcon: ({ focused, size, color }) => (
             <Ionicons
               name={focused ? "home" : "home-outline"}
@@ -57,7 +58,21 @@ function Routes() {
         name="SelectFazPage"
         component={SelectFazPage}
         options={{
-          title: "Bem vindo.",
+          title: "Selecionar Fazenda",
+          drawerIcon: ({ focused, size, color }) => (
+            <Ionicons
+              name={focused ? "home" : "home-outline"}
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Despesas"
+        component={Despesas}
+        options={{
+          title: "Despesas",
           drawerIcon: ({ focused, size, color }) => (
             <Ionicons
               name={focused ? "home" : "home-outline"}

@@ -256,7 +256,7 @@ function EntradaEstoque() {
           inputMode="text"
         />
         <DropdownComponent />
-        <Text style={styles.font}>Preço do produto:</Text>
+        <Text style={styles.font}>Preço da compra:</Text>
         <TextInput
           style={styles.font}
           value={valorProdI}

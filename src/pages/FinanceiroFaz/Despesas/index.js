@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState,useContext } from "react";
+import { useState, useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -15,7 +15,7 @@ import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
 import { AuthContext } from "../../../contexts/auth";
 function Despesas() {
-  const { precoCF,listaAli } = useContext(AuthContext);
+  const { precoCF, listaAli } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
   function toggleModal() {
     setModalVisible(!isModalVisible);
@@ -24,8 +24,8 @@ function Despesas() {
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
-          {item.tipoAlim} - R$
-          {((item.valorAli / item.qtdAli) * item.consumoAli).toFixed(2)}
+          {item.nomeProd} - R$
+          {(item.valorProd * item.qtdProd).toFixed(2)}
         </Text>
       </TouchableOpacity>
     );
@@ -55,7 +55,9 @@ function Despesas() {
           <Text style={styles.texto}>Total de despesas:</Text>
           <Text style={styles.textoValorNeg}>R${despesas.toFixed(2)}</Text>
           <View style={styles.lineStyle} />
-          <Text style={styles.preGraf}>Clique no gráfico para mais detalhes.</Text>
+          <Text style={styles.preGraf}>
+            Clique no gráfico para mais detalhes.
+          </Text>
           <View style={styles.containerChart}>
             <BezierChartDespesas />
           </View>
@@ -98,10 +100,9 @@ function Despesas() {
   );
 }
 const styles = StyleSheet.create({
-  preGraf:{
-    color: 'white',
-    alignSelf: 'center',
-    
+  preGraf: {
+    color: "white",
+    alignSelf: "center",
   },
   modalContainer: {
     backgroundColor: "rgba(234,242,215,1)",

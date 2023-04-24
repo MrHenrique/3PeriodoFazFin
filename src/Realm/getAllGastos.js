@@ -6,8 +6,8 @@ async function getAllGastos(fazID) {
   try {
     const data = realm.objects("Farm").filtered(`_id= '${fazID}'`);
     for (var i in data[0].rebanhos) {
-      for (var j in data[0].rebanhos[i].gastos) {
-        testes.push(data[0].rebanhos[i].gastos[j]);
+      for (var j in data[0].rebanhos[i].despesas) {
+        testes.push(data[0].rebanhos[i].despesas[j]);
       }
     }
     return testes;

@@ -17,6 +17,7 @@ import Estoque from "../pages/Estoque";
 import AdicionarLeite from "../pages/Leite/AdicionarLeite";
 import RegistrosLeite from "../pages/Leite/RegistrosLeite";
 import SelectFazPage from "../pages/SelectFazPage";
+import Despesas from "../pages/Despesas";
 const Stack = createNativeStackNavigator();
 function StackRoutes() {
   return (
@@ -31,6 +32,13 @@ function StackRoutes() {
       <Stack.Screen
         name="SelectFazPage"
         component={SelectFazPage}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Despesas"
+        component={Despesas}
         options={{
           headerShown: false,
         }}
