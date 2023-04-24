@@ -1,9 +1,6 @@
 import React, {
   useState,
-  useContext,
-  useFocusEffect,
-  useCallback,
-  useEffect,
+  useContext,useEffect
 } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
@@ -17,8 +14,13 @@ const DropdownComponent = () => {
   const { TipoProd } = useContext(AuthContext);
   const [value, setValue] = useState(1);
   const [isFocus, setIsFocus] = useState(false);
-  var tipoProduto = value;
-  TipoProd(tipoProduto);
+
+  useEffect(() => {
+    var tipoProduto = value;
+    TipoProd(tipoProduto);
+  }, [value, TipoProd]);
+
+
   const renderLabel = () => {
     if (value || isFocus) {
       return (

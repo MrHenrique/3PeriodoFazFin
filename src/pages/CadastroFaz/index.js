@@ -69,7 +69,7 @@ function CadastroFaz() {
           <View style={styles.containerbotao}>
             <TouchableOpacity
               style={styles.botaopress2}
-              onPress={() => navigation.navigate("Home")}
+              onPress={() => navigation.navigate("SelectFazPage")}
             >
               <Text style={styles.tituloBotao}>{"Voltar"}</Text>
             </TouchableOpacity>

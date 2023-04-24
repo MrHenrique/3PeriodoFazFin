@@ -1,21 +1,15 @@
 import * as React from "react";
-import { useState, useContext, useCallback } from "react";
-import { useFocusEffect } from "@react-navigation/native";
 import { StyleSheet, useWindowDimensions } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import Header from "../../components/Header";
-import { AuthContext } from "../../contexts/auth";
 import EstoqueGeral from "./EstoqueGeral";
 import EntradaEstoque from "./EntradaEstoque";
 const FirstRoute = () => <EntradaEstoque />;
 
 const SecondRoute = () => <EstoqueGeral />;
-
-const ThirdRoute = () => <EstoqueGeral />;
 const renderScene = SceneMap({
   first: FirstRoute,
   second: SecondRoute,
-  third: ThirdRoute,
 });
 
 export default function Estoque({ navigation }) {
@@ -24,17 +18,16 @@ export default function Estoque({ navigation }) {
   const [routes] = React.useState([
     {
       key: "first",
-      title: "Produtos utilizados",
-    },
-    {
-      key: "second",
       title: "Compra de produtos",
     },
     {
-      key: "third",
+      key: "second",
       title: "Estoque de produtos",
     },
   ]);
+  const handleTabChange = (newIndex) => {
+    setIndex(newIndex === index ? newIndex + 1 : newIndex);
+  };
   const renderTabBar = (props) => (
     <TabBar
       {...props}
@@ -56,11 +49,13 @@ export default function Estoque({ navigation }) {
           routes,
         }}
         renderScene={renderScene}
-        onIndexChange={setIndex}
+        onIndexChange={handleTabChange}
         initialLayout={{
           width: layout.width,
         }}
         renderTabBar={renderTabBar}
+        key={index}
+        lazy={false}
       />
     </>
   );

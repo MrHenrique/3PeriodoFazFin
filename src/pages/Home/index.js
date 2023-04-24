@@ -10,38 +10,51 @@ import {
   TouchableOpacity,
 } from "react-native";
 import getAllFarm from "../../Realm/getAllFarm";
+import getAllReb from "../../Realm/getAllReb";
 import styles from "./styles";
 
 function Home({ navigation }) {
   const [listaFaz, setListaFaz] = useState([]);
-  const { fazID } = useContext(AuthContext);
+  const [listaReb, setListaReb] = useState([]);
+  const { FazendaID, RebanhoID, FazendaProp } = useContext(AuthContext);
   const imgbg1 = "../../../assets/background7.jpg";
   useEffect(() => {
-    (async () => {
+    let isMounted = true;
+
+    const fetchData = async () => {
       const data = await getAllFarm();
-      setListaFaz(data);
-      data.addListener((values) => {
-        setListaFaz([...values]);
-      });
-    })();
+      if (isMounted) {
+        setListaFaz(data);
+        if (data.length === 1) {
+          FazendaID(data[0]._id);
+          FazendaProp(data[0].proprietario);
+          const fazID = data[0]._id;
+          const dataReb = await getAllReb(fazID);
+          if (isMounted) {
+            setListaReb(dataReb);
+            if (dataReb.length === 1) {
+              RebanhoID(dataReb[0]._id);
+            }
+          }
+        }
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  function CanContinue(fazID) {
-    if (typeof fazID == "undefined" || fazID == "") {
-      const CanContinue = true;
-      return CanContinue;
-    } else {
-      const CanContinue = false;
-      return CanContinue;
+  function navigateWhere() {
+    if (listaFaz.length === 1 && listaReb.length === 1) {
+      return "GeralReb";
     }
-  }
-  function DisabledStyle(fazID) {
-    if (typeof fazID == "undefined" || fazID == "") {
-      const Style = styles.disabledbutton;
-      return Style;
+    if (listaFaz.length === 1 && listaReb.length != 1) {
+      return "GeralFaz";
     } else {
-      const Style = styles.botaopress2;
-      return Style;
+      return "SelectFazPage";
     }
   }
   return (
@@ -57,29 +70,12 @@ function Home({ navigation }) {
             source={require("../../../assets/FazFin.png")}
           />
           <Text style={styles.title}>Bem-vindo(a)</Text>
-          <View style={styles.select}>
-            <Text style={styles.subtitle}>Sua fazenda:</Text>
-            <SelectFaz
-              touchableText="Selecione sua fazenda"
-              title="Fazendas"
-              objKey="_id"
-              objValue="nomefaz"
-              data={listaFaz}
-            />
-          </View>
           <View style={styles.containerbotoes}>
             <TouchableOpacity
-              disabled={CanContinue(fazID)}
-              style={DisabledStyle(fazID)}
-              onPress={() => navigation.navigate("GeralFaz")}
+              style={styles.tituloBotao}
+              onPress={() => navigation.navigate(navigateWhere())}
             >
               <Text style={styles.tituloBotao}>{"Continuar"}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.botaopress}
-              onPress={() => navigation.navigate("CadastroFaz")}
-            >
-              <Text style={styles.tituloBotao}>{"Cadastrar fazenda"}</Text>
             </TouchableOpacity>
           </View>
         </View>

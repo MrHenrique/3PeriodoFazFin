@@ -3,27 +3,13 @@ import { Buttons, Colors, Fonts } from "../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
-  container: {
+  geralfaz: {
     flex: 1,
-    backgroundColor: Colors.Cyan,
-  },
-
-  containergeral: {
-    flex: 1,
-    margin: scale(15),
-    justifyContent: "space-around",
-    backgroundColor: Colors.darkgreenTransparent,
-    borderRadius: 10,
-  },
-  containercadastrarreb: {
-    flex: 1.5,
-    bottom: 0,
-    justifyContent: "center",
   },
   viewtext: {
-    flex: 1.2,
+    flex: 1,
     alignSelf: "center",
-    justifyContent: "center",
+    marginTop: scale(-75),
   },
   imgbg: {
     flex: 1,
@@ -31,8 +17,24 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 
+  bolareceita: {
+    width: scale(10),
+    height: scale(10),
+    borderRadius: 50,
+    backgroundColor: Colors.neongreen,
+    marginEnd: scale(5),
+  },
+
+  boladespesa: {
+    width: scale(10),
+    height: scale(10),
+    borderRadius: 50,
+    backgroundColor: Colors.red,
+    marginEnd: scale(5),
+  },
+
   bannerButton: {
-    flex: 0.7,
+    flex: 1,
     backgroundColor: Colors.btngreen,
     justifyContent: "center",
     borderRadius: 10,
@@ -155,22 +157,9 @@ const styles = StyleSheet.create({
   },
 
   containerbotoes: {
+    flex: 1,
     padding: verticalScale(10),
     flexDirection: "column-reverse",
-  },
-  containerlogo: {
-    flex: 1,
-    marginBottom: verticalScale(50),
-    justifyContent: "center",
-    marginTop: verticalScale(10),
-  },
-
-  logo: {
-    resizeMode: "contain",
-    height: verticalScale(150),
-    width: verticalScale(150),
-    top: verticalScale(30),
-    alignSelf: "center",
   },
 });
 export default styles;

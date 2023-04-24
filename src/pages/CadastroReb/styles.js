@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Buttons, Colors, Fonts } from "../../styles";
+import { Buttons, Colors, Fonts, TextInput } from "../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
@@ -39,10 +39,7 @@ const styles = StyleSheet.create({
     color: Colors.black,
     textAlign: "center",
     ...Fonts.txtMediumBold,
-    borderRadius: 20,
-    width: scale(300),
-    height: verticalScale(40),
-    marginVertical: verticalScale(10),
+    ...TextInput.TextInputLargeRounded,
   },
   containerbotoes: {
     flex: 1,
