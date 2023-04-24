@@ -72,7 +72,7 @@ function Home({ navigation }) {
           <Text style={styles.title}>Bem-vindo(a)</Text>
           <View style={styles.containerbotoes}>
             <TouchableOpacity
-              style={styles.tituloBotao}
+              style={styles.botaopress2}
               onPress={() => navigation.navigate(navigateWhere())}
             >
               <Text style={styles.tituloBotao}>{"Continuar"}</Text>

@@ -8,6 +8,7 @@ async function getAllGastosReb(rebID) {
     for (var i in data[0].gastos) {
       testes.push(data[0].gastos[i]);
     }
+    // console.log(testes.sort((a, b) => a.createdAt - b.createdAt));
     return testes.sort((a, b) => a.createdAt - b.createdAt);
   } catch (e) {
     Alert.alert("Error", e.message);

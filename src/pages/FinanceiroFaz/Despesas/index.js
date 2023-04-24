@@ -89,7 +89,7 @@ function Despesas() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.botaopress}
-          onPress={() => navigation.navigate("GeralFaz")}
+          onPress={() => navigation.navigate("GeralReb")}
         >
           <Text style={styles.tituloBotao}>{"Voltar"}</Text>
         </TouchableOpacity>
