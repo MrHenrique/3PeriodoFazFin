@@ -68,6 +68,7 @@ function AuthProvider({ children }) {
   const [listaReceitaVacas, setListaReceitaVacas] = useState([]);
   function ListaReceitaVacas(receitaVacas) {
     setListaReceitaVacas(receitaVacas);
+  }
   const [idEstoqueSaida, SetIdEstoqueSaida] = useState();
   function IdEstoqueSaida(dataID) {
     SetIdEstoqueSaida(dataID);
