@@ -9,11 +9,10 @@ import {
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { scale, verticalScale } from "react-native-size-matters";
-import { AuthContext } from "../../contexts/auth";
+import { AuthContext } from "../../../contexts/auth";
 import { Feather } from "@expo/vector-icons";
-import { useLinkBuilder } from "@react-navigation/native";
 import uuid from "react-native-uuid";
-import writenewVaca from "../../Realm/WritenewVaca";
+import writenewVaca from "../../../Realm/WritenewVaca";
 
 function CadastroVaca({ navigation }) {
   const [nomeVaca, setnomeVaca] = useState();
@@ -43,8 +42,6 @@ function CadastroVaca({ navigation }) {
     return newvaca;
   }
   const { rebID } = useContext(AuthContext);
-  const windowWidth = Dimensions.get("window").width;
-  const windowHeight = Dimensions.get("window").height;
   return (
     <ScrollView>
       <View style={styles.container}>

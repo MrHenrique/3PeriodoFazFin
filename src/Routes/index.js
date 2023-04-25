@@ -9,15 +9,15 @@ import {
   Fontisto,
   AntDesign,
 } from "@expo/vector-icons";
-import CadastroFaz from "../pages/CadastroFaz";
+import CadastroFaz from "../pages/Cadastro/CadastroFaz";
+import CadastroReb from "../pages/Cadastro/CadastroReb";
+import GeralReb from "../pages/GeralReb";
 import StackRoutes from "../Routes/stackRoutes";
 import PageListavacas from "../pages/PageListavacas";
 import PagelancaContas from "../pages/PagelancaContas";
 import GeralFaz from "../pages/GeralFaz";
-import CadastroReb from "../pages/CadastroReb";
 import Manejo from "../pages/Manejo";
 import Leite from "../pages/Leite";
-import GeralReb from "../pages/GeralReb";
 import FinanceiroFaz from "../pages/FinanceiroFaz";
 import FinanceiroReb from "../pages/FinanceiroReb";
 import Estoque from "../pages/Estoque";
