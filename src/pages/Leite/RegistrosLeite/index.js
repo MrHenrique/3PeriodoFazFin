@@ -15,9 +15,8 @@ function RegistrosLeite() {
   const navigation = useNavigation();
   const { listaLeiteReb, precoLeiteReb } = useContext(AuthContext);
   const { listaFiltrada } = useContext(AuthContext);
+  const [shouldShow, setShouldShow] = useState(false);
 
-  console.log(listaFiltrada);
-  
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity style={styles.listaDet}>
@@ -33,18 +32,27 @@ function RegistrosLeite() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.filtros}>
-        {/*filtros*/}
-        <FiltrosData/>
-      </View>
-      <View style={styles.lista}>
-        <FlatList
-          style={styles.scroll}
-          data={listaFiltrada}
-          renderItem={renderItem}
-          keyExtractor={(item) => item._id}
-        />
-      </View>
+      <TouchableOpacity
+        onPress={() => setShouldShow(!shouldShow)}
+        style={styles.filtrosBotao}
+      >
+        <Text style={styles.tituloBotao}>Filtros</Text>
+      </TouchableOpacity>
+      {shouldShow && (
+        <View style={styles.filtros}>
+          {/*filtros*/}
+          <FiltrosData />
+        </View>
+      )}
+      <FlatList
+        style={[
+          styles.lista,
+          { marginTop: shouldShow ? verticalScale(180) : 0 },
+        ]}
+        data={listaFiltrada}
+        renderItem={renderItem}
+        keyExtractor={(item) => item._id}
+      />
       <TouchableOpacity
         style={styles.botaopress}
         onPress={() => navigation.navigate("GeralReb")}
@@ -61,21 +69,25 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   filtros: {
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    borderRadius: 10,
+    padding: 10,
+    margin: 10,
     position: "absolute",
-    alignSelf: "center",
+    top: verticalScale(65),
+    left: 0,
+    right: 0,
+  },
+  filtrosBotao: {
+    backgroundColor: "rgba(15, 109, 0, 0.9)",
+    borderRadius: 10,
+    padding: 10,
     margin: 10,
   },
   lista: {
+    flex: 1,
     marginTop: 10,
-    top: verticalScale(150),
-  },
-  modalContainer: {
-    backgroundColor: "rgba(234,242,215,1)",
-    position: "absolute",
-    top: verticalScale(30),
-    alignSelf: "center",
-    width: scale(330),
-    borderRadius: 20,
+    marginBottom: 40,
   },
   botaopress: {
     borderRadius: 20,

@@ -149,7 +149,7 @@ function FiltrosData() {
     <SafeAreaView style={styles.container}>
       <DropdownComponentMes />
       {/*Filtro intervalo entre datas*/}
-      <View style={{ flexDirection: "row", /*marginBottom: 32*/}}>
+      <View style={{ flexDirection: "row",}}>
         <TouchableOpacity
           style={{
             flex: 1,
@@ -244,7 +244,6 @@ function FiltrosData() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
   },
 });
 
