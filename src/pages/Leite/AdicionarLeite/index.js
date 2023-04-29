@@ -67,7 +67,7 @@ function AdicionarLeite() {
       },
       vacaID
     );
-    navigation.navigate("Contas");
+    //navigation.navigate("Contas");
   }
   //Buscar no banco
   async function fetchData(rebID) {
