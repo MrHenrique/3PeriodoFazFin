@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
-import Header from "../../components/Header";
-import { AuthContext } from "../../contexts/auth";
+import { AuthContext } from "../../../contexts/auth";
 import {
   Text,
   SafeAreaView,
@@ -13,8 +12,7 @@ import {
   Alert,
 } from "react-native";
 import uuid from "react-native-uuid";
-import writeReb from "../../Realm/writeReb";
-import { scale, verticalScale } from "react-native-size-matters";
+import writeReb from "../../../Realm/writeReb";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 
@@ -59,7 +57,7 @@ function CadastroReb({}) {
   }
 
   const navigation = useNavigation();
-  const imgbg1 = "../../../assets/bg6.jpg";
+  const imgbg1 = "../../../../assets/bg6.jpg";
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
@@ -70,7 +68,7 @@ function CadastroReb({}) {
         <View style={styles.mainContainer}>
           <Image
             style={styles.logo}
-            source={require("../../../assets/FazFin.png")}
+            source={require("../../../../assets/FazFin.png")}
           />
           <View style={styles.viewtext}>
             <Text style={styles.texto}>Nome do rebanho:</Text>

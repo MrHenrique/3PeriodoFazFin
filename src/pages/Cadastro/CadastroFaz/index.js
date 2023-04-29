@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import uuid from "react-native-uuid";
-import writeFarm from "../../Realm/writeFarm";
+import writeFarm from "../../../Realm/writeFarm";
 import styles from "./styles";
 function CadastroFaz() {
   const [nomefaz, setNomefaz] = useState("");
@@ -30,7 +30,7 @@ function CadastroFaz() {
     navigation.navigate("SelectFazPage");
   }
   const navigation = useNavigation();
-  const imgbg1 = "../../../assets/backgroundCad.jpg";
+  const imgbg1 = "../../../../assets/backgroundCad.jpg";
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
@@ -41,7 +41,7 @@ function CadastroFaz() {
         <View style={styles.containergeral}>
           <Image
             style={styles.logo}
-            source={require("../../../assets/FazFin.png")}
+            source={require("../../../../assets/FazFin.png")}
           />
           <Text style={[styles.texto, { marginTop: verticalScale(40) }]}>
             Nome da fazenda

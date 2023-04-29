@@ -1,18 +1,11 @@
 import { StyleSheet } from "react-native";
-import { Buttons, Colors, Fonts, TextInput } from "../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
+import { Colors, Fonts, Buttons, TextInput } from "../../../styles";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.Cyan,
-  },
-  mainContainer: {
-    flex: 1,
-    margin: scale(15),
-    borderRadius: 10,
-    backgroundColor: Colors.darkgreenTransparent,
-
   },
   imgbg: {
     flex: 1,
@@ -20,31 +13,23 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   logo: {
-    flex: 1,
     resizeMode: "contain",
     height: verticalScale(150),
     width: verticalScale(150),
+    top: verticalScale(30),
     alignSelf: "center",
+    justifyContent: "center",
   },
   texto: {
-    ...Fonts.txtLargeBold,
+    ...Fonts.txtLarge,
     color: Colors.white,
-  },
-  viewtext: {
-    flex: 1,
     alignSelf: "center",
   },
   campoTexto: {
-    backgroundColor: Colors.white,
-    color: Colors.black,
-    textAlign: "center",
     ...Fonts.txtMediumBold,
     ...TextInput.TextInputLargeRounded,
-  },
-  containerbotoes: {
-    flex: 1,
-    padding: verticalScale(10),
-    flexDirection: "column-reverse",
+    backgroundColor: Colors.white,
+    color: Colors.black,
   },
   botaopress: {
     ...Buttons.btnLargeRounded,
@@ -59,6 +44,16 @@ const styles = StyleSheet.create({
     ...Fonts.txtMediumBold,
     color: Colors.white,
   },
+  containergeral: {
+    flex: 1,
+    margin: scale(15),
+    borderRadius: 10,
+    backgroundColor: Colors.darkgreenTransparent,
+  },
+  containerbotao : {
+    flex: 1,
+    flexDirection: "column-reverse",
+    padding: verticalScale(10),
+  },
 });
-
 export default styles;
