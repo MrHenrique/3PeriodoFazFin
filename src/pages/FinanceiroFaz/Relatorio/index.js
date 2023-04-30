@@ -140,7 +140,7 @@ function Relatorio() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.botaopress}
-          onPress={() => navigation.navigate("GeralReb")}
+          onPress={() => navigation.navigate("Home")}
         >
           <Text style={styles.tituloBotao}>{"Voltar"}</Text>
         </TouchableOpacity>

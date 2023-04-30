@@ -13,7 +13,7 @@ import { scale, verticalScale } from "react-native-size-matters";
 import Select from "../../components/Select";
 import { AuthContext } from "../../contexts/auth";
 import styles from "./styles";
-function GeralFaz({ navigation }) {
+function SelectRebPage({ navigation }) {
   const [listaReb, setListaReb] = useState([]);
 
   async function fetchDataReb(fazID) {
@@ -97,7 +97,7 @@ function GeralFaz({ navigation }) {
             <TouchableOpacity
               disabled={CanContinue(rebID)}
               style={DisabledStyle(rebID)}
-              onPress={() => navigation.navigate("GeralReb")}
+              onPress={() => navigation.navigate("Home")}
             >
               <Text style={styles.tituloBotao}>{"Continuar"}</Text>
             </TouchableOpacity>
@@ -107,4 +107,4 @@ function GeralFaz({ navigation }) {
     </SafeAreaView>
   );
 }
-export default GeralFaz;
+export default SelectRebPage;

@@ -285,7 +285,7 @@ function AdicionarLeite() {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.botaopress}
-        onPress={() => navigation.navigate("GeralReb")}
+        onPress={() => navigation.navigate("Home")}
       >
         <Text style={styles.textovoltar}>Voltar</Text>
       </TouchableOpacity>

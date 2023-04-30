@@ -53,7 +53,7 @@ function CadastroReb({}) {
       },
       fazID
     );
-    navigation.navigate("GeralFaz");
+    navigation.navigate("SelectRebPage");
   }
 
   const navigation = useNavigation();
@@ -90,7 +90,7 @@ function CadastroReb({}) {
           <View style={styles.containerbotoes}>
             <TouchableOpacity
               style={styles.botaopress2}
-              onPress={() => navigation.navigate("GeralFaz")}
+              onPress={() => navigation.navigate("SelectRebPage")}
             >
               <Text style={styles.tituloBotao}>{"Voltar"}</Text>
             </TouchableOpacity>

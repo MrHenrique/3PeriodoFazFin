@@ -54,7 +54,7 @@ function PageLancavacas({ navigation }) {
 
           <TouchableOpacity
             style={styles.voltar}
-            onPress={() => navigation.navigate("GeralReb")}
+            onPress={() => navigation.navigate("Home")}
           >
             <Text style={styles.tituloBotao}>{"Voltar"}</Text>
           </TouchableOpacity>

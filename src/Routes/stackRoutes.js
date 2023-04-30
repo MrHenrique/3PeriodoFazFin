@@ -3,11 +3,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CadastroFaz from "../pages/Cadastro/CadastroFaz";
 import CadastroReb from "../pages/Cadastro/CadastroReb";
 import CadastroVaca from "../pages/Cadastro/CadastroVaca";
-import Home from "../pages/Home";
-import GeralFaz from "../pages/GeralFaz";
+import Login from "../pages/Login";
+import SelectRebPage from "../pages/SelectRebPage";
 import Manejo from "../pages/Manejo";
 import Leite from "../pages/Leite";
-import GeralReb from "../pages/GeralReb";
+import Home from "../pages/Home";
 import PagelancaContas from "../pages/PagelancaContas";
 import PageListavacas from "../pages/PageListavacas";
 import FinanceiroFaz from "../pages/FinanceiroFaz";
@@ -23,8 +23,8 @@ function StackRoutes() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Home"
-        component={Home}
+        name="Login"
+        component={Login}
         options={{
           headerShown: false,
         }}
@@ -59,8 +59,8 @@ function StackRoutes() {
         }}
       />
       <Stack.Screen
-        name="GeralFaz"
-        component={GeralFaz}
+        name="SelectRebPage"
+        component={SelectRebPage}
         options={{
           headerShown: false,
         }}
@@ -101,8 +101,8 @@ function StackRoutes() {
         }}
       />
       <Stack.Screen
-        name="GeralReb"
-        component={GeralReb}
+        name="Home"
+        component={Home}
         options={{
           headerShown: false,
         }}

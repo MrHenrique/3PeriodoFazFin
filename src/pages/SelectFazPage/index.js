@@ -73,7 +73,7 @@ function SelectFazPage() {
             <TouchableOpacity
               disabled={CanContinue(fazID)}
               style={DisabledStyle(fazID)}
-              onPress={() => navigation.navigate("GeralFaz")}
+              onPress={() => navigation.navigate("SelectRebPage")}
             >
               <Text style={styles.tituloBotao}>{"Continuar"}</Text>
             </TouchableOpacity>
