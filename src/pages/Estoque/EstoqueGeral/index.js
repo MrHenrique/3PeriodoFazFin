@@ -258,7 +258,7 @@ function EstoqueGeral() {
         </Modal>
         <TouchableOpacity
           style={styles.botao}
-          onPress={() => navigation.navigate("GeralReb")}
+          onPress={() => navigation.navigate("Home")}
         >
           <Text style={styles.font}>{"Voltar"}</Text>
         </TouchableOpacity>

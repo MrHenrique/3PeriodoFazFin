@@ -11,15 +11,15 @@ import {
 } from "@expo/vector-icons";
 import CadastroFaz from "../pages/Cadastro/CadastroFaz";
 import CadastroReb from "../pages/Cadastro/CadastroReb";
-import GeralReb from "../pages/GeralReb";
+import Home from "../pages/Home";
 import StackRoutes from "../Routes/stackRoutes";
 import PageListavacas from "../pages/PageListavacas";
 import PagelancaContas from "../pages/PagelancaContas";
-import GeralFaz from "../pages/GeralFaz";
+import SelectRebPage from "../pages/SelectRebPage";
 import Manejo from "../pages/Manejo";
 import Leite from "../pages/Leite";
-import FinanceiroFaz from "../pages/FinanceiroFaz";
-import FinanceiroReb from "../pages/FinanceiroReb";
+import FinanceiroFaz from "../pages/PageFinanceiro/FinanceiroFaz";
+import FinanceiroReb from "../pages/PageFinanceiro/FinanceiroReb";
 import Estoque from "../pages/Estoque";
 import SelectFazPage from "../pages/SelectFazPage";
 import Despesas from "../pages/Despesas";
@@ -98,9 +98,9 @@ function Routes() {
       />
       <Drawer.Screen
         name="Visão geral de Fazenda"
-        component={GeralFaz}
+        component={SelectRebPage}
         options={{
-          title: "Visão geral de Fazenda",
+          title: "Selecione o rebanho para acessar dados",
           drawerIcon: ({ focused, size, color }) => (
             <MaterialCommunityIcons
               name={focused ? "finance" : "finance"}
@@ -142,9 +142,9 @@ function Routes() {
       />
       <Drawer.Screen
         name="Visão geral de rebanho"
-        component={GeralReb}
+        component={Home}
         options={{
-          title: "Visão geral de rebanho",
+          title: "Gerenciar Fazenda",
           drawerIcon: ({ focused, size, color }) => (
             <Entypo
               name={focused ? "line-graph" : "line-graph"}

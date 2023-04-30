@@ -44,7 +44,7 @@ function PageListavacas({ navigation }) {
           <View style={styles.contvoltar}>
             <TouchableOpacity
               style={styles.botaovoltar}
-              onPress={() => navigation.navigate("GeralReb")}
+              onPress={() => navigation.navigate("Home")}
             >
               <Text style={styles.textovoltar}>Voltar</Text>
             </TouchableOpacity>

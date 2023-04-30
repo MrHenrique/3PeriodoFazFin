@@ -10,10 +10,10 @@ import {
   FlatList,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import BezierChartDespesas from "../../../components/Graficos/BezierChartDespesas";
+import BezierChartDespesas from "../../../../components/Graficos/BezierChartDespesas";
 import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
-import { AuthContext } from "../../../contexts/auth";
+import { AuthContext } from "../../../../contexts/auth";
 function Despesas() {
   const { precoCF, listaAli } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -38,7 +38,7 @@ function Despesas() {
     }
   }
   const despesas = getDespesas();
-  const imgbg1 = "../../../../assets/bg2.jpg";
+  const imgbg1 = "../../../../../assets/bg2.jpg";
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -91,7 +91,7 @@ function Despesas() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.botaopress}
-          onPress={() => navigation.navigate("GeralReb")}
+          onPress={() => navigation.navigate("Home")}
         >
           <Text style={styles.tituloBotao}>{"Voltar"}</Text>
         </TouchableOpacity>

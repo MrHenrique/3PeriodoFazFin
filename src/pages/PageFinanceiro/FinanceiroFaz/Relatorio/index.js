@@ -11,39 +11,37 @@ import {
   ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import PieChartReb from "../../../components/Graficos/PieChartReb";
+import PieChartFaz from "../../../../components/Graficos/PieChart";
 import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
-import { AuthContext } from "../../../contexts/auth";
-function RelatorioReb() {
-  const precoTotal = precoLeiteReb - precoCFReb;
-  const { precoCFReb, listaAliReb, listaLeiteReb, precoLeiteReb } = useContext(AuthContext);
+import { AuthContext } from "../../../../contexts/auth";
+function Relatorio() {
+  const precoTotal = precoLeite - precoCF;
+  const { precoCF, listaAli, listaLeite, precoLeite } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
   function toggleModal() {
     setModalVisible(!isModalVisible);
   }
   const renderItem2 = ({ item }) => {
-    console.log(item)
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
-        {item.createdAt.getDate().toString().padStart(2, '0')}/{(item.createdAt.getMonth() + 1).toString().padStart(2, '0')}/{item.createdAt.getFullYear()} - {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
+          {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
         </Text>
       </TouchableOpacity>
     );
   };
   const renderItem = ({ item }) => {
-    console.log(item.createdAt)
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
-          {item.createdAt.getDate().toString().padStart(2, '0')}/{(item.createdAt.getMonth() + 1).toString().padStart(2, '0')}/{item.createdAt.getFullYear()} - {item.nomeProd} - R$
+          {item.nomeProd} - R$
           {(item.valorProd * item.qtdProd).toFixed(2)}
         </Text>
       </TouchableOpacity>
     );
   };
-  function Color() {
+  function Color(total) {
     let color;
     if (total > 0) {
       color = styles.textoValorPos;
@@ -54,15 +52,15 @@ function RelatorioReb() {
     }
   }
   function getDespesas() {
-    if (typeof precoCFReb !== "undefined") {
-      return Number(precoCFReb);
+    if (typeof precoCF !== "undefined") {
+      return Number(precoCF);
     } else {
       return 0;
     }
   }
   function getReceitas() {
-    if (typeof precoLeiteReb !== "undefined") {
-      return Number(precoLeiteReb);
+    if (typeof precoLeite !== "undefined") {
+      return Number(precoLeite);
     } else {
       return 0;
     }
@@ -77,7 +75,7 @@ function RelatorioReb() {
   const total = getTotal(getDespesas(), getReceitas());
   const despesas = getDespesas();
   const receitas = getReceitas();
-  const imgbg1 = "../../../../assets/bg5.jpg";
+  const imgbg1 = "../../../../../assets/bg5.jpg";
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -104,7 +102,7 @@ function RelatorioReb() {
             Clique no gráfico para mais detalhes.
           </Text>
           <View style={styles.containerChart}>
-            <PieChartReb />
+            <PieChartFaz />
           </View>
 
           <Modal
@@ -118,14 +116,14 @@ function RelatorioReb() {
               <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
               <FlatList
                 style={styles.scroll}
-                data={listaLeiteReb}
+                data={listaLeite}
                 renderItem={renderItem2}
                 keyExtractor={(item) => item._id}
               />
               <Text style={styles.tituloModal}>Detalhes de despesas:</Text>
               <FlatList
                 style={styles.scroll}
-                data={listaAliReb}
+                data={listaAli}
                 renderItem={renderItem}
                 keyExtractor={(item) => item._id}
               />
@@ -142,7 +140,7 @@ function RelatorioReb() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.botaopress}
-          onPress={() => navigation.navigate("GeralReb")}
+          onPress={() => navigation.navigate("Home")}
         >
           <Text style={styles.tituloBotao}>{"Voltar"}</Text>
         </TouchableOpacity>
@@ -263,4 +261,4 @@ const styles = StyleSheet.create({
     height: verticalScale(245),
   },
 });
-export default RelatorioReb;
+export default Relatorio;

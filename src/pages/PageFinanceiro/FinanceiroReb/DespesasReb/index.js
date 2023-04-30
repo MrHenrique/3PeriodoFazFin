@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useContext } from "react";
+import { useState,useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -7,38 +7,38 @@ import {
   TouchableOpacity,
   ImageBackground,
   SafeAreaView,
-  ScrollView,
   FlatList,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import BezierChartFaturamento from "../../../components/Graficos/BezierChartFaturamento";
+import BezierChartDespesasReb from "../../../../components/Graficos/BezierChartDespesasReb";
 import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
-import { AuthContext } from "../../../contexts/auth";
-function Faturamento() {
-  const { precoCF, listaAli, listaLeite, precoLeite } = useContext(AuthContext);
+import { AuthContext } from "../../../../contexts/auth";
+function DespesasReb() {
+  const { precoCFReb,listaAliReb } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
   function toggleModal() {
     setModalVisible(!isModalVisible);
   }
-  const imgbg1 = "../../../../assets/bg2.jpg";
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
-          {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
+          {item.nomeProd} - R$
+          {(item.valorProd * item.qtdProd).toFixed(2)}
         </Text>
       </TouchableOpacity>
     );
   };
-  function getReceitas() {
-    if (typeof precoLeite !== "undefined") {
-      return Number(precoLeite);
+  function getDespesas() {
+    if (typeof precoCFReb !== "undefined") {
+      return Number(precoCFReb);
     } else {
       return 0;
     }
   }
-  const receitas = getReceitas();
+  const despesas = getDespesas();
+  const imgbg1 = "../../../../../assets/bg2.jpg";
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -52,13 +52,14 @@ function Faturamento() {
             toggleModal();
           }}
         >
-          <Text style={styles.texto}>Total de receitas:</Text>
-          <Text style={styles.textoValorPos}>R${receitas.toFixed(2)}</Text>
+          <Text style={styles.texto}>Total de despesas:</Text>
+          <Text style={styles.textoValorNeg}>R${despesas.toFixed(2)}</Text>
           <View style={styles.lineStyle} />
           <Text style={styles.preGraf}>Clique no gráfico para mais detalhes.</Text>
           <View style={styles.containerChart}>
-            <BezierChartFaturamento />
+            <BezierChartDespesasReb />
           </View>
+
           <Modal
             isVisible={isModalVisible}
             coverScreen={true}
@@ -67,10 +68,11 @@ function Faturamento() {
             animationOut="slideOutDown"
           >
             <View style={styles.modalContainer}>
-              <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
+              <Text style={styles.tituloModal}>Detalhes de Despesas:</Text>
+
               <FlatList
                 style={styles.scroll}
-                data={listaLeite}
+                data={listaAliReb}
                 renderItem={renderItem}
                 keyExtractor={(item) => item._id}
               />
@@ -87,7 +89,7 @@ function Faturamento() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.botaopress}
-          onPress={() => navigation.navigate("GeralReb")}
+          onPress={() => navigation.navigate("Home")}
         >
           <Text style={styles.tituloBotao}>{"Voltar"}</Text>
         </TouchableOpacity>
@@ -99,7 +101,7 @@ const styles = StyleSheet.create({
   preGraf:{
     color: 'white',
     alignSelf: 'center',
-
+    
   },
   modalContainer: {
     backgroundColor: "rgba(234,242,215,1)",
@@ -209,4 +211,4 @@ const styles = StyleSheet.create({
     height: verticalScale(525),
   },
 });
-export default Faturamento;
+export default DespesasReb;
