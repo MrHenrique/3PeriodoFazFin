@@ -3,49 +3,49 @@ import { useEffect, useState, useContext, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { View, StyleSheet, useWindowDimensions } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import RelatorioReb from "./RelatorioReb";
-import Header from "../../components/Header";
-import DespesasReb from "./DespesasReb";
-import FaturamentoReb from "./FaturamentoReb";
-import { AuthContext } from "../../contexts/auth";
-import { DespesasTotais } from "../../components/Calculos DB/DespesasTotais";
-import { ReceitasTotais } from "../../components/Calculos DB/ReceitasTotais";
-import getAllGastosReb from "../../Realm/getAllGastosReb";
-import getAllLeiteReb from "../../Realm/getAllLeiteReb";
-const FirstRoute = () => <RelatorioReb />;
+import Relatorio from "./Relatorio";
+import Header from "../../../components/Header";
+import Despesas from "./Despesas";
+import Faturamento from "./Faturamento";
+import { AuthContext } from "../../../contexts/auth";
+import { DespesasTotais } from "../../../components/Calculos DB/DespesasTotais";
+import { ReceitasTotais } from "../../../components/Calculos DB/ReceitasTotais";
+import getAllGastos from "../../../Realm/getAllGastos";
+import getAllLeite from "../../../Realm/getAllLeite";
+const FirstRoute = () => <Relatorio />;
 
-const SecondRoute = () => <DespesasReb />;
+const SecondRoute = () => <Despesas />;
 
-const ThirdRoute = () => <FaturamentoReb />;
+const ThirdRoute = () => <Faturamento />;
 const renderScene = SceneMap({
   first: FirstRoute,
   second: SecondRoute,
   third: ThirdRoute,
 });
 
-export default function FinanceiroReb({ navigation }) {
-  const { PrecoCFReb, ListaAliReb, fazID, rebID, PrecoLeiteReb, ListaLeiteReb } =
+export default function FinanceiroFaz({ navigation }) {
+  const { PrecoCF, ListaAli, fazID, PrecoLeite, ListaLeite } =
     useContext(AuthContext);
   const [dataGasto, setDataGastos] = useState([]);
   const [dataReceitas, setDataReceitas] = useState([]);
-  async function fetchDataDes(rebID) {
-    const dataGas = await getAllGastosReb(rebID);
+  async function fetchDataDes(fazID) {
+    const dataGas = await getAllGastos(fazID);
     setDataGastos(dataGas);
-    ListaAliReb(dataGas);
+    ListaAli(dataGas);
     const precoCF = DespesasTotais(dataGas);
-    PrecoCFReb(precoCF);
+    PrecoCF(precoCF);
   }
-  async function fetchDataRec(rebID) {
-    const dataRec = await getAllLeiteReb(rebID);
+  async function fetchDataRec(fazID) {
+    const dataRec = await getAllLeite(fazID);
     setDataReceitas(dataRec);
-    ListaLeiteReb(dataRec);
+    ListaLeite(dataRec);
     const precoLeite = ReceitasTotais(dataRec);
-    PrecoLeiteReb(precoLeite);
+    PrecoLeite(precoLeite);
   }
   useFocusEffect(
     useCallback(() => {
-      fetchDataRec(rebID);
-      fetchDataDes(rebID);
+      fetchDataRec(fazID);
+      fetchDataDes(fazID);
     }, [])
   );
 
@@ -80,7 +80,6 @@ export default function FinanceiroReb({ navigation }) {
   );
   return (
     <>
-      <Header />
       <TabView
         navigationState={{
           index,

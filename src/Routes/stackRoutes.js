@@ -7,12 +7,11 @@ import Login from "../pages/Login";
 import SelectRebPage from "../pages/SelectRebPage";
 import Manejo from "../pages/Manejo";
 import Leite from "../pages/Leite";
+import PageFinanceiro from "../pages/PageFinanceiro";
 import Home from "../pages/Home";
 import PagelancaContas from "../pages/PagelancaContas";
 import PageListavacas from "../pages/PageListavacas";
-import FinanceiroFaz from "../pages/FinanceiroFaz";
 import Alimentacao from "../pages/Alimentacao";
-import FinanceiroReb from "../pages/FinanceiroReb";
 import Estoque from "../pages/Estoque";
 import AdicionarLeite from "../pages/Leite/AdicionarLeite";
 import RegistrosLeite from "../pages/Leite/RegistrosLeite";
@@ -80,6 +79,13 @@ function StackRoutes() {
         }}
       />
       <Stack.Screen
+        name="PageFinanceiro"
+        component={PageFinanceiro}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="AdicionarLeite"
         component={AdicionarLeite}
         options={{
@@ -130,23 +136,8 @@ function StackRoutes() {
       />
 
       <Stack.Screen
-        name="FinanceiroFaz"
-        component={FinanceiroFaz}
-        options={{
-          headerShown: false,
-        }}
-      />
-
-      <Stack.Screen
         name="Alimentacao"
         component={Alimentacao}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="FinanceiroReb"
-        component={FinanceiroReb}
         options={{
           headerShown: false,
         }}

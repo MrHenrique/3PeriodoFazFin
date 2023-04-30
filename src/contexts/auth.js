@@ -77,6 +77,10 @@ function AuthProvider({ children }) {
   function TipoEstoqueSaida(dataTipo) {
     SetTipoEstoqueSaida(dataTipo);
   }
+  const [idPageFinanceiro, setIdPageFinanceiro] = useState();
+  function IdPageFinanceiro(dataTipo) {
+    setIdPageFinanceiro(dataTipo);
+  }
   return (
     <AuthContext.Provider
       value={{
@@ -116,6 +120,8 @@ function AuthProvider({ children }) {
         IdEstoqueSaida,
         tipoEstoqueSaida,
         TipoEstoqueSaida,
+        IdPageFinanceiro,
+        idPageFinanceiro,
       }}
     >
       {children}

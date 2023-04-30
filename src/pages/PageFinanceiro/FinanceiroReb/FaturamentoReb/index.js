@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -7,38 +7,48 @@ import {
   TouchableOpacity,
   ImageBackground,
   SafeAreaView,
+  ScrollView,
   FlatList,
+  TextInput,
+  Platform,
+  StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import BezierChartDespesas from "../../../components/Graficos/BezierChartDespesas";
+import BezierChartFaturamentoReb from "../../../../components/Graficos/BezierChartFaturamentoReb";
+import FiltrosData from "../../../../components/Filtros/FiltrosData";
 import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
-import { AuthContext } from "../../../contexts/auth";
-function Despesas() {
-  const { precoCF, listaAli } = useContext(AuthContext);
+import { AuthContext } from "../../../../contexts/auth";
+function FaturamentoReb() {
+  const { precoCFReb, listaAliReb, listaLeiteReb, precoLeiteReb } =
+    useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
+  const { listaFiltrada } = useContext(AuthContext);
+
   function toggleModal() {
     setModalVisible(!isModalVisible);
   }
+  const imgbg1 = "../../../../../assets/bg2.jpg";
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
-          {item.nomeProd} - R$
-          {(item.valorProd * item.qtdProd).toFixed(2)}
+          {item.createdAt.getDate().toString().padStart(2, 0)}/
+          {(item.createdAt.getMonth() + 1).toString().padStart(2, 0)}/
+          {item.createdAt.getFullYear().toString()} - {item.description} - R${" "}
+          {(item.prodL * item.precoL).toFixed(2)}
         </Text>
       </TouchableOpacity>
     );
   };
-  function getDespesas() {
-    if (typeof precoCF !== "undefined") {
-      return Number(precoCF);
+  function getReceitas() {
+    if (typeof precoLeiteReb !== "undefined") {
+      return Number(precoLeiteReb);
     } else {
       return 0;
     }
   }
-  const despesas = getDespesas();
-  const imgbg1 = "../../../../assets/bg2.jpg";
+  const receitas = getReceitas();
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -52,16 +62,15 @@ function Despesas() {
             toggleModal();
           }}
         >
-          <Text style={styles.texto}>Total de despesas:</Text>
-          <Text style={styles.textoValorNeg}>R${despesas.toFixed(2)}</Text>
+          <Text style={styles.texto}>Total de receitas:</Text>
+          <Text style={styles.textoValorPos}>R${receitas.toFixed(2)}</Text>
           <View style={styles.lineStyle} />
           <Text style={styles.preGraf}>
             Clique no gráfico para mais detalhes.
           </Text>
           <View style={styles.containerChart}>
-            <BezierChartDespesas />
+            <BezierChartFaturamentoReb />
           </View>
-
           <Modal
             isVisible={isModalVisible}
             coverScreen={true}
@@ -70,11 +79,14 @@ function Despesas() {
             animationOut="slideOutDown"
           >
             <View style={styles.modalContainer}>
-              <Text style={styles.tituloModal}>Detalhes de Despesas:</Text>
+              <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
+
+              {/*filtros*/}
+              <FiltrosData />
 
               <FlatList
                 style={styles.scroll}
-                data={listaAli}
+                data={listaFiltrada}
                 renderItem={renderItem}
                 keyExtractor={(item) => item._id}
               />
@@ -209,7 +221,7 @@ const styles = StyleSheet.create({
     marginVertical: verticalScale(5),
   },
   scroll: {
-    height: verticalScale(525),
+    height: verticalScale(380),
   },
 });
-export default Despesas;
+export default FaturamentoReb;

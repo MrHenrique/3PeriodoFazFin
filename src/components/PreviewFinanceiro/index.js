@@ -87,6 +87,8 @@ function PreviewFinanceiro({ Titulo, Id }) {
     ListaLeiteReb,
     PrecoLeiteReb,
     precoLeiteReb,
+    idPageFinanceiro,
+    IdPageFinanceiro
   } = useContext(AuthContext);
 
   //Funcoes para validar e renderizar
@@ -151,10 +153,12 @@ function PreviewFinanceiro({ Titulo, Id }) {
         onPress={() => {
           switch (Id) {
             case 1:
-              navigation.navigate("FinanceiroFaz");
+              navigation.navigate("PageFinanceiro");
+              IdPageFinanceiro(0);
               break;
             case 2:
-              navigation.navigate("FinanceiroReb");
+              navigation.navigate("PageFinanceiro");
+              IdPageFinanceiro(1);
               break;
           }
         }}

@@ -1,46 +1,65 @@
 import * as React from "react";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import {
   View,
+  FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
   ImageBackground,
   SafeAreaView,
   ScrollView,
-  FlatList,
-  TextInput,
-  Platform,
-  StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import BezierChartFaturamentoReb from "../../../components/Graficos/BezierChartFaturamentoReb";
-import FiltrosData from "../../../components/Filtros/FiltrosData";
+import PieChartReb from "../../../../components/Graficos/PieChartReb";
 import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
-import { AuthContext } from "../../../contexts/auth";
-function FaturamentoReb() {
-  const { precoCFReb, listaAliReb, listaLeiteReb, precoLeiteReb } =
-    useContext(AuthContext);
+import { AuthContext } from "../../../../contexts/auth";
+function RelatorioReb() {
+  const precoTotal = precoLeiteReb - precoCFReb;
+  const { precoCFReb, listaAliReb, listaLeiteReb, precoLeiteReb } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
-  const { listaFiltrada } = useContext(AuthContext);
-
   function toggleModal() {
     setModalVisible(!isModalVisible);
   }
-  const imgbg1 = "../../../../assets/bg2.jpg";
-  const renderItem = ({ item }) => {
+  const renderItem2 = ({ item }) => {
+    console.log(item)
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
-          {item.createdAt.getDate().toString().padStart(2, 0)}/
-          {(item.createdAt.getMonth() + 1).toString().padStart(2, 0)}/
-          {item.createdAt.getFullYear().toString()} - {item.description} - R${" "}
-          {(item.prodL * item.precoL).toFixed(2)}
+        {item.createdAt.getDate().toString().padStart(2, '0')}/{(item.createdAt.getMonth() + 1).toString().padStart(2, '0')}/{item.createdAt.getFullYear()} - {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
         </Text>
       </TouchableOpacity>
     );
   };
+  const renderItem = ({ item }) => {
+    console.log(item.createdAt)
+    return (
+      <TouchableOpacity style={styles.listaDet}>
+        <Text style={styles.tituloBotao}>
+          {item.createdAt.getDate().toString().padStart(2, '0')}/{(item.createdAt.getMonth() + 1).toString().padStart(2, '0')}/{item.createdAt.getFullYear()} - {item.nomeProd} - R$
+          {(item.valorProd * item.qtdProd).toFixed(2)}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+  function Color() {
+    let color;
+    if (total > 0) {
+      color = styles.textoValorPos;
+      return color;
+    } else {
+      color = styles.textoValorNeg;
+      return color;
+    }
+  }
+  function getDespesas() {
+    if (typeof precoCFReb !== "undefined") {
+      return Number(precoCFReb);
+    } else {
+      return 0;
+    }
+  }
   function getReceitas() {
     if (typeof precoLeiteReb !== "undefined") {
       return Number(precoLeiteReb);
@@ -48,14 +67,24 @@ function FaturamentoReb() {
       return 0;
     }
   }
+  function getTotal(despesas, receitas) {
+    if (despesas !== "0" || receitas !== "0") {
+      return Number(receitas - despesas);
+    } else {
+      return 0;
+    }
+  }
+  const total = getTotal(getDespesas(), getReceitas());
+  const despesas = getDespesas();
   const receitas = getReceitas();
+  const imgbg1 = "../../../../../assets/bg5.jpg";
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
         style={styles.imgbg}
         source={require(imgbg1)}
-        imageStyle={{ opacity: 0.3 }}
+        imageStyle={{ opacity: 0.6 }}
       >
         <TouchableOpacity
           onPress={() => {
@@ -63,14 +92,21 @@ function FaturamentoReb() {
           }}
         >
           <Text style={styles.texto}>Total de receitas:</Text>
-          <Text style={styles.textoValorPos}>R${receitas.toFixed(2)}</Text>
+          <Text style={styles.textoValorPos}>R$ {receitas.toFixed(2)}</Text>
+          <View style={styles.lineStyle} />
+          <Text style={styles.texto}>Total de despesas:</Text>
+          <Text style={styles.textoValorNeg}>R${despesas.toFixed(2)}</Text>
+          <View style={styles.lineStyle} />
+          <Text style={styles.texto}>Balanço final:</Text>
+          <Text style={Color()}>R${total.toFixed(2)}</Text>
           <View style={styles.lineStyle} />
           <Text style={styles.preGraf}>
             Clique no gráfico para mais detalhes.
           </Text>
           <View style={styles.containerChart}>
-            <BezierChartFaturamentoReb />
+            <PieChartReb />
           </View>
+
           <Modal
             isVisible={isModalVisible}
             coverScreen={true}
@@ -80,13 +116,16 @@ function FaturamentoReb() {
           >
             <View style={styles.modalContainer}>
               <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
-
-              {/*filtros*/}
-              <FiltrosData />
-
               <FlatList
                 style={styles.scroll}
-                data={listaFiltrada}
+                data={listaLeiteReb}
+                renderItem={renderItem2}
+                keyExtractor={(item) => item._id}
+              />
+              <Text style={styles.tituloModal}>Detalhes de despesas:</Text>
+              <FlatList
+                style={styles.scroll}
+                data={listaAliReb}
                 renderItem={renderItem}
                 keyExtractor={(item) => item._id}
               />
@@ -125,23 +164,16 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   modalScroll: {
-    height: verticalScale(500),
+    height: verticalScale(220),
     marginVertical: verticalScale(10),
   },
   container: {
     backgroundColor: "#006773",
     flex: 1,
   },
-  lineStyle: {
-    backgroundColor: "#FFF",
-    padding: verticalScale(0.4),
-    width: scale(310),
-    alignSelf: "center",
-    margin: verticalScale(6),
-  },
   containerChart: {
     position: "absolute",
-    top: verticalScale(150),
+    top: verticalScale(280),
   },
   botaopress: {
     borderRadius: 20,
@@ -158,6 +190,13 @@ const styles = StyleSheet.create({
     fontSize: verticalScale(14),
     fontWeight: "bold",
     color: "#fff",
+  },
+  lineStyle: {
+    backgroundColor: "#FFF",
+    padding: verticalScale(0.4),
+    width: scale(310),
+    alignSelf: "center",
+    margin: verticalScale(6),
   },
   tituloModal: {
     fontSize: verticalScale(20),
@@ -221,7 +260,7 @@ const styles = StyleSheet.create({
     marginVertical: verticalScale(5),
   },
   scroll: {
-    height: verticalScale(380),
+    height: verticalScale(245),
   },
 });
-export default FaturamentoReb;
+export default RelatorioReb;
