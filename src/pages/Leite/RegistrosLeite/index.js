@@ -38,12 +38,10 @@ function RegistrosLeite() {
       >
         <Text style={styles.tituloBotao}>Filtros</Text>
       </TouchableOpacity>
-      {shouldShow && (
-        <View style={styles.filtros}>
-          {/*filtros*/}
-          <FiltrosData />
-        </View>
-      )}
+      <View style={[styles.filtros, { display: shouldShow ? "flex" : "none" }]}>
+        {/*filtros*/}
+        <FiltrosData listaRecebida={listaLeiteReb} />
+      </View>
       <FlatList
         style={[
           styles.lista,

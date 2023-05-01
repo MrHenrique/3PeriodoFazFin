@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useContext } from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import Header from "../../components/Header";
-import { scale, verticalScale } from "react-native-size-matters";
 import AdicionarLeite from "./AdicionarLeite";
 import RegistrosLeite from "./RegistrosLeite";
 const FirstRoute = () => <AdicionarLeite />;
@@ -25,6 +24,9 @@ function Leite() {
       title: "Dados Leite",
     },
   ]);
+  const handleTabChange = (newIndex) => {
+    setIndex(newIndex === index ? newIndex + 1 : newIndex);
+  };
   const renderTabBar = (props) => (
     <TabBar
       {...props}
@@ -46,11 +48,13 @@ function Leite() {
           routes,
         }}
         renderScene={renderScene}
-        onIndexChange={setIndex}
+        onIndexChange={handleTabChange}
         initialLayout={{
           width: layout.width,
         }}
         renderTabBar={renderTabBar}
+        key={index}
+        lazy={false}
       />
     </>
   );
