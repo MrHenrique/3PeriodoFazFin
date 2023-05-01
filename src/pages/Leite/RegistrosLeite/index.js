@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useCallback } from "react";
 import {
   View,
   StyleSheet,
@@ -7,15 +7,31 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import FiltrosData from "../../../components/Filtros/FiltrosData";
 import { scale, verticalScale } from "react-native-size-matters";
 import { AuthContext } from "../../../contexts/auth";
+import getAllLeiteReb from "../../../Realm/getAllLeiteReb";
 function RegistrosLeite() {
   const navigation = useNavigation();
-  const { listaLeiteReb, precoLeiteReb } = useContext(AuthContext);
-  const { listaFiltrada } = useContext(AuthContext);
+  const [listaLeite, setListaLeite] = useState([]);
+  const { rebID } = useContext(AuthContext);
+  const { listaFiltrada, ListaFiltrada } = useContext(AuthContext);
   const [shouldShow, setShouldShow] = useState(false);
+
+  //Busca as produçoes de leite no banco de dados.
+  async function fetchDataLeite(rebID) {
+    const dataLeite = await getAllLeiteReb(rebID);
+    setListaLeite(dataLeite);
+    ListaFiltrada(dataLeite); //usado para passar a lista buscada para a ListaFiltrada para mostrar a lista toda de inicio.
+  }
+  // Quando a pagina está em foco roda a função de buscar os dados no BD.
+  useFocusEffect(
+    useCallback(() => {
+      fetchDataLeite(rebID);
+    }, [])
+  );
 
   const renderItem = ({ item }) => {
     return (
@@ -40,7 +56,7 @@ function RegistrosLeite() {
       </TouchableOpacity>
       <View style={[styles.filtros, { display: shouldShow ? "flex" : "none" }]}>
         {/*filtros*/}
-        <FiltrosData listaRecebida={listaLeiteReb} />
+        <FiltrosData listaRecebida={listaLeite} />
       </View>
       <FlatList
         style={[
@@ -112,9 +128,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     marginVertical: verticalScale(5),
-  },
-  scroll: {
-    height: verticalScale(300),
   },
 });
 export default RegistrosLeite;
