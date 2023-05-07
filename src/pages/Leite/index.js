@@ -12,7 +12,7 @@ function Leite() {
     <>
       <Header />
       <Tab.Navigator
-         screenOptions={{
+        screenOptions={{
           tabBarLabelStyle: { color: "#fff" },
           tabBarIndicatorStyle: { backgroundColor: "#fff" },
           tabBarStyle: styles.tab,

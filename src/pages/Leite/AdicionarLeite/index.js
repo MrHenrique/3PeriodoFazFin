@@ -10,7 +10,7 @@ import {
   Platform,
   StatusBar,
 } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import uuid from "react-native-uuid";
 import writeLeite from "../../../Realm/writeLeite";
 import getAllVacas from "../../../Realm/getAllVacas";
@@ -91,10 +91,8 @@ function AdicionarLeite() {
   const [searchText, setSearchText] = useState("");
 
   // Códido para pegar a data ....
-
   const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
-  const [show, setShow] = useState(false);
+  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [text, setText] = useState(
     new Date().getDate().toString().padStart(2, "0") +
       "/" +
@@ -103,26 +101,24 @@ function AdicionarLeite() {
       new Date().getFullYear().toString().padStart(2, "0")
   );
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "IOS");
-    setDate(currentDate);
-
-    let tempDate = new Date(currentDate);
+  const showDatePicker = () => {
+    setIsDatePickerVisible(true);
+  };
+  const hideDatePicker = () => {
+    setIsDatePickerVisible(false);
+  };
+  const handleDateConfirm = (selectedDate) => {
+    let tempDate = new Date(selectedDate);
     let fDate =
       tempDate.getDate().toString().padStart(2, "0") +
       "/" +
       (tempDate.getMonth() + 1).toString().padStart(2, "0") +
       "/" +
-      tempDate.getFullYear();
+      tempDate.getFullYear().toString().padStart(2, "0");
     setText(fDate);
+    setDate(selectedDate);
+    hideDatePicker();
   };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
   //Fim do código da data .....
 
   //-----------------------------
@@ -177,23 +173,18 @@ function AdicionarLeite() {
                 backgroundColor: "grey",
                 borderRadius: 20,
               }}
-              onPress={() => showMode("date")}
+              onPress={showDatePicker}
             >
               <Text style={styles.tituloinfo}>Selecione a data:</Text>
             </TouchableOpacity>
           </View>
 
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={mode}
-              display="default"
-              onChange={onChange}
-            />
-          )}
-
-          <StatusBar style="auto" />
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleDateConfirm}
+            onCancel={hideDatePicker}
+          />
         </View>
 
         {/*Descrição*/}
