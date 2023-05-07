@@ -24,7 +24,7 @@ const ScreenWidth = Dimensions.get("screen").width;
 const ScreenHeight = Dimensions.get("screen").height;
 
 function Lista_vacas({ textobarrapesquisa, idrebanho }) {
-  const { precoCFReb, GrafVaca } = useContext(AuthContext);
+  const { precoCFReb, GrafVaca, ListaReceitaVacas } = useContext(AuthContext);
   async function fetchVaca() {
     try {
       const datavacas = await getRebVacas(idrebanho);
@@ -75,6 +75,7 @@ function Lista_vacas({ textobarrapesquisa, idrebanho }) {
     setnascimentoVaca(item.nascimentoVaca);
     setbrincoVaca(item.brincoVaca);
     setdescVaca(item.descVaca);
+    ListaReceitaVacas(item.receitas); //Usado para criar um array com as receitas das Vacas para usar no Graficodetalhesvacas
     var idvaca = item._id;
     setIdVaca(idvaca);
     const resultLeite = getResultL(item);

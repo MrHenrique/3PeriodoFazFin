@@ -1,6 +1,6 @@
 import { getRealm } from "./realm";
 import { Alert } from "react-native";
-async function getAllGastos(rebID) {
+async function getAllGastosReb(rebID) {
   let testes = [];
   const realm = await getRealm();
   try {
@@ -8,10 +8,10 @@ async function getAllGastos(rebID) {
     for (var i in data[0].gastos) {
       testes.push(data[0].gastos[i]);
     }
-    return testes;
+    return testes.sort((a, b) => a.createdAt - b.createdAt);
   } catch (e) {
     Alert.alert("Error", e.message);
   }
   realm.close();
 }
-export default getAllGastos;
+export default getAllGastosReb;

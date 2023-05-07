@@ -53,9 +53,35 @@ function AuthProvider({ children }) {
   function GrafVaca(data) {
     SetGrafVaca(data);
   }
+  const [tipoProd, SetTipoProd] = useState();
+  function TipoProd(dataProd) {
+    SetTipoProd(dataProd);
+  }
+  const [filtroMes, setFiltroMes] = useState();
+  function FiltroMes(mesFiltro) {
+    setFiltroMes(mesFiltro);
+  }
+  const [listaFiltrada, setListaFiltrada] = useState([]);
+  function ListaFiltrada(listaFiltrada) {
+    setListaFiltrada(listaFiltrada);
+  }
+  const [listaReceitaVacas, setListaReceitaVacas] = useState([]);
+  function ListaReceitaVacas(receitaVacas) {
+    setListaReceitaVacas(receitaVacas);
+  }
   return (
     <AuthContext.Provider
-      value={{GrafVaca,grafVaca,
+      value={{
+        ListaReceitaVacas,
+        listaReceitaVacas,
+        ListaFiltrada,
+        listaFiltrada,
+        FiltroMes,
+        filtroMes,
+        GrafVaca,
+        grafVaca,
+        TipoProd,
+        tipoProd,
         FazendaID,
         fazID,
         RebanhoID,

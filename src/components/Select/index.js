@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext,useEffect } from "react";
 import {
   TouchableOpacity,
   Text,
@@ -83,6 +83,15 @@ const Select = ({
 }) => {
   const [visible, setVisible] = useState(false);
   const [selected, setSelected] = useState(null);
+  useEffect(() => {
+    if (data.length === 1) {
+      setSelected(data[0]);
+      var Rebid = data[0]._id;
+      RebanhoID(Rebid);
+      setVisible(false);
+      console.log(Rebid)
+    }
+  }, [data]);
   const { TouchableComponent } = touchableComponent(
     touchableText,
     () => setVisible(true),

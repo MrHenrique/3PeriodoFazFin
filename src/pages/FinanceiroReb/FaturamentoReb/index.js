@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -9,15 +9,22 @@ import {
   SafeAreaView,
   ScrollView,
   FlatList,
+  TextInput,
+  Platform,
+  StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import BezierChartFaturamentoReb from "../../../components/Graficos/BezierChartFaturamentoReb";
+import FiltrosData from "../../../components/Filtros/FiltrosData";
 import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
 import { AuthContext } from "../../../contexts/auth";
 function FaturamentoReb() {
-  const { precoCFReb, listaAliReb, listaLeiteReb, precoLeiteReb } = useContext(AuthContext);
+  const { precoCFReb, listaAliReb, listaLeiteReb, precoLeiteReb } =
+    useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
+  const { listaFiltrada } = useContext(AuthContext);
+
   function toggleModal() {
     setModalVisible(!isModalVisible);
   }
@@ -26,7 +33,10 @@ function FaturamentoReb() {
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
-          {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
+          {item.createdAt.getDate().toString().padStart(2, 0)}/
+          {(item.createdAt.getMonth() + 1).toString().padStart(2, 0)}/
+          {item.createdAt.getFullYear().toString()} - {item.description} - R${" "}
+          {(item.prodL * item.precoL).toFixed(2)}
         </Text>
       </TouchableOpacity>
     );
@@ -55,7 +65,9 @@ function FaturamentoReb() {
           <Text style={styles.texto}>Total de receitas:</Text>
           <Text style={styles.textoValorPos}>R${receitas.toFixed(2)}</Text>
           <View style={styles.lineStyle} />
-          <Text style={styles.preGraf}>Clique no gráfico para mais detalhes.</Text>
+          <Text style={styles.preGraf}>
+            Clique no gráfico para mais detalhes.
+          </Text>
           <View style={styles.containerChart}>
             <BezierChartFaturamentoReb />
           </View>
@@ -68,9 +80,13 @@ function FaturamentoReb() {
           >
             <View style={styles.modalContainer}>
               <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
+
+              {/*filtros*/}
+              <FiltrosData />
+
               <FlatList
                 style={styles.scroll}
-                data={listaLeiteReb}
+                data={listaFiltrada}
                 renderItem={renderItem}
                 keyExtractor={(item) => item._id}
               />
@@ -96,10 +112,9 @@ function FaturamentoReb() {
   );
 }
 const styles = StyleSheet.create({
-  preGraf:{
-    color: 'white',
-    alignSelf: 'center',
-
+  preGraf: {
+    color: "white",
+    alignSelf: "center",
   },
   modalContainer: {
     backgroundColor: "rgba(234,242,215,1)",
@@ -206,7 +221,7 @@ const styles = StyleSheet.create({
     marginVertical: verticalScale(5),
   },
   scroll: {
-    height: verticalScale(525),
+    height: verticalScale(380),
   },
 });
 export default FaturamentoReb;
