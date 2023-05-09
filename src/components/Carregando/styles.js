@@ -43,8 +43,10 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   tabviewShadow: {
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.btndarkgreen,
     height: verticalScale(45),
+    borderBottomColor: Colors.white,
+    borderBottomWidth: 5,
   },
 });
 export default styles;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
 import { StyleSheet, useWindowDimensions, Text } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+import { Buttons, Colors, Fonts } from "../../styles";
 import { AuthContext } from "../../contexts/auth";
 import Header from "../../components/Header";
 import FinanceiroReb from "./FinanceiroReb";
@@ -25,21 +26,30 @@ function PageFinanceiro() {
     {
       key: "first",
       title: "Fazenda",
+      accessibilityLabel: "FinanceiroFazenda"
     },
     {
       key: "second",
       title: "Rebanho",
+      accessibilityLabel: "FinanceiroRebanho"
     },
   ]);
   const renderTabBar = (props) => (
     <TabBar
       {...props}
+      activeColor={Colors.white}
+      inactiveColor={Colors.grey}
+      pressOpacity={0.1}
       indicatorStyle={{
-        backgroundColor: "#fff",
+        backgroundColor: Colors.btndarkgreen,
+        height: "95%", 
+        borderBottomWidth: 5,
+        borderColor: Colors.white
       }}
       style={styles.tab}
       labelStyle={{
-        color: "#fff",
+        color: Colors.white,
+        ...Fonts.txtMediumBold,
       }}
     />
   );
@@ -70,7 +80,7 @@ function PageFinanceiro() {
 
 const styles = StyleSheet.create({
   tab: {
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
+    backgroundColor: Colors.green, 
   },
 });
 

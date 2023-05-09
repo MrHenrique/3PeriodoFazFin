@@ -3,7 +3,7 @@ import { Dimensions } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 import { AuthContext } from "../../../contexts/auth";
 import { useContext } from "react";
-const screenWidth = Dimensions.get("window").width;
+const screenWidth = Dimensions.get("screen").width;
 function BezierChartDespesas() {
   const { listaAli } = useContext(AuthContext);
   const despesasPorMesFaz = {
@@ -72,7 +72,7 @@ function BezierChartDespesas() {
     <LineChart
       data={data}
       width={screenWidth}
-      height={verticalScale(330)}
+      height={330}
       chartConfig={chartConfig}
       verticalLabelRotation={60}
       fromZero={true}

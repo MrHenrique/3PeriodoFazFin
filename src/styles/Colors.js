@@ -14,7 +14,7 @@ const Colors = {
     black: "rgba(0, 0, 0, 1)",
     Cyan: "rgba(0,103,115,1)",
     grey: "#CECECE",
-    neongreen: "#04f000"
+    neongreen: "#04f000",
 
 }
 export default Colors;

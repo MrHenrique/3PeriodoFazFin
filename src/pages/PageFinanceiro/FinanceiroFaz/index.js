@@ -4,7 +4,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { View, StyleSheet, useWindowDimensions } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import Relatorio from "./Relatorio";
-import Header from "../../../components/Header";
+import { Buttons, Colors, Fonts } from "../../../styles";
 import Despesas from "./Despesas";
 import Faturamento from "./Faturamento";
 import { AuthContext } from "../../../contexts/auth";
@@ -69,12 +69,16 @@ export default function FinanceiroFaz({ navigation }) {
   const renderTabBar = (props) => (
     <TabBar
       {...props}
+      activeColor={Colors.white}
+      inactiveColor={Colors.grey}
       indicatorStyle={{
-        backgroundColor: "#fff",
+        backgroundColor: Colors.white,
+        height: 4,
       }}
       style={styles.tab}
       labelStyle={{
-        color: "#fff",
+        color: Colors.white,
+        ...Fonts.txtMediumBold,
       }}
     />
   );
@@ -98,6 +102,6 @@ export default function FinanceiroFaz({ navigation }) {
 
 const styles = StyleSheet.create({
   tab: {
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
+    backgroundColor: Colors.btndarkgreen,
   },
 });

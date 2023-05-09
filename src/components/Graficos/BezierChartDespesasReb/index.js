@@ -74,7 +74,7 @@ function BezierChartDespesasReb() {
       width={screenWidth}
       height={verticalScale(330)}
       chartConfig={chartConfig}
-      verticalLabelRotation={30}
+      verticalLabelRotation={60}
       fromZero={true}
       bezier
     />
