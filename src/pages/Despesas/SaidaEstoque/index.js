@@ -87,6 +87,13 @@ export default function SaidaEstoque() {
       newListaEstoque[0].nomeProd
     );
   }
+  function averagePrice() {
+    if (newListaEstoque[0].qtdProd > 0) {
+      return (newListaEstoque[0].valorProd / newListaEstoque[0].qtdProd).toFixed(2);;
+    } else {
+      return "-";
+    }
+  }
   return (
     <>
       <View
@@ -114,7 +121,7 @@ export default function SaidaEstoque() {
             {newListaEstoque.length > 0 ? (
               <Text>
                 Preço Médio : R${" "}
-                {newListaEstoque[0].valorProd / newListaEstoque[0].qtdProd}{" "}
+                {averagePrice()}{" "}
                 Quantidade em Estoque : {newListaEstoque[0].qtdProd}
               </Text>
             ) : (
