@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -7,13 +7,10 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-
 import { useNavigation } from "@react-navigation/native";
 import DropdownComponent from "../../../components/Dropdown/TipoProd";
 import uuid from "react-native-uuid";
 import { AuthContext } from "../../../contexts/auth";
-import writeEstoqueEntrada from "../../../Realm/writeEstoqueEntrada";
-import writeEstoque from "../../../Realm/writeEstoque";
 import { useMainContext } from "../../../contexts/RealmContext";
 
 function EntradaEstoque() {
@@ -68,7 +65,7 @@ function EntradaEstoque() {
               Alert.alert("Dados cadastrados com sucesso!");
             });
           } catch (e) {
-            Alert.alert("Não foi possível cadastrar.");
+            Alert.alert("Não foi possível cadastrar!");
           } finally {
             resetStates();
           }
@@ -107,7 +104,7 @@ function EntradaEstoque() {
               Alert.alert("Dados cadastrados com sucesso!");
             });
           } catch (e) {
-            Alert.alert("Não foi possível cadastrar.");
+            Alert.alert("Não foi possível cadastrar!");
           } finally {
             resetStates();
           }

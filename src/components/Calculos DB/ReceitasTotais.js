@@ -1,8 +1,5 @@
 export function ReceitasTotais(dataRec) {
-  var testes = 0;
-  for (var i in dataRec) {
-    testes += (dataRec[i].prodL * dataRec[i].precoL);
-  }
-  const precoLeite = testes.toFixed(2);
-  return precoLeite;
+  const valoresPorProduto = dataRec.map(produto => produto.prodL * produto.precoL);
+  const receitaTotal = valoresPorProduto.reduce((total, valor) => total + valor, 0);
+  return receitaTotal.toFixed(2);
 }
