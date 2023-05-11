@@ -1,62 +1,26 @@
 import * as React from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
-import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import Header from "../../components/Header";
 import EstoqueGeral from "./EstoqueGeral";
 import EntradaEstoque from "./EntradaEstoque";
-const FirstRoute = () => <EntradaEstoque />;
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
-const SecondRoute = () => <EstoqueGeral />;
-const renderScene = SceneMap({
-  first: FirstRoute,
-  second: SecondRoute,
-});
+const Tab = createMaterialTopTabNavigator();
 
-export default function Estoque({ navigation }) {
-  const layout = useWindowDimensions();
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    {
-      key: "first",
-      title: "Compra de produtos",
-    },
-    {
-      key: "second",
-      title: "Estoque de produtos",
-    },
-  ]);
-  const handleTabChange = (newIndex) => {
-    setIndex(newIndex === index ? newIndex + 1 : newIndex);
-  };
-  const renderTabBar = (props) => (
-    <TabBar
-      {...props}
-      indicatorStyle={{
-        backgroundColor: "#fff",
-      }}
-      style={styles.tab}
-      labelStyle={{
-        color: "#fff",
-      }}
-    />
-  );
+export default function Estoque() {
   return (
     <>
       <Header />
-      <TabView
-        navigationState={{
-          index,
-          routes,
+      <Tab.Navigator
+        screenOptions={{
+          tabBarLabelStyle: { color: "#fff" },
+          tabBarIndicatorStyle: { backgroundColor: "#fff" },
+          tabBarStyle: styles.tab,
         }}
-        renderScene={renderScene}
-        onIndexChange={handleTabChange}
-        initialLayout={{
-          width: layout.width,
-        }}
-        renderTabBar={renderTabBar}
-        key={index}
-        lazy={false}
-      />
+      >
+        <Tab.Screen name="Saída de estoque" component={EntradaEstoque} />
+        <Tab.Screen name="Outras Despesas" component={EstoqueGeral} />
+      </Tab.Navigator>
     </>
   );
 }

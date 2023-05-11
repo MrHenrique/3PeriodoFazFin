@@ -1,36 +1,40 @@
-import React, { useState, useContext, useCallback, useEffect } from "react";
-
-import { useFocusEffect } from "@react-navigation/native";
-import getAllEstoque from "../../Realm/getAllEstoque";
+import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { AuthContext } from "../../contexts/auth";
+import { useMainContext } from "../../contexts/RealmContext";
 
 const EstoqueOptions = () => {
-  const [value, setValue] = useState(1);
+  const realm = useMainContext();
+  const [value, setValue] = useState(0);
   const [isFocus, setIsFocus] = useState(false);
   const [listaEstoque, setListaEstoque] = useState([]);
-  const { fazID, IdEstoqueSaida, tipoEstoqueSaida } = useContext(AuthContext);
-
-  const fetchDataEstoque = useCallback(async () => {
-    const dataEstoque = await getAllEstoque(fazID);
-    let filteredDataEstoque = [];
-
-    if (tipoEstoqueSaida === 1) {
-      filteredDataEstoque = dataEstoque.filter((obj) => obj.pesoProd != null);
-      setValue(1);
-    } else if (tipoEstoqueSaida === 2) {
-      filteredDataEstoque = dataEstoque.filter((obj) => obj.volumeProd != null);
-      setValue(1);
-    }
-
-    setListaEstoque(filteredDataEstoque);
-  }, [tipoEstoqueSaida]);
+  const { fazID, IdEstoqueSaida, tipoEstoqueSaida,idEstoqueSaida } = useContext(AuthContext);
 
   useEffect(() => {
-    fetchDataEstoque();
-  }, [fetchDataEstoque]);
-
+    if (realm) {
+      let dataEstoque = realm.objectForPrimaryKey("Farm", fazID);
+      setListaEstoque(dataEstoque.atualEstoque.sorted("nomeProd"));
+      let filteredDataEstoque;
+      if (tipoEstoqueSaida === 1) {
+        filteredDataEstoque = dataEstoque.atualEstoque.filter(
+          (obj) => obj.pesoProd !== 0
+        );
+        setValue(1);
+        setListaEstoque(filteredDataEstoque);
+      } else if (tipoEstoqueSaida === 2) {
+        filteredDataEstoque = dataEstoque.atualEstoque.filter(
+          (obj) => obj.volumeProd !== 0
+        );
+        setValue(1);
+        setListaEstoque(filteredDataEstoque);
+      }
+    }
+  }, [realm, tipoEstoqueSaida]);
+useEffect(()=>{
+  if (idEstoqueSaida === "")
+  setValue(0)
+},[idEstoqueSaida]);
   const data = listaEstoque.map((item, index) => ({
     label: item.nomeProd,
     value: String(index + 1),

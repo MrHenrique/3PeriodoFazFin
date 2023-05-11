@@ -91,7 +91,7 @@ function Home({ navigation }) {
             <View style={styles.BTN_route}>
               <TouchableOpacity
                 style={styles.botaoPress4}
-                onPress={() => navigation.navigate("PagelancaContas")}
+                onPress={() => navigation.navigate("Despesas")}
               >
                 <Text style={styles.tituloBotao2}>
                   <MaterialCommunityIcons

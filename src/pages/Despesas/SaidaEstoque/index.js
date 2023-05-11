@@ -1,16 +1,16 @@
 import * as React from "react";
 import { Text, TouchableOpacity, View, TextInput } from "react-native";
 import EstoqueOptions from "../../../components/Dropdown/EstoqueOptions";
-import { useState, useContext, useCallback, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import uuid from "react-native-uuid";
 import { AuthContext } from "../../../contexts/auth";
-import writeGastos from "../../../Realm/writeGastos";
-import writeEstoque from "../../../Realm/writeEstoque";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import getAllEstoque from "../../../Realm/getAllEstoque";
+import { useNavigation } from "@react-navigation/native";
 import { CheckBox } from "react-native-elements";
+import { useMainContext } from "../../../contexts/RealmContext";
+import { Alert } from "react-native";
 
 export default function SaidaEstoque() {
+  const realm = useMainContext();
   const navigation = useNavigation();
   const [qtdProd, setQtdProd] = useState("");
   const [obserProd, setObserProd] = useState("");
@@ -19,20 +19,19 @@ export default function SaidaEstoque() {
   const [newListaEstoque, setNewListaEstoque] = useState([]);
   const [idSelected, setIdSelected] = useState("");
   const [tipo, setTipo] = useState(0);
-  const { fazID, rebID, idEstoqueSaida, TipoEstoqueSaida } =
+  const { fazID, rebID, idEstoqueSaida, TipoEstoqueSaida,IdEstoqueSaida } =
     useContext(AuthContext);
 
   //Buscar no banco estoque
-  async function fetchDataEstoque(fazID) {
-    const dataEstoque = await getAllEstoque(fazID);
-    setListaEstoque(dataEstoque);
-  }
-  //Chama funcao buscando dados do estoque ao focar em página
-  useFocusEffect(
-    useCallback(() => {
-      fetchDataEstoque(fazID);
-    }, [])
-  );
+  useEffect(() => {
+    if (realm) {
+      let dataEstoque = realm.objectForPrimaryKey("Farm", fazID);
+      setListaEstoque(dataEstoque.atualEstoque.sorted("nomeProd"));
+      dataEstoque.atualEstoque.sorted("nomeProd").addListener((values) => {
+        setListaEstoque([...values]);
+      });
+    }
+  }, [realm]);
   useEffect(() => {
     setIdSelected(idEstoqueSaida);
   }, [idEstoqueSaida]);
@@ -47,45 +46,65 @@ export default function SaidaEstoque() {
   }, [tipo]);
   //funcao filtrar estoque
   const FilterEstoqueData = () => {
-    setShouldShow(true);
     if (idEstoqueSaida != "") {
+      setShouldShow(true);
       setNewListaEstoque(
         listaEstoque.filter((estoque) => estoque._id === idEstoqueSaida)
       );
     }
+    else{setShouldShow(false);}
   };
 
   async function handleAddGastos() {
-    const qtdProdFinal = newListaEstoque[0].qtdProd - Number(qtdProd);
-    const valorProdFinal =
-      (newListaEstoque[0].valorProd / newListaEstoque[0].qtdProd) *
-      qtdProdFinal;
-    const valorMedioTransacao =
-      newListaEstoque[0].valorProd / newListaEstoque[0].qtdProd;
-    await writeGastos(
-      {
-        _id: uuid.v4(),
-        createdAt: new Date(),
-        nomeProd: newListaEstoque[0].nomeProd,
-        valorProd: valorMedioTransacao,
-        qtdProd: Number(qtdProd),
-      },
-      rebID
-    );
-    await writeEstoque(
-      {
-        nomeProd: newListaEstoque[0].nomeProd,
-        _id: newListaEstoque[0]._id,
-        valorProd: valorProdFinal,
-        qtdProd: qtdProdFinal,
-        createdAt: new Date(),
-        obserProd: obserProd,
-        pesoProd: newListaEstoque[0].pesoProd,
-        volumeProd: newListaEstoque[0].volumeProd,
-      },
-      fazID,
-      newListaEstoque[0].nomeProd
-    );
+    if (realm) {
+      const qtdProdFinal = newListaEstoque[0].qtdProd - Number(qtdProd);
+      const valorProdFinal =
+        (newListaEstoque[0].valorProd / newListaEstoque[0].qtdProd) *
+        qtdProdFinal;
+      const valorMedioTransacao =
+        newListaEstoque[0].valorProd / newListaEstoque[0].qtdProd;
+
+      try {
+        realm.write(() => {
+          let updateEstoque = realm
+            .objects("AtualEstoqueSchema")
+            .filtered(`_id= '${idEstoqueSaida}'`)[0];
+          updateEstoque.qtdProd = qtdProdFinal;
+          updateEstoque.obserProd = obserProd;
+          updateEstoque.createdAt = new Date();
+          updateEstoque.valorProd = valorProdFinal;
+
+          let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+          let createdGastos = realm.create("DespesasSchema", {
+            _id: uuid.v4(),
+            createdAt: new Date(),
+            nomeProd: newListaEstoque[0].nomeProd,
+            valorProd: valorMedioTransacao,
+            qtdProd: Number(qtdProd),
+            obserProd: obserProd,
+            pesoProd: 0,
+            volumeProd: 0,
+          });
+          reb.despesas.push(createdGastos);
+          Alert.alert("Dados cadastrados com sucesso!");
+        });
+      } catch (e) {
+        Alert.alert("Não foi possível cadastrar.");
+      } finally {
+        setObserProd("");
+        setQtdProd("");
+        IdEstoqueSaida("");
+      }
+    }
+  }
+  function averagePrice() {
+    if (newListaEstoque[0].qtdProd > 0) {
+      return (
+        newListaEstoque[0].valorProd / newListaEstoque[0].qtdProd
+      ).toFixed(2);
+    } else {
+      return "-";
+    }
   }
   return (
     <>
@@ -113,9 +132,8 @@ export default function SaidaEstoque() {
           <View>
             {newListaEstoque.length > 0 ? (
               <Text>
-                Preço Médio : R${" "}
-                {newListaEstoque[0].valorProd / newListaEstoque[0].qtdProd}{" "}
-                Quantidade em Estoque : {newListaEstoque[0].qtdProd}
+                Preço Médio : R$ {averagePrice()} Quantidade em Estoque :{" "}
+                {newListaEstoque[0].qtdProd}
               </Text>
             ) : (
               <></>
@@ -142,6 +160,10 @@ export default function SaidaEstoque() {
       </View>
       <TouchableOpacity onPress={handleAddGastos}>
         <Text>{"Cadastrar"}</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+        <Text>{"Voltar"}</Text>
       </TouchableOpacity>
     </>
   );

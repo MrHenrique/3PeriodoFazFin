@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -8,14 +8,14 @@ import {
   ScrollView,
   Image,
 } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../../contexts/auth";
-import getAllEstoqueEntrada from "../../../Realm/getAllEstoqueEntrada";
-import getAllEstoque from "../../../Realm/getAllEstoque";
 import Modal from "react-native-modal";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useMainContext } from "../../../contexts/RealmContext";
 function EstoqueGeral() {
+  const realm = useMainContext();
+
   const navigation = useNavigation();
   //estados
   const [listaEstoque, setListaEstoque] = useState([]);
@@ -34,25 +34,22 @@ function EstoqueGeral() {
   }
   //abrir e fechar modal, chama funcao buscando dados no DB de entrada, modal troca de estado
   function toggleModal() {
-    fetchDataEntrada(fazID);
     setModalVisible(!isModalVisible);
   }
-  //Buscar no banco estoque
-  async function fetchDataEstoque(fazID) {
-    const dataEstoque = await getAllEstoque(fazID);
-    setListaEstoque(dataEstoque);
-  }
-  //Buscar no banco Transações de entrada
-  async function fetchDataEntrada(fazID) {
-    const dataEstoqueEntrada = await getAllEstoqueEntrada(fazID);
-    setListaEstoqueEntrada(dataEstoqueEntrada);
-  }
-  //Chama funcao buscando dados do estoque ao focar em página
-  useFocusEffect(
-    useCallback(() => {
-      fetchDataEstoque(fazID);
-    }, [])
-  );
+  //Chama funcao buscando dados do estoque
+  useEffect(() => {
+    if (realm) {
+      let dataEstoque = realm.objectForPrimaryKey("Farm", fazID);
+      setListaEstoque(dataEstoque.atualEstoque.sorted("nomeProd"));
+      setListaEstoqueEntrada(dataEstoque.entradaEstoque.sorted("createdAt"));
+      dataEstoque.atualEstoque.sorted("nomeProd").addListener((values) => {
+        setListaEstoque([...values]);
+      });
+      dataEstoque.entradaEstoque.sorted("createdAt").addListener((values) => {
+        setListaEstoqueEntrada([...values]);
+      });
+    }
+  }, [realm]);
   //renderiza flat list com transações de entrada
   const renderItemEntrada = ({ item }) => {
     return (
@@ -98,17 +95,13 @@ function EstoqueGeral() {
     }
   };
   const EstoqueValorTotal = () => {
-    console.log(listaEstoque);
-    let Valor = 0;
-    let ValorTotal = 0;
-    let x = 0;
-    while (x < listaEstoque.length) {
-      Valor = listaEstoque[x].valorProd;
-      x = x + 1;
-      ValorTotal = ValorTotal + Valor;
-    }
+    let ValorTotal = listaEstoque.reduce(
+      (total, produto) => total + produto.valorProd,
+      0
+    );
     return ValorTotal;
   };
+
   const CategImg = (categoriaProd) => {
     if (categoriaProd == "Alimentos") {
       return (

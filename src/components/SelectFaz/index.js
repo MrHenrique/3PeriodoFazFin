@@ -91,8 +91,9 @@ const SelectFaz = ({
       FazendaID(Fazid);
       var FazProp = data[0].proprietario;
       FazendaProp(FazProp);
+      var Rebid = "";
+      RebanhoID(Rebid);
       setVisible(false);
-      console.log(Fazid)
     }
   }, [data]);
 

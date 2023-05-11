@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -7,15 +7,14 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-
 import { useNavigation } from "@react-navigation/native";
 import DropdownComponent from "../../../components/Dropdown/TipoProd";
 import uuid from "react-native-uuid";
 import { AuthContext } from "../../../contexts/auth";
-import writeEstoqueEntrada from "../../../Realm/writeEstoqueEntrada";
-import writeEstoque from "../../../Realm/writeEstoque";
-import getAllEstoqueFiltered from "../../../Realm/getAllEstoqueFiltered";
+import { useMainContext } from "../../../contexts/RealmContext";
+
 function EntradaEstoque() {
+  const realm = useMainContext();
   const navigation = useNavigation();
   //estados
   const [listaEstoqueFiltered, setListaEstoqueFiltered] = useState([]);
@@ -30,93 +29,189 @@ function EntradaEstoque() {
   //Gravar dados em Estoque principal
   async function handleAddEstoque() {
     //checar se produto já existe
-    if (listaEstoqueFiltered == undefined) {
+    if (listaEstoqueFiltered.length === 0) {
       //se não existe checar se cadastro é relacionado a tipo 1 ou 2 (farmácia/alimentos)
       if (tipoProd == 1) {
         let valorProd = Number(valorProdI);
         let volumeProd = Number(volumeProdI);
+        let pesoProd = 0;
         let qtdProd = Number(qtdProdI);
-        await writeEstoque(
-          {
-            nomeProd,
-            _id: uuid.v4(),
-            valorProd,
-            qtdProd,
-            volumeProd,
-            obserProd,
-            createdAt: new Date(),
-          },
-          fazID,
-          nomeProd
-        );
+        if (realm) {
+          try {
+            realm.write(() => {
+              let farm = realm.objectForPrimaryKey("Farm", fazID);
+              let createdEstoque = realm.create("AtualEstoqueSchema", {
+                nomeProd: nomeProd,
+                _id: uuid.v4(),
+                valorProd,
+                qtdProd,
+                pesoProd,
+                volumeProd,
+                obserProd,
+                createdAt: new Date(),
+              });
+              let createdEstoqueEntrada = realm.create("EstoqueEntradaSchema", {
+                nomeProd: nomeProd,
+                _id: uuid.v4(),
+                valorProd,
+                qtdProd,
+                pesoProd,
+                volumeProd,
+                obserProd,
+                createdAt: new Date(),
+              });
+              farm.entradaEstoque.push(createdEstoqueEntrada);
+              farm.atualEstoque.push(createdEstoque);
+              Alert.alert("Dados cadastrados com sucesso!");
+            });
+          } catch (e) {
+            Alert.alert("Não foi possível cadastrar!");
+          } finally {
+            resetStates();
+          }
+        }
       } else if (tipoProd == 2) {
         let valorProd = Number(valorProdI);
         let pesoProd = Number(pesoProdI);
+        let volumeProd = 0;
         let qtdProd = Number(qtdProdI);
-        await writeEstoque(
-          {
-            nomeProd,
-            _id: uuid.v4(),
-            valorProd,
-            pesoProd,
-            qtdProd,
-            obserProd,
-            createdAt: new Date(),
-          },
-          fazID,
-          nomeProd
-        );
+        if (realm) {
+          try {
+            realm.write(() => {
+              let farm = realm.objectForPrimaryKey("Farm", fazID);
+              let createdEstoque = realm.create("AtualEstoqueSchema", {
+                nomeProd: nomeProd,
+                _id: uuid.v4(),
+                valorProd,
+                qtdProd,
+                pesoProd,
+                volumeProd,
+                obserProd,
+                createdAt: new Date(),
+              });
+              let createdEstoqueEntrada = realm.create("EstoqueEntradaSchema", {
+                nomeProd: nomeProd,
+                _id: uuid.v4(),
+                valorProd,
+                qtdProd,
+                pesoProd,
+                volumeProd,
+                obserProd,
+                createdAt: new Date(),
+              });
+              farm.entradaEstoque.push(createdEstoqueEntrada);
+              farm.atualEstoque.push(createdEstoque);
+              Alert.alert("Dados cadastrados com sucesso!");
+            });
+          } catch (e) {
+            Alert.alert("Não foi possível cadastrar!");
+          } finally {
+            resetStates();
+          }
+        }
       }
     }
     //se produto existe
     else {
-      if (tipoProd == 1 && listaEstoqueFiltered.volumeProd > 0) {
+      if (tipoProd == 1 && listaEstoqueFiltered[0].volumeProd > 0) {
         let valorProd = Number(valorProdI);
         let volumeProd = Number(volumeProdI);
         let qtdProd = Number(qtdProdI);
-        valorProd = valorProd + listaEstoqueFiltered.valorProd;
-        volumeProd = volumeProd + listaEstoqueFiltered.volumeProd;
-        qtdProd = qtdProd + listaEstoqueFiltered.qtdProd;
-        await writeEstoque(
-          {
-            nomeProd,
-            _id: uuid.v4(),
-            valorProd,
-            qtdProd,
-            volumeProd,
-            obserProd,
-            createdAt: new Date(),
-          },
-          fazID,
-          nomeProd
-        );
-      } else if (tipoProd == 2 && listaEstoqueFiltered.pesoProd > 0) {
+        let pesoProd = 0;
+        valorProdF = valorProd + listaEstoqueFiltered[0].valorProd;
+        volumeProdF = volumeProd + listaEstoqueFiltered[0].volumeProd;
+        qtdProdF = qtdProd + listaEstoqueFiltered[0].qtdProd;
+        if (realm) {
+          try {
+            realm.write(() => {
+              let updateEstoque = realm
+                .objects("AtualEstoqueSchema")
+                .filtered(`_id= '${listaEstoqueFiltered[0]._id}'`)[0];
+              updateEstoque.valorProd = valorProdF;
+              updateEstoque.pesoProd = pesoProd;
+              updateEstoque.volumeProd = volumeProdF;
+              updateEstoque.qtdProd = qtdProdF;
+              updateEstoque.obserProd = obserProd;
+              updateEstoque.createdAt = new Date();
+
+              let farm = realm.objectForPrimaryKey("Farm", fazID);
+              let createdEstoqueEntrada = realm.create("EstoqueEntradaSchema", {
+                nomeProd: nomeProd,
+                _id: uuid.v4(),
+                valorProd,
+                qtdProd,
+                pesoProd,
+                volumeProd,
+                obserProd,
+                createdAt: new Date(),
+              });
+              farm.entradaEstoque.push(createdEstoqueEntrada);
+              Alert.alert("Dados cadastrados com sucesso!");
+            });
+          } catch (e) {
+            Alert.alert("Não foi possível cadastrar.", e.message);
+          } finally {
+            resetStates();
+          }
+        }
+      } else if (tipoProd == 2 && listaEstoqueFiltered[0].pesoProd > 0) {
         let valorProd = Number(valorProdI);
         let pesoProd = Number(pesoProdI);
         let qtdProd = Number(qtdProdI);
-        valorProd = valorProd + listaEstoqueFiltered.valorProd;
-        pesoProd = pesoProd + listaEstoqueFiltered.pesoProd;
-        qtdProd = qtdProd + listaEstoqueFiltered.qtdProd;
-        await writeEstoque(
-          {
-            nomeProd,
-            _id: uuid.v4(),
-            valorProd,
-            pesoProd,
-            qtdProd,
-            obserProd,
-            createdAt: new Date(),
-          },
-          fazID,
-          nomeProd
-        );
+        let volumeProd = 0;
+        valorProd = valorProd + listaEstoqueFiltered[0].valorProd;
+        pesoProd = pesoProd + listaEstoqueFiltered[0].pesoProd;
+        qtdProd = qtdProd + listaEstoqueFiltered[0].qtdProd;
+        if (realm) {
+          try {
+            realm.write(() => {
+              let updateEstoque = realm
+                .objects("AtualEstoqueSchema")
+                .filtered(`_id= '${listaEstoqueFiltered[0]._id}'`)[0];
+              updateEstoque.valorProd = valorProdF;
+              updateEstoque.pesoProd = pesoProd;
+              updateEstoque.volumeProd = volumeProdF;
+              updateEstoque.qtdProd = qtdProdF;
+              updateEstoque.obserProd = obserProd;
+              updateEstoque.createdAt = new Date();
+
+              let farm = realm.objectForPrimaryKey("Farm", fazID);
+              let createdEstoqueEntrada = realm.create("EstoqueEntradaSchema", {
+                nomeProd: nomeProd,
+                _id: uuid.v4(),
+                valorProd,
+                qtdProd,
+                pesoProd,
+                volumeProd,
+                obserProd,
+                createdAt: new Date(),
+              });
+              farm.entradaEstoque.push(createdEstoqueEntrada);
+              Alert.alert("Dados cadastrados com sucesso!");
+            });
+          } catch (e) {
+            Alert.alert("Não foi possível cadastrar.");
+          } finally {
+            resetStates();
+          }
+        }
       } else {
         Alert.alert(
           "Produto com mesmo nome encontrado em outra categoria, cadastro sem sucesso."
         );
+        resetStates();
       }
     }
   }
+  //reset estados
+  const resetStates = () => {
+    setNomeProd("");
+    setValorProd("");
+    setVolumeProd("");
+    setPesoProd("");
+    setObserProd("");
+    setQtdProd(0);
+  };
   //botões de + e -
   //mais
   const maisButton = () => {
@@ -129,88 +224,24 @@ function EntradaEstoque() {
     }
   };
   //Buscar no banco filtrando por nome
-  async function fetchDataEstoqueFiltered(fazID, nomeProd) {
-    const dataEstoqueFiltered = await getAllEstoqueFiltered(fazID, nomeProd);
-    setListaEstoqueFiltered(dataEstoqueFiltered);
+  async function fetchDataEstoqueFiltered(realm, fazID) {
+    let dataEstoque = realm.objectForPrimaryKey("Farm", fazID);
+    let filteredEstoque = dataEstoque.atualEstoque.filter(
+      (produto) => produto.nomeProd === nomeProd
+    );
+    setListaEstoqueFiltered(filteredEstoque);
+    dataEstoque.atualEstoque.addListener((values) => {
+      let filteredValues = values.filter(
+        (produto) => produto.nomeProd === nomeProd
+      );
+      setListaEstoqueFiltered(filteredValues);
+    });
   }
   useEffect(() => {
-    fetchDataEstoqueFiltered(fazID, nomeProd);
-  }, [nomeProd]);
-  //Gravar dados de transações de entrada no banco
-  async function handleAddEstoqueEntrada() {
-    //checar se produto já existe
-    if (listaEstoqueFiltered == undefined) {
-      //se n existe checar se cadastro é relacionado a tipo 1 ou 2 (farmácia/alimentos)
-      if (tipoProd == 1) {
-        let valorProd = Number(valorProdI);
-        let volumeProd = Number(volumeProdI);
-        let qtdProd = Number(qtdProdI);
-        await writeEstoqueEntrada(
-          {
-            _id: uuid.v4(),
-            nomeProd,
-            valorProd,
-            qtdProd,
-            volumeProd,
-            obserProd,
-            createdAt: new Date(),
-          },
-          fazID
-        );
-      } else if (tipoProd == 2) {
-        let valorProd = Number(valorProdI);
-        let pesoProd = Number(pesoProdI);
-        let qtdProd = Number(qtdProdI);
-        await writeEstoqueEntrada(
-          {
-            _id: uuid.v4(),
-            nomeProd,
-            valorProd,
-            pesoProd,
-            qtdProd,
-            obserProd,
-            createdAt: new Date(),
-          },
-          fazID
-        );
-      } //se existe checar se cadastro é relacionado a tipo 1 ou 2 (farmácia/alimentos)
-    } else {
-      if (tipoProd == 1 && listaEstoqueFiltered.volumeProd > 0) {
-        let valorProd = Number(valorProdI);
-        let volumeProd = Number(volumeProdI);
-        let qtdProd = Number(qtdProdI);
-        await writeEstoqueEntrada(
-          {
-            _id: uuid.v4(),
-            nomeProd,
-            valorProd,
-            qtdProd,
-            volumeProd,
-            obserProd,
-            createdAt: new Date(),
-          },
-          fazID
-        );
-      } else if (tipoProd == 2 && listaEstoqueFiltered.pesoProd > 0) {
-        let valorProd = Number(valorProdI);
-        let pesoProd = Number(pesoProdI);
-        let qtdProd = Number(qtdProdI);
-        await writeEstoqueEntrada(
-          {
-            _id: uuid.v4(),
-            nomeProd,
-            valorProd,
-            pesoProd,
-            qtdProd,
-            obserProd,
-            createdAt: new Date(),
-          },
-          fazID
-        );
-      }
+    if (realm) {
+      fetchDataEstoqueFiltered(realm, fazID);
     }
-    handleAddEstoque();
-  }
+  }, [realm, nomeProd]);
   //Checar tipo de input farmacia/alimentos e deixar visivel somente o campo relacionado (volume/peso)
   const TextInputTipo = () => {
     if (tipoProd == 1) {
@@ -290,10 +321,7 @@ function EntradaEstoque() {
           keyboardType="default"
           inputMode="text"
         />
-        <TouchableOpacity
-          style={styles.botao}
-          onPress={handleAddEstoqueEntrada}
-        >
+        <TouchableOpacity style={styles.botao} onPress={handleAddEstoque}>
           <Text style={styles.font}>{"Cadastrar"}</Text>
         </TouchableOpacity>
 
@@ -316,7 +344,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
     alignSelf: "center",
-    textAlign: 'center',
+    textAlign: "center",
   },
   botao: {
     backgroundColor: "green",
