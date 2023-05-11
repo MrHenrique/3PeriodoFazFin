@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import Header from "../../components/Header";
 import { scale, verticalScale } from "react-native-size-matters";
 import AdicionarLeite from "./AdicionarLeite";
 import RegistrosLeite from "./RegistrosLeite";
@@ -39,7 +38,6 @@ function Leite() {
   );
   return (
     <>
-      <Header />
       <TabView
         navigationState={{
           index,

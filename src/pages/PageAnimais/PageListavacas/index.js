@@ -9,11 +9,12 @@ import {
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { scale, verticalScale } from "react-native-size-matters";
-import Lista_vacas from "../../components/Lista_Vacas";
-import SearchBar from "../../components/SearchBar";
-import { AuthContext } from "../../contexts/auth";
+import Lista_vacas from "../../../components/Lista_Vacas";
+import SearchBar from "../../../components/SearchBar";
+import { AuthContext } from "../../../contexts/auth";
+import SearchBarFiltro from "../../../components/SearchBarFiltro";
 
-const imgbg1 = "../../../assets/listavacas-bg.jpg";
+const imgbg1 = "../../../../assets/listavacas-bg.jpg";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -30,7 +31,8 @@ function PageListavacas({ navigation }) {
           source={require(imgbg1)}
           imageStyle={{ opacity: 0.6 }}
         >
-          <SearchBar setChange={(data) => setBarrapesquisa(data)} />
+          <SearchBarFiltro/>
+          {/* <SearchBar setChange={(data) => setBarrapesquisa(data)} /> */}
           <Lista_vacas textobarrapesquisa={Barrapesquisa} idrebanho={rebID} />
 
           <View style={styles.contcad}>
