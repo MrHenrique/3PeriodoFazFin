@@ -18,8 +18,8 @@ export default function SaidaEstoque() {
   const [shouldShow, setShouldShow] = useState(false);
   const [newListaEstoque, setNewListaEstoque] = useState([]);
   const [idSelected, setIdSelected] = useState("");
-  const [tipo, setTipo] = useState(0);
-  const { fazID, rebID, idEstoqueSaida, TipoEstoqueSaida,IdEstoqueSaida } =
+  const [tipo, setTipo] = useState(1);
+  const { fazID, rebID, idEstoqueSaida, TipoEstoqueSaida, IdEstoqueSaida } =
     useContext(AuthContext);
 
   //Buscar no banco estoque
@@ -51,8 +51,9 @@ export default function SaidaEstoque() {
       setNewListaEstoque(
         listaEstoque.filter((estoque) => estoque._id === idEstoqueSaida)
       );
+    } else {
+      setShouldShow(false);
     }
-    else{setShouldShow(false);}
   };
 
   async function handleAddGastos() {
@@ -116,14 +117,20 @@ export default function SaidaEstoque() {
         }}
       >
         <CheckBox
-          title="Alimento"
+          title="Remédios"
           checked={tipo === 1}
-          onPress={() => setTipo(1)}
+          onPress={() => {
+            setTipo(1);
+            IdEstoqueSaida("");
+          }}
         />
         <CheckBox
-          title="Remédios"
+          title="Alimento"
           checked={tipo === 2}
-          onPress={() => setTipo(2)}
+          onPress={() => {
+            setTipo(2);
+            IdEstoqueSaida("");
+          }}
         />
       </View>
       <EstoqueOptions />
@@ -162,7 +169,12 @@ export default function SaidaEstoque() {
         <Text>{"Cadastrar"}</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Home");
+          IdEstoqueSaida("");
+        }}
+      >
         <Text>{"Voltar"}</Text>
       </TouchableOpacity>
     </>

@@ -34,7 +34,7 @@ function EntradaEstoque() {
       if (tipoProd == 1) {
         let valorProd = Number(valorProdI);
         let volumeProd = Number(volumeProdI);
-        let pesoProd = 0;
+        let pesoProd = -1;
         let qtdProd = Number(qtdProdI);
         if (realm) {
           try {
@@ -65,7 +65,7 @@ function EntradaEstoque() {
               Alert.alert("Dados cadastrados com sucesso!");
             });
           } catch (e) {
-            Alert.alert("Não foi possível cadastrar!");
+            Alert.alert("Não foi possível cadastrar!",e.message);
           } finally {
             resetStates();
           }
@@ -73,7 +73,7 @@ function EntradaEstoque() {
       } else if (tipoProd == 2) {
         let valorProd = Number(valorProdI);
         let pesoProd = Number(pesoProdI);
-        let volumeProd = 0;
+        let volumeProd = -1;
         let qtdProd = Number(qtdProdI);
         if (realm) {
           try {
@@ -104,7 +104,7 @@ function EntradaEstoque() {
               Alert.alert("Dados cadastrados com sucesso!");
             });
           } catch (e) {
-            Alert.alert("Não foi possível cadastrar!");
+            Alert.alert("Não foi possível cadastrar!",e.message);
           } finally {
             resetStates();
           }
@@ -113,14 +113,14 @@ function EntradaEstoque() {
     }
     //se produto existe
     else {
-      if (tipoProd == 1 && listaEstoqueFiltered[0].volumeProd > 0) {
+      if (tipoProd == 1 && listaEstoqueFiltered[0].volumeProd >= 0) {
         let valorProd = Number(valorProdI);
         let volumeProd = Number(volumeProdI);
         let qtdProd = Number(qtdProdI);
-        let pesoProd = 0;
-        valorProdF = valorProd + listaEstoqueFiltered[0].valorProd;
-        volumeProdF = volumeProd + listaEstoqueFiltered[0].volumeProd;
-        qtdProdF = qtdProd + listaEstoqueFiltered[0].qtdProd;
+        let pesoProd = -1;
+        let valorProdF = valorProd + listaEstoqueFiltered[0].valorProd;
+        let volumeProdF = volumeProd + listaEstoqueFiltered[0].volumeProd;
+        let qtdProdF = qtdProd + listaEstoqueFiltered[0].qtdProd;
         if (realm) {
           try {
             realm.write(() => {
@@ -154,14 +154,14 @@ function EntradaEstoque() {
             resetStates();
           }
         }
-      } else if (tipoProd == 2 && listaEstoqueFiltered[0].pesoProd > 0) {
+      } else if (tipoProd == 2 && listaEstoqueFiltered[0].pesoProd >= 0) {
         let valorProd = Number(valorProdI);
         let pesoProd = Number(pesoProdI);
         let qtdProd = Number(qtdProdI);
-        let volumeProd = 0;
-        valorProd = valorProd + listaEstoqueFiltered[0].valorProd;
-        pesoProd = pesoProd + listaEstoqueFiltered[0].pesoProd;
-        qtdProd = qtdProd + listaEstoqueFiltered[0].qtdProd;
+        let volumeProd = -1;
+        let valorProdF = valorProd + listaEstoqueFiltered[0].valorProd;
+        let pesoProdF = pesoProd + listaEstoqueFiltered[0].pesoProd;
+        let qtdProdF = qtdProd + listaEstoqueFiltered[0].qtdProd;
         if (realm) {
           try {
             realm.write(() => {
@@ -169,8 +169,8 @@ function EntradaEstoque() {
                 .objects("AtualEstoqueSchema")
                 .filtered(`_id= '${listaEstoqueFiltered[0]._id}'`)[0];
               updateEstoque.valorProd = valorProdF;
-              updateEstoque.pesoProd = pesoProd;
-              updateEstoque.volumeProd = volumeProdF;
+              updateEstoque.pesoProd = pesoProdF;
+              updateEstoque.volumeProd = volumeProd;
               updateEstoque.qtdProd = qtdProdF;
               updateEstoque.obserProd = obserProd;
               updateEstoque.createdAt = new Date();
@@ -190,7 +190,7 @@ function EntradaEstoque() {
               Alert.alert("Dados cadastrados com sucesso!");
             });
           } catch (e) {
-            Alert.alert("Não foi possível cadastrar.");
+            Alert.alert("Não foi possível cadastrar.",e.message);
           } finally {
             resetStates();
           }

@@ -8,18 +8,15 @@ import {
   View,
   ImageBackground,
   TextInput,
-  StyleSheet,
-  Alert,
 } from "react-native";
 import uuid from "react-native-uuid";
 import writeReb from "../../../Realm/writeReb";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
-
-function CadastroReb({}) {
+function CadastroReb() {
   const [nomeReb, setNomeReb] = useState("");
   const [QtdAni, setQtdAni] = useState(0);
-  const { fazID } = useContext(AuthContext);
+  const { fazID,RebanhoID } = useContext(AuthContext);
 
   //Escrever no Banco
 
@@ -44,16 +41,18 @@ function CadastroReb({}) {
   }
 
   async function handleAddReb() {
+    let newRebId = uuid.v4()
     await writeReb(
       {
-        _id: uuid.v4(),
+        _id: newRebId,
         nomeReb,
         createdAt: new Date(),
         vacas: genVacas(QtdAni),
       },
       fazID
     );
-    navigation.navigate("SelectRebPage");
+    RebanhoID(newRebId)
+    navigation.navigate("Home");
   }
 
   const navigation = useNavigation();

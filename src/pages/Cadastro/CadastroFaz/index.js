@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { verticalScale, scale } from "react-native-size-matters";
+import React, { useState,useContext } from "react";
+import { verticalScale } from "react-native-size-matters";
 import {
   Text,
   SafeAreaView,
@@ -8,26 +8,32 @@ import {
   View,
   ImageBackground,
   TextInput,
-  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import uuid from "react-native-uuid";
 import writeFarm from "../../../Realm/writeFarm";
 import styles from "./styles";
+import { AuthContext } from "../../../contexts/auth";
 function CadastroFaz() {
+  const { FazendaID, FazendaProp, RebanhoID } = useContext(AuthContext);
   const [nomefaz, setNomefaz] = useState("");
   const [proprietario, setProprietario] = useState("");
   const [tipoprod, setTipoprod] = useState("");
   //Escrever no Banco
   async function handleAddFarm() {
+    let NewFazID = uuid.v4()
     await writeFarm({
-      _id: uuid.v4(),
+      _id: NewFazID,
       nomefaz,
       proprietario,
       tipoprod,
       createdAt: new Date(),
     });
-    navigation.navigate("SelectFazPage");
+    FazendaID(NewFazID);
+    RebanhoID("");
+    FazendaProp(proprietario);
+    navigation.navigate("SelectRebPage");
+
   }
   const navigation = useNavigation();
   const imgbg1 = "../../../../assets/backgroundCad.jpg";
