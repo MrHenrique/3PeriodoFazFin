@@ -17,7 +17,6 @@ import AdicionarLeite from "../pages/Leite/AdicionarLeite";
 import RegistrosLeite from "../pages/Leite/RegistrosLeite";
 import SelectFazPage from "../pages/SelectFazPage";
 import Despesas from "../pages/Despesas";
-import PageAnimais from "../pages/PageAnimais";
 const Stack = createNativeStackNavigator();
 function StackRoutes() {
   return (
@@ -139,13 +138,6 @@ function StackRoutes() {
       <Stack.Screen
         name="Alimentacao"
         component={Alimentacao}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="PageAnimais"
-        component={PageAnimais}
         options={{
           headerShown: false,
         }}

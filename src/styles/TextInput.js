@@ -8,10 +8,3 @@ export const TextInputLargeRounded = {
       height: verticalScale(40),
       marginVertical: verticalScale(10),
 }
-export const MediumRounded = {
-      textAlign: "center",
-      borderRadius: 20,
-      width: scale(250),
-      height: verticalScale(40),
-      marginVertical: verticalScale(10),
-}
