@@ -1,13 +1,12 @@
-import React from "react";
-import { StyleSheet } from "react-native";
+import * as React from "react";
+import { StyleSheet, useWindowDimensions } from "react-native";
+import PageListaVacas from "./PageListavacas";
+import Leite from "../Leite";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import Header from "../../components/Header";
-import AdicionarLeite from "./AdicionarLeite";
-import RegistrosLeite from "./RegistrosLeite";
 
 const Tab = createMaterialTopTabNavigator();
 
-function Leite() {
+export default function PageAnimais() {
   return (
     <>
       <Tab.Navigator
@@ -17,8 +16,8 @@ function Leite() {
           tabBarStyle: styles.tab,
         }}
       >
-        <Tab.Screen name="Cadastrar Leite" component={AdicionarLeite} />
-        <Tab.Screen name="Dados Leite" component={RegistrosLeite} />
+        <Tab.Screen name="Lista Vacas" component={PageListaVacas} />
+        <Tab.Screen name="Leite" component={Leite} />
       </Tab.Navigator>
     </>
   );
@@ -29,5 +28,3 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(15, 109, 0, 0.9)",
   },
 });
-
-export default Leite;

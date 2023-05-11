@@ -9,11 +9,11 @@ import {
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { scale, verticalScale } from "react-native-size-matters";
-import Lista_vacas from "../../components/Lista_Vacas";
-import SearchBar from "../../components/SearchBar";
-import { AuthContext } from "../../contexts/auth";
+import Lista_vacas from "../../../components/Lista_Vacas";
+import SearchBar from "../../../components/SearchBar";
+import { AuthContext } from "../../../contexts/auth";
 
-const imgbg1 = "../../../assets/listavacas-bg.jpg";
+const imgbg1 = "../../../../assets/listavacas-bg.jpg";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 

@@ -13,7 +13,6 @@ import CadastroFaz from "../pages/Cadastro/CadastroFaz";
 import CadastroReb from "../pages/Cadastro/CadastroReb";
 import Home from "../pages/Home";
 import StackRoutes from "../Routes/stackRoutes";
-import PageListavacas from "../pages/PageListavacas";
 import PagelancaContas from "../pages/PagelancaContas";
 import SelectRebPage from "../pages/SelectRebPage";
 import Manejo from "../pages/Manejo";
@@ -162,20 +161,6 @@ function Routes() {
           drawerIcon: ({ focused, size, color }) => (
             <AntDesign
               name={focused ? "linechart" : "linechart"}
-              size={size}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Vacas"
-        component={PageListavacas}
-        options={{
-          title: "Lista de Vacas",
-          drawerIcon: ({ focused, size, color }) => (
-            <Ionicons
-              name={focused ? "list-circle" : "list-circle-outline"}
               size={size}
               color={color}
             />

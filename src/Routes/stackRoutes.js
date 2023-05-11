@@ -10,7 +10,7 @@ import Leite from "../pages/Leite";
 import PageFinanceiro from "../pages/PageFinanceiro";
 import Home from "../pages/Home";
 import PagelancaContas from "../pages/PagelancaContas";
-import PageListavacas from "../pages/PageListavacas";
+import PageAnimais from "../pages/PageAnimais";
 import Alimentacao from "../pages/Alimentacao";
 import Estoque from "../pages/Estoque";
 import AdicionarLeite from "../pages/Leite/AdicionarLeite";
@@ -121,8 +121,8 @@ function StackRoutes() {
         }}
       />
       <Stack.Screen
-        name="PageListavacas"
-        component={PageListavacas}
+        name="PageAnimais"
+        component={PageAnimais}
         options={{
           headerShown: false,
         }}
