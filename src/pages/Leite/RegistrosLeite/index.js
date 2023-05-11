@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useCallback } from "react";
 import {
   View,
   StyleSheet,
@@ -7,25 +7,61 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import FiltrosData from "../../../components/Filtros/FiltrosData";
 import { scale, verticalScale } from "react-native-size-matters";
 import { AuthContext } from "../../../contexts/auth";
+import getAllLeiteReb from "../../../Realm/getAllLeiteReb";
 function RegistrosLeite() {
   const navigation = useNavigation();
-  const { listaLeiteReb, precoLeiteReb } = useContext(AuthContext);
-  const { listaFiltrada } = useContext(AuthContext);
+  const [listaLeite, setListaLeite] = useState([]);
+  const { rebID } = useContext(AuthContext);
+  const { listaFiltrada, ListaFiltrada } = useContext(AuthContext);
   const [shouldShow, setShouldShow] = useState(false);
+
+  //Busca as produçoes de leite no banco de dados.
+  async function fetchDataLeite(rebID) {
+    const dataLeite = await getAllLeiteReb(rebID);
+    setListaLeite(dataLeite);
+    ListaFiltrada(dataLeite); //usado para passar a lista buscada para a ListaFiltrada para mostrar a lista toda de inicio.
+  }
+  // Quando a pagina está em foco roda a função de buscar os dados no BD.
+  useFocusEffect(
+    useCallback(() => {
+      fetchDataLeite(rebID);
+    }, [])
+  );
+
+  const handleEditPress = () => {
+    console.log("Editar pressionado");
+  };
+
+  const handleDeletePress = () => {
+    console.log("Excluir pressionado");
+  };
 
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity style={styles.listaDet}>
-        <Text style={styles.tituloBotao}>
-          {item.createdAt.getDate().toString().padStart(2, 0)}/
-          {(item.createdAt.getMonth() + 1).toString().padStart(2, 0)}/
-          {item.createdAt.getFullYear().toString()} - {item.description} - R${" "}
-          {(item.prodL * item.precoL).toFixed(2)}
-        </Text>
+        <View style={styles.itemContainer}>
+          <View style={[styles.indicador, { backgroundColor: "yellow" }]} />
+          <Text style={styles.itemText}>
+            {item.createdAt.getDate().toString().padStart(2, 0)}/
+            {(item.createdAt.getMonth() + 1).toString().padStart(2, 0)}/
+            {item.createdAt.getFullYear().toString()} - {item.prodL.toFixed(2)} L
+          </Text>
+          <TouchableOpacity style={styles.editButton} onPress={handleEditPress}>
+            <AntDesign name="edit" size={24} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={handleDeletePress}
+          >
+            <AntDesign name="delete" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -38,12 +74,10 @@ function RegistrosLeite() {
       >
         <Text style={styles.tituloBotao}>Filtros</Text>
       </TouchableOpacity>
-      {shouldShow && (
-        <View style={styles.filtros}>
-          {/*filtros*/}
-          <FiltrosData />
-        </View>
-      )}
+      <View style={[styles.filtros, { display: shouldShow ? "flex" : "none" }]}>
+        {/*filtros*/}
+        <FiltrosData listaRecebida={listaLeite} />
+      </View>
       <FlatList
         style={[
           styles.lista,
@@ -115,8 +149,35 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginVertical: verticalScale(5),
   },
-  scroll: {
-    height: verticalScale(300),
+  itemContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingRight: 10,
+  },
+  editButton: {
+    //padding: 10,
+    //backgroundColor: "red",
+  },
+  deleteButton: {
+    //padding: 10,
+    //backgroundColor: "blue",
+  },
+  itemText: {
+    //backgroundColor: "gray",
+    flex: 1,
+    marginLeft: 10,
+    marginRight: 10,
+    fontSize: verticalScale(14),
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  indicador: {
+    padding: 8,
+    borderTopLeftRadius: 50,
+    borderBottomLeftRadius: 50,
+    width: 10,
+    height: 40,
   },
 });
 export default RegistrosLeite;

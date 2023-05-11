@@ -1,55 +1,26 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
-import { StyleSheet, useWindowDimensions } from "react-native";
-import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import { scale, verticalScale } from "react-native-size-matters";
+import React from "react";
+import { StyleSheet } from "react-native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import Header from "../../components/Header";
 import AdicionarLeite from "./AdicionarLeite";
 import RegistrosLeite from "./RegistrosLeite";
-const FirstRoute = () => <AdicionarLeite />;
-const SecondRoute = () => <RegistrosLeite />;
-const renderScene = SceneMap({
-  first: FirstRoute,
-  second: SecondRoute,
-});
+
+const Tab = createMaterialTopTabNavigator();
 
 function Leite() {
-  const layout = useWindowDimensions();
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    {
-      key: "first",
-      title: "Cadastrar Leite",
-    },
-    {
-      key: "second",
-      title: "Dados Leite",
-    },
-  ]);
-  const renderTabBar = (props) => (
-    <TabBar
-      {...props}
-      indicatorStyle={{
-        backgroundColor: "#fff",
-      }}
-      style={styles.tab}
-      labelStyle={{
-        color: "#fff",
-      }}
-    />
-  );
   return (
     <>
-      <TabView
-        navigationState={{
-          index,
-          routes,
+      <Header />
+      <Tab.Navigator
+        screenOptions={{
+          tabBarLabelStyle: { color: "#fff" },
+          tabBarIndicatorStyle: { backgroundColor: "#fff" },
+          tabBarStyle: styles.tab,
         }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        initialLayout={{
-          width: layout.width,
-        }}
-        renderTabBar={renderTabBar}
-      />
+      >
+        <Tab.Screen name="Cadastrar Leite" component={AdicionarLeite} />
+        <Tab.Screen name="Dados Leite" component={RegistrosLeite} />
+      </Tab.Navigator>
     </>
   );
 }

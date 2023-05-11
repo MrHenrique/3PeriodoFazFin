@@ -12,9 +12,10 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DropdownComponentMes from "../Dropdown/DropdownMes";
 import { AuthContext } from "../../contexts/auth";
 
-function FiltrosData() {
-  const { listaLeiteReb, ListaFiltrada, filtroMes } = useContext(AuthContext);
-  const [lista, setLista] = useState(listaLeiteReb);
+function FiltrosData(props) {
+  const { listaRecebida } = props; // Recebe a lista que vai ser filtrada
+  const { ListaFiltrada, filtroMes } = useContext(AuthContext);
+  const [lista, setLista] = useState(listaRecebida);
   const [startDate, setStartDate] = useState(""); //Filtro Intervalo entre datas
   const [textStartDate, setTextStartDate] = useState("Data Inicial"); //Filtro Intervalo entre datas
   const [endDate, setEndDate] = useState(""); //Filtro Intervalo entre datas
@@ -29,8 +30,7 @@ function FiltrosData() {
 
   useEffect(() => {
     ListaFiltrada(lista);
-  }, [lista])
-  
+  }, [lista]);
 
   //Codigo do DateTimePickerModal
   //Data Inicial
@@ -97,10 +97,10 @@ function FiltrosData() {
   //Filtro por mês
   useEffect(() => {
     if (filtroMes === 13) {
-      setLista(listaLeiteReb);
+      setLista(listaRecebida);
     } else {
-      const listaFiltradaMes = listaLeiteReb.filter((item) => {
-        //pega todos os itens da lista que foi puxada da (listaLeiteReb)
+      const listaFiltradaMes = listaRecebida.filter((item) => {
+        //pega todos os itens da lista que foi puxada da (listaRecebida)
         const itemDataDeCriacao = new Date(item.createdAt); //cria uma nova data com a data do (createdAt do item) e atribui a variavel itemDataDeCriacao
         return itemDataDeCriacao.getMonth() === filtroMes - 1; // verifica se o mês do item é igual ao escolhido pelo usuário
       });
@@ -110,8 +110,8 @@ function FiltrosData() {
 
   //Código para retornar uma lista do intevalo selecionado pelo usuário (FILTRO INTERVALO ENTRE DATAS)
   const filtrarIntervalo = () => {
-    const listaFiltradaIntervalo = listaLeiteReb.filter((item) => {
-      //pega todos os itens da lista que foi puxada da (listaLeiteReb)
+    const listaFiltradaIntervalo = listaRecebida.filter((item) => {
+      //pega todos os itens da lista que foi puxada da (listaRecebida)
       const itemDataDeCriacao = new Date(item.createdAt); //cria uma nova data com a data do (createdAt do item) e atribui a variavel itemDataDeCriacao
       const dataInicio = new Date(startDate); //pega a data de inicio escolhida pelo usuario
       dataInicio.setHours(0, 0, 0); //ajusta o horario para 00:00:00 para garantir que a data de inicio seja no começo do dia.
@@ -128,10 +128,10 @@ function FiltrosData() {
   //Código para retornar uma lista com a data Especifica selecionada pelo usuario (FILTRO POR DATA ESPECIFICA)
   useEffect(() => {
     if (specificDate === null) {
-      setLista(listaLeiteReb);
+      setLista(listaRecebida);
     } else {
       setLista(
-        listaLeiteReb.filter((item) => {
+        listaRecebida.filter((item) => {
           const itemDataDeCriacao = new Date(item.createdAt); // converte a string de data do item para um objeto Date
           const specificDateObj = new Date(specificDate); // converte a string de busca para um objeto Date
           return (
@@ -149,7 +149,7 @@ function FiltrosData() {
     <SafeAreaView style={styles.container}>
       <DropdownComponentMes />
       {/*Filtro intervalo entre datas*/}
-      <View style={{ flexDirection: "row",}}>
+      <View style={{ flexDirection: "row" }}>
         <TouchableOpacity
           style={{
             flex: 1,
@@ -232,7 +232,7 @@ function FiltrosData() {
           onPress={() => {
             setSpecificDate(null);
             setTextSpecificDate("Data Especifica");
-            setLista(listaLeiteReb);
+            setLista(listaRecebida);
           }}
         >
           <Text style={{ textAlign: "center" }}>Limpar</Text>

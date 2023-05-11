@@ -82,7 +82,7 @@ function FaturamentoReb() {
               <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
 
               {/*filtros*/}
-              <FiltrosData />
+              <FiltrosData listaRecebida={listaLeiteReb}/>
 
               <FlatList
                 style={styles.scroll}
