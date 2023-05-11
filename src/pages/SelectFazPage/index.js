@@ -9,25 +9,25 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import getAllFarm from "../../Realm/getAllFarm";
 import styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
+import { useMainContext } from "../../contexts/RealmContext";
 function SelectFazPage() {
   
+  const realm = useMainContext();
   const navigation = useNavigation();
   const [listaFaz, setListaFaz] = useState([]);
   const { fazID } = useContext(AuthContext);
   const imgbg1 = "../../../assets/background7.jpg";
   useEffect(() => {
-    (async () => {
-      const data = await getAllFarm();
+    if (realm) {
+      let data = realm.objects("Farm").sorted("nomefaz");
       setListaFaz(data);
-      data.addListener((values) => {
+      data.sorted("nomefaz").addListener((values) => {
         setListaFaz([...values]);
       });
-    })();
-  }, []);
-
+    }
+  }, [realm]);
   function CanContinue(fazID) {
     if (typeof fazID == "undefined" || fazID == "") {
       const CanContinue = true;
