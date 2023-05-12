@@ -89,7 +89,6 @@ const Select = ({
       var Rebid = data[0]._id;
       RebanhoID(Rebid);
       setVisible(false);
-      console.log(Rebid)
     }
   }, [data]);
   const { TouchableComponent } = touchableComponent(

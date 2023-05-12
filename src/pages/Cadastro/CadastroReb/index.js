@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../../contexts/auth";
 import {
   Text,
@@ -8,18 +8,18 @@ import {
   View,
   ImageBackground,
   TextInput,
-  StyleSheet,
-  Alert,
 } from "react-native";
 import uuid from "react-native-uuid";
-import writeReb from "../../../Realm/writeReb";
 import { useNavigation } from "@react-navigation/native";
+import { useMainContext } from "../../../contexts/RealmContext";
+import { Alert } from "react-native";
 import styles from "./styles";
-
-function CadastroReb({}) {
+function CadastroReb() {
+  const realm = useMainContext();
   const [nomeReb, setNomeReb] = useState("");
   const [QtdAni, setQtdAni] = useState(0);
-  const { fazID } = useContext(AuthContext);
+  const [listaReb, setListaReb] = useState([]);
+  const { fazID, RebanhoID } = useContext(AuthContext);
 
   //Escrever no Banco
 
@@ -42,20 +42,42 @@ function CadastroReb({}) {
     }
     return proximasvacas;
   }
-
+  useEffect(() => {
+    if (realm) {
+      let data = realm.objectForPrimaryKey("Farm", fazID);
+      setListaReb(
+        data.rebanhos.filter((rebanho) => rebanho.nomeReb === nomeReb)
+      );
+    }
+  }, [realm, nomeReb]);
+  //Escrever no Banco
   async function handleAddReb() {
-    await writeReb(
-      {
-        _id: uuid.v4(),
-        nomeReb,
-        createdAt: new Date(),
-        vacas: genVacas(QtdAni),
-      },
-      fazID
-    );
-    navigation.navigate("SelectRebPage");
+    if (realm && listaReb.length === 0) {
+      try {
+        realm.write(() => {
+          let newRebId = uuid.v4();
+          let farm = realm.objectForPrimaryKey("Farm", fazID);
+          let createdReb = realm.create("RebanhoSchema", {
+            _id: newRebId,
+            nomeReb,
+            createdAt: new Date(),
+            vacas: genVacas(QtdAni),
+          });
+          farm.rebanhos.push(createdReb);
+          Alert.alert("Dados cadastrados com sucesso!");
+          RebanhoID(newRebId);
+          navigation.navigate("Home");
+        });
+      } catch (e) {
+        Alert.alert("Não foi possível cadastrar!", e.message);
+      } finally {
+        setNomeReb("");
+        setQtdAni(0);
+      }
+    } else {
+      Alert.alert("Esse rebanho já existe, troque o nome e tente novamente.");
+    }
   }
-
   const navigation = useNavigation();
   const imgbg1 = "../../../../assets/bg6.jpg";
   return (

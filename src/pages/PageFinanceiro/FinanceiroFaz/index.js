@@ -1,101 +1,59 @@
 import * as React from "react";
-import { useEffect, useState, useContext, useCallback } from "react";
-import { useFocusEffect } from "@react-navigation/native";
-import { View, StyleSheet, useWindowDimensions } from "react-native";
-import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+import { useEffect, useContext } from "react";
+import { StyleSheet } from "react-native";
 import Relatorio from "./Relatorio";
-import { Buttons, Colors, Fonts } from "../../../styles";
 import Despesas from "./Despesas";
 import Faturamento from "./Faturamento";
 import { AuthContext } from "../../../contexts/auth";
 import { DespesasTotais } from "../../../components/Calculos DB/DespesasTotais";
 import { ReceitasTotais } from "../../../components/Calculos DB/ReceitasTotais";
-import getAllGastos from "../../../Realm/getAllGastos";
-import getAllLeite from "../../../Realm/getAllLeite";
-const FirstRoute = () => <Relatorio />;
-
-const SecondRoute = () => <Despesas />;
-
-const ThirdRoute = () => <Faturamento />;
-const renderScene = SceneMap({
-  first: FirstRoute,
-  second: SecondRoute,
-  third: ThirdRoute,
-});
-
-export default function FinanceiroFaz({ navigation }) {
+import { useMainContext } from "../../../contexts/RealmContext";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+export default function FinanceiroFaz() {
+  const realm = useMainContext();
+  const Tab = createMaterialTopTabNavigator();
   const { PrecoCF, ListaAli, fazID, PrecoLeite, ListaLeite } =
     useContext(AuthContext);
-  const [dataGasto, setDataGastos] = useState([]);
-  const [dataReceitas, setDataReceitas] = useState([]);
-  async function fetchDataDes(fazID) {
-    const dataGas = await getAllGastos(fazID);
-    setDataGastos(dataGas);
-    ListaAli(dataGas);
-    const precoCF = DespesasTotais(dataGas);
-    PrecoCF(precoCF);
-  }
-  async function fetchDataRec(fazID) {
-    const dataRec = await getAllLeite(fazID);
-    setDataReceitas(dataRec);
-    ListaLeite(dataRec);
-    const precoLeite = ReceitasTotais(dataRec);
-    PrecoLeite(precoLeite);
-  }
-  useFocusEffect(
-    useCallback(() => {
-      fetchDataRec(fazID);
-      fetchDataDes(fazID);
-    }, [])
-  );
 
-  const layout = useWindowDimensions();
-
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    {
-      key: "first",
-      title: "Relatórios",
-    },
-    {
-      key: "second",
-      title: "Despesas",
-    },
-    {
-      key: "third",
-      title: "Faturamento",
-    },
-  ]);
-  const renderTabBar = (props) => (
-    <TabBar
-      {...props}
-      activeColor={Colors.white}
-      inactiveColor={Colors.grey}
-      indicatorStyle={{
-        backgroundColor: Colors.white,
-        height: 4,
-      }}
-      style={styles.tab}
-      labelStyle={{
-        color: Colors.white,
-        ...Fonts.txtMediumBold,
-      }}
-    />
-  );
+  //Buscar no banco Despesas faz
+  useEffect(() => {
+    if (realm) {
+      let dataDespesas = realm.objectForPrimaryKey("Farm", fazID);
+      let despesas = [];
+      dataDespesas.rebanhos.forEach((rebanho) => {
+        despesas.push(...rebanho.despesas);
+      });
+      PrecoCF(DespesasTotais(despesas));
+      ListaAli(despesas);
+    }
+  }, [realm]);
+  //Buscar no banco receita faz
+  useEffect(() => {
+    if (realm) {
+      let dataReceitas = realm.objectForPrimaryKey("Farm", fazID);
+      let receitas = [];
+      dataReceitas.rebanhos.forEach((rebanho) => {
+        rebanho.vacas.forEach((vaca) => {
+          receitas.push(...vaca.receitas);
+        });
+      });
+      PrecoLeite(ReceitasTotais(receitas));
+      ListaLeite(receitas);
+    }
+  }, [realm]);
   return (
     <>
-      <TabView
-        navigationState={{
-          index,
-          routes,
+      <Tab.Navigator
+        screenOptions={{
+          tabBarLabelStyle: { color: "#fff" },
+          tabBarIndicatorStyle: { backgroundColor: "#fff" },
+          tabBarStyle: styles.tab,
         }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        initialLayout={{
-          width: layout.width,
-        }}
-        renderTabBar={renderTabBar}
-      />
+      >
+        <Tab.Screen name="Relatórios" component={Relatorio} />
+        <Tab.Screen name="Despesas" component={Despesas} />
+        <Tab.Screen name="Faturamento" component={Faturamento} />
+      </Tab.Navigator>
     </>
   );
 }

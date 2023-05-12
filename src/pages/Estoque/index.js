@@ -18,8 +18,8 @@ export default function Estoque() {
           tabBarStyle: styles.tab,
         }}
       >
-        <Tab.Screen name="Saída de estoque" component={EntradaEstoque} />
-        <Tab.Screen name="Outras Despesas" component={EstoqueGeral} />
+        <Tab.Screen name="Compras" component={EntradaEstoque} />
+        <Tab.Screen name="Estoque Geral" component={EstoqueGeral} />
       </Tab.Navigator>
     </>
   );

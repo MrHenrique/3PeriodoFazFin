@@ -94,6 +94,7 @@ const SelectFaz = ({
       var Rebid = "";
       RebanhoID(Rebid);
       setVisible(false);
+      console.log(Fazid);
     }
   }, [data]);
 
@@ -120,6 +121,7 @@ const SelectFaz = ({
       var Rebid = "";
       FazendaID(Fazid);
       RebanhoID(Rebid);
+      console.log(Fazid);
     } else {
       setSelected(item);
       setVisible(false);
@@ -130,6 +132,7 @@ const SelectFaz = ({
         RebanhoID(Rebid);
         var FazProp = item.proprietario;
         FazendaProp(FazProp);
+        console.log(Fazid);
       }
     }
   }

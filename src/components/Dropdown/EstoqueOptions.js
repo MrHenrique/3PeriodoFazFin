@@ -7,9 +7,10 @@ import { useMainContext } from "../../contexts/RealmContext";
 const EstoqueOptions = () => {
   const realm = useMainContext();
   const [value, setValue] = useState(0);
-  const [isFocus, setIsFocus] = useState(false);
+  const [isFocus, setIsFocus] = useState(true);
   const [listaEstoque, setListaEstoque] = useState([]);
-  const { fazID, IdEstoqueSaida, tipoEstoqueSaida,idEstoqueSaida } = useContext(AuthContext);
+  const { fazID, IdEstoqueSaida, tipoEstoqueSaida, idEstoqueSaida } =
+    useContext(AuthContext);
 
   useEffect(() => {
     if (realm) {
@@ -18,23 +19,21 @@ const EstoqueOptions = () => {
       let filteredDataEstoque;
       if (tipoEstoqueSaida === 1) {
         filteredDataEstoque = dataEstoque.atualEstoque.filter(
-          (obj) => obj.pesoProd !== 0
+          (obj) => obj.pesoProd < 0
         );
-        setValue(1);
         setListaEstoque(filteredDataEstoque);
       } else if (tipoEstoqueSaida === 2) {
         filteredDataEstoque = dataEstoque.atualEstoque.filter(
-          (obj) => obj.volumeProd !== 0
+          (obj) => obj.volumeProd < 0
         );
-        setValue(1);
         setListaEstoque(filteredDataEstoque);
       }
     }
+    setValue(0);
   }, [realm, tipoEstoqueSaida]);
-useEffect(()=>{
-  if (idEstoqueSaida === "")
-  setValue(0)
-},[idEstoqueSaida]);
+  useEffect(() => {
+    if (idEstoqueSaida === "") setValue(0);
+  }, [idEstoqueSaida]);
   const data = listaEstoque.map((item, index) => ({
     label: item.nomeProd,
     value: String(index + 1),
@@ -68,11 +67,9 @@ useEffect(()=>{
         placeholder={"Clique aqui"}
         value={value}
         onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
         onChange={(item) => {
           setValue(item.value);
           IdEstoqueSaida(item._id);
-          setIsFocus(false);
         }}
       />
     </View>

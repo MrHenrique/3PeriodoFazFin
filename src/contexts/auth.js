@@ -17,35 +17,35 @@ function AuthProvider({ children }) {
       FazProp: FazProp,
     });
   }
-  const [precoCF, SetPrecoCF] = useState();
+  const [precoCF, SetPrecoCF] = useState(0);
   function PrecoCF(precoCF) {
     SetPrecoCF(precoCF);
   }
-  const [listaAli, SetListaAli] = useState();
+  const [listaAli, SetListaAli] = useState([]);
   function ListaAli(dataGas) {
     SetListaAli(dataGas);
   }
-  const [listaLeite, SetListaLeite] = useState();
+  const [listaLeite, SetListaLeite] = useState([]);
   function ListaLeite(dataLeite) {
     SetListaLeite(dataLeite);
   }
-  const [precoLeite, SetPrecoLeite] = useState();
+  const [precoLeite, SetPrecoLeite] = useState(0);
   function PrecoLeite(precoLeite) {
     SetPrecoLeite(precoLeite);
   }
-  const [precoCFReb, SetPrecoCFReb] = useState();
+  const [precoCFReb, SetPrecoCFReb] = useState(0);
   function PrecoCFReb(precoCF) {
     SetPrecoCFReb(precoCF);
   }
-  const [listaLeiteReb, SetListaLeiteReb] = useState();
+  const [listaLeiteReb, SetListaLeiteReb] = useState([]);
   function ListaLeiteReb(dataLeite) {
     SetListaLeiteReb(dataLeite);
   }
-  const [precoLeiteReb, SetPrecoLeiteReb] = useState();
+  const [precoLeiteReb, SetPrecoLeiteReb] = useState(0);
   function PrecoLeiteReb(precoLeite) {
     SetPrecoLeiteReb(precoLeite);
   }
-  const [listaAliReb, SetListaAliReb] = useState();
+  const [listaAliReb, SetListaAliReb] = useState([]);
   function ListaAliReb(dataGas) {
     SetListaAliReb(dataGas);
   }

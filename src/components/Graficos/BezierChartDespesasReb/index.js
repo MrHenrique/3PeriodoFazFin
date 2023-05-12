@@ -40,7 +40,7 @@ function BezierChartDespesasReb() {
 
   //Percorre todos as despesas
   listaAliReb.forEach((item) => {
-    const valor = (item.valorAli / item.qtdAli) * item.consumoAli;
+    const valor = (item.valorProd * item.qtdProd);
     const mes = item.createdAt.getMonth(); // cria uma variavel que se iguala ao mes de criação do item
 
     despesasPorMesReb[mes] += valor; //Soma todos as despesas do mês

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from "react";
+import React, { useState, useContext,useEffect } from "react";
 import {
   Text,
   View,
@@ -7,30 +7,24 @@ import {
   SafeAreaView,
   Image,
 } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
-import getAllReb from "../../Realm/getAllReb";
-import { scale, verticalScale } from "react-native-size-matters";
 import Select from "../../components/Select";
 import { AuthContext } from "../../contexts/auth";
 import styles from "./styles";
+import { useMainContext } from "../../contexts/RealmContext";
 function SelectRebPage({ navigation }) {
+  const realm = useMainContext();
   const [listaReb, setListaReb] = useState([]);
+  useEffect(() => {
+    if (realm) {
+      let data = realm.objectForPrimaryKey("Farm",fazID);
+      setListaReb(data.rebanhos);
+      data.rebanhos.sorted("nomeReb").addListener((values) => {
+        setListaReb([...values]);
+      });
+    }
+  }, [realm]);
 
-  async function fetchDataReb(fazID) {
-    const data = await getAllReb(fazID);
-    setListaReb(data);
-    data.addListener((values) => {
-      setListaReb([...values]);
-    });
-  }
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchDataReb(fazID);
-    }, [])
-  );
-
-  const { precoCF, fazID, rebID, precoLeite } = useContext(AuthContext);
+  const { fazID, rebID } = useContext(AuthContext);
 
   function CanContinue(rebID) {
     if (typeof rebID == "undefined" || rebID == "") {

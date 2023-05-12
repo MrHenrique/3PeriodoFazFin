@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { verticalScale, scale } from "react-native-size-matters";
+import React, { useState, useContext, useEffect } from "react";
+import { verticalScale } from "react-native-size-matters";
 import {
   Text,
   SafeAreaView,
@@ -8,26 +8,56 @@ import {
   View,
   ImageBackground,
   TextInput,
-  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import uuid from "react-native-uuid";
 import writeFarm from "../../../Realm/writeFarm";
 import styles from "./styles";
+import { AuthContext } from "../../../contexts/auth";
+import { useMainContext } from "../../../contexts/RealmContext";
+import { Alert } from "react-native";
 function CadastroFaz() {
+  const realm = useMainContext();
+  const { FazendaID, FazendaProp, RebanhoID } = useContext(AuthContext);
   const [nomefaz, setNomefaz] = useState("");
   const [proprietario, setProprietario] = useState("");
   const [tipoprod, setTipoprod] = useState("");
+  const [listaFaz, setListaFaz] = useState([]);
+  useEffect(() => {
+    if (realm) {
+      let data = realm.objects("Farm").sorted("nomefaz");
+      setListaFaz(data.filter((fazenda) => fazenda.nomefaz === nomefaz));
+    }
+  }, [realm,nomefaz]);
   //Escrever no Banco
   async function handleAddFarm() {
-    await writeFarm({
-      _id: uuid.v4(),
-      nomefaz,
-      proprietario,
-      tipoprod,
-      createdAt: new Date(),
-    });
-    navigation.navigate("SelectFazPage");
+    if (realm && listaFaz.length === 0) {
+      try {
+        realm.write(() => {
+          let NewFazID = uuid.v4();
+          realm.create("Farm", {
+            _id: NewFazID,
+            nomefaz,
+            proprietario,
+            tipoprod,
+            createdAt: new Date(),
+          });
+          Alert.alert("Dados cadastrados com sucesso!");
+          FazendaID(NewFazID);
+          navigation.navigate("SelectRebPage");
+          RebanhoID("");
+          FazendaProp(proprietario);
+        });
+      } catch (e) {
+        Alert.alert("Não foi possível cadastrar!", e.message);
+      } finally {
+        setNomefaz("");
+        setProprietario("");
+        setTipoprod("");
+      }
+    } else {
+      Alert.alert("Essa fazenda já existe, troque o nome e tente novamente.");
+    }
   }
   const navigation = useNavigation();
   const imgbg1 = "../../../../assets/backgroundCad.jpg";

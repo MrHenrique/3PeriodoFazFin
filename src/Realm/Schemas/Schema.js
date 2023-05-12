@@ -33,7 +33,7 @@ export const EstoqueEntradaSchema = {
 };
 export const AtualEstoqueSchema = {
   name: "AtualEstoqueSchema",
-  primaryKey: "nomeProd",
+  primaryKey: "_id",
   properties: {
     _id: "string",
     nomeProd: "string",
