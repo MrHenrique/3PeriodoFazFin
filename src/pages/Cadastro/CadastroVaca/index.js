@@ -1,45 +1,52 @@
 import React, { useState, useContext } from "react";
-import {
-  Dimensions,
-  View,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-} from "react-native";
+import { View, ScrollView, StyleSheet, Text, TextInput } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { scale, verticalScale } from "react-native-size-matters";
 import { AuthContext } from "../../../contexts/auth";
 import { Feather } from "@expo/vector-icons";
 import uuid from "react-native-uuid";
-import writenewVaca from "../../../Realm/WritenewVaca";
+import { useMainContext } from "../../../contexts/RealmContext";
+import { Alert } from "react-native";
 
 function CadastroVaca({ navigation }) {
-  const [nomeVaca, setnomeVaca] = useState();
-  const [nascVaca, setnascVaca] = useState();
-  const [brincoVaca, setbrincoVaca] = useState();
-  const [descVaca, setdescVaca] = useState();
-  const [genero, setgenero] = useState();
-  const [macho, setmacho] = useState("square");
-  const [femea, setfemea] = useState("square");
-
-  function CombineData() {
-    const newvaca = {
-      _id: uuid.v4(),
-      nomeVaca: nomeVaca,
-      nascimentoVaca: nascVaca,
-      brincoVaca: brincoVaca,
-      descVaca: descVaca,
-      createdAt: new Date(),
-      genero: genero,
-      receitas: [],
-      assignee: {
-        type: "linkingObjects",
-        objectType: "RebanhoSchema",
-        property: "vacas",
-      },
-    };
-    return newvaca;
+  const realm = useMainContext();
+  const [nomeVaca, setNomeVaca] = useState();
+  const [nascVaca, setNascVaca] = useState();
+  const [brincoVaca, setBrincoVaca] = useState();
+  const [descVaca, setDescVaca] = useState();
+  const [genero, setGenero] = useState();
+  const [macho, setMacho] = useState("square");
+  const [femea, setFemea] = useState("square");
+  //Escrever no Banco
+  async function handleAddVaca() {
+    if (realm) {
+      try {
+        realm.write(() => {
+          let dataReb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+          let createdVaca = realm.create("VacasSchema", {
+            _id: uuid.v4(),
+            nomeVaca: nomeVaca,
+            nascimentoVaca: nascVaca,
+            brincoVaca: brincoVaca,
+            descVaca: descVaca,
+            createdAt: new Date(),
+            genero: genero,
+          });
+          dataReb.vacas.push(createdVaca);
+          Alert.alert("Dados cadastrados com sucesso!");
+        });
+      } catch (e) {
+        Alert.alert("Não foi possível cadastrar!", e.message);
+      } finally {
+        setNomeVaca();
+        setNascVaca();
+        setBrincoVaca();
+        setDescVaca();
+        setGenero();
+        setMacho("square");
+        setFemea("square");
+      }
+    }
   }
   const { rebID } = useContext(AuthContext);
   return (
@@ -113,8 +120,7 @@ function CadastroVaca({ navigation }) {
         <TouchableOpacity
           style={styles.botaopress}
           onPress={() => {
-            writenewVaca(rebID, CombineData()),
-              navigation.navigate("PageListavacas");
+            handleAddVaca();
           }}
         >
           <Text style={styles.textovoltar}>Cadastrar Animal</Text>

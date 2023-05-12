@@ -1,76 +1,103 @@
 import { View, TouchableOpacity, Text, Alert } from "react-native";
-import React, { useState, useEffect, useContext, useCallback } from "react";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import React, { useEffect, useContext } from "react";
+import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import { Color } from "./styles";
-//DB
-import getAllGastos from "../../Realm/getAllGastos";
-import getAllGastosReb from "../../Realm/getAllGastosReb";
-import getAllLeite from "../../Realm/getAllLeite";
-import getAllLeiteReb from "../../Realm/getAllLeiteReb";
+import { useMainContext } from "../../contexts/RealmContext";
 import { ReceitasTotais } from "../../components/Calculos DB/ReceitasTotais";
 import { DespesasTotais } from "../../components/Calculos DB/DespesasTotais";
 //--
 import { AuthContext } from "../../contexts/auth";
 
 function PreviewFinanceiro({ Titulo, Id }) {
+  const realm = useMainContext();
   const navigation = useNavigation();
-  const [dataGasto, setDataGastos] = useState([]);
-  const [dataReceitas, setDataReceitas] = useState([]);
-  async function fetchDataReceitas(fazID) {
-    // console.log(Id);
-    var dataRec;
+  useEffect(() => {
     switch (Id) {
       case 1:
-        dataRec = await getAllLeite(fazID);
-        setDataReceitas(dataRec);
-        ListaLeite(dataRec);
-        const precoLeite = ReceitasTotais(dataRec);
-        PrecoLeite(precoLeite);
+        if (realm) {
+          let dataReceitas = realm.objectForPrimaryKey("Farm", fazID);
+          let receitas = [];
+          dataReceitas.rebanhos.forEach((rebanho) => {
+            rebanho.vacas.forEach((vaca) => {
+              receitas.push(...vaca.receitas);
+            });
+          });
+          PrecoLeite(ReceitasTotais(receitas));
+          ListaLeite(receitas);
+          dataReceitas.rebanhos.addListener((rebanhoResults) => {
+            let newReceitas = [];
+            rebanhoResults.forEach((rebanho) => {
+              rebanho.vacas.forEach((vaca) => {
+                newReceitas.push(...vaca.receitas);
+              });
+            });
+            PrecoCF(ReceitasTotais(newReceitas));
+            ListaLeite(newReceitas);
+          });
+        }
         break;
       case 2:
-        dataRec = await getAllLeiteReb(rebID);
-        setDataReceitas(dataRec);
-        ListaLeiteReb(dataRec);
-        const precoLeiteReb = ReceitasTotais(dataRec);
-        PrecoLeiteReb(precoLeiteReb);
+        if (realm) {
+          let dataReceitas = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+          let receitas = [];
+          dataReceitas.vacas.forEach((vaca) => {
+            receitas.push(...vaca.receitas);
+          });
+          PrecoLeiteReb(ReceitasTotais(receitas));
+          ListaLeiteReb(receitas);
+          let newReceitas = [];
+          dataReceitas.vacas.addListener((values) => {
+            values.forEach((vaca) => {
+              newReceitas.push(...vaca.receitas);
+            });
+            PrecoCFReb(ReceitasTotais(newReceitas));
+            ListaLeiteReb(newReceitas);
+          });
+        }
         break;
       default:
         Alert.alert("erro na busca de dados, consultar desenvolvedor");
         break;
     }
-  }
-  async function fetchDataDespesas(fazID) {
-    var dataGas;
+  }, [realm]);
+  useEffect(() => {
     switch (Id) {
       case 1:
-        // console.log("fazenda");
-        dataGas = await getAllGastos(fazID);
-        setDataGastos(dataGas);
-        ListaAli(dataGas);
-        const precoCF = DespesasTotais(dataGas);
-        PrecoCF(precoCF);
+        if (realm) {
+          let dataDespesas = realm.objectForPrimaryKey("Farm", fazID);
+          let despesas = [];
+          dataDespesas.rebanhos.forEach((rebanho) => {
+            despesas.push(...rebanho.despesas);
+          });
+          PrecoCF(DespesasTotais(despesas));
+          ListaAli(despesas);
+          dataDespesas.rebanhos.addListener((rebanhoResults) => {
+            let newDespesas = [];
+            rebanhoResults.forEach((rebanho) => {
+              newDespesas.push(...rebanho.despesas);
+            });
+            PrecoCF(DespesasTotais(newDespesas));
+            ListaAli(newDespesas);
+          });
+        }
         break;
       case 2:
-        // console.log("rebanho");
-        dataGas = await getAllGastosReb(rebID);
-        setDataGastos(dataGas);
-        ListaAliReb(dataGas);
-        const precoCFReb = DespesasTotais(dataGas);
-        PrecoCFReb(precoCFReb);
+        if (realm) {
+          let dataGastos = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+          PrecoCFReb(DespesasTotais(dataGastos.despesas));
+          ListaAliReb(dataGastos.despesas);
+          dataGastos.despesas.addListener((values) => {
+            PrecoCFReb(DespesasTotais([...values]));
+          });
+          ListaAliReb(dataGastos.despesas);
+        }
         break;
       default:
         Alert.alert("erro na busca de dados, consultar desenvolvedor");
         break;
     }
-  }
-  //atualizar dados
-  useFocusEffect(
-    useCallback(() => {
-      fetchDataReceitas(fazID);
-      fetchDataDespesas(fazID);
-    }, [])
-  );
+  }, [realm]);
 
   const {
     precoCF,
@@ -88,7 +115,7 @@ function PreviewFinanceiro({ Titulo, Id }) {
     PrecoLeiteReb,
     precoLeiteReb,
     idPageFinanceiro,
-    IdPageFinanceiro
+    IdPageFinanceiro,
   } = useContext(AuthContext);
 
   //Funcoes para validar e renderizar

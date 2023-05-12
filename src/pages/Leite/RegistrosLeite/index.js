@@ -16,7 +16,7 @@ import { useMainContext } from "../../../contexts/RealmContext";
 function RegistrosLeite() {
   const realm = useMainContext();
   const navigation = useNavigation();
-  const { rebID, ListaLeiteReb,listaFiltrada } = useContext(AuthContext);
+  const { rebID, ListaLeiteReb, listaFiltrada } = useContext(AuthContext);
   const [lista, setLista] = useState([]);
   const [shouldShow, setShouldShow] = useState(false);
   useEffect(() => {

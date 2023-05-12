@@ -8,43 +8,31 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import getAllFarm from "../../Realm/getAllFarm";
-import getAllReb from "../../Realm/getAllReb";
 import styles from "./styles";
+import { useMainContext } from "../../contexts/RealmContext";
 
 function Login({ navigation }) {
-  const [listaFaz, setListaFaz] = useState([]);
-  const [listaReb, setListaReb] = useState([]);
+  const realm = useMainContext();
   const { FazendaID, RebanhoID, FazendaProp } = useContext(AuthContext);
+  const [listaReb, setListaReb] = useState([]);
+  const [listaFaz, setListaFaz] = useState([]);
   const imgbg1 = "../../../assets/background7.jpg";
   useEffect(() => {
-    let isMounted = true;
-
-    const fetchData = async () => {
-      const data = await getAllFarm();
-      if (isMounted) {
-        setListaFaz(data);
-        if (data.length === 1) {
-          FazendaID(data[0]._id);
-          FazendaProp(data[0].proprietario);
-          const fazID = data[0]._id;
-          const dataReb = await getAllReb(fazID);
-          if (isMounted) {
-            setListaReb(dataReb);
-            if (dataReb.length === 1) {
-              RebanhoID(dataReb[0]._id);
-            }
-          }
+    if (realm) {
+      let data = realm.objects("Farm").sorted("nomefaz");
+      setListaFaz(data);
+      if (data.length === 1) {
+        FazendaID(data[0]._id);
+        FazendaProp(data[0].proprietario);
+        const fazID = data[0]._id;
+        let dataReb = realm.objectForPrimaryKey("Farm", fazID);
+        setListaReb(dataReb.rebanhos);
+        if (dataReb.rebanhos.length === 1) {
+          RebanhoID(dataReb.rebanhos[0]._id);
         }
       }
-    };
-
-    fetchData();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+    }
+  }, [realm]);
 
   function navigateWhere() {
     if (listaFaz.length === 1 && listaReb.length === 1) {
