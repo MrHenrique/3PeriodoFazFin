@@ -258,7 +258,7 @@ function AdicionarLeite() {
               placeholder="Pesquise pelo nome."
               value={searchText}
               onChangeText={(t) => setSearchText(t)}
-            ></TextInput>
+            />
             <FlatList
               style={styles.scroll}
               data={lista}
