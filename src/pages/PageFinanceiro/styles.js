@@ -149,6 +149,6 @@ export function setSize(text, width) {
   var fontSize = width / text.toString().length + 3;
   var maxSize = width / 10;
   fontSize = Math.min(fontSize, maxSize);
-  console.log(fontSize);
+  // console.log(fontSize);
   return fontSize;
 }

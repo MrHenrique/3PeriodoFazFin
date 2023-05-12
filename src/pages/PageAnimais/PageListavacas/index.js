@@ -13,12 +13,12 @@ import {
   ScrollView,
 } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
-import { AuthContext } from "../../contexts/auth";
-import Graficodetalhesvacas from "../../components/Graficos/Graficodetalhesvacas";
+import { AuthContext } from "../../../contexts/auth";
+import Graficodetalhesvacas from "../../../components/Graficos/Graficodetalhesvacas";
 import Modal from "react-native-modal";
 import { MaterialCommunityIcons, Feather } from "@expo/vector-icons";
-import { useMainContext } from "../../contexts/RealmContext";
-const imgbg1 = "../../../assets/listavacas-bg.jpg";
+import { useMainContext } from "../../../contexts/RealmContext";
+const imgbg1 = "../../../../assets/listavacas-bg.jpg";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 const ScreenWidth = Dimensions.get("screen").width;

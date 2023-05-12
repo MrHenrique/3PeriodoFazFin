@@ -24,7 +24,7 @@ function RelatorioReb() {
     setModalVisible(!isModalVisible);
   }
   const renderItem2 = ({ item }) => {
-    console.log(item);
+    // console.log(item);
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
@@ -37,7 +37,7 @@ function RelatorioReb() {
     );
   };
   const renderItem = ({ item }) => {
-    console.log(item.createdAt);
+    // console.log(item.createdAt);
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>

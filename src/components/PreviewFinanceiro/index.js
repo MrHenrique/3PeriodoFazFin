@@ -12,70 +12,72 @@ import { AuthContext } from "../../contexts/auth";
 function PreviewFinanceiro({ Titulo, Id }) {
   const realm = useMainContext();
   const navigation = useNavigation();
-  useEffect(() => {
-    switch (Id) {
-      case 1:
-        if (realm) {
-          let dataReceitas = realm.objectForPrimaryKey("Farm", fazID);
-          let receitas = [];
-          dataReceitas.rebanhos.forEach((rebanho) => {
-            rebanho.vacas.forEach((vaca) => {
-              receitas.push(...vaca.receitas);
-            });
-          });
-          PrecoLeite(ReceitasTotais(receitas));
-          ListaLeite(receitas);
-          dataReceitas.rebanhos.addListener((rebanhoResults) => {
-            let newReceitas = [];
-            rebanhoResults.forEach((rebanho) => {
-              rebanho.vacas.forEach((vaca) => {
-                newReceitas.push(...vaca.receitas);
-              });
-            });
-            PrecoCF(ReceitasTotais(newReceitas));
-            ListaLeite(newReceitas);
-          });
-        }
-        break;
-      case 2:
-        if (realm) {
-          let dataReceitas = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-          let receitas = [];
-          dataReceitas.vacas.forEach((vaca) => {
-            receitas.push(...vaca.receitas);
-          });
-          PrecoLeiteReb(ReceitasTotais(receitas));
-          ListaLeiteReb(receitas);
-          let newReceitas = [];
-          dataReceitas.vacas.addListener((values) => {
-            values.forEach((vaca) => {
-              newReceitas.push(...vaca.receitas);
-            });
-            PrecoCFReb(ReceitasTotais(newReceitas));
-            ListaLeiteReb(newReceitas);
-          });
-        }
-        break;
-      default:
-        Alert.alert("erro na busca de dados, consultar desenvolvedor");
-        break;
-    }
-  }, [realm]);
+  
+  // useEffect(() => {
+  //   switch (Id) {
+  //     case 1:
+  //       if (realm) {
+  //         let dataReceitas = realm.objectForPrimaryKey("Farm", fazID);
+  //         let receitas = [];
+  //         dataReceitas.rebanhos.forEach((rebanho) => {
+  //           rebanho.vacas.forEach((vaca) => {
+  //             receitas.push(...vaca.receitas);
+  //           });
+  //         });
+  //         PrecoLeite(ReceitasTotais(receitas));
+  //         ListaLeite(receitas);
+  //         dataReceitas.rebanhos.addListener((rebanhoResults) => {
+  //           let newReceitas = [];
+  //           rebanhoResults.forEach((rebanho) => {
+  //             rebanho.vacas.forEach((vaca) => {
+  //               newReceitas.push(...vaca.receitas);
+  //             });
+  //           });
+  //           PrecoCF(ReceitasTotais(newReceitas));
+  //           ListaLeite(newReceitas);
+  //         });
+  //       }
+  //       break;
+  //     case 2:
+  //       if (realm) {
+  //         let dataReceitas = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+  //         let receitas = [];
+  //         dataReceitas.vacas.forEach((vaca) => {
+  //           receitas.push(...vaca.receitas);
+  //         });
+  //         PrecoLeiteReb(ReceitasTotais(receitas));
+  //         ListaLeiteReb(receitas);
+  //         let newReceitas = [];
+  //         dataReceitas.vacas.addListener((values) => {
+  //           values.forEach((vaca) => {
+  //             newReceitas.push(...vaca.receitas);
+  //           });
+  //           PrecoCFReb(ReceitasTotais(newReceitas));
+  //           ListaLeiteReb(newReceitas);
+  //         });
+  //       }
+  //       break;
+  //     default:
+  //       Alert.alert("erro na busca de dados, consultar desenvolvedor");
+  //       break;
+  //   }
+  // }, [realm]);
+
   useEffect(() => {
     switch (Id) {
       case 1:
         if (realm) {
           let dataDespesas = realm.objectForPrimaryKey("Farm", fazID);
           let despesas = [];
-          dataDespesas.rebanhos.forEach((rebanho) => {
-            despesas.push(...rebanho.despesas);
+          dataDespesas.rebanhos.forEach((rebanhos) => {
+            despesas.push(...rebanhos.despesas);
           });
           PrecoCF(DespesasTotais(despesas));
           ListaAli(despesas);
           dataDespesas.rebanhos.addListener((rebanhoResults) => {
             let newDespesas = [];
-            rebanhoResults.forEach((rebanho) => {
-              newDespesas.push(...rebanho.despesas);
+            rebanhoResults.forEach((rebanhos) => {
+              newDespesas.push(...rebanhos.despesas);
             });
             PrecoCF(DespesasTotais(newDespesas));
             ListaAli(newDespesas);

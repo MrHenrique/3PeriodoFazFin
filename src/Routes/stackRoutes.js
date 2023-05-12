@@ -8,10 +8,7 @@ import SelectRebPage from "../pages/SelectRebPage";
 import Leite from "../pages/Leite";
 import PageFinanceiro from "../pages/PageFinanceiro";
 import Home from "../pages/Home";
-import PagelancaContas from "../pages/PagelancaContas";
 import PageAnimais from "../pages/PageAnimais";
-import Alimentacao from "../pages/Alimentacao";
-import PageListavacas from "../pages/PageListavacas";
 import Estoque from "../pages/Estoque";
 import SelectFazPage from "../pages/SelectFazPage";
 import Despesas from "../pages/Despesas";
@@ -86,13 +83,6 @@ function StackRoutes() {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="PagelancaContas"
-        component={PagelancaContas}
         options={{
           headerShown: false,
         }}
