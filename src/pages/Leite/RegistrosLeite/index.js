@@ -6,17 +6,30 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FiltrosData from "../../../components/Filtros/FiltrosData";
 import { scale, verticalScale } from "react-native-size-matters";
 import { AuthContext } from "../../../contexts/auth";
+import { useMainContext } from "../../../contexts/RealmContext";
 function RegistrosLeite() {
+  const realm = useMainContext();
   const navigation = useNavigation();
-  const { listaLeiteReb, precoLeiteReb } = useContext(AuthContext);
-  const { listaFiltrada } = useContext(AuthContext);
+  const { rebID, ListaLeiteReb,listaFiltrada } = useContext(AuthContext);
+  const [lista, setLista] = useState([]);
   const [shouldShow, setShouldShow] = useState(false);
-
+  useEffect(() => {
+    if (realm) {
+      let dataReceitas = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+      let receitas = [];
+      dataReceitas.vacas.forEach((vaca) => {
+        receitas.push(...vaca.receitas);
+      });
+      setLista(receitas);
+      ListaLeiteReb(receitas);
+    }
+  }, [realm]);
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity style={styles.listaDet}>
