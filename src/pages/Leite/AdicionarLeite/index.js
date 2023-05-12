@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Text,
   TouchableOpacity,
@@ -9,18 +9,18 @@ import {
   FlatList,
   Platform,
   StatusBar,
+  Alert,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import uuid from "react-native-uuid";
-import writeLeite from "../../../Realm/writeLeite";
-import getAllVacas from "../../../Realm/getAllVacas";
-import { useFocusEffect } from "@react-navigation/native";
 import { AuthContext } from "../../../contexts/auth";
 import Modal from "react-native-modal";
 import { scale, verticalScale } from "react-native-size-matters";
 import { useNavigation } from "@react-navigation/native";
+import { useMainContext } from "../../../contexts/RealmContext";
 
 function AdicionarLeite() {
+  const realm = useMainContext();
   const navigation = useNavigation();
   const [isModalVisible, setModalVisible] = useState(false);
   const [vacaID, setVacaID] = useState("");
@@ -55,33 +55,42 @@ function AdicionarLeite() {
   };
   //Escrever no Banco
   async function handleAddLeite() {
-    const precoL = Number(precoLV);
-    const prodL = Number(prodLV);
-    await writeLeite(
-      {
-        _id: uuid.v4(),
-        precoL,
-        prodL,
-        description,
-        createdAt: new Date(date),
-      },
-      vacaID
-    );
-    //navigation.navigate("Contas");
+    if (realm) {
+      try {
+        const precoL = Number(precoLV);
+        const prodL = Number(prodLV);
+        realm.write(() => {
+          let Vacas = realm.objectForPrimaryKey("VacasSchema", vacaID);
+          let createdLeite = realm.create("LeiteSchema", {
+            _id: uuid.v4(),
+            precoL,
+            prodL,
+            description,
+            createdAt: new Date(date),
+          });
+          Vacas.receitas.push(createdLeite);
+          Alert.alert("Dados cadastrados com sucesso!");
+        });
+      } catch (e) {
+        Alert.alert("Não foi possível cadastrar!", e.message);
+      } finally {
+        setPrecoLV("");
+        setProdLV("");
+        setDescription("");
+      }
+    }
   }
   //Buscar no banco
-  async function fetchData(rebID) {
-    const dataVaca = await getAllVacas(rebID);
-    setListaVaca(dataVaca);
-  }
-  useFocusEffect(
-    useCallback(() => {
-      fetchData(rebID);
-    }, [])
-  );
-  const { ListaLeite, PrecoLeite, rebID, fazID } = useContext(AuthContext);
-  //Background
-  const imgbg1 = "../../../assets/bg10.jpg";
+  useEffect(() => {
+    if (realm) {
+      let dataVaca = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+      setListaVaca(dataVaca.vacas.sorted("nomeVaca"));
+      dataVaca.vacas.sorted("nomeVaca").addListener((values) => {
+        setListaVaca([...values]);
+      });
+    }
+  }, [realm]);
+  const { rebID } = useContext(AuthContext);
   //States para salvar o input
   const [description, setDescription] = useState("");
   const [precoLV, setPrecoLV] = useState("");
@@ -249,7 +258,7 @@ function AdicionarLeite() {
               placeholder="Pesquise pelo nome."
               value={searchText}
               onChangeText={(t) => setSearchText(t)}
-            ></TextInput>
+            />
             <FlatList
               style={styles.scroll}
               data={lista}

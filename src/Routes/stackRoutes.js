@@ -5,16 +5,14 @@ import CadastroReb from "../pages/Cadastro/CadastroReb";
 import CadastroVaca from "../pages/Cadastro/CadastroVaca";
 import Login from "../pages/Login";
 import SelectRebPage from "../pages/SelectRebPage";
-import Manejo from "../pages/Manejo";
 import Leite from "../pages/Leite";
 import PageFinanceiro from "../pages/PageFinanceiro";
 import Home from "../pages/Home";
 import PagelancaContas from "../pages/PagelancaContas";
 import PageAnimais from "../pages/PageAnimais";
 import Alimentacao from "../pages/Alimentacao";
+import PageListavacas from "../pages/PageListavacas";
 import Estoque from "../pages/Estoque";
-import AdicionarLeite from "../pages/Leite/AdicionarLeite";
-import RegistrosLeite from "../pages/Leite/RegistrosLeite";
 import SelectFazPage from "../pages/SelectFazPage";
 import Despesas from "../pages/Despesas";
 const Stack = createNativeStackNavigator();
@@ -22,7 +20,7 @@ function StackRoutes() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Login"
+        name="Login "
         component={Login}
         options={{
           headerShown: false,
@@ -86,27 +84,6 @@ function StackRoutes() {
         }}
       />
       <Stack.Screen
-        name="AdicionarLeite"
-        component={AdicionarLeite}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="RegistrosLeite"
-        component={RegistrosLeite}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="Manejo"
-        component={Manejo}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
         name="Home"
         component={Home}
         options={{
@@ -130,14 +107,6 @@ function StackRoutes() {
       <Stack.Screen
         name="CadastroVaca"
         component={CadastroVaca}
-        options={{
-          headerShown: false,
-        }}
-      />
-
-      <Stack.Screen
-        name="Alimentacao"
-        component={Alimentacao}
         options={{
           headerShown: false,
         }}
