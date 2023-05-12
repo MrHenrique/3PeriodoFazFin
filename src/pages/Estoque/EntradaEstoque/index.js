@@ -6,12 +6,14 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import DropdownComponent from "../../../components/Dropdown/TipoProd";
 import uuid from "react-native-uuid";
 import { AuthContext } from "../../../contexts/auth";
 import { useMainContext } from "../../../contexts/RealmContext";
+import styles from "../styles";
 
 function EntradaEstoque() {
   const realm = useMainContext();
@@ -65,7 +67,7 @@ function EntradaEstoque() {
               Alert.alert("Dados cadastrados com sucesso!");
             });
           } catch (e) {
-            Alert.alert("Não foi possível cadastrar!",e.message);
+            Alert.alert("Não foi possível cadastrar!", e.message);
           } finally {
             resetStates();
           }
@@ -104,7 +106,7 @@ function EntradaEstoque() {
               Alert.alert("Dados cadastrados com sucesso!");
             });
           } catch (e) {
-            Alert.alert("Não foi possível cadastrar!",e.message);
+            Alert.alert("Não foi possível cadastrar!", e.message);
           } finally {
             resetStates();
           }
@@ -190,7 +192,7 @@ function EntradaEstoque() {
               Alert.alert("Dados cadastrados com sucesso!");
             });
           } catch (e) {
-            Alert.alert("Não foi possível cadastrar.",e.message);
+            Alert.alert("Não foi possível cadastrar.", e.message);
           } finally {
             resetStates();
           }
@@ -249,7 +251,7 @@ function EntradaEstoque() {
         <View>
           <Text style={styles.font}>Volume do produto:</Text>
           <TextInput
-            style={styles.font}
+            style={styles.textInput}
             value={volumeProdI}
             onChangeText={setVolumeProd}
             placeholder="200"
@@ -263,7 +265,7 @@ function EntradaEstoque() {
       <View>
         <Text style={styles.font}>Peso do produto:</Text>
         <TextInput
-          style={styles.font}
+          style={styles.textInput}
           value={pesoProdI}
           onChangeText={setPesoProd}
           placeholder="60"
@@ -275,98 +277,79 @@ function EntradaEstoque() {
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.font}>Cadastro de Produto</Text>
-      <View>
-        <Text style={styles.font}>Nome do produto:</Text>
-        <TextInput
-          style={styles.font}
-          value={nomeProd}
-          onChangeText={setNomeProd}
-          placeholder="Prata"
-          keyboardType="default"
-          inputMode="text"
-        />
-        <DropdownComponent />
-        <Text style={styles.font}>Preço da compra:</Text>
-        <TextInput
-          style={styles.font}
-          value={valorProdI}
-          onChangeText={setValorProd}
-          placeholder="50,00"
-          keyboardType="decimal-pad"
-          inputMode="decimal"
-        />
-        <Text style={styles.font}>Quantidade de produtos comprados:</Text>
-        <View style={styles.containerMaisMenos}>
-          <TouchableOpacity style={styles.button} onPress={menosButton}>
-            <Text style={styles.buttonText}>-</Text>
-          </TouchableOpacity>
+      <View style={styles.containergeral}>
+        <View style={styles.containerInputTitulo}>
+          <Text style={styles.fontTitulo}>Cadastro de Produto</Text>
+        </View>
+        <View style={styles.containerInput}>
+          <Text style={styles.font}>Nome do produto:</Text>
           <TextInput
-            style={styles.font}
-            value={qtdProdI}
-            onChangeText={(valor) => setQtdProd(valor)}
-            keyboardType="numeric"
+            style={styles.textInput}
+            value={nomeProd}
+            onChangeText={setNomeProd}
+            placeholder="Prata"
+            keyboardType="default"
+            inputMode="text"
           />
-          <TouchableOpacity style={styles.button} onPress={maisButton}>
-            <Text style={styles.buttonText}>+</Text>
+        </View>
+        <View style={styles.containerInput}>
+          <DropdownComponent />
+        </View>
+        <View style={styles.containerInput}>
+          <Text style={styles.font}>Preço da compra:</Text>
+          <TextInput
+            style={styles.textInput}
+            value={valorProdI}
+            onChangeText={setValorProd}
+            placeholder="50,00"
+            keyboardType="decimal-pad"
+            inputMode="decimal"
+          />
+        </View>
+        <View style={styles.containerInput}>
+          <Text style={styles.font}>Quantidade de produtos comprados:</Text>
+          <View style={styles.containerMaisMenos}>
+            <TouchableOpacity style={styles.button} onPress={menosButton}>
+              <Text style={styles.buttonText}>-</Text>
+            </TouchableOpacity>
+            <TextInput
+              style={styles.textInputQtd}
+              value={qtdProdI}
+              onChangeText={(valor) => setQtdProd(valor)}
+              keyboardType="numeric"
+            />
+            <TouchableOpacity style={styles.button} onPress={maisButton}>
+              <Text style={styles.buttonText}>+</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.containerInput}>{TextInputTipo()}</View>
+        <View style={styles.containerInput}>
+          <Text style={styles.font}>Observações:</Text>
+          <TextInput
+            style={styles.textInput}
+            value={obserProd}
+            onChangeText={setObserProd}
+            placeholder="Produto comprado em ..."
+            keyboardType="default"
+            inputMode="text"
+          />
+        </View>
+        <View style={styles.containerButao}>
+          <TouchableOpacity style={styles.botao} onPress={handleAddEstoque}>
+            <Text style={styles.font}>{"Cadastrar"}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.botao}
+            onPress={() => navigation.navigate("Home")}
+          >
+            <Text style={styles.font}>{"Voltar"}</Text>
           </TouchableOpacity>
         </View>
-        {TextInputTipo()}
-        <Text style={styles.font}>Observações:</Text>
-        <TextInput
-          style={styles.font}
-          value={obserProd}
-          onChangeText={setObserProd}
-          placeholder="Produto comprado em ..."
-          keyboardType="default"
-          inputMode="text"
-        />
-        <TouchableOpacity style={styles.botao} onPress={handleAddEstoque}>
-          <Text style={styles.font}>{"Cadastrar"}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.botao}
-          onPress={() => navigation.navigate("Home")}
-        >
-          <Text style={styles.font}>{"Voltar"}</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#004513",
-  },
-  font: {
-    color: "white",
-    fontSize: 20,
-    alignSelf: "center",
-    textAlign: "center",
-  },
-  botao: {
-    backgroundColor: "green",
-    alignSelf: "center",
-    height: "100%",
-    width: "100%",
-    maxHeight: 50,
-    maxWidth: 200,
-  },
-  containerMaisMenos: {
-    flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "center",
-  },
-  button: {
-    backgroundColor: "lightgray",
-    padding: 8,
-    borderRadius: 4,
-  },
-  buttonText: {
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-});
+
 export default EntradaEstoque;

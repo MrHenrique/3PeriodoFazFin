@@ -9,6 +9,7 @@ import { DespesasTotais } from "../../../components/Calculos DB/DespesasTotais";
 import { ReceitasTotais } from "../../../components/Calculos DB/ReceitasTotais";
 import { useMainContext } from "../../../contexts/RealmContext";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { Colors } from "../../../styles/";
 export default function FinanceiroReb() {
   const Tab = createMaterialTopTabNavigator();
   const realm = useMainContext();

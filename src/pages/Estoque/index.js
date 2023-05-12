@@ -4,6 +4,7 @@ import Header from "../../components/Header";
 import EstoqueGeral from "./EstoqueGeral";
 import EntradaEstoque from "./EntradaEstoque";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import styles, { estilo } from "./styles";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -13,8 +14,8 @@ export default function Estoque() {
       <Header />
       <Tab.Navigator
         screenOptions={{
-          tabBarLabelStyle: { color: "#fff" },
-          tabBarIndicatorStyle: { backgroundColor: "#fff" },
+          tabBarLabelStyle: { ...estilo.tabarlabel },
+          tabBarIndicatorStyle: { ...estilo.tabBarIndicator },
           tabBarStyle: styles.tab,
         }}
       >
@@ -24,9 +25,3 @@ export default function Estoque() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  tab: {
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-  },
-});
