@@ -22,12 +22,15 @@ function CadastroFaz() {
   const [proprietario, setProprietario] = useState("");
   const [tipoprod, setTipoprod] = useState("");
   const [listaFaz, setListaFaz] = useState([]);
+  const [isNomefazValid, setIsNomefazValid] = useState(true);
+  const [isProprValid, setIsProprValid] = useState(true);
+  const [isTipoValid, setIsTipoValid] = useState(true);
   useEffect(() => {
     if (realm) {
       let data = realm.objects("Farm").sorted("nomefaz");
       setListaFaz(data.filter((fazenda) => fazenda.nomefaz === nomefaz));
     }
-  }, [realm,nomefaz]);
+  }, [realm, nomefaz]);
   //Escrever no Banco
   async function handleAddFarm() {
     if (realm && listaFaz.length === 0) {
@@ -58,6 +61,39 @@ function CadastroFaz() {
       Alert.alert("Essa fazenda já existe, troque o nome e tente novamente.");
     }
   }
+  function handleNomefazChange(text) {
+    const isValid = text.trim().length > 0;
+    setIsNomefazValid(isValid);
+    setNomefaz(text);
+  }
+  function handleProprChange(text) {
+    const isValid = text.trim().length > 0;
+    setIsProprValid(isValid);
+    setProprietario(text);
+  }
+  function handleTipoChange(text) {
+    const isValid = text.trim().length > 0;
+    setIsTipoValid(isValid);
+    setTipoprod(text);
+  }
+  function validCheck() {
+    if (nomefaz.length === 0) {
+      setIsNomefazValid(false);
+    } else if (proprietario.length === 0) {
+      setIsProprValid(false);
+    } else if (tipoprod.length === 0) {
+      setIsTipoValid(false);
+    }
+    if (
+      isNomefazValid === true &&
+      isProprValid === true &&
+      isTipoValid === true
+    ) {
+      handleAddFarm();
+    } else {
+      Alert.alert("Preencha todos os campos e tente novamente.");
+    }
+  }
   const navigation = useNavigation();
   const imgbg1 = "../../../../assets/backgroundCad.jpg";
   return (
@@ -77,24 +113,39 @@ function CadastroFaz() {
           </Text>
           <TextInput
             style={styles.campoTexto}
-            onChangeText={setNomefaz}
+            onChangeText={handleNomefazChange}
             value={nomefaz}
             placeholder="Qual o nome da sua Fazenda?"
           ></TextInput>
+          {!isNomefazValid && (
+            <Text style={styles.error}>
+              O nome da fazenda não pode estar vazio.
+            </Text>
+          )}
           <Text style={styles.texto}>Proprietário</Text>
           <TextInput
             style={styles.campoTexto}
-            onChangeText={setProprietario}
+            onChangeText={handleProprChange}
             value={proprietario}
             placeholder="Qual o nome do proprietário?"
           ></TextInput>
+          {!isProprValid && (
+            <Text style={styles.error}>
+              O nome do proprietário não pode estar vazio.
+            </Text>
+          )}
           <Text style={styles.texto}>Tipo de produção</Text>
           <TextInput
             style={styles.campoTexto}
-            onChangeText={setTipoprod}
+            onChangeText={handleTipoChange}
             value={tipoprod}
             placeholder="Ex: Pecuária Leiteira"
           ></TextInput>
+          {!isTipoValid && (
+            <Text style={styles.error}>
+              O tipo de produção não pode estar vazio.
+            </Text>
+          )}
           <View style={styles.containerbotao}>
             <TouchableOpacity
               style={styles.botaopress2}
@@ -102,7 +153,7 @@ function CadastroFaz() {
             >
               <Text style={styles.tituloBotao}>{"Voltar"}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.botaopress} onPress={handleAddFarm}>
+            <TouchableOpacity style={styles.botaopress} onPress={validCheck}>
               <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
             </TouchableOpacity>
           </View>

@@ -50,10 +50,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: Colors.darkgreenTransparent,
   },
-  containerbotao : {
+  containerbotao: {
     flex: 1,
     flexDirection: "column-reverse",
     padding: verticalScale(10),
+  },
+  error: {
+    backgroundColor: "#ff0000",
+    marginBottom: 10,
+    borderRadius: 20,
+    padding: verticalScale(2),
+    alignSelf: "center",
+    color: "white"
   },
 });
 export default styles;
