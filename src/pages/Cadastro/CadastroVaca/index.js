@@ -58,7 +58,7 @@ function CadastroVaca({ navigation }) {
           <TextInput
             style={styles.detalhe}
             value={nomeVaca}
-            onChangeText={setnomeVaca}
+            onChangeText={setNomeVaca}
           />
         </View>
         {/*Nascimento*/}
@@ -67,7 +67,7 @@ function CadastroVaca({ navigation }) {
           <TextInput
             style={styles.detalhe}
             value={nascVaca}
-            onChangeText={setnascVaca}
+            onChangeText={setNascVaca}
             keyboardType="number-pad"
           />
         </View>
@@ -77,7 +77,7 @@ function CadastroVaca({ navigation }) {
           <TextInput
             style={styles.detalhe}
             value={brincoVaca}
-            onChangeText={setbrincoVaca}
+            onChangeText={setBrincoVaca}
           />
         </View>
         {/*Descrição*/}
@@ -86,7 +86,7 @@ function CadastroVaca({ navigation }) {
           <TextInput
             style={styles.detalhe}
             value={descVaca}
-            onChangeText={setdescVaca}
+            onChangeText={setDescVaca}
             multiline
           />
         </View>
@@ -97,7 +97,7 @@ function CadastroVaca({ navigation }) {
             <View style={{ alignSelf: "center" }}>
               <TouchableOpacity
                 onPress={() => {
-                  setgenero(1), setmacho("check-square"), setfemea("square");
+                  setGenero(1), setMacho("check-square"), setFemea("square");
                 }}
               >
                 <Text style={styles.titulogen}>Macho</Text>
@@ -107,7 +107,7 @@ function CadastroVaca({ navigation }) {
             <View>
               <TouchableOpacity
                 onPress={() => {
-                  setgenero(0), setmacho("square"), setfemea("check-square");
+                  setGenero(0), setMacho("square"), setFemea("check-square");
                 }}
               >
                 <Text style={styles.titulogen}>Fêmea</Text>
@@ -128,7 +128,7 @@ function CadastroVaca({ navigation }) {
 
         <TouchableOpacity
           style={[styles.botaopress, { marginBottom: scale(30) }]}
-          onPress={() => navigation.navigate("PageListavacas")}
+          onPress={() => navigation.navigate("PageAnimais")}
         >
           <Text style={styles.textovoltar}>Voltar</Text>
         </TouchableOpacity>
