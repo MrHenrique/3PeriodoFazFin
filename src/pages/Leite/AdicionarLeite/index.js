@@ -90,7 +90,9 @@ function AdicionarLeite() {
       });
     }
   }, [realm]);
-  const { rebID } = useContext(AuthContext);
+  const { ListaLeite, PrecoLeite, rebID, fazID } = useContext(AuthContext);
+  //Background
+  const imgbg1 = "../../../assets/bg10.jpg";
   //States para salvar o input
   const [description, setDescription] = useState("");
   const [precoLV, setPrecoLV] = useState("");
@@ -258,7 +260,7 @@ function AdicionarLeite() {
               placeholder="Pesquise pelo nome."
               value={searchText}
               onChangeText={(t) => setSearchText(t)}
-            />
+            ></TextInput>
             <FlatList
               style={styles.scroll}
               data={lista}

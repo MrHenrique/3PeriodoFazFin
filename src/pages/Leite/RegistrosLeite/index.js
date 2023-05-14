@@ -8,6 +8,7 @@ import {
   FlatList,
   Alert,
 } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import FiltrosData from "../../../components/Filtros/FiltrosData";
 import { scale, verticalScale } from "react-native-size-matters";
@@ -16,29 +17,64 @@ import { useMainContext } from "../../../contexts/RealmContext";
 function RegistrosLeite() {
   const realm = useMainContext();
   const navigation = useNavigation();
-  const { rebID, ListaLeiteReb, listaFiltrada } = useContext(AuthContext);
-  const [lista, setLista] = useState([]);
+  const { rebID, ListaFiltrada, listaFiltrada } = useContext(AuthContext);
+  const [listaLeite, setListaLeite] = useState([]);
   const [shouldShow, setShouldShow] = useState(false);
   useEffect(() => {
     if (realm) {
       let dataReceitas = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+  
+      dataReceitas.vacas.addListener((object, changes) => {
+        console.log("Data changed:", object, changes);
+  
+        let NewReceitas = [];
+        object.forEach((vaca) => {
+          NewReceitas.push(...vaca.receitas);
+        });
+  
+        setListaLeite(NewReceitas);
+        ListaFiltrada(NewReceitas);
+      });
+  
       let receitas = [];
       dataReceitas.vacas.forEach((vaca) => {
         receitas.push(...vaca.receitas);
       });
-      setLista(receitas);
-      ListaLeiteReb(receitas);
+  
+      setListaLeite(receitas);
+      ListaFiltrada(receitas);
     }
   }, [realm]);
+  
+  const handleEditPress = () => {
+    console.log("Editar pressionado");
+  };
+
+  const handleDeletePress = () => {
+    console.log("Excluir pressionado");
+  };
+
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity style={styles.listaDet}>
-        <Text style={styles.tituloBotao}>
-          {item.createdAt.getDate().toString().padStart(2, 0)}/
-          {(item.createdAt.getMonth() + 1).toString().padStart(2, 0)}/
-          {item.createdAt.getFullYear().toString()} - {item.description} - R${" "}
-          {(item.prodL * item.precoL).toFixed(2)}
-        </Text>
+        <View style={styles.itemContainer}>
+          <View style={[styles.indicador, { backgroundColor: "yellow" }]} />
+          <Text style={styles.itemText}>
+            {item.createdAt.getDate().toString().padStart(2, 0)}/
+            {(item.createdAt.getMonth() + 1).toString().padStart(2, 0)}/
+            {item.createdAt.getFullYear().toString()} - {item.prodL.toFixed(2)}{" "}
+            L
+          </Text>
+          <TouchableOpacity style={styles.editButton} onPress={handleEditPress}>
+            <AntDesign name="edit" size={24} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={handleDeletePress}
+          >
+            <AntDesign name="delete" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -51,12 +87,10 @@ function RegistrosLeite() {
       >
         <Text style={styles.tituloBotao}>Filtros</Text>
       </TouchableOpacity>
-      {shouldShow && (
-        <View style={styles.filtros}>
-          {/*filtros*/}
-          <FiltrosData />
-        </View>
-      )}
+      <View style={[styles.filtros, { display: shouldShow ? "flex" : "none" }]}>
+        {/*filtros*/}
+        <FiltrosData listaRecebida={listaLeite} />
+      </View>
       <FlatList
         style={[
           styles.lista,
@@ -128,8 +162,35 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginVertical: verticalScale(5),
   },
-  scroll: {
-    height: verticalScale(300),
+  itemContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingRight: 10,
+  },
+  editButton: {
+    //padding: 10,
+    //backgroundColor: "red",
+  },
+  deleteButton: {
+    //padding: 10,
+    //backgroundColor: "blue",
+  },
+  itemText: {
+    //backgroundColor: "gray",
+    flex: 1,
+    marginLeft: 10,
+    marginRight: 10,
+    fontSize: verticalScale(14),
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  indicador: {
+    padding: 8,
+    borderTopLeftRadius: 50,
+    borderBottomLeftRadius: 50,
+    width: 10,
+    height: 40,
   },
 });
 export default RegistrosLeite;
