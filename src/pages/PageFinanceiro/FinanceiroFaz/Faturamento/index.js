@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   ImageBackground,
   SafeAreaView,
-  ScrollView,
   FlatList,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -15,9 +14,11 @@ import BezierChartFaturamento from "../../../../components/Graficos/BezierChartF
 import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
 import { AuthContext } from "../../../../contexts/auth";
+import FiltrosData from "../../../../components/Filtros/FiltrosData";
 function Faturamento() {
-  const { precoCF, listaAli, listaLeite, precoLeite } = useContext(AuthContext);
+  const { precoCF, listaAli, listaLeite, precoLeite , listaFiltrada} = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [shouldShow, setShouldShow] = useState(false);
   function toggleModal() {
     setModalVisible(!isModalVisible);
   }
@@ -26,7 +27,10 @@ function Faturamento() {
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
-          {item.description} - R$ {(item.prodL * item.precoL).toFixed(2)}
+          {item.createdAt.getDate().toString().padStart(2, 0)}/
+          {(item.createdAt.getMonth() + 1).toString().padStart(2, 0)}/
+          {item.createdAt.getFullYear().toString()} - R${" "}
+          {(item.prodL * item.precoL).toFixed(2)}
         </Text>
       </TouchableOpacity>
     );
@@ -55,7 +59,9 @@ function Faturamento() {
           <Text style={styles.texto}>Total de receitas:</Text>
           <Text style={styles.textoValorPos}>R${receitas.toFixed(2)}</Text>
           <View style={styles.lineStyle} />
-          <Text style={styles.preGraf}>Clique no gráfico para mais detalhes.</Text>
+          <Text style={styles.preGraf}>
+            Clique no gráfico para mais detalhes.
+          </Text>
           <View style={styles.containerChart}>
             <BezierChartFaturamento />
           </View>
@@ -68,9 +74,28 @@ function Faturamento() {
           >
             <View style={styles.modalContainer}>
               <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
+              {/*filtros*/}
+              <TouchableOpacity
+                onPress={() => setShouldShow(!shouldShow)}
+                style={styles.filtrosBotao}
+              >
+                <Text style={styles.tituloBotao}>Filtros</Text>
+              </TouchableOpacity>
+              <View
+                style={[
+                  styles.filtros,
+                  { display: shouldShow ? "flex" : "none" },
+                ]}
+              >
+                <FiltrosData listaRecebida={listaLeite} />
+              </View>
+
               <FlatList
-                style={styles.scroll}
-                data={listaLeite}
+                style={[
+                  styles.lista,
+                  { marginTop: shouldShow ? verticalScale(180) : 0 },
+                ]}
+                data={listaFiltrada}
                 renderItem={renderItem}
                 keyExtractor={(item) => item._id}
               />
@@ -96,10 +121,9 @@ function Faturamento() {
   );
 }
 const styles = StyleSheet.create({
-  preGraf:{
-    color: 'white',
-    alignSelf: 'center',
-
+  preGraf: {
+    color: "white",
+    alignSelf: "center",
   },
   modalContainer: {
     backgroundColor: "rgba(234,242,215,1)",
@@ -107,6 +131,7 @@ const styles = StyleSheet.create({
     top: verticalScale(0),
     alignSelf: "center",
     width: scale(330),
+    height: scale(480),
     borderRadius: 20,
   },
   modalScroll: {
@@ -207,6 +232,27 @@ const styles = StyleSheet.create({
   },
   scroll: {
     height: verticalScale(525),
+  },
+  filtrosBotao: {
+    backgroundColor: "rgba(15, 109, 0, 0.9)",
+    borderRadius: 10,
+    padding: 10,
+    margin: 10,
+  },
+  filtros: {
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    borderRadius: 10,
+    padding: 10,
+    margin: 10,
+    position: "absolute",
+    top: verticalScale(80),
+    left: 0,
+    right: 0,
+  },
+  lista: {
+    flex: 1,
+    marginTop: 10,
+    marginBottom: 12,
   },
 });
 export default Faturamento;
