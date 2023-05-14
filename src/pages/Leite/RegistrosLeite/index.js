@@ -32,6 +32,7 @@ function RegistrosLeite() {
           NewReceitas.push(...vaca.receitas);
         });
   
+        NewReceitas.sort((a, b) => a.createdAt - b.createdAt);
         setListaLeite(NewReceitas);
         ListaFiltrada(NewReceitas);
       });
@@ -40,7 +41,8 @@ function RegistrosLeite() {
       dataReceitas.vacas.forEach((vaca) => {
         receitas.push(...vaca.receitas);
       });
-  
+      
+      receitas.sort((a, b) => a.createdAt - b.createdAt);
       setListaLeite(receitas);
       ListaFiltrada(receitas);
     }
