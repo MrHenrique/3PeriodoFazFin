@@ -61,7 +61,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: verticalScale(2),
     alignSelf: "center",
-    color: "white"
+    color: "yellow"
+  }, campoTextoErro: {
+    ...Fonts.txtMediumBold,
+    ...TextInput.TextInputLargeRounded,
+    backgroundColor: Colors.white,
+    color: Colors.black,
+    borderWidth: 2,
+    borderColor: Colors.red,
   },
 });
 export default styles;

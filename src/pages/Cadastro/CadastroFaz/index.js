@@ -23,6 +23,7 @@ function CadastroFaz() {
   const [tipoprod, setTipoprod] = useState("");
   const [listaFaz, setListaFaz] = useState([]);
   const [isNomefazValid, setIsNomefazValid] = useState(true);
+  const [nomeExist, setNomeExist] = useState(false);
   const [isProprValid, setIsProprValid] = useState(true);
   const [isTipoValid, setIsTipoValid] = useState(true);
   useEffect(() => {
@@ -33,7 +34,7 @@ function CadastroFaz() {
   }, [realm, nomefaz]);
   //Escrever no Banco
   async function handleAddFarm() {
-    if (realm && listaFaz.length === 0) {
+    if (realm) {
       try {
         realm.write(() => {
           let NewFazID = uuid.v4();
@@ -57,10 +58,13 @@ function CadastroFaz() {
         setProprietario("");
         setTipoprod("");
       }
-    } else {
-      Alert.alert("Essa fazenda já existe, troque o nome e tente novamente.");
     }
   }
+  useEffect(() => {
+    const exists = listaFaz.length > 0;
+    setNomeExist(exists);
+  }, [listaFaz.length]);
+
   function handleNomefazChange(text) {
     const isValid = text.trim().length > 0;
     setIsNomefazValid(isValid);
@@ -79,18 +83,21 @@ function CadastroFaz() {
   function validCheck() {
     if (nomefaz.length === 0) {
       setIsNomefazValid(false);
+    } else if (listaFaz.length != 0) {
+      setNomeExist(true);
     } else if (proprietario.length === 0) {
       setIsProprValid(false);
     } else if (tipoprod.length === 0) {
       setIsTipoValid(false);
-    }
-    else if (
+    } else if (
       isNomefazValid === true &&
       isProprValid === true &&
-      isTipoValid === true
+      isTipoValid === true &&
+      nomeExist === false
     ) {
       handleAddFarm();
     } else {
+      console.log("erro")
       Alert.alert("Preencha todos os campos e tente novamente.");
     }
   }
@@ -120,6 +127,11 @@ function CadastroFaz() {
           {!isNomefazValid && (
             <Text style={styles.error}>
               O nome da fazenda não pode estar vazio.
+            </Text>
+          )}
+          {nomeExist && (
+            <Text style={styles.error}>
+              Uma Fazenda com esse nome já existe.
             </Text>
           )}
           <Text style={styles.texto}>Proprietário</Text>
