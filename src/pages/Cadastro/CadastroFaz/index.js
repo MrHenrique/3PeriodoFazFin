@@ -84,7 +84,7 @@ function CadastroFaz() {
     } else if (tipoprod.length === 0) {
       setIsTipoValid(false);
     }
-    if (
+    else if (
       isNomefazValid === true &&
       isProprValid === true &&
       isTipoValid === true
