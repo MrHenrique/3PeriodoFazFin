@@ -1,13 +1,5 @@
-import React, { useState, useContext, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  ScrollView,
-} from "react-native";
+import React, { useState, useContext, useEffect, useRef } from "react";
+import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import DropdownComponent from "../../../components/Dropdown/TipoProd";
 import uuid from "react-native-uuid";
@@ -18,6 +10,10 @@ import styles from "../styles";
 function EntradaEstoque() {
   const realm = useMainContext();
   const navigation = useNavigation();
+  //Referencias
+  const inputVolumePeso = useRef(null);
+  const inputObservacao = useRef(null);
+  const inputQuantidade = useRef(null);
   //estados
   const [listaEstoqueFiltered, setListaEstoqueFiltered] = useState([]);
   const [nomeProd, setNomeProd] = useState("");
@@ -251,12 +247,16 @@ function EntradaEstoque() {
         <View>
           <Text style={styles.font}>Volume do produto:</Text>
           <TextInput
+            ref={inputVolumePeso}
             style={styles.textInput}
             value={volumeProdI}
             onChangeText={setVolumeProd}
             placeholder="200"
             keyboardType="decimal-pad"
             inputMode="decimal"
+            onSubmitEditing={() => {
+              inputObservacao.current.focus();
+            }}
           />
         </View>
       );
@@ -265,12 +265,16 @@ function EntradaEstoque() {
       <View>
         <Text style={styles.font}>Peso do produto:</Text>
         <TextInput
+          ref={inputVolumePeso}
           style={styles.textInput}
           value={pesoProdI}
           onChangeText={setPesoProd}
           placeholder="60"
           keyboardType="decimal-pad"
           inputMode="decimal"
+          onSubmitEditing={() => {
+            inputObservacao.current.focus();
+          }}
         />
       </View>
     );
@@ -304,6 +308,9 @@ function EntradaEstoque() {
             placeholder="50,00"
             keyboardType="decimal-pad"
             inputMode="decimal"
+            onSubmitEditing={() => {
+              inputQuantidade.current.focus();
+            }}
           />
         </View>
         <View style={styles.containerInput}>
@@ -313,10 +320,14 @@ function EntradaEstoque() {
               <Text style={styles.buttonText}>-</Text>
             </TouchableOpacity>
             <TextInput
+              ref={inputQuantidade}
               style={styles.textInputQtd}
               value={qtdProdI}
               onChangeText={(valor) => setQtdProd(valor)}
               keyboardType="numeric"
+              onSubmitEditing={() => {
+                inputVolumePeso.current.focus();
+              }}
             />
             <TouchableOpacity style={styles.button} onPress={maisButton}>
               <Text style={styles.buttonText}>+</Text>
@@ -327,6 +338,7 @@ function EntradaEstoque() {
         <View style={styles.containerInput}>
           <Text style={styles.font}>Observações:</Text>
           <TextInput
+            ref={inputObservacao}
             style={styles.textInput}
             value={obserProd}
             onChangeText={setObserProd}
