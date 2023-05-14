@@ -188,7 +188,12 @@ function EstoqueGeral() {
               <></>
             )}
             <View style={styles.containerlist}>
-              <Text style={styles.font}>Data da ultima compra :</Text>
+              <Text style={styles.font}>
+                Data da ultima compra :{" "}
+                {item.createdAt.getDate().toString().padStart(2, 0)}/
+                {(item.createdAt.getMonth() + 1).toString().padStart(2, 0)}/
+                {item.createdAt.getFullYear().toString()}
+              </Text>
             </View>
             <View style={styles.containerlist}>
               <Text style={styles.font}>Observações : {item.obserProd}</Text>
