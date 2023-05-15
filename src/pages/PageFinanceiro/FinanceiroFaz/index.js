@@ -19,25 +19,27 @@ export default function FinanceiroFaz() {
   //Buscar no banco Despesas faz
   useEffect(() => {
     if (realm) {
-      let dataDespesas = realm.objectForPrimaryKey("Farm", fazID).sort((a, b) => a.createdAt - b.createdAt);
+      let dataDespesas = realm.objectForPrimaryKey("Farm", fazID);
       let despesas = [];
       dataDespesas.rebanhos.forEach((rebanho) => {
         despesas.push(...rebanho.despesas);
       });
+      if (despesas.length > 0) {
+        despesas = despesas.sort((a, b) => a.createdAt - b.createdAt);
+      }
       PrecoCF(DespesasTotais(despesas));
       ListaAli(despesas);
-    }
-  }, [realm]);
-  //Buscar no banco receita faz
-  useEffect(() => {
-    if (realm) {
-      let dataReceitas = realm.objectForPrimaryKey("Farm", fazID).sort((a, b) => a.createdAt - b.createdAt);
+      //Buscar no banco receita faz
+      let dataReceitas = realm.objectForPrimaryKey("Farm", fazID);
       let receitas = [];
       dataReceitas.rebanhos.forEach((rebanho) => {
         rebanho.vacas.forEach((vaca) => {
           receitas.push(...vaca.receitas);
         });
       });
+      if (receitas.length > 0) {
+        receitas = receitas.sort((a, b) => a.createdAt - b.createdAt);
+      }
       PrecoLeite(ReceitasTotais(receitas));
       ListaLeite(receitas);
     }
