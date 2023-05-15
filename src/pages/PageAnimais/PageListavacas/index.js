@@ -138,7 +138,11 @@ function PageListavacas({ navigation }) {
       "logo apos confirme no botao confirmar alterações"
     );
   }
-
+  function resultadoVaca() {
+    const result = (resultL - gastoReb).toFixed(2);
+    const formattedResult = `R$ ${result.replace(".", ",")}`;
+    return formattedResult;
+  }
   function verificagenero() {
     if (Details.genero === 1) {
       setgenero(1);
@@ -153,7 +157,8 @@ function PageListavacas({ navigation }) {
 
   function getResultNumber(item) {
     const result = (getResultL(item) - gastoReb).toFixed(2);
-    return result;
+    const formattedResult = `R$ ${result.replace(".", ",")}`;
+    return formattedResult;
   }
 
   return (
@@ -282,9 +287,7 @@ function PageListavacas({ navigation }) {
                 </View>
                 <View style={styles.containerinfos}>
                   <Text style={styles.tituloinfo}>Resultado:</Text>
-                  <Text style={styles.detalhe}>
-                    R${(resultL - gastoReb).toFixed(2)}
-                  </Text>
+                  <Text style={styles.detalhe}>{resultadoVaca()}</Text>
                 </View>
                 <View
                   style={{
@@ -361,7 +364,7 @@ function PageListavacas({ navigation }) {
                       fontSize: scale(15),
                     }}
                   >
-                    R${getResultNumber(item)}
+                    {getResultNumber(item)}
                   </Text>
                 </View>
               </TouchableOpacity>

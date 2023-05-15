@@ -70,9 +70,12 @@ function RelatorioReb() {
       return 0;
     }
   }
-  const total = getTotal(getDespesas(), getReceitas());
-  const despesas = getDespesas();
-  const receitas = getReceitas();
+  const total = getTotal(getDespesas(), getReceitas()).toFixed(2);
+  const formattedTotal = `R$ ${total.replace(".", ",")}`;
+  const despesas = getDespesas().toFixed(2);
+  const formattedDespesas = `R$ ${despesas.replace(".", ",")}`;
+  const receitas = getReceitas().toFixed(2);
+  const formattedReceitas = `R$ ${receitas.replace(".", ",")}`;
   const imgbg1 = "../../../../../assets/bg5.jpg";
   const navigation = useNavigation();
   return (
@@ -94,10 +97,10 @@ function RelatorioReb() {
                 <Text
                   style={[
                     styles.textoValorPos,
-                    { fontSize: setSize(receitas.toFixed(2), 250) },
+                    { fontSize: setSize(formattedReceitas, 250) },
                   ]}
                 >
-                  R$ {receitas.toFixed(2)}
+                  {formattedReceitas}
                 </Text>
               </View>
               <View style={styles.containerInfo}>
@@ -105,10 +108,10 @@ function RelatorioReb() {
                 <Text
                   style={[
                     styles.textoValorNeg,
-                    { fontSize: setSize(despesas.toFixed(2), 250) },
+                    { fontSize: setSize(formattedDespesas, 250) },
                   ]}
                 >
-                  R${despesas.toFixed(2)}
+                  {formattedDespesas}
                 </Text>
               </View>
               <View style={styles.containerInfo}>
@@ -116,10 +119,10 @@ function RelatorioReb() {
                 <Text
                   style={[
                     Color(total),
-                    { fontSize: setSize(total.toFixed(2), 250) },
+                    { fontSize: setSize(formattedTotal, 250) },
                   ]}
                 >
-                  R${total.toFixed(2)}
+                  {formattedTotal}
                 </Text>
               </View>
               <View style={styles.Grafico}>
