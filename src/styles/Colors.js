@@ -13,7 +13,7 @@ const Colors = {
     white: "rgba(255, 255, 255, 1)",
     black: "rgba(0, 0, 0, 1)",
     Cyan: "rgba(0,103,115,1)",
-    grey: "#CECECE",
+    grey: "#D9D9D9",
     neongreen: "#04f000",
 
 }
