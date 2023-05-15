@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
-import { Buttons, Colors, Fonts } from "../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
+import { Colors, Fonts, Buttons, TextInput } from "../../styles";
 
 const styles = StyleSheet.create({
   container: {
@@ -11,6 +11,23 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     resizeMode: "cover",
+  },
+  containergeral: {
+    flex: 1,
+    margin: scale(15),
+    borderRadius: 10,
+    backgroundColor: Colors.darkgreenTransparent,
+  },
+  texto: {
+    ...Fonts.txtLarge,
+    color: Colors.white,
+    alignSelf: "center",
+  },
+  campoTexto: {
+    ...Fonts.txtMediumBold,
+    ...TextInput.TextInputLargeRounded,
+    backgroundColor: Colors.white,
+    color: Colors.black,
   },
   logo: {
     resizeMode: "contain",
@@ -43,7 +60,7 @@ const styles = StyleSheet.create({
   disabledbutton: {
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.btndarkgreen,
-    opacity: 0.4
+    opacity: 0.4,
   },
   tituloBotao: {
     ...Fonts.txtMediumBold,
@@ -64,6 +81,5 @@ const styles = StyleSheet.create({
     padding: verticalScale(10),
     flexDirection: "column-reverse",
   },
-  
 });
 export default styles;

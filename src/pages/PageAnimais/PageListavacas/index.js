@@ -18,6 +18,7 @@ import Graficodetalhesvacas from "../../../components/Graficos/Graficodetalhesva
 import Modal from "react-native-modal";
 import { MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 import { useMainContext } from "../../../contexts/RealmContext";
+import { Colors, Buttons } from "../../../styles";
 const imgbg1 = "../../../../assets/listavacas-bg.jpg";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -373,13 +374,13 @@ function PageListavacas({ navigation }) {
         />
         <View>
           <TouchableOpacity
-            style={styles.botaovoltar}
+            style={styles.botaopress}
             onPress={() => navigation.navigate("CadastroVaca")}
           >
             <Text style={styles.textovoltar}>Cadastrar Vaca</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.botaovoltar}
+            style={styles.botaopress2}
             onPress={() => navigation.navigate("Home")}
           >
             <Text style={styles.textovoltar}>Voltar</Text>
@@ -521,6 +522,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "80%",
+  },
+  botaopress: {
+    ...Buttons.btnLargeRounded,
+    backgroundColor: Colors.btngreen,
+    marginBottom: verticalScale(10),
+  },
+  botaopress2: {
+    ...Buttons.btnLargeRounded,
+    backgroundColor: Colors.btngreen,
   },
 });
 

@@ -18,7 +18,7 @@ function StackRoutes() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Login "
+        name="LoginPage"
         component={Login}
         options={{
           headerShown: false,

@@ -51,56 +51,59 @@ function SignUp() {
         source={require(imgbg1)}
         imageStyle={{ opacity: 0.6 }}
       >
-        <View style={styles.containerlogin}>
+        <View style={styles.containergeral}>
           <Image
             style={styles.logo}
             source={require("../../../assets/FazFin.png")}
           />
           <Text style={styles.title}>Bem-vindo(a)</Text>
-          <View>
-            <Text>Digite o seu nome</Text>
-            <TextInput
-              inputMode="text"
-              onChangeText={setNomeProp}
-              value={nomeProp}
-              placeholder="Nome"
-            />
-          </View>
-          <View>
-            <Text>Digite seu email</Text>
-            <TextInput
-              value={email}
-              onChangeText={setEmail}
-              placeholder="Email"
-              inputMode="text"
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-          </View>
-          <View>
-            <Text>Digite a senha</Text>
-            <TextInput
-              inputMode="text"
-              autoCapitalize="none"
-              onChangeText={setPassword}
-              value={password}
-              secureTextEntry
-            />
-          </View>
-          <View>
-            <Text>Confirme a senha</Text>
-            <TextInput
-              placeholder="Senha"
-              inputMode="text"
-              autoCapitalize="none"
-              onChangeText={setPasswordConfirm}
-              value={passwordConfirm}
-              secureTextEntry
-            />
-          </View>
+          <Text style={styles.texto}>Digite o seu nome</Text>
+          <TextInput
+            style={styles.campoTexto}
+            inputMode="text"
+            onChangeText={setNomeProp}
+            value={nomeProp}
+            placeholder="Nome"
+          />
+          <Text style={styles.texto}>Digite seu email</Text>
+          <TextInput
+            style={styles.campoTexto}
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Email"
+            inputMode="text"
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          <Text style={styles.texto}>Digite a senha</Text>
+          <TextInput
+            style={styles.campoTexto}
+            inputMode="text"
+            placeholder="Senha"
+            autoCapitalize="none"
+            onChangeText={setPassword}
+            value={password}
+            secureTextEntry
+          />
+          <Text style={styles.texto}>Confirme a senha</Text>
+          <TextInput
+            style={styles.campoTexto}
+            placeholder="Confirme sua senha"
+            inputMode="text"
+            autoCapitalize="none"
+            onChangeText={setPasswordConfirm}
+            value={passwordConfirm}
+            secureTextEntry
+          />
           <View style={styles.containerbotoes}>
             <TouchableOpacity
               style={styles.botaopress2}
+              onPress={() => navigation.navigate("LoginPage")}
+            >
+              <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.botaopress}
               onPress={handleUserRegister}
             >
               <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
