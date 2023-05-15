@@ -274,7 +274,7 @@ function EntradaEstoque() {
   //mais
   const maisButton = () => {
     setQtdProd((parseInt(qtdProd) + 1).toString());
-    if(qtdProd > 0){
+    if (qtdProd >= 0) {
       setIsQtdProdValid(true);
     }
   };
@@ -307,40 +307,46 @@ function EntradaEstoque() {
   const TextInputTipo = () => {
     if (tipoProd == 1) {
       return (
-        <View>
+        <View style={styles.containerInput}>
           <Text style={styles.font}>Volume do produto:</Text>
           <TextInput
-            style={styles.textInput}
+            style={
+              !isVolumeProdValid ? styles.textInputError : styles.textInput
+            }
             value={volumeProd}
             onChangeText={handleVolumeProdChange}
             placeholder="200"
             keyboardType="decimal-pad"
             inputMode="decimal"
           />
-          {!isVolumeProdValid && (
-            <Text style={styles.error}>
-              Valor digitado inválido, tente novamente.
-            </Text>
-          )}
+          <View>
+            {!isVolumeProdValid && (
+              <Text style={styles.error}>
+                Valor digitado inválido, tente novamente.
+              </Text>
+            )}
+          </View>
         </View>
       );
     }
     return (
-      <View>
+      <View style={styles.containerInput}>
         <Text style={styles.font}>Peso do produto:</Text>
         <TextInput
-          style={styles.textInput}
+          style={!isPesoProdValid ? styles.textInputError : styles.textInput}
           value={pesoProd}
           onChangeText={handlePesoProdChange}
           placeholder="60"
           keyboardType="decimal-pad"
           inputMode="decimal"
         />
-        {!isPesoProdValid && (
-          <Text style={styles.error}>
-            Valor digitado inválido, tente novamente.
-          </Text>
-        )}
+        <View>
+          {!isPesoProdValid && (
+            <Text style={styles.error}>
+              Valor digitado inválido, tente novamente.
+            </Text>
+          )}
+        </View>
       </View>
     );
   };
@@ -350,36 +356,42 @@ function EntradaEstoque() {
         <View style={styles.containerInput}>
           <Text style={styles.font}>Nome do produto:</Text>
           <TextInput
-            style={styles.textInput}
+            style={!isNomeProdValid ? styles.textInputError : styles.textInput}
             value={nomeProd}
             onChangeText={handleNomeProdChange}
             placeholder="Prata"
             keyboardType="default"
             inputMode="text"
           />
+          <View>
+            {!isNomeProdValid && (
+              <Text style={[styles.error]}>Digite o nome do produto!</Text>
+            )}
+          </View>
         </View>
-        {!isNomeProdValid && (
-          <Text style={styles.error}>Digite o nome do produto!</Text>
-        )}
+
         <View style={styles.containerInput}>
           <DropdownComponent />
         </View>
         <View style={styles.containerInput}>
           <Text style={styles.font}>Preço da compra:</Text>
           <TextInput
-            style={styles.textInput}
+            style={!isValorProdValid ? styles.textInputError : styles.textInput}
             value={valorProd}
             onChangeText={handleValorProdChange}
             placeholder="50,00"
             keyboardType="decimal-pad"
             inputMode="decimal"
           />
+          <View>
+            {!isValorProdValid && (
+              <Text style={styles.error}>
+                Valor digitado inválido, tente novamente.
+              </Text>
+            )}
+          </View>
         </View>
-        {!isValorProdValid && (
-          <Text style={styles.error}>
-            Valor digitado inválido, tente novamente.
-          </Text>
-        )}
+
         <View style={styles.containerInput}>
           <Text style={styles.font}>Quantidade de produtos comprados:</Text>
           <View style={styles.containerMaisMenos}>
@@ -387,7 +399,9 @@ function EntradaEstoque() {
               <Text style={styles.buttonText}>-</Text>
             </TouchableOpacity>
             <TextInput
-              style={styles.textInputQtd}
+              style={
+                !isQtdProdValid ? styles.textInputQtdError : styles.textInputQtd
+              }
               value={qtdProd}
               onChangeText={(valor) => handleQtdProdChange(valor)}
               keyboardType="numeric"
@@ -396,12 +410,14 @@ function EntradaEstoque() {
               <Text style={styles.buttonText}>+</Text>
             </TouchableOpacity>
           </View>
+          <View>
+            {!isQtdProdValid && (
+              <Text style={styles.error}>
+                Valor digitado inválido, tente novamente.
+              </Text>
+            )}
+          </View>
         </View>
-        {!isQtdProdValid && (
-          <Text style={styles.error}>
-            Valor digitado inválido, tente novamente.
-          </Text>
-        )}
         <View style={styles.containerInput}>{TextInputTipo()}</View>
         <View style={styles.containerInput}>
           <Text style={styles.font}>Observações:</Text>
