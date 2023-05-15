@@ -19,7 +19,7 @@ export default function FinanceiroFaz() {
   //Buscar no banco Despesas faz
   useEffect(() => {
     if (realm) {
-      let dataDespesas = realm.objectForPrimaryKey("Farm", fazID);
+      let dataDespesas = realm.objectForPrimaryKey("Farm", fazID).sort((a, b) => a.createdAt - b.createdAt);
       let despesas = [];
       dataDespesas.rebanhos.forEach((rebanho) => {
         despesas.push(...rebanho.despesas);
@@ -31,7 +31,7 @@ export default function FinanceiroFaz() {
   //Buscar no banco receita faz
   useEffect(() => {
     if (realm) {
-      let dataReceitas = realm.objectForPrimaryKey("Farm", fazID);
+      let dataReceitas = realm.objectForPrimaryKey("Farm", fazID).sort((a, b) => a.createdAt - b.createdAt);
       let receitas = [];
       dataReceitas.rebanhos.forEach((rebanho) => {
         rebanho.vacas.forEach((vaca) => {

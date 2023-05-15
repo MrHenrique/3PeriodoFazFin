@@ -18,7 +18,9 @@ export default function FinanceiroReb() {
   //Buscar no banco Gastos Reb
   useEffect(() => {
     if (realm) {
-      let dataGastos = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+      let dataGastos = realm
+        .objectForPrimaryKey("RebanhoSchema", rebID)
+        .sort((a, b) => a.createdAt - b.createdAt);
       PrecoCFReb(DespesasTotais(dataGastos.despesas));
       ListaAliReb(dataGastos.despesas);
     }
@@ -26,7 +28,7 @@ export default function FinanceiroReb() {
   //Buscar no banco Receitas Reb
   useEffect(() => {
     if (realm) {
-      let dataReceitas = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+      let dataReceitas = realm.objectForPrimaryKey("RebanhoSchema", rebID).sort((a, b) => a.createdAt - b.createdAt);
       let receitas = [];
       dataReceitas.vacas.forEach((vaca) => {
         receitas.push(...vaca.receitas);
