@@ -4,7 +4,6 @@ import { Ionicons, MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 import Home from "../pages/Home";
 import StackRoutes from "../Routes/stackRoutes";
 import SelectRebPage from "../pages/SelectRebPage";
-import Leite from "../pages/Leite";
 import SelectFazPage from "../pages/SelectFazPage";
 const Drawer = createDrawerNavigator();
 function Routes() {
@@ -73,20 +72,6 @@ function Routes() {
           drawerIcon: ({ focused, size, color }) => (
             <Entypo
               name={focused ? "line-graph" : "line-graph"}
-              size={size}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Leite"
-        component={Leite}
-        options={{
-          title: "Leite",
-          drawerIcon: ({ focused, size, color }) => (
-            <Entypo
-              name={focused ? "bucket" : "bucket"}
               size={size}
               color={color}
             />

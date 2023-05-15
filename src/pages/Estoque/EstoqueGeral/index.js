@@ -1,22 +1,27 @@
 import React, { useState, useContext, useEffect } from "react";
 import {
   View,
-  StyleSheet,
+  Dimensions,
   Text,
   TouchableOpacity,
   FlatList,
   ScrollView,
   Image,
+  ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../../contexts/auth";
 import Modal from "react-native-modal";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { useMainContext } from "../../../contexts/RealmContext";
+import styles from "../styles";
 function EstoqueGeral() {
   const realm = useMainContext();
 
   const navigation = useNavigation();
+  //flatlist
+  const numcolumns = 2;
+  const windowwidth = Dimensions.get("window").width;
   //estados
   const [listaEstoque, setListaEstoque] = useState([]);
   const [oldListaEstoque, setOldListaEstoque] = useState([]);
@@ -104,21 +109,9 @@ function EstoqueGeral() {
 
   const CategImg = (categoriaProd) => {
     if (categoriaProd == "Alimentos") {
-      return (
-        <Image
-          style={styles.tinyLogo}
-          source={require("../../../../assets/wheat-sack.png")}
-        />
-      );
+      return require("../../../../assets/wheat-sack.png");
     } else {
-      return (
-        <TouchableOpacity>
-          <Image
-            style={styles.tinyLogo}
-            source={require("../../../../assets/syringe.png")}
-          />
-        </TouchableOpacity>
-      );
+      return require("../../../../assets/syringe.png");
     }
   };
   const renderItemEstoque = ({ item }) => {
@@ -128,70 +121,145 @@ function EstoqueGeral() {
       if (categoriaProd == "Alimentos") {
         return (
           <View style={styles.containerlist}>
-            <Text style={styles.font}>
-              Peso em estoque : {(item.pesoProd / item.qtdProd) * item.qtdProd}{" "}
-              KG
-            </Text>
+            <View style={styles.ListItem}>
+              <Text style={styles.fontsubtitulo}>Peso em estoque :</Text>
+              <Text style={styles.fontcontainerlistitem}>
+                {" "}
+                {(item.pesoProd / item.qtdProd) * item.qtdProd} kg
+              </Text>
+            </View>
           </View>
         );
       } else {
         return (
           <View style={styles.containerlist}>
-            <Text style={styles.font}>
-              Volume em estoque :{" "}
-              {(item.volumeProd / item.qtdProd) * item.qtdProd} ml
-            </Text>
+            <View style={styles.ListItem}>
+              <Text style={styles.fontsubtitulo}>Volume em estoque :</Text>
+              <Text style={styles.fontcontainerlistitem}>
+                {(item.volumeProd / item.qtdProd) * item.qtdProd} ml
+              </Text>
+            </View>
           </View>
         );
       }
     }
     return (
       <View style={styles.containerlist}>
-        <TouchableOpacity onPress={() => EstoqueClick(item)}>
-          <View style={styles.modalContainer}>
-            <View style={styles.containerItem}>{imgCateg}</View>
-            <View style={styles.containerText}>
-              <Text style={styles.Text}>{item.nomeProd}</Text>
+        <TouchableOpacity
+          style={
+            shouldShow
+              ? styles.listcontainerstyleMargin
+              : styles.listcontainerstyle
+          }
+          onPress={() => EstoqueClick(item)}
+        >
+          <ImageBackground
+            source={imgCateg}
+            resizeMode="contain"
+            style={styles.containerItem}
+            imageStyle={{ margin: 25 }}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.containerText}>
+                <Text style={styles.Text}>{item.nomeProd}</Text>
+              </View>
+              <MaterialIcons
+                name={"expand-more"}
+                size={35}
+                color={"white"}
+                style={shouldShow ? styles.iconArrowvirado : styles.iconArrow}
+              />
             </View>
-            <MaterialCommunityIcons
-              name={"arrow-down-right"}
-              size={25}
-              color={"white"}
-              style={styles.iconArrow}
-            />
-          </View>
+          </ImageBackground>
         </TouchableOpacity>
         {shouldShow ? (
-          <ScrollView>
+          <ScrollView style={styles.containerItems}>
             <View style={styles.containerlist}>
-              <Text style={styles.font}>Nome do item : {item.nomeProd}</Text>
+              <View
+                style={{
+                  alignContent: "center",
+                  alignItems: "center",
+                  alignSelf: "center",
+                }}
+              >
+                <View
+                  style={[
+                    styles.ListItem,
+                    { flex: 1, flexDirection: "column", borderBottomWidth: 0 },
+                  ]}
+                >
+                  <Text style={styles.fontsubtitulo}>Categoria do item:</Text>
+                  <Text style={styles.fontcontainerlistitem}>
+                    {categoriaProd}
+                  </Text>
+                </View>
+              </View>
             </View>
             <View style={styles.containerlist}>
-              <Text style={styles.font}>
-                Categoria do item : {categoriaProd}
-              </Text>
-            </View>
-            <View style={styles.containerlist}>
-              <Text style={styles.font}>Itens em estoque : {item.qtdProd}</Text>
+              <View style={styles.ListItem}>
+                <Text style={styles.fontsubtitulo}>Itens em estoque:</Text>
+                <Text style={styles.fontcontainerlistitem}>
+                  {" "}
+                  {item.qtdProd}
+                </Text>
+              </View>
             </View>
             {item.qtdProd > 0 ? (
               <View>
                 {tipoRelatorio(categoriaProd)}
                 <View style={styles.containerlist}>
-                  <Text style={styles.font}>
-                    Média de preço por item : R$
-                    {(item.valorProd / item.qtdProd).toFixed(2)}
-                  </Text>
+                  <View style={styles.ListItem}>
+                    <Text style={styles.fontsubtitulo}>
+                      Média de preço por item:
+                    </Text>
+                    <Text style={styles.fontcontainerlistitem}>
+                      R$
+                      {(item.valorProd / item.qtdProd).toFixed(2)}
+                    </Text>
+                  </View>
                 </View>
               </View>
             ) : (
               <></>
             )}
             <View style={styles.containerlist}>
-              <Text style={styles.font}>Data da ultima compra :</Text>
+              <View style={styles.ListItem}>
+                <Text style={styles.fontsubtitulo}>
+                  Data da ultima compra :
+                </Text>
+                <Text style={styles.fontcontainerlistitem}>22/05/2004</Text>
+              </View>
             </View>
             <View style={styles.containerlist}>
-              <Text style={styles.font}>Observações : {item.obserProd}</Text>
+              <View
+                style={{
+                  flex: 1,
+                  alignContent: "center",
+                  alignItems: "center",
+                  alignSelf: "center",
+                }}
+              >
+                <View
+                  style={[
+                    styles.ListItem,
+                    { flex: 1, flexDirection: "column", borderBottomWidth: 0 },
+                  ]}
+                >
+                  <Text style={styles.fontsubtitulo}>Observações:</Text>
+                  <Text
+                    style={[
+                      styles.fontcontainerlistitem,
+                      {
+                        flex: 1,
+                        textAlign: "left",
+                      },
+                    ]}
+                  >
+                    {" "}
+                    {item.obserProd}
+                  </Text>
+                </View>
+              </View>
             </View>
           </ScrollView>
         ) : null}
@@ -200,113 +268,84 @@ function EstoqueGeral() {
   };
   return (
     <View style={styles.container}>
-      <View>
-        <Text style={styles.font}>Valor de produtos em Estoque</Text>
-        <Text style={styles.font}>R$ {EstoqueValorTotal().toFixed(2)}</Text>
-      </View>
-      <View>
-        <TouchableOpacity
-          onPress={() => {
-            toggleModal();
-          }}
-        >
-          <Text style={styles.font}>Relatorio de Compras</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => setShouldShowDetalhes(!shouldShowDetalhes)}
-        >
-          <Text style={styles.font}>Produtos cadastrados</Text>
-        </TouchableOpacity>
-        {shouldShowDetalhes ? (
+      <View style={styles.containergeral}>
+        <View style={styles.containerValor}>
           <View>
-            <FlatList
-              data={listaEstoque}
-              renderItem={renderItemEstoque}
-              keyExtractor={(item) => item._id}
-            ></FlatList>
+            <Text style={styles.font}>
+              {shouldShow ? "Valor Produto" : "Valor produtos em estoque"}
+            </Text>
+            <Text style={styles.fontvalortotal}>
+              R$ {EstoqueValorTotal().toFixed(2)}
+            </Text>
           </View>
-        ) : null}
-        <Modal
-          isVisible={isModalVisible}
-          coverScreen={true}
-          backdropColor={"rgba(234,242,215,0.8)"}
-          animationIn="slideInUp"
-          animationOut="slideOutDown"
-        >
-          <View style={styles.container}>
-            <Text style={styles.font}>Compras:</Text>
-            <FlatList
-              data={listaEstoqueEntrada}
-              renderItem={renderItemEntrada}
-              keyExtractor={(item) => item._id}
-            ></FlatList>
+        </View>
+
+        <View style={styles.containerlista}>
+          <View style={styles.relatorioCadastro}>
             <TouchableOpacity
+              style={styles.botaorelatorioproduto}
               onPress={() => {
                 toggleModal();
               }}
             >
-              <Text style={styles.font}>Voltar</Text>
+              <Text style={styles.fontblk}>Relatorios</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.botaorelatorioproduto}
+              onPress={() => setShouldShowDetalhes(!shouldShowDetalhes)}
+            >
+              <Text style={styles.fontblk}>Produtos</Text>
             </TouchableOpacity>
           </View>
-        </Modal>
-        <TouchableOpacity
-          style={styles.botao}
-          onPress={() => navigation.navigate("Home")}
-        >
-          <Text style={styles.font}>{"Voltar"}</Text>
-        </TouchableOpacity>
+
+          <View style={styles.containershouldshow}>
+            {shouldShowDetalhes ? (
+              <View>
+                <FlatList
+                  data={listaEstoque}
+                  renderItem={renderItemEstoque}
+                  keyExtractor={(item) => item._id}
+                  numColumns={numcolumns}
+                ></FlatList>
+              </View>
+            ) : null}
+          </View>
+          {/* Modal relatorio de compras */}
+          <Modal
+            isVisible={isModalVisible}
+            coverScreen={true}
+            backdropColor={"rgba(234,242,215,0.8)"}
+            animationIn="slideInUp"
+            animationOut="slideOutDown"
+          >
+            <View style={styles.container}>
+              <Text style={styles.font}>Compras:</Text>
+              <FlatList
+                data={listaEstoqueEntrada}
+                renderItem={renderItemEntrada}
+                keyExtractor={(item) => item._id}
+              ></FlatList>
+              <TouchableOpacity
+                onPress={() => {
+                  toggleModal();
+                }}
+              >
+                <Text style={styles.font}>Voltar</Text>
+              </TouchableOpacity>
+            </View>
+          </Modal>
+
+          <View style={styles.containerButao}>
+            <TouchableOpacity
+              style={styles.botao}
+              onPress={() => navigation.navigate("Home")}
+            >
+              <Text style={styles.font}>{"Voltar"}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     </View>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#004513",
-  },
-  containerlist: {
-    padding: 5,
-  },
-  modalContainer: {
-    flex: 1,
-    margin: 10,
-    padding: 10,
-    borderWidth: 2,
-    borderColor: "green",
-    borderRadius: 10,
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
-    overflow: "scroll",
-    flexDirection: "row",
-    alignSelf: "center",
-  },
-  containerItem: { flex: 1, marginLeft: 15 },
-  containerText: { flex: 1 },
-  font: {
-    color: "white",
-    fontSize: 20,
-    alignSelf: "center",
-  },
-  botao: {
-    backgroundColor: "green",
-    alignSelf: "center",
-    height: "100%",
-    width: "100%",
-    maxHeight: 50,
-    maxWidth: 200,
-  },
-  tinyLogo: {
-    width: 60,
-    height: 60,
-  },
-  Text: {
-    fontSize: 25,
-    fontWeight: "bold",
-    color: "white",
-  },
-  iconArrow: {
-    marginTop: 50,
-  },
-});
 export default EstoqueGeral;

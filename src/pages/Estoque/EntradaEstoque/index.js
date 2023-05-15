@@ -347,9 +347,6 @@ function EntradaEstoque() {
   return (
     <View style={styles.container}>
       <View style={styles.containergeral}>
-        <View style={styles.containerInputTitulo}>
-          <Text style={styles.fontTitulo}>Cadastro de Produto</Text>
-        </View>
         <View style={styles.containerInput}>
           <Text style={styles.font}>Nome do produto:</Text>
           <TextInput
