@@ -98,6 +98,8 @@ function EntradaEstoque() {
 
   //Gravar dados em Estoque principal
   async function handleAddEstoque() {
+    
+    let qtdProdN = parseInt(qtdProd);
     //checar se produto já existe
     if (listaEstoqueFiltered.length === 0) {
       //se não existe checar se cadastro é relacionado a tipo 1 ou 2 (farmácia/alimentos)
@@ -111,7 +113,7 @@ function EntradaEstoque() {
                 nomeProd: nomeProd,
                 _id: uuid.v4(),
                 valorProd,
-                qtdProd,
+                qtdProd:qtdProdN,
                 pesoProd,
                 volumeProd,
                 obserProd,
@@ -121,7 +123,7 @@ function EntradaEstoque() {
                 nomeProd: nomeProd,
                 _id: uuid.v4(),
                 valorProd,
-                qtdProd,
+                qtdProd:qtdProdN,
                 pesoProd,
                 volumeProd,
                 obserProd,
@@ -147,7 +149,7 @@ function EntradaEstoque() {
                 nomeProd: nomeProd,
                 _id: uuid.v4(),
                 valorProd,
-                qtdProd,
+                qtdProd:qtdProdN,
                 pesoProd,
                 volumeProd,
                 obserProd,
@@ -157,7 +159,7 @@ function EntradaEstoque() {
                 nomeProd: nomeProd,
                 _id: uuid.v4(),
                 valorProd,
-                qtdProd,
+                qtdProd:qtdProdN,
                 pesoProd,
                 volumeProd,
                 obserProd,
@@ -178,10 +180,10 @@ function EntradaEstoque() {
     //se produto existe
     else {
       if (tipoProd == 1 && listaEstoqueFiltered[0].volumeProd >= 0) {
-        let pesoProd = -1;
+        let pesoProd = -1
         let valorProdF = valorProd + listaEstoqueFiltered[0].valorProd;
         let volumeProdF = volumeProd + listaEstoqueFiltered[0].volumeProd;
-        let qtdProdF = qtdProd + listaEstoqueFiltered[0].qtdProd;
+        let qtdProdF = qtdProdN + listaEstoqueFiltered[0].qtdProd;
         if (realm) {
           try {
             realm.write(() => {
@@ -200,7 +202,7 @@ function EntradaEstoque() {
                 nomeProd: nomeProd,
                 _id: uuid.v4(),
                 valorProd,
-                qtdProd,
+                qtdProd:qtdProdN,
                 pesoProd,
                 volumeProd,
                 obserProd,
@@ -219,7 +221,7 @@ function EntradaEstoque() {
         let volumeProd = -1;
         let valorProdF = valorProd + listaEstoqueFiltered[0].valorProd;
         let pesoProdF = pesoProd + listaEstoqueFiltered[0].pesoProd;
-        let qtdProdF = qtdProd + listaEstoqueFiltered[0].qtdProd;
+        let qtdProdF = qtdProdN + listaEstoqueFiltered[0].qtdProd;
         if (realm) {
           try {
             realm.write(() => {
@@ -238,7 +240,7 @@ function EntradaEstoque() {
                 nomeProd: nomeProd,
                 _id: uuid.v4(),
                 valorProd,
-                qtdProd,
+                qtdProd:qtdProdN,
                 pesoProd,
                 volumeProd,
                 obserProd,
