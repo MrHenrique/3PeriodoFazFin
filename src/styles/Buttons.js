@@ -18,3 +18,7 @@ export const btnSmall = {
   width: scale(100),
   height: verticalScale(40),
 };
+export const btnSmallRounded = {
+  ...btnSmall,
+  borderRadius: 20,
+};

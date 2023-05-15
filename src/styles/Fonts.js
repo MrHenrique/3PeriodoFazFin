@@ -32,6 +32,10 @@ export const txtLargeBold = {
   ...txtLarge,
   fontWeight: "bold",
 };
+export const txtXLargeBold = {
+  ...txtXLarge,
+  fontWeight: "bold",
+};
 export const txtMediumBold = {
   ...txtMedium,
   fontWeight: "bold",

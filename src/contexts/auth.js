@@ -17,35 +17,35 @@ function AuthProvider({ children }) {
       FazProp: FazProp,
     });
   }
-  const [precoCF, SetPrecoCF] = useState();
+  const [precoCF, SetPrecoCF] = useState(0);
   function PrecoCF(precoCF) {
     SetPrecoCF(precoCF);
   }
-  const [listaAli, SetListaAli] = useState();
+  const [listaAli, SetListaAli] = useState([]);
   function ListaAli(dataGas) {
     SetListaAli(dataGas);
   }
-  const [listaLeite, SetListaLeite] = useState();
+  const [listaLeite, SetListaLeite] = useState([]);
   function ListaLeite(dataLeite) {
     SetListaLeite(dataLeite);
   }
-  const [precoLeite, SetPrecoLeite] = useState();
+  const [precoLeite, SetPrecoLeite] = useState(0);
   function PrecoLeite(precoLeite) {
     SetPrecoLeite(precoLeite);
   }
-  const [precoCFReb, SetPrecoCFReb] = useState();
+  const [precoCFReb, SetPrecoCFReb] = useState(0);
   function PrecoCFReb(precoCF) {
     SetPrecoCFReb(precoCF);
   }
-  const [listaLeiteReb, SetListaLeiteReb] = useState();
+  const [listaLeiteReb, SetListaLeiteReb] = useState([]);
   function ListaLeiteReb(dataLeite) {
     SetListaLeiteReb(dataLeite);
   }
-  const [precoLeiteReb, SetPrecoLeiteReb] = useState();
+  const [precoLeiteReb, SetPrecoLeiteReb] = useState(0);
   function PrecoLeiteReb(precoLeite) {
     SetPrecoLeiteReb(precoLeite);
   }
-  const [listaAliReb, SetListaAliReb] = useState();
+  const [listaAliReb, SetListaAliReb] = useState([]);
   function ListaAliReb(dataGas) {
     SetListaAliReb(dataGas);
   }
@@ -57,9 +57,39 @@ function AuthProvider({ children }) {
   function TipoProd(dataProd) {
     SetTipoProd(dataProd);
   }
+  const [filtroMes, setFiltroMes] = useState();
+  function FiltroMes(mesFiltro) {
+    setFiltroMes(mesFiltro);
+  }
+  const [listaFiltrada, setListaFiltrada] = useState([]);
+  function ListaFiltrada(listaFiltrada) {
+    setListaFiltrada(listaFiltrada);
+  }
+  const [listaReceitaVacas, setListaReceitaVacas] = useState([]);
+  function ListaReceitaVacas(receitaVacas) {
+    setListaReceitaVacas(receitaVacas);
+  }
+  const [idEstoqueSaida, SetIdEstoqueSaida] = useState();
+  function IdEstoqueSaida(dataID) {
+    SetIdEstoqueSaida(dataID);
+  }
+  const [tipoEstoqueSaida, SetTipoEstoqueSaida] = useState();
+  function TipoEstoqueSaida(dataTipo) {
+    SetTipoEstoqueSaida(dataTipo);
+  }
+  const [idPageFinanceiro, setIdPageFinanceiro] = useState();
+  function IdPageFinanceiro(dataTipo) {
+    setIdPageFinanceiro(dataTipo);
+  }
   return (
     <AuthContext.Provider
       value={{
+        ListaReceitaVacas,
+        listaReceitaVacas,
+        ListaFiltrada,
+        listaFiltrada,
+        FiltroMes,
+        filtroMes,
         GrafVaca,
         grafVaca,
         TipoProd,
@@ -86,6 +116,12 @@ function AuthProvider({ children }) {
         precoCFReb,
         listaAliReb,
         ListaAliReb,
+        idEstoqueSaida,
+        IdEstoqueSaida,
+        tipoEstoqueSaida,
+        TipoEstoqueSaida,
+        IdPageFinanceiro,
+        idPageFinanceiro,
       }}
     >
       {children}

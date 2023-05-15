@@ -5,13 +5,16 @@ import { NavigationContainer } from "@react-navigation/native";
 import { registerRootComponent } from "expo";
 import Routes from "./src/Routes";
 import AuthProvider from "./src/contexts/auth";
+import RealmContextProvider from "./src/contexts/RealmContext";
 function App() {
   return (
     <NavigationContainer>
-      <AuthProvider>
-      <StatusBar hidden={true} />
-      <Routes />
-      </AuthProvider>
+      <RealmContextProvider>
+        <AuthProvider>
+          <StatusBar hidden={true} />
+          <Routes />
+        </AuthProvider>
+      </RealmContextProvider>
     </NavigationContainer>
   );
 }

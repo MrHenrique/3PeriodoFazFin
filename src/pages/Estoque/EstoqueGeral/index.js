@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -8,14 +8,14 @@ import {
   ScrollView,
   Image,
 } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../../contexts/auth";
-import getAllEstoqueEntrada from "../../../Realm/getAllEstoqueEntrada";
-import getAllEstoque from "../../../Realm/getAllEstoque";
 import Modal from "react-native-modal";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useMainContext } from "../../../contexts/RealmContext";
 function EstoqueGeral() {
+  const realm = useMainContext();
+
   const navigation = useNavigation();
   //estados
   const [listaEstoque, setListaEstoque] = useState([]);
@@ -34,25 +34,22 @@ function EstoqueGeral() {
   }
   //abrir e fechar modal, chama funcao buscando dados no DB de entrada, modal troca de estado
   function toggleModal() {
-    fetchDataEntrada(fazID);
     setModalVisible(!isModalVisible);
   }
-  //Buscar no banco estoque
-  async function fetchDataEstoque(fazID) {
-    const dataEstoque = await getAllEstoque(fazID);
-    setListaEstoque(dataEstoque);
-  }
-  //Buscar no banco Transações de entrada
-  async function fetchDataEntrada(fazID) {
-    const dataEstoqueEntrada = await getAllEstoqueEntrada(fazID);
-    setListaEstoqueEntrada(dataEstoqueEntrada);
-  }
-  //Chama funcao buscando dados do estoque ao focar em página
-  useFocusEffect(
-    useCallback(() => {
-      fetchDataEstoque(fazID);
-    }, [])
-  );
+  //Chama funcao buscando dados do estoque
+  useEffect(() => {
+    if (realm) {
+      let dataEstoque = realm.objectForPrimaryKey("Farm", fazID);
+      setListaEstoque(dataEstoque.atualEstoque.sorted("nomeProd"));
+      setListaEstoqueEntrada(dataEstoque.entradaEstoque.sorted("createdAt"));
+      dataEstoque.atualEstoque.sorted("nomeProd").addListener((values) => {
+        setListaEstoque([...values]);
+      });
+      dataEstoque.entradaEstoque.sorted("createdAt").addListener((values) => {
+        setListaEstoqueEntrada([...values]);
+      });
+    }
+  }, [realm]);
   //renderiza flat list com transações de entrada
   const renderItemEntrada = ({ item }) => {
     return (
@@ -98,16 +95,13 @@ function EstoqueGeral() {
     }
   };
   const EstoqueValorTotal = () => {
-    let Valor = 0;
-    let ValorTotal = 0;
-    let x = 0;
-    while (x < listaEstoque.length) {
-      Valor = listaEstoque[x].qtdProd * listaEstoque[x].valorProd;
-      x = x + 1;
-      ValorTotal = ValorTotal + Valor;
-    }
+    let ValorTotal = listaEstoque.reduce(
+      (total, produto) => total + produto.valorProd,
+      0
+    );
     return ValorTotal;
   };
+
   const CategImg = (categoriaProd) => {
     if (categoriaProd == "Alimentos") {
       return (
@@ -158,7 +152,6 @@ function EstoqueGeral() {
             <View style={styles.containerItem}>{imgCateg}</View>
             <View style={styles.containerText}>
               <Text style={styles.Text}>{item.nomeProd}</Text>
-              <Text style={styles.Text}>{item.qtdProd.toFixed(0)}</Text>
             </View>
             <MaterialCommunityIcons
               name={"arrow-down-right"}
@@ -181,13 +174,19 @@ function EstoqueGeral() {
             <View style={styles.containerlist}>
               <Text style={styles.font}>Itens em estoque : {item.qtdProd}</Text>
             </View>
-            {tipoRelatorio(categoriaProd)}
-            <View style={styles.containerlist}>
-              <Text style={styles.font}>
-                Média de preço por item : R$
-                {(item.valorProd / item.qtdProd).toFixed(2)}
-              </Text>
-            </View>
+            {item.qtdProd > 0 ? (
+              <View>
+                {tipoRelatorio(categoriaProd)}
+                <View style={styles.containerlist}>
+                  <Text style={styles.font}>
+                    Média de preço por item : R$
+                    {(item.valorProd / item.qtdProd).toFixed(2)}
+                  </Text>
+                </View>
+              </View>
+            ) : (
+              <></>
+            )}
             <View style={styles.containerlist}>
               <Text style={styles.font}>Data da ultima compra :</Text>
             </View>
@@ -201,23 +200,11 @@ function EstoqueGeral() {
   };
   return (
     <View style={styles.container}>
-        <View>
-          <Text style={styles.font}>Valor de produtos em Estoque</Text>
-          <Text style={styles.font}>R$ {EstoqueValorTotal().toFixed(2)}</Text>
-        </View>
       <View>
-        <TouchableOpacity
-          onPress={() => setShouldShowDetalhes(!shouldShowDetalhes)}
-        >
-          <Text style={styles.font}>Produtos cadastrados</Text>
-        </TouchableOpacity>
-        {shouldShowDetalhes ? (
-          <FlatList
-            data={listaEstoque}
-            renderItem={renderItemEstoque}
-            keyExtractor={(item) => item._id}
-          ></FlatList>
-        ) : null}
+        <Text style={styles.font}>Valor de produtos em Estoque</Text>
+        <Text style={styles.font}>R$ {EstoqueValorTotal().toFixed(2)}</Text>
+      </View>
+      <View>
         <TouchableOpacity
           onPress={() => {
             toggleModal();
@@ -225,6 +212,20 @@ function EstoqueGeral() {
         >
           <Text style={styles.font}>Relatorio de Compras</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setShouldShowDetalhes(!shouldShowDetalhes)}
+        >
+          <Text style={styles.font}>Produtos cadastrados</Text>
+        </TouchableOpacity>
+        {shouldShowDetalhes ? (
+          <View>
+            <FlatList
+              data={listaEstoque}
+              renderItem={renderItemEstoque}
+              keyExtractor={(item) => item._id}
+            ></FlatList>
+          </View>
+        ) : null}
         <Modal
           isVisible={isModalVisible}
           coverScreen={true}
@@ -250,7 +251,7 @@ function EstoqueGeral() {
         </Modal>
         <TouchableOpacity
           style={styles.botao}
-          onPress={() => navigation.navigate("GeralFaz")}
+          onPress={() => navigation.navigate("Home")}
         >
           <Text style={styles.font}>{"Voltar"}</Text>
         </TouchableOpacity>
