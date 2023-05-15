@@ -98,13 +98,14 @@ function EntradaEstoque() {
 
   //Gravar dados em Estoque principal
   async function handleAddEstoque() {
-    
     let qtdProdN = parseInt(qtdProd);
+    let pesoProdNull = -1;
+    let volumeProdNull = -1;
     //checar se produto já existe
     if (listaEstoqueFiltered.length === 0) {
       //se não existe checar se cadastro é relacionado a tipo 1 ou 2 (farmácia/alimentos)
       if (tipoProd == 1) {
-        let pesoProd = -1;
+        
         if (realm) {
           try {
             realm.write(() => {
@@ -114,7 +115,7 @@ function EntradaEstoque() {
                 _id: uuid.v4(),
                 valorProd,
                 qtdProd:qtdProdN,
-                pesoProd,
+                pesoProd:pesoProdNull,
                 volumeProd,
                 obserProd,
                 createdAt: new Date(),
@@ -124,7 +125,7 @@ function EntradaEstoque() {
                 _id: uuid.v4(),
                 valorProd,
                 qtdProd:qtdProdN,
-                pesoProd,
+                pesoProd:pesoProdNull,
                 volumeProd,
                 obserProd,
                 createdAt: new Date(),
@@ -140,7 +141,6 @@ function EntradaEstoque() {
           }
         }
       } else if (tipoProd == 2) {
-        let volumeProd = -1;
         if (realm) {
           try {
             realm.write(() => {
@@ -151,7 +151,7 @@ function EntradaEstoque() {
                 valorProd,
                 qtdProd:qtdProdN,
                 pesoProd,
-                volumeProd,
+                volumeProd:volumeProdNull,
                 obserProd,
                 createdAt: new Date(),
               });
@@ -161,7 +161,7 @@ function EntradaEstoque() {
                 valorProd,
                 qtdProd:qtdProdN,
                 pesoProd,
-                volumeProd,
+                volumeProd:volumeProdNull,
                 obserProd,
                 createdAt: new Date(),
               });
@@ -180,7 +180,6 @@ function EntradaEstoque() {
     //se produto existe
     else {
       if (tipoProd == 1 && listaEstoqueFiltered[0].volumeProd >= 0) {
-        let pesoProd = -1
         let valorProdF = valorProd + listaEstoqueFiltered[0].valorProd;
         let volumeProdF = volumeProd + listaEstoqueFiltered[0].volumeProd;
         let qtdProdF = qtdProdN + listaEstoqueFiltered[0].qtdProd;
@@ -191,7 +190,7 @@ function EntradaEstoque() {
                 .objects("AtualEstoqueSchema")
                 .filtered(`_id= '${listaEstoqueFiltered[0]._id}'`)[0];
               updateEstoque.valorProd = valorProdF;
-              updateEstoque.pesoProd = pesoProd;
+              updateEstoque.pesoProd = pesoProdNull;
               updateEstoque.volumeProd = volumeProdF;
               updateEstoque.qtdProd = qtdProdF;
               updateEstoque.obserProd = obserProd;
@@ -203,7 +202,7 @@ function EntradaEstoque() {
                 _id: uuid.v4(),
                 valorProd,
                 qtdProd:qtdProdN,
-                pesoProd,
+                pesoProd:pesoProdNull,
                 volumeProd,
                 obserProd,
                 createdAt: new Date(),
@@ -218,7 +217,6 @@ function EntradaEstoque() {
           }
         }
       } else if (tipoProd == 2 && listaEstoqueFiltered[0].pesoProd >= 0) {
-        let volumeProd = -1;
         let valorProdF = valorProd + listaEstoqueFiltered[0].valorProd;
         let pesoProdF = pesoProd + listaEstoqueFiltered[0].pesoProd;
         let qtdProdF = qtdProdN + listaEstoqueFiltered[0].qtdProd;
@@ -230,7 +228,7 @@ function EntradaEstoque() {
                 .filtered(`_id= '${listaEstoqueFiltered[0]._id}'`)[0];
               updateEstoque.valorProd = valorProdF;
               updateEstoque.pesoProd = pesoProdF;
-              updateEstoque.volumeProd = volumeProd;
+              updateEstoque.volumeProd = volumeProdNull;
               updateEstoque.qtdProd = qtdProdF;
               updateEstoque.obserProd = obserProd;
               updateEstoque.createdAt = new Date();
@@ -242,7 +240,7 @@ function EntradaEstoque() {
                 valorProd,
                 qtdProd:qtdProdN,
                 pesoProd,
-                volumeProd,
+                volumeProd: volumeProdNull,
                 obserProd,
                 createdAt: new Date(),
               });
