@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.25,
     flex: 1,
     justifyContent: "center",
-    height: verticalScale(120),
+    height: verticalScale(140),
   },
   listcontainerstyle: {
     flex: 1,
@@ -184,6 +184,9 @@ const styles = StyleSheet.create({
     color: Colors.neongreen,
     ...Fonts.txtLargeBold,
     alignSelf: "center",
+  },
+  containerImg: {
+    padding: scale(20),
   },
 });
 // estilo tab

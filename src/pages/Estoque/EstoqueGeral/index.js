@@ -147,7 +147,9 @@ function EstoqueGeral() {
       <View style={styles.containerlist}>
         <TouchableOpacity
           style={
-            shouldShow ? styles.listcontainerstyleMargin : styles.listcontainerstyle
+            shouldShow
+              ? styles.listcontainerstyleMargin
+              : styles.listcontainerstyle
           }
           onPress={() => EstoqueClick(item)}
         >
@@ -155,6 +157,7 @@ function EstoqueGeral() {
             source={imgCateg}
             resizeMode="contain"
             style={styles.containerItem}
+            imageStyle={{ margin: 25 }}
           >
             <View style={styles.modalContainer}>
               <View style={styles.containerText}>
@@ -182,7 +185,7 @@ function EstoqueGeral() {
                 <View
                   style={[
                     styles.ListItem,
-                    { flex: 1, flexDirection: "column", borderBottomWidth: 0, },
+                    { flex: 1, flexDirection: "column", borderBottomWidth: 0 },
                   ]}
                 >
                   <Text style={styles.fontsubtitulo}>Categoria do item:</Text>
@@ -239,7 +242,7 @@ function EstoqueGeral() {
                 <View
                   style={[
                     styles.ListItem,
-                    { flex: 1, flexDirection: "column", borderBottomWidth: 0, },
+                    { flex: 1, flexDirection: "column", borderBottomWidth: 0 },
                   ]}
                 >
                   <Text style={styles.fontsubtitulo}>Observações:</Text>
@@ -271,7 +274,9 @@ function EstoqueGeral() {
             <Text style={styles.font}>
               {shouldShow ? "Valor Produto" : "Valor produtos em estoque"}
             </Text>
-            <Text style={styles.fontvalortotal}>R$ {EstoqueValorTotal().toFixed(2)}</Text>
+            <Text style={styles.fontvalortotal}>
+              R$ {EstoqueValorTotal().toFixed(2)}
+            </Text>
           </View>
         </View>
 
