@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
     color: Colors.black,
     borderWidth: 2,
     borderColor: Colors.red,
+  },
   containerlist: {
     flex: 1,
     flexDirection: "column",
