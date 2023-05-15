@@ -12,6 +12,7 @@ import PageAnimais from "../pages/PageAnimais";
 import Estoque from "../pages/Estoque";
 import SelectFazPage from "../pages/SelectFazPage";
 import Despesas from "../pages/Despesas";
+import SingUp from "../pages/SingUp";
 const Stack = createNativeStackNavigator();
 function StackRoutes() {
   return (
@@ -97,6 +98,13 @@ function StackRoutes() {
       <Stack.Screen
         name="CadastroVaca"
         component={CadastroVaca}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="SingUp"
+        component={SingUp}
         options={{
           headerShown: false,
         }}

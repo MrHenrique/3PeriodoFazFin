@@ -64,5 +64,6 @@ const styles = StyleSheet.create({
     padding: verticalScale(10),
     flexDirection: "column-reverse",
   },
+  
 });
 export default styles;

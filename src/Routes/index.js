@@ -78,6 +78,7 @@ function Routes() {
           ),
         }}
       />
+        
     </Drawer.Navigator>
   );
 }
