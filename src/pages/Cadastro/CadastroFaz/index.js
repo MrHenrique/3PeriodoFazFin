@@ -22,15 +22,19 @@ function CadastroFaz() {
   const [proprietario, setProprietario] = useState("");
   const [tipoprod, setTipoprod] = useState("");
   const [listaFaz, setListaFaz] = useState([]);
+  const [isNomefazValid, setIsNomefazValid] = useState(true);
+  const [nomeExist, setNomeExist] = useState(false);
+  const [isProprValid, setIsProprValid] = useState(true);
+  const [isTipoValid, setIsTipoValid] = useState(true);
   useEffect(() => {
     if (realm) {
       let data = realm.objects("Farm").sorted("nomefaz");
       setListaFaz(data.filter((fazenda) => fazenda.nomefaz === nomefaz));
     }
-  }, [realm,nomefaz]);
+  }, [realm, nomefaz]);
   //Escrever no Banco
   async function handleAddFarm() {
-    if (realm && listaFaz.length === 0) {
+    if (realm) {
       try {
         realm.write(() => {
           let NewFazID = uuid.v4();
@@ -54,8 +58,46 @@ function CadastroFaz() {
         setProprietario("");
         setTipoprod("");
       }
-    } else {
-      Alert.alert("Essa fazenda já existe, troque o nome e tente novamente.");
+    }
+  }
+  useEffect(() => {
+    const exists = listaFaz.length > 0;
+    setNomeExist(exists);
+  }, [listaFaz.length]);
+
+  function handleNomefazChange(text) {
+    const isValid = text.trim().length > 0;
+    setIsNomefazValid(isValid);
+    setNomefaz(text);
+  }
+  function handleProprChange(text) {
+    const isValid = text.trim().length > 0;
+    setIsProprValid(isValid);
+    setProprietario(text);
+  }
+  function handleTipoChange(text) {
+    const isValid = text.trim().length > 0;
+    setIsTipoValid(isValid);
+    setTipoprod(text);
+  }
+  function validCheck() {
+    if (nomefaz.length === 0) {
+      setIsNomefazValid(false);
+
+      if (listaFaz.length != 0) {
+        setNomeExist(true);
+      }
+      if (proprietario.length === 0) {
+        setIsProprValid(false);
+      }
+      if (tipoprod.length === 0) {
+        setIsTipoValid(false);
+      }
+    }
+    else if (isNomefazValid && isProprValid && isTipoValid && !nomeExist) {
+      handleAddFarm();
+    } else if (!isNomefazValid || !isProprValid || !isTipoValid || nomeExist) {
+      Alert.alert("Preencha todos os campos e tente novamente.");
     }
   }
   const navigation = useNavigation();
@@ -77,24 +119,38 @@ function CadastroFaz() {
           </Text>
           <TextInput
             style={styles.campoTexto}
-            onChangeText={setNomefaz}
+            onChangeText={handleNomefazChange}
             value={nomefaz}
             placeholder="Qual o nome da sua Fazenda?"
           ></TextInput>
+          {!isNomefazValid && (
+            <Text style={styles.error}>Digite o nome da Fazenda!</Text>
+          )}
+          {nomeExist && (
+            <Text style={styles.error}>
+              Uma Fazenda com esse nome já existe!
+            </Text>
+          )}
           <Text style={styles.texto}>Proprietário</Text>
           <TextInput
             style={styles.campoTexto}
-            onChangeText={setProprietario}
+            onChangeText={handleProprChange}
             value={proprietario}
             placeholder="Qual o nome do proprietário?"
           ></TextInput>
+          {!isProprValid && (
+            <Text style={styles.error}>Digite o nome do proprietário!</Text>
+          )}
           <Text style={styles.texto}>Tipo de produção</Text>
           <TextInput
             style={styles.campoTexto}
-            onChangeText={setTipoprod}
+            onChangeText={handleTipoChange}
             value={tipoprod}
             placeholder="Ex: Pecuária Leiteira"
           ></TextInput>
+          {!isTipoValid && (
+            <Text style={styles.error}>Digite o tipo de produção!</Text>
+          )}
           <View style={styles.containerbotao}>
             <TouchableOpacity
               style={styles.botaopress2}
@@ -102,7 +158,7 @@ function CadastroFaz() {
             >
               <Text style={styles.tituloBotao}>{"Voltar"}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.botaopress} onPress={handleAddFarm}>
+            <TouchableOpacity style={styles.botaopress} onPress={validCheck}>
               <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
             </TouchableOpacity>
           </View>

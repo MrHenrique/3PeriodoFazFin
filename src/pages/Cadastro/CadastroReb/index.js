@@ -17,16 +17,19 @@ import styles from "./styles";
 function CadastroReb() {
   const realm = useMainContext();
   const [nomeReb, setNomeReb] = useState("");
-  const [QtdAni, setQtdAni] = useState(0);
+  const [qtdAni, setQtdAni] = useState("");
   const [listaReb, setListaReb] = useState([]);
   const { fazID, RebanhoID } = useContext(AuthContext);
+  const [isNomeRebValid, setIsNomeRebValid] = useState(true);
+  const [rebExist, setRebExist] = useState(false);
+  const [isQtdAniValid, setIsQtdAniValid] = useState(true);
 
   //Escrever no Banco
 
   function genVacas() {
     const proximasvacas = [];
-    for (let i = 0; i <= QtdAni; i++) {
-      if (QtdAni == i) {
+    for (let i = 0; i <= qtdAni; i++) {
+      if (qtdAni == i) {
       } else {
         proximasvacas.push({
           _id: uuid.v4(),
@@ -52,7 +55,7 @@ function CadastroReb() {
   }, [realm, nomeReb]);
   //Escrever no Banco
   async function handleAddReb() {
-    if (realm && listaReb.length === 0) {
+    if (realm) {
       try {
         realm.write(() => {
           let newRebId = uuid.v4();
@@ -61,7 +64,7 @@ function CadastroReb() {
             _id: newRebId,
             nomeReb,
             createdAt: new Date(),
-            vacas: genVacas(QtdAni),
+            vacas: genVacas(qtdAni),
           });
           farm.rebanhos.push(createdReb);
           Alert.alert("Dados cadastrados com sucesso!");
@@ -74,8 +77,46 @@ function CadastroReb() {
         setNomeReb("");
         setQtdAni(0);
       }
-    } else {
-      Alert.alert("Esse rebanho já existe, troque o nome e tente novamente.");
+    }
+  }
+  useEffect(() => {
+    const exists = listaReb.length > 0;
+    setRebExist(exists);
+  }, [listaReb.length]);
+
+  function handleNomeRebChange(text) {
+    const isValid = text.trim().length > 0;
+    setIsNomeRebValid(isValid);
+    setNomeReb(text);
+  }
+  function handleQtdAniChange(text) {
+    const parsedValue = parseInt(text, 10);
+
+    const isValid =
+      text.trim().length > 0 &&
+      Number.isInteger(parsedValue) &&
+      parsedValue >= 0 &&
+      parsedValue.toString() === text.trim();
+    console.log(isValid);
+
+    setIsQtdAniValid(isValid);
+    setQtdAni(text);
+  }
+  function validCheck() {
+    if (nomeReb.length === 0) {
+      setIsNomeRebValid(false);
+
+      if (listaReb.length !== 0) {
+        setRebExist(true);
+      }
+
+      if (qtdAni.length === 0) {
+        setIsQtdAniValid(false);
+      }
+    } else if (isNomeRebValid && isQtdAniValid && !rebExist) {
+      handleAddReb();
+    } else if (!isNomeRebValid || !isQtdAniValid || rebExist) {
+      Alert.alert("Preencha todos os campos e tente novamente.");
     }
   }
   const navigation = useNavigation();
@@ -96,18 +137,31 @@ function CadastroReb() {
             <Text style={styles.texto}>Nome do rebanho:</Text>
             <TextInput
               style={styles.campoTexto}
-              onChangeText={setNomeReb}
+              onChangeText={handleNomeRebChange}
               value={nomeReb}
               placeholder="Ex: Vacas solteiras"
             ></TextInput>
+            {!isNomeRebValid && (
+              <Text style={styles.error}>Digite o nome do rebanho!</Text>
+            )}
+            {rebExist && (
+              <Text style={styles.error}>
+                Um rebanho com esse nome já existe!
+              </Text>
+            )}
             <Text style={styles.texto}>Quantidade de animais:</Text>
             <TextInput
               style={styles.campoTexto}
-              onChangeText={setQtdAni}
-              value={QtdAni}
+              onChangeText={handleQtdAniChange}
+              value={qtdAni}
               keyboardType="number-pad"
               placeholder="Quantos animais no rebanho?"
             ></TextInput>
+            {!isQtdAniValid && (
+              <Text style={styles.error}>
+                Valor digitado inválido, tente novamente.
+              </Text>
+            )}
           </View>
           <View style={styles.containerbotoes}>
             <TouchableOpacity
@@ -119,7 +173,7 @@ function CadastroReb() {
             <TouchableOpacity
               style={styles.botaopress}
               onPress={() => {
-                handleAddReb();
+                validCheck();
               }}
             >
               <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
