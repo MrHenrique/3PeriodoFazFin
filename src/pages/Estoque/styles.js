@@ -19,6 +19,12 @@ const styles = StyleSheet.create({
   containerInput: {
     flex: 1,
     justifyContent: "center",
+  },
+  containerInputTitulo: {
+    flex: 0.45,
+  },
+  fontTitulo: {
+    ...Fonts.txtXLargeBold,
     marginVertical: verticalScale(5),
   },
   font: {
@@ -84,6 +90,21 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-end",
   },
+  error: {
+    backgroundColor: "#ff0000",
+    marginBottom: 10,
+    borderRadius: 20,
+    padding: verticalScale(2),
+    alignSelf: "center",
+    color: "yellow",
+  },
+  campoTextoErro: {
+    ...Fonts.txtMediumBold,
+    ...TextInput.TextInputLargeRounded,
+    backgroundColor: Colors.white,
+    color: Colors.black,
+    borderWidth: 2,
+    borderColor: Colors.red,
   containerlist: {
     flex: 1,
     flexDirection: "column",

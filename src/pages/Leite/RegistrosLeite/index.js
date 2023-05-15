@@ -23,29 +23,31 @@ function RegistrosLeite() {
   useEffect(() => {
     if (realm) {
       let dataReceitas = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-  
-      dataReceitas.vacas.addListener((object, changes) => {
-        console.log("Data changed:", object, changes);
-  
+
+      dataReceitas.vacas.addListener((object) => {
         let NewReceitas = [];
         object.forEach((vaca) => {
           NewReceitas.push(...vaca.receitas);
         });
-  
+        if (NewReceitas.length > 0) {
+          NewReceitas = NewReceitas.sort((a, b) => a.createdAt - b.createdAt);
+        }
         setListaLeite(NewReceitas);
         ListaFiltrada(NewReceitas);
       });
-  
+
       let receitas = [];
       dataReceitas.vacas.forEach((vaca) => {
         receitas.push(...vaca.receitas);
       });
-  
+      if (receitas.length > 0) {
+        receitas = receitas.sort((a, b) => a.createdAt - b.createdAt);
+      }
       setListaLeite(receitas);
       ListaFiltrada(receitas);
     }
   }, [realm]);
-  
+
   const handleEditPress = () => {
     console.log("Editar pressionado");
   };

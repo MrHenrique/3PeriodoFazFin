@@ -24,13 +24,12 @@ export default function FinanceiroFaz() {
       dataDespesas.rebanhos.forEach((rebanho) => {
         despesas.push(...rebanho.despesas);
       });
+      if (despesas.length > 0) {
+        despesas = despesas.sort((a, b) => a.createdAt - b.createdAt);
+      }
       PrecoCF(DespesasTotais(despesas));
       ListaAli(despesas);
-    }
-  }, [realm]);
-  //Buscar no banco receita faz
-  useEffect(() => {
-    if (realm) {
+      //Buscar no banco receita faz
       let dataReceitas = realm.objectForPrimaryKey("Farm", fazID);
       let receitas = [];
       dataReceitas.rebanhos.forEach((rebanho) => {
@@ -38,6 +37,9 @@ export default function FinanceiroFaz() {
           receitas.push(...vaca.receitas);
         });
       });
+      if (receitas.length > 0) {
+        receitas = receitas.sort((a, b) => a.createdAt - b.createdAt);
+      }
       PrecoLeite(ReceitasTotais(receitas));
       ListaLeite(receitas);
     }

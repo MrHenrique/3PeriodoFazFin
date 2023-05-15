@@ -12,111 +12,71 @@ import { AuthContext } from "../../contexts/auth";
 function PreviewFinanceiro({ Titulo, Id }) {
   const realm = useMainContext();
   const navigation = useNavigation();
-  
-  // useEffect(() => {
-  //   switch (Id) {
-  //     case 1:
-  //       if (realm) {
-  //         let dataReceitas = realm.objectForPrimaryKey("Farm", fazID);
-  //         let receitas = [];
-  //         dataReceitas.rebanhos.forEach((rebanho) => {
-  //           rebanho.vacas.forEach((vaca) => {
-  //             receitas.push(...vaca.receitas);
-  //           });
-  //         });
-  //         PrecoLeite(ReceitasTotais(receitas));
-  //         ListaLeite(receitas);
-  //         dataReceitas.rebanhos.addListener((rebanhoResults) => {
-  //           let newReceitas = [];
-  //           rebanhoResults.forEach((rebanho) => {
-  //             rebanho.vacas.forEach((vaca) => {
-  //               newReceitas.push(...vaca.receitas);
-  //             });
-  //           });
-  //           PrecoCF(ReceitasTotais(newReceitas));
-  //           ListaLeite(newReceitas);
-  //         });
-  //       }
-  //       break;
-  //     case 2:
-  //       if (realm) {
-  //         let dataReceitas = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-  //         let receitas = [];
-  //         dataReceitas.vacas.forEach((vaca) => {
-  //           receitas.push(...vaca.receitas);
-  //         });
-  //         PrecoLeiteReb(ReceitasTotais(receitas));
-  //         ListaLeiteReb(receitas);
-  //         let newReceitas = [];
-  //         dataReceitas.vacas.addListener((values) => {
-  //           values.forEach((vaca) => {
-  //             newReceitas.push(...vaca.receitas);
-  //           });
-  //           PrecoCFReb(ReceitasTotais(newReceitas));
-  //           ListaLeiteReb(newReceitas);
-  //         });
-  //       }
-  //       break;
-  //     default:
-  //       Alert.alert("erro na busca de dados, consultar desenvolvedor");
-  //       break;
-  //   }
-  // }, [realm]);
 
   useEffect(() => {
-    switch (Id) {
-      case 1:
-        if (realm) {
-          let dataDespesas = realm.objectForPrimaryKey("Farm", fazID);
-          let despesas = [];
-          dataDespesas.rebanhos.forEach((rebanhos) => {
-            despesas.push(...rebanhos.despesas);
+    if (realm) {
+      let dataReceitas = realm.objectForPrimaryKey("Farm", fazID);
+      let receitas = [];
+      dataReceitas.rebanhos.forEach((rebanho) => {
+        rebanho.vacas.forEach((vaca) => {
+          receitas.push(...vaca.receitas);
+        });
+      });
+      PrecoLeite(ReceitasTotais(receitas));
+      dataReceitas.rebanhos.addListener((rebanhoResults) => {
+        let newReceitas = [];
+        rebanhoResults.forEach((rebanho) => {
+          rebanho.vacas.forEach((vaca) => {
+            newReceitas.push(...vaca.receitas);
           });
-          PrecoCF(DespesasTotais(despesas));
-          ListaAli(despesas);
-          dataDespesas.rebanhos.addListener((rebanhoResults) => {
-            let newDespesas = [];
-            rebanhoResults.forEach((rebanhos) => {
-              newDespesas.push(...rebanhos.despesas);
-            });
-            PrecoCF(DespesasTotais(newDespesas));
-            ListaAli(newDespesas);
-          });
-        }
-        break;
-      case 2:
-        if (realm) {
-          let dataGastos = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-          PrecoCFReb(DespesasTotais(dataGastos.despesas));
-          ListaAliReb(dataGastos.despesas);
-          dataGastos.despesas.addListener((values) => {
-            PrecoCFReb(DespesasTotais([...values]));
-          });
-          ListaAliReb(dataGastos.despesas);
-        }
-        break;
-      default:
-        Alert.alert("erro na busca de dados, consultar desenvolvedor");
-        break;
+        });
+        PrecoLeite(ReceitasTotais(newReceitas));
+      });
     }
+    let dataReceitasreb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+    let receitasreb = [];
+    dataReceitasreb.vacas.forEach((vaca) => {
+      receitasreb.push(...vaca.receitas);
+    });
+    PrecoLeiteReb(ReceitasTotais(receitasreb));
+    let newReceitasreb = [];
+    dataReceitasreb.vacas.addListener((values) => {
+      values.forEach((vaca) => {
+        newReceitasreb.push(...vaca.receitas);
+      });
+      PrecoLeiteReb(ReceitasTotais(newReceitasreb));
+    });
+    let dataDespesas = realm.objectForPrimaryKey("Farm", fazID);
+    let despesas = [];
+    dataDespesas.rebanhos.forEach((rebanhos) => {
+      despesas.push(...rebanhos.despesas);
+    });
+    PrecoCF(DespesasTotais(despesas));
+    dataDespesas.rebanhos.addListener((rebanhoResults) => {
+      let newDespesas = [];
+      rebanhoResults.forEach((rebanhos) => {
+        newDespesas.push(...rebanhos.despesas);
+      });
+      PrecoCF(DespesasTotais(newDespesas));
+    });
+    let dataGastos = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+    PrecoCFReb(DespesasTotais(dataGastos.despesas));
+    dataGastos.despesas.addListener((values) => {
+      PrecoCFReb(DespesasTotais([...values]));
+    });
   }, [realm]);
 
   const {
     precoCF,
     PrecoCF,
-    ListaAli,
     fazID,
     rebID,
-    ListaLeite,
     precoLeite,
     PrecoLeite,
-    ListaAliReb,
     PrecoCFReb,
     precoCFReb,
-    ListaLeiteReb,
     PrecoLeiteReb,
     precoLeiteReb,
-    idPageFinanceiro,
     IdPageFinanceiro,
   } = useContext(AuthContext);
 
