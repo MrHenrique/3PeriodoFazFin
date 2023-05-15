@@ -83,21 +83,20 @@ function CadastroFaz() {
   function validCheck() {
     if (nomefaz.length === 0) {
       setIsNomefazValid(false);
-    } else if (listaFaz.length != 0) {
-      setNomeExist(true);
-    } else if (proprietario.length === 0) {
-      setIsProprValid(false);
-    } else if (tipoprod.length === 0) {
-      setIsTipoValid(false);
-    } else if (
-      isNomefazValid === true &&
-      isProprValid === true &&
-      isTipoValid === true &&
-      nomeExist === false
-    ) {
+
+      if (listaFaz.length != 0) {
+        setNomeExist(true);
+      }
+      if (proprietario.length === 0) {
+        setIsProprValid(false);
+      }
+      if (tipoprod.length === 0) {
+        setIsTipoValid(false);
+      }
+    }
+    else if (isNomefazValid && isProprValid && isTipoValid && !nomeExist) {
       handleAddFarm();
-    } else {
-      console.log("erro")
+    } else if (!isNomefazValid || !isProprValid || !isTipoValid || nomeExist) {
       Alert.alert("Preencha todos os campos e tente novamente.");
     }
   }
@@ -125,13 +124,11 @@ function CadastroFaz() {
             placeholder="Qual o nome da sua Fazenda?"
           ></TextInput>
           {!isNomefazValid && (
-            <Text style={styles.error}>
-              O nome da fazenda não pode estar vazio.
-            </Text>
+            <Text style={styles.error}>Digite o nome da Fazenda!</Text>
           )}
           {nomeExist && (
             <Text style={styles.error}>
-              Uma Fazenda com esse nome já existe.
+              Uma Fazenda com esse nome já existe!
             </Text>
           )}
           <Text style={styles.texto}>Proprietário</Text>
@@ -142,9 +139,7 @@ function CadastroFaz() {
             placeholder="Qual o nome do proprietário?"
           ></TextInput>
           {!isProprValid && (
-            <Text style={styles.error}>
-              O nome do proprietário não pode estar vazio.
-            </Text>
+            <Text style={styles.error}>Digite o nome do proprietário!</Text>
           )}
           <Text style={styles.texto}>Tipo de produção</Text>
           <TextInput
@@ -154,9 +149,7 @@ function CadastroFaz() {
             placeholder="Ex: Pecuária Leiteira"
           ></TextInput>
           {!isTipoValid && (
-            <Text style={styles.error}>
-              O tipo de produção não pode estar vazio.
-            </Text>
+            <Text style={styles.error}>Digite o tipo de produção!</Text>
           )}
           <View style={styles.containerbotao}>
             <TouchableOpacity

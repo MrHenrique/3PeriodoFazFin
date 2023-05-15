@@ -59,6 +59,21 @@ const styles = StyleSheet.create({
     ...Fonts.txtMediumBold,
     color: Colors.white,
   },
+  error: {
+    backgroundColor: "#ff0000",
+    marginBottom: 10,
+    borderRadius: 20,
+    padding: verticalScale(2),
+    alignSelf: "center",
+    color: "yellow"
+  }, campoTextoErro: {
+    ...Fonts.txtMediumBold,
+    ...TextInput.TextInputLargeRounded,
+    backgroundColor: Colors.white,
+    color: Colors.black,
+    borderWidth: 2,
+    borderColor: Colors.red,
+  },
 });
 
 export default styles;
