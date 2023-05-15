@@ -38,7 +38,8 @@ function Faturamento() {
       return 0;
     }
   }
-  const receitas = getReceitas();
+  const receitas = getReceitas().toFixed(2);
+  const formattedReceitas = `R$ ${receitas.replace(".", ",")}`;
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -53,7 +54,7 @@ function Faturamento() {
           }}
         >
           <Text style={styles.texto}>Total de receitas:</Text>
-          <Text style={styles.textoValorPos}>R${receitas.toFixed(2)}</Text>
+          <Text style={styles.textoValorPos}>{formattedReceitas}</Text>
           <View style={styles.lineStyle} />
           <Text style={styles.preGraf}>Clique no gráfico para mais detalhes.</Text>
           <View style={styles.containerChart}>

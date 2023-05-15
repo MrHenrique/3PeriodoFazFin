@@ -100,9 +100,11 @@ export default function SaidaEstoque() {
   }
   function averagePrice() {
     if (newListaEstoque[0].qtdProd > 0) {
-      return (
+      const valor = (
         newListaEstoque[0].valorProd / newListaEstoque[0].qtdProd
       ).toFixed(2);
+      const formattedValor = `R$ ${valor.replace(".", ",")}`;
+      return formattedValor;
     } else {
       return "-";
     }
@@ -139,7 +141,7 @@ export default function SaidaEstoque() {
           <View>
             {newListaEstoque.length > 0 ? (
               <Text>
-                Preço Médio : R$ {averagePrice()} Quantidade em Estoque :{" "}
+                Preço Médio : {averagePrice()} Quantidade em Estoque :{" "}
                 {newListaEstoque[0].qtdProd}
               </Text>
             ) : (

@@ -38,7 +38,9 @@ function DespesasReb() {
       return 0;
     }
   }
-  const despesas = getDespesas();
+
+  const despesas = getDespesas().toFixed(2);
+  const formattedDespesas = `R$ ${despesas.replace(".", ",")}`; 
   const imgbg1 = "../../../../../assets/bg2.jpg";
   const navigation = useNavigation();
   return (
@@ -56,7 +58,7 @@ function DespesasReb() {
               }}
             >
               <Text style={styles.texto}>Total de despesas:</Text>
-              <Text style={styles.textoValorNeg}>R${despesas.toFixed(2)}</Text>
+              <Text style={styles.textoValorNeg}>{formattedDespesas}</Text>
               <View style={styles.lineStyle} />
               <Text style={styles.preGraf}>
                 Clique no gráfico para mais detalhes.

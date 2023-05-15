@@ -57,6 +57,9 @@ function RegistrosLeite() {
   };
 
   const renderItem = ({ item }) => {
+    
+    const result = item.prodL.toFixed(2);
+    const formattedResult = `${result.replace(".", ",")}L`;
     return (
       <TouchableOpacity style={styles.listaDet}>
         <View style={styles.itemContainer}>
@@ -64,8 +67,7 @@ function RegistrosLeite() {
           <Text style={styles.itemText}>
             {item.createdAt.getDate().toString().padStart(2, 0)}/
             {(item.createdAt.getMonth() + 1).toString().padStart(2, 0)}/
-            {item.createdAt.getFullYear().toString()} - {item.prodL.toFixed(2)}{" "}
-            L
+            {item.createdAt.getFullYear().toString()} - {formattedResult}
           </Text>
           <TouchableOpacity style={styles.editButton} onPress={handleEditPress}>
             <AntDesign name="edit" size={24} color="black" />

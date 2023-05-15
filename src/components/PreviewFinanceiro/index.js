@@ -126,9 +126,12 @@ function PreviewFinanceiro({ Titulo, Id }) {
     }
   }
   // variaveis para rendering
-  const total = getTotal(getDespesas(), getReceitas());
-  const despesas = getDespesas();
-  const receitas = getReceitas();
+  const total = getTotal(getDespesas(), getReceitas()).toFixed(2);
+  const formattedTotal = `${total.replace(".", ",")}`;
+  const despesas = getDespesas().toFixed(2);
+  const formattedDespesas = `R$ ${despesas.replace(".", ",")}`;
+  const receitas = getReceitas().toFixed(2);
+  const formattedReceitas = `R$ ${receitas.replace(".", ",")}`;
   function setSize(text, width) {
     var fontSize = width / text.toString().length;
     var maxSize = width / 10;
@@ -159,17 +162,17 @@ function PreviewFinanceiro({ Titulo, Id }) {
           <View
             style={[
               styles.containerSaldoTotal,
-              { borderBottomColor: Color(total) },
+              { borderBottomColor: Color(formattedTotal) },
             ]}
           >
             <Text style={styles.textoRS}>R$ </Text>
             <Text
               style={[
                 styles.textResultsPrice,
-                { fontSize: setSize(total.toFixed(2), 250) },
+                { fontSize: setSize(formattedTotal, 250) },
               ]}
             >
-              {total.toFixed(2)}
+              {formattedTotal}
             </Text>
           </View>
           <View style={styles.textoBannerCat}>
@@ -180,10 +183,10 @@ function PreviewFinanceiro({ Titulo, Id }) {
             <Text
               style={[
                 styles.textoBannerRec,
-                { fontSize: setSize(receitas.toFixed(2), 200) },
+                { fontSize: setSize(formattedReceitas, 200) },
               ]}
             >
-              {receitas.toFixed(2)}
+              {formattedReceitas}
             </Text>
           </View>
           <View style={styles.textoBannerCat}>
@@ -194,11 +197,10 @@ function PreviewFinanceiro({ Titulo, Id }) {
             <Text
               style={[
                 styles.textoBannerDes,
-                { fontSize: setSize(despesas.toFixed(2), 200) },
+                { fontSize: setSize(formattedDespesas, 200) },
               ]}
             >
-              {despesas.toFixed(2)}
-            </Text>
+              {formattedDespesas}</Text>
           </View>
           <Text style={styles.bannerText}>
             {"Clique aqui para mais detalhes"}
