@@ -21,6 +21,6 @@ export const getRealm = async () =>
       EstoqueEntradaSchema,
       AtualEstoqueSchema,
     ],
-    schemaVersion: 1,
+    schemaVersion: 2,
     deleteRealmIfMigrationNeeded: true,
   });
