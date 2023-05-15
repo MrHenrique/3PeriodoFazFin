@@ -25,7 +25,9 @@ function Despesas() {
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
-          {item.nomeProd} - R$
+          {item.createdAt.getDate().toString().padStart(2, 0)}/
+          {(item.createdAt.getMonth() + 1).toString().padStart(2, 0)}/
+          {item.createdAt.getFullYear().toString()} - {item.nomeProd} - R$
           {(item.valorProd * item.qtdProd).toFixed(2)}
         </Text>
       </TouchableOpacity>

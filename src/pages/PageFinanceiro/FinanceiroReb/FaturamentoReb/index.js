@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -7,11 +7,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   SafeAreaView,
-  ScrollView,
   FlatList,
-  TextInput,
-  Platform,
-  StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import BezierChartFaturamentoReb from "../../../../components/Graficos/BezierChartFaturamentoReb";
@@ -24,6 +20,7 @@ function FaturamentoReb() {
     useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
   const { listaFiltrada } = useContext(AuthContext);
+  const [shouldShow, setShouldShow] = useState(false);
 
   function toggleModal() {
     setModalVisible(!isModalVisible);
@@ -83,10 +80,26 @@ function FaturamentoReb() {
               <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
 
               {/*filtros*/}
-              <FiltrosData listaRecebida={listaLeiteReb}/>
+              <TouchableOpacity
+                onPress={() => setShouldShow(!shouldShow)}
+                style={styles.filtrosBotao}
+              >
+                <Text style={styles.tituloBotao}>Filtros</Text>
+              </TouchableOpacity>
+              <View
+                style={[
+                  styles.filtros,
+                  { display: shouldShow ? "flex" : "none" },
+                ]}
+              >
+                <FiltrosData listaRecebida={listaLeiteReb} />
+              </View>
 
               <FlatList
-                style={styles.scroll}
+                style={[
+                  styles.lista,
+                  { marginTop: shouldShow ? verticalScale(180) : 0 },
+                ]}
                 data={listaFiltrada}
                 renderItem={renderItem}
                 keyExtractor={(item) => item._id}
@@ -123,6 +136,7 @@ const styles = StyleSheet.create({
     top: verticalScale(0),
     alignSelf: "center",
     width: scale(330),
+    height: scale(480),
     borderRadius: 20,
   },
   modalScroll: {
@@ -223,6 +237,27 @@ const styles = StyleSheet.create({
   },
   scroll: {
     height: verticalScale(380),
+  },
+  filtrosBotao: {
+    backgroundColor: "rgba(15, 109, 0, 0.9)",
+    borderRadius: 10,
+    padding: 10,
+    margin: 10,
+  },
+  filtros: {
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    borderRadius: 10,
+    padding: 10,
+    margin: 10,
+    position: "absolute",
+    top: verticalScale(80),
+    left: 0,
+    right: 0,
+  },
+  lista: {
+    flex: 1,
+    marginTop: 10,
+    marginBottom: 12,
   },
 });
 export default FaturamentoReb;

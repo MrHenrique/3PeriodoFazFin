@@ -103,10 +103,12 @@ function EstoqueGeral() {
     }
   };
   const EstoqueValorTotal = () => {
-    let ValorTotal = listaEstoque.reduce((total, produto) => total + produto.valorProd, 0);
-const formattedValor = `R$ ${ValorTotal.toFixed(2).replace('.', ',')}`;
-return formattedValor;
-
+    let ValorTotal = listaEstoque.reduce(
+      (total, produto) => total + produto.valorProd,
+      0
+    );
+    const formattedValor = `R$ ${ValorTotal.toFixed(2).replace(".", ",")}`;
+    return formattedValor;
   };
   function formatMediaPreco(item) {
     const valor = (item.valorProd * item.qtdProd).toFixed(2);
@@ -235,7 +237,11 @@ return formattedValor;
                 <Text style={styles.fontsubtitulo}>
                   Data da ultima compra :
                 </Text>
-                <Text style={styles.fontcontainerlistitem}>22/05/2004</Text>
+                <Text style={styles.fontcontainerlistitem}>
+                  {item.createdAt.getDate().toString().padStart(2, 0)}/
+                  {(item.createdAt.getMonth() + 1).toString().padStart(2, 0)}/
+                  {item.createdAt.getFullYear().toString()}
+                </Text>
               </View>
             </View>
             <View style={styles.containerlist}>
@@ -282,9 +288,7 @@ return formattedValor;
             <Text style={styles.font}>
               {shouldShow ? "Valor Produto" : "Valor produtos em estoque"}
             </Text>
-            <Text style={styles.fontvalortotal}>
-              {EstoqueValorTotal()}
-            </Text>
+            <Text style={styles.fontvalortotal}>{EstoqueValorTotal()}</Text>
           </View>
         </View>
 
