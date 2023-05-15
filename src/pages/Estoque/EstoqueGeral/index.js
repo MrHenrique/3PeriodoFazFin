@@ -55,13 +55,16 @@ function EstoqueGeral() {
       });
     }
   }, [realm]);
+
   //renderiza flat list com transações de entrada
   const renderItemEntrada = ({ item }) => {
+    const valor = (item.valorProd * item.qtdProd).toFixed(2);
+    const formattedValor = `R$ ${valor.replace(".", ",")}`;
     return (
       <ScrollView>
         <TouchableOpacity>
           <Text style={styles.font}>
-            {item.nomeProd} - R$ {(item.valorProd * item.qtdProd).toFixed(2)}
+            {item.nomeProd} - {formattedValor}
           </Text>
         </TouchableOpacity>
       </ScrollView>
@@ -100,13 +103,16 @@ function EstoqueGeral() {
     }
   };
   const EstoqueValorTotal = () => {
-    let ValorTotal = listaEstoque.reduce(
-      (total, produto) => total + produto.valorProd,
-      0
-    );
-    return ValorTotal;
-  };
+    let ValorTotal = listaEstoque.reduce((total, produto) => total + produto.valorProd, 0);
+const formattedValor = `R$ ${ValorTotal.toFixed(2).replace('.', ',')}`;
+return formattedValor;
 
+  };
+  function formatMediaPreco(item) {
+    const valor = (item.valorProd * item.qtdProd).toFixed(2);
+    const formattedValor = `R$ ${valor.replace(".", ",")}`;
+    return formattedValor;
+  }
   const CategImg = (categoriaProd) => {
     if (categoriaProd == "Alimentos") {
       return require("../../../../assets/wheat-sack.png");
@@ -119,25 +125,28 @@ function EstoqueGeral() {
     const imgCateg = CategImg(categoriaProd);
     function tipoRelatorio(categoriaProd) {
       if (categoriaProd == "Alimentos") {
+        const valor = ((item.pesoProd / item.qtdProd) * item.qtdProd).toFixed(
+          2
+        );
+        const formattedValor = `${valor.replace(".", ",")}kg`;
         return (
           <View style={styles.containerlist}>
             <View style={styles.ListItem}>
               <Text style={styles.fontsubtitulo}>Peso em estoque :</Text>
-              <Text style={styles.fontcontainerlistitem}>
-                {" "}
-                {(item.pesoProd / item.qtdProd) * item.qtdProd} kg
-              </Text>
+              <Text style={styles.fontcontainerlistitem}>{formattedValor}</Text>
             </View>
           </View>
         );
       } else {
+        const valor = ((item.volumeProd / item.qtdProd) * item.qtdProd).toFixed(
+          2
+        );
+        const formattedValor = `${valor.replace(".", ",")}ml`;
         return (
           <View style={styles.containerlist}>
             <View style={styles.ListItem}>
               <Text style={styles.fontsubtitulo}>Volume em estoque :</Text>
-              <Text style={styles.fontcontainerlistitem}>
-                {(item.volumeProd / item.qtdProd) * item.qtdProd} ml
-              </Text>
+              <Text style={styles.fontcontainerlistitem}>{formattedValor}</Text>
             </View>
           </View>
         );
@@ -213,8 +222,7 @@ function EstoqueGeral() {
                       Média de preço por item:
                     </Text>
                     <Text style={styles.fontcontainerlistitem}>
-                      R$
-                      {(item.valorProd / item.qtdProd).toFixed(2)}
+                      {formatMediaPreco(item)}
                     </Text>
                   </View>
                 </View>
@@ -275,7 +283,7 @@ function EstoqueGeral() {
               {shouldShow ? "Valor Produto" : "Valor produtos em estoque"}
             </Text>
             <Text style={styles.fontvalortotal}>
-              R$ {EstoqueValorTotal().toFixed(2)}
+              {EstoqueValorTotal()}
             </Text>
           </View>
         </View>
