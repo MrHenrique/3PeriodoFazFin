@@ -10,30 +10,99 @@ import styles from "../styles";
 function EntradaEstoque() {
   const realm = useMainContext();
   const navigation = useNavigation();
-  //Referencias
-  const inputVolumePeso = useRef(null);
-  const inputObservacao = useRef(null);
-  const inputQuantidade = useRef(null);
   //estados
   const [listaEstoqueFiltered, setListaEstoqueFiltered] = useState([]);
   const [nomeProd, setNomeProd] = useState("");
-  const [valorProdI, setValorProd] = useState("");
-  const [volumeProdI, setVolumeProd] = useState("");
-  const [pesoProdI, setPesoProd] = useState("");
+  const [valorProd, setValorProd] = useState("");
+  const [volumeProd, setVolumeProd] = useState("");
+  const [pesoProd, setPesoProd] = useState("");
   const [obserProd, setObserProd] = useState("");
-  const [qtdProdI, setQtdProd] = useState(0);
-  const { tipoProd } = useContext(AuthContext);
-  const { fazID } = useContext(AuthContext);
+  const [qtdProd, setQtdProd] = useState("1");
+  const [isNomeProdValid, setIsNomeProdValid] = useState(true);
+  const [isValorProdValid, setIsValorProdValid] = useState(true);
+  const [isVolumeProdValid, setIsVolumeProdValid] = useState(true);
+  const [isPesoProdValid, setIsPesoProdValid] = useState(true);
+  const [isQtdProdValid, setIsQtdProdValid] = useState(true);
+  const { fazID, tipoProd } = useContext(AuthContext);
+
+  function handleNomeProdChange(text) {
+    const isValid = text.trim().length > 0;
+    setIsNomeProdValid(isValid);
+    setNomeProd(text);
+  }
+
+  function handleValorProdChange(text) {
+    const cleanedText = text.replace(",", ".");
+    const parsedValue = parseFloat(cleanedText);
+
+    const isValid = !isNaN(parsedValue) && parsedValue > 0;
+    setIsValorProdValid(isValid);
+    setValorProd(parsedValue);
+  }
+
+  function handleVolumeProdChange(text) {
+    const cleanedText = text.replace(",", ".");
+    const parsedValue = parseFloat(cleanedText);
+
+    const isValid = !isNaN(parsedValue) && parsedValue > 0;
+    setIsVolumeProdValid(isValid);
+    setVolumeProd(parsedValue);
+  }
+
+  function handlePesoProdChange(text) {
+    const cleanedText = text.replace(",", ".");
+    const parsedValue = parseFloat(cleanedText);
+
+    const isValid = !isNaN(parsedValue) && parsedValue > 0;
+    setIsPesoProdValid(isValid);
+    setPesoProd(parsedValue);
+  }
+
+  function handleQtdProdChange(text) {
+    const parsedValue = parseInt(text, 10);
+    const isValid =
+      text.trim().length > 0 &&
+      Number.isInteger(parsedValue) &&
+      parsedValue > 0 &&
+      parsedValue.toString() === text.trim();
+    setIsQtdProdValid(isValid);
+    setQtdProd(parsedValue);
+  }
+  function validCheck() {
+    if (nomeProd.length === 0) {
+      setIsNomeProdValid(false);
+      if (valorProd.length === 0) {
+        setIsValorProdValid(false);
+      }
+      if (volumeProd.length === 0 && tipoProd === 1) {
+        setIsVolumeProdValid(false);
+      }
+      if (pesoProd.length === 0 && tipoProd === 2) {
+        setIsPesoProdValid(false);
+      }
+      if (qtdProd <= 0) {
+        setIsQtdProdValid(false);
+      }
+    } else if (
+      isNomeProdValid &&
+      isValorProdValid &&
+      isVolumeProdValid &&
+      isPesoProdValid &&
+      isQtdProdValid
+    ) {
+      handleAddEstoque();
+    } else {
+      Alert.alert("Preencha todos os campos e tente novamente.");
+    }
+  }
+
   //Gravar dados em Estoque principal
   async function handleAddEstoque() {
     //checar se produto já existe
     if (listaEstoqueFiltered.length === 0) {
       //se não existe checar se cadastro é relacionado a tipo 1 ou 2 (farmácia/alimentos)
       if (tipoProd == 1) {
-        let valorProd = Number(valorProdI);
-        let volumeProd = Number(volumeProdI);
         let pesoProd = -1;
-        let qtdProd = Number(qtdProdI);
         if (realm) {
           try {
             realm.write(() => {
@@ -69,10 +138,7 @@ function EntradaEstoque() {
           }
         }
       } else if (tipoProd == 2) {
-        let valorProd = Number(valorProdI);
-        let pesoProd = Number(pesoProdI);
         let volumeProd = -1;
-        let qtdProd = Number(qtdProdI);
         if (realm) {
           try {
             realm.write(() => {
@@ -112,9 +178,6 @@ function EntradaEstoque() {
     //se produto existe
     else {
       if (tipoProd == 1 && listaEstoqueFiltered[0].volumeProd >= 0) {
-        let valorProd = Number(valorProdI);
-        let volumeProd = Number(volumeProdI);
-        let qtdProd = Number(qtdProdI);
         let pesoProd = -1;
         let valorProdF = valorProd + listaEstoqueFiltered[0].valorProd;
         let volumeProdF = volumeProd + listaEstoqueFiltered[0].volumeProd;
@@ -153,9 +216,6 @@ function EntradaEstoque() {
           }
         }
       } else if (tipoProd == 2 && listaEstoqueFiltered[0].pesoProd >= 0) {
-        let valorProd = Number(valorProdI);
-        let pesoProd = Number(pesoProdI);
-        let qtdProd = Number(qtdProdI);
         let volumeProd = -1;
         let valorProdF = valorProd + listaEstoqueFiltered[0].valorProd;
         let pesoProdF = pesoProd + listaEstoqueFiltered[0].pesoProd;
@@ -208,17 +268,20 @@ function EntradaEstoque() {
     setVolumeProd("");
     setPesoProd("");
     setObserProd("");
-    setQtdProd(0);
+    setQtdProd("1");
   };
   //botões de + e -
   //mais
   const maisButton = () => {
-    setQtdProd((parseInt(qtdProdI) + 1).toString());
+    setQtdProd((parseInt(qtdProd) + 1).toString());
+    if(qtdProd > 0){
+      setIsQtdProdValid(true);
+    }
   };
   //menos
   const menosButton = () => {
-    if (qtdProdI >= 1) {
-      setQtdProd((parseInt(qtdProdI) - 1).toString());
+    if (qtdProd >= 2) {
+      setQtdProd((parseInt(qtdProd) - 1).toString());
     }
   };
   //Buscar no banco filtrando por nome
@@ -247,17 +310,18 @@ function EntradaEstoque() {
         <View>
           <Text style={styles.font}>Volume do produto:</Text>
           <TextInput
-            ref={inputVolumePeso}
             style={styles.textInput}
-            value={volumeProdI}
-            onChangeText={setVolumeProd}
+            value={volumeProd}
+            onChangeText={handleVolumeProdChange}
             placeholder="200"
             keyboardType="decimal-pad"
             inputMode="decimal"
-            onSubmitEditing={() => {
-              inputObservacao.current.focus();
-            }}
           />
+          {!isVolumeProdValid && (
+            <Text style={styles.error}>
+              Valor digitado inválido, tente novamente.
+            </Text>
+          )}
         </View>
       );
     }
@@ -265,17 +329,18 @@ function EntradaEstoque() {
       <View>
         <Text style={styles.font}>Peso do produto:</Text>
         <TextInput
-          ref={inputVolumePeso}
           style={styles.textInput}
-          value={pesoProdI}
-          onChangeText={setPesoProd}
+          value={pesoProd}
+          onChangeText={handlePesoProdChange}
           placeholder="60"
           keyboardType="decimal-pad"
           inputMode="decimal"
-          onSubmitEditing={() => {
-            inputObservacao.current.focus();
-          }}
         />
+        {!isPesoProdValid && (
+          <Text style={styles.error}>
+            Valor digitado inválido, tente novamente.
+          </Text>
+        )}
       </View>
     );
   };
@@ -290,12 +355,15 @@ function EntradaEstoque() {
           <TextInput
             style={styles.textInput}
             value={nomeProd}
-            onChangeText={setNomeProd}
+            onChangeText={handleNomeProdChange}
             placeholder="Prata"
             keyboardType="default"
             inputMode="text"
           />
         </View>
+        {!isNomeProdValid && (
+          <Text style={styles.error}>Digite o nome do produto!</Text>
+        )}
         <View style={styles.containerInput}>
           <DropdownComponent />
         </View>
@@ -303,16 +371,18 @@ function EntradaEstoque() {
           <Text style={styles.font}>Preço da compra:</Text>
           <TextInput
             style={styles.textInput}
-            value={valorProdI}
-            onChangeText={setValorProd}
+            value={valorProd}
+            onChangeText={handleValorProdChange}
             placeholder="50,00"
             keyboardType="decimal-pad"
             inputMode="decimal"
-            onSubmitEditing={() => {
-              inputQuantidade.current.focus();
-            }}
           />
         </View>
+        {!isValorProdValid && (
+          <Text style={styles.error}>
+            Valor digitado inválido, tente novamente.
+          </Text>
+        )}
         <View style={styles.containerInput}>
           <Text style={styles.font}>Quantidade de produtos comprados:</Text>
           <View style={styles.containerMaisMenos}>
@@ -320,25 +390,25 @@ function EntradaEstoque() {
               <Text style={styles.buttonText}>-</Text>
             </TouchableOpacity>
             <TextInput
-              ref={inputQuantidade}
               style={styles.textInputQtd}
-              value={qtdProdI}
-              onChangeText={(valor) => setQtdProd(valor)}
+              value={qtdProd}
+              onChangeText={(valor) => handleQtdProdChange(valor)}
               keyboardType="numeric"
-              onSubmitEditing={() => {
-                inputVolumePeso.current.focus();
-              }}
             />
             <TouchableOpacity style={styles.button} onPress={maisButton}>
               <Text style={styles.buttonText}>+</Text>
             </TouchableOpacity>
           </View>
         </View>
+        {!isQtdProdValid && (
+          <Text style={styles.error}>
+            Valor digitado inválido, tente novamente.
+          </Text>
+        )}
         <View style={styles.containerInput}>{TextInputTipo()}</View>
         <View style={styles.containerInput}>
           <Text style={styles.font}>Observações:</Text>
           <TextInput
-            ref={inputObservacao}
             style={styles.textInput}
             value={obserProd}
             onChangeText={setObserProd}
@@ -348,7 +418,7 @@ function EntradaEstoque() {
           />
         </View>
         <View style={styles.containerButao}>
-          <TouchableOpacity style={styles.botao} onPress={handleAddEstoque}>
+          <TouchableOpacity style={styles.botao} onPress={validCheck}>
             <Text style={styles.font}>{"Cadastrar"}</Text>
           </TouchableOpacity>
 
