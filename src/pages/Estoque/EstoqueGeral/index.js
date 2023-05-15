@@ -111,7 +111,7 @@ function EstoqueGeral() {
     return formattedValor;
   };
   function formatMediaPreco(item) {
-    const valor = (item.valorProd * item.qtdProd).toFixed(2);
+    const valor = (item.valorProd / item.qtdProd).toFixed(2);
     const formattedValor = `R$ ${valor.replace(".", ",")}`;
     return formattedValor;
   }

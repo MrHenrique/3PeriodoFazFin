@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
     margin: scale(15),
     borderRadius: 10,
     backgroundColor: Colors.darkgreenTransparent,
-
   },
   imgbg: {
     flex: 1,
@@ -65,8 +64,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: verticalScale(2),
     alignSelf: "center",
-    color: "yellow"
-  }, campoTextoErro: {
+    color: "yellow",
+  },
+  campoTextoErro: {
     ...Fonts.txtMediumBold,
     ...TextInput.TextInputLargeRounded,
     backgroundColor: Colors.white,

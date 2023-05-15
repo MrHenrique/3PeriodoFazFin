@@ -103,9 +103,10 @@ function CadastroReb() {
     setQtdAni(text);
   }
   function validCheck() {
-    if (nomeReb.length === 0) {
-      setIsNomeRebValid(false);
-
+    if (nomeReb.length === 0 || listaReb.length !== 0 || qtdAni.length === 0) {
+      if (nomeReb.length === 0) {
+        setIsNomeRebValid(false);
+      }
       if (listaReb.length !== 0) {
         setRebExist(true);
       }
@@ -136,7 +137,9 @@ function CadastroReb() {
           <View style={styles.viewtext}>
             <Text style={styles.texto}>Nome do rebanho:</Text>
             <TextInput
-              style={styles.campoTexto}
+              style={
+                !isNomeRebValid ? styles.campoTextoErro : styles.campoTexto
+              }
               onChangeText={handleNomeRebChange}
               value={nomeReb}
               placeholder="Ex: Vacas solteiras"
@@ -151,7 +154,7 @@ function CadastroReb() {
             )}
             <Text style={styles.texto}>Quantidade de animais:</Text>
             <TextInput
-              style={styles.campoTexto}
+              style={!isQtdAniValid ? styles.campoTextoErro : styles.campoTexto}
               onChangeText={handleQtdAniChange}
               value={qtdAni}
               keyboardType="number-pad"

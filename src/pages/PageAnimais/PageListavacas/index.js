@@ -161,6 +161,11 @@ function PageListavacas({ navigation }) {
     const formattedResult = `R$ ${result.replace(".", ",")}`;
     return formattedResult;
   }
+  function getResultNumberColor(item) {
+    const result = (getResultL(item) - gastoReb).toFixed(2);
+    return result;
+
+  }
 
   return (
     <View style={styles.container}>
@@ -360,7 +365,7 @@ function PageListavacas({ navigation }) {
                   </Text>
                   <Text
                     style={{
-                      color: getResultNumber(item) >= 0 ? "#0FFF50" : "#FF3131",
+                      color: getResultNumberColor(item) >= 0 ? "#0FFF50" : "#FF3131",
                       fontWeight: "bold",
                       fontSize: scale(15),
                     }}

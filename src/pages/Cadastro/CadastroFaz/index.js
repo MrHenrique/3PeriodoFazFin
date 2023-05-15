@@ -81,9 +81,15 @@ function CadastroFaz() {
     setTipoprod(text);
   }
   function validCheck() {
-    if (nomefaz.length === 0) {
-      setIsNomefazValid(false);
-
+    if (
+      nomefaz.length === 0 ||
+      listaFaz.lenght != 0 ||
+      proprietario.length === 0 ||
+      tipoprod.length === 0
+    ) {
+      if (nomefaz.length === 0) {
+        setIsNomefazValid(false);
+      }
       if (listaFaz.length != 0) {
         setNomeExist(true);
       }
@@ -93,8 +99,7 @@ function CadastroFaz() {
       if (tipoprod.length === 0) {
         setIsTipoValid(false);
       }
-    }
-    else if (isNomefazValid && isProprValid && isTipoValid && !nomeExist) {
+    } else if (isNomefazValid && isProprValid && isTipoValid && !nomeExist) {
       handleAddFarm();
     } else if (!isNomefazValid || !isProprValid || !isTipoValid || nomeExist) {
       Alert.alert("Preencha todos os campos e tente novamente.");
@@ -118,7 +123,7 @@ function CadastroFaz() {
             Nome da fazenda
           </Text>
           <TextInput
-            style={styles.campoTexto}
+            style={!isNomefazValid ? styles.campoTextoError : styles.campoTexto}
             onChangeText={handleNomefazChange}
             value={nomefaz}
             placeholder="Qual o nome da sua Fazenda?"
@@ -133,7 +138,7 @@ function CadastroFaz() {
           )}
           <Text style={styles.texto}>Proprietário</Text>
           <TextInput
-            style={styles.campoTexto}
+            style={!isProprValid ? styles.campoTextoError : styles.campoTexto}
             onChangeText={handleProprChange}
             value={proprietario}
             placeholder="Qual o nome do proprietário?"
@@ -143,7 +148,7 @@ function CadastroFaz() {
           )}
           <Text style={styles.texto}>Tipo de produção</Text>
           <TextInput
-            style={styles.campoTexto}
+            style={!isTipoValid ? styles.campoTextoError : styles.campoTexto}
             onChangeText={handleTipoChange}
             value={tipoprod}
             placeholder="Ex: Pecuária Leiteira"

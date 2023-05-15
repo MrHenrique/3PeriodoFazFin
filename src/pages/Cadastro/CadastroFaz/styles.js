@@ -31,6 +31,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     color: Colors.black,
   },
+  campoTextoError: {
+    ...Fonts.txtMediumBold,
+    ...TextInput.TextInputLargeRounded,
+    backgroundColor: Colors.white,
+    color: Colors.red,
+    fontWeight: "bold",
+    fontSize: 15,
+    borderWidth: 2,
+    borderColor: Colors.red,
+  },
   botaopress: {
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.btngreen,
@@ -56,13 +66,13 @@ const styles = StyleSheet.create({
     padding: verticalScale(10),
   },
   error: {
-    backgroundColor: "#ff0000",
-    marginBottom: 10,
+    backgroundColor: Colors.red,
     borderRadius: 20,
-    padding: verticalScale(2),
+    paddingVertical: verticalScale(2),
     alignSelf: "center",
-    color: "yellow"
-  }, campoTextoErro: {
+    color: Colors.yellow,
+  },
+  campoTextoErro: {
     ...Fonts.txtMediumBold,
     ...TextInput.TextInputLargeRounded,
     backgroundColor: Colors.white,
