@@ -376,25 +376,26 @@ function EntradaEstoque() {
   // RETORNA O ESTILO PARA O BOTAO, decidindo qual estilo, dependendo se o teclado esta ativo ou nao
   function StyleFuncKeyboard() {
     if (keyboardStatus) {
-      console.log("Ativado");
       return styles.containerButaoKeyboardOn;
     } else {
-      console.log("Desativado");
       return styles.containerButao;
     }
   }
   function StyleScrollViewContainer() {
     if (keyboardStatus) {
-      return styles.ContainerScrollStyle;
+      return [styles.ContainerScrollStyle, { paddingBottom: 15 }];
     } else {
-      return [styles.ContainerScrollStyle, {flex: 1,}];
+      return [styles.ContainerScrollStyle, { flex: 1 }];
     }
   }
   return (
     <KeyboardAvoidingView behavior="undefined" style={styles.containerkeyboard}>
       <View style={styles.container}>
         <View style={styles.containergeral}>
-          <ScrollView style={styles.scrollcontainer} contentContainerStyle={StyleScrollViewContainer()}>
+          <ScrollView
+            style={styles.scrollcontainer}
+            contentContainerStyle={StyleScrollViewContainer()}
+          >
             <View style={styles.containerInput}>
               <Text style={styles.font}>Nome do produto:</Text>
               <TextInput
