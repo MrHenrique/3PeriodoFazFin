@@ -16,11 +16,19 @@ const styles = StyleSheet.create({
     margin: scale(15),
     backgroundColor: Colors.green,
   },
+  containerkeyboard: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: Colors.red,
+  },
   containerInput: {
-    flex: 1.2,
+    flex: 1,
     justifyContent: "center",
     position: "relative",
     // backgroundColor: Colors.blue,
+  },
+  ContainerScrollStyle: {
+    marginVertical: verticalScale(10),
   },
   containerInputTitulo: {
     flex: 0.45,
@@ -107,9 +115,17 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   containerButao: {
-    flex: 1.5,
+    flex: 0.2,
     flexDirection: "column",
     justifyContent: "flex-end",
+    minHeight: scale(10),
+  },
+  containerButaoKeyboardOn: {
+    flex: 0.2,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    paddingTop: verticalScale(10),
+    minHeight: scale(60),
   },
   error: {
     backgroundColor: Colors.red,
@@ -232,6 +248,10 @@ const styles = StyleSheet.create({
   },
   containerImg: {
     padding: scale(20),
+  },
+  scrollcontainer: {
+    flex: 1,
+    // backgroundColor: Colors.black,
   },
 });
 // estilo tab

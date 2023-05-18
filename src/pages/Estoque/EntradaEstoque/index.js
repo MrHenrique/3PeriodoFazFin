@@ -1,5 +1,14 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import React, { useState, useContext, useEffect } from "react";
+import {
+  Keyboard,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import DropdownComponent from "../../../components/Dropdown/TipoProd";
 import uuid from "react-native-uuid";
@@ -24,6 +33,8 @@ function EntradaEstoque() {
   const [isPesoProdValid, setIsPesoProdValid] = useState(true);
   const [isQtdProdValid, setIsQtdProdValid] = useState(true);
   const { fazID, tipoProd } = useContext(AuthContext);
+  //status teclado
+  const [keyboardStatus, setkeyboardStatus] = useState(false);
 
   function handleNomeProdChange(text) {
     const isValid = text.trim().length > 0;
@@ -105,7 +116,6 @@ function EntradaEstoque() {
     if (listaEstoqueFiltered.length === 0) {
       //se não existe checar se cadastro é relacionado a tipo 1 ou 2 (farmácia/alimentos)
       if (tipoProd == 1) {
-        
         if (realm) {
           try {
             realm.write(() => {
@@ -114,8 +124,8 @@ function EntradaEstoque() {
                 nomeProd: nomeProd,
                 _id: uuid.v4(),
                 valorProd,
-                qtdProd:qtdProdN,
-                pesoProd:pesoProdNull,
+                qtdProd: qtdProdN,
+                pesoProd: pesoProdNull,
                 volumeProd,
                 obserProd,
                 createdAt: new Date(),
@@ -124,8 +134,8 @@ function EntradaEstoque() {
                 nomeProd: nomeProd,
                 _id: uuid.v4(),
                 valorProd,
-                qtdProd:qtdProdN,
-                pesoProd:pesoProdNull,
+                qtdProd: qtdProdN,
+                pesoProd: pesoProdNull,
                 volumeProd,
                 obserProd,
                 createdAt: new Date(),
@@ -149,9 +159,9 @@ function EntradaEstoque() {
                 nomeProd: nomeProd,
                 _id: uuid.v4(),
                 valorProd,
-                qtdProd:qtdProdN,
+                qtdProd: qtdProdN,
                 pesoProd,
-                volumeProd:volumeProdNull,
+                volumeProd: volumeProdNull,
                 obserProd,
                 createdAt: new Date(),
               });
@@ -159,9 +169,9 @@ function EntradaEstoque() {
                 nomeProd: nomeProd,
                 _id: uuid.v4(),
                 valorProd,
-                qtdProd:qtdProdN,
+                qtdProd: qtdProdN,
                 pesoProd,
-                volumeProd:volumeProdNull,
+                volumeProd: volumeProdNull,
                 obserProd,
                 createdAt: new Date(),
               });
@@ -201,8 +211,8 @@ function EntradaEstoque() {
                 nomeProd: nomeProd,
                 _id: uuid.v4(),
                 valorProd,
-                qtdProd:qtdProdN,
-                pesoProd:pesoProdNull,
+                qtdProd: qtdProdN,
+                pesoProd: pesoProdNull,
                 volumeProd,
                 obserProd,
                 createdAt: new Date(),
@@ -238,7 +248,7 @@ function EntradaEstoque() {
                 nomeProd: nomeProd,
                 _id: uuid.v4(),
                 valorProd,
-                qtdProd:qtdProdN,
+                qtdProd: qtdProdN,
                 pesoProd,
                 volumeProd: volumeProdNull,
                 obserProd,
@@ -350,100 +360,140 @@ function EntradaEstoque() {
       </View>
     );
   };
+  // LISTENER DO TECLADO(ATIVADO OU NAO)
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setkeyboardStatus(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setkeyboardStatus(false);
+    });
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+  // RETORNA O ESTILO PARA O BOTAO, decidindo qual estilo, dependendo se o teclado esta ativo ou nao
+  function StyleFuncKeyboard() {
+    if (keyboardStatus) {
+      console.log("Ativado");
+      return styles.containerButaoKeyboardOn;
+    } else {
+      console.log("Desativado");
+      return styles.containerButao;
+    }
+  }
+  function StyleScrollViewContainer() {
+    if (keyboardStatus) {
+      return styles.ContainerScrollStyle;
+    } else {
+      return [styles.ContainerScrollStyle, {flex: 1,}];
+    }
+  }
   return (
-    <View style={styles.container}>
-      <View style={styles.containergeral}>
-        <View style={styles.containerInput}>
-          <Text style={styles.font}>Nome do produto:</Text>
-          <TextInput
-            style={!isNomeProdValid ? styles.textInputError : styles.textInput}
-            value={nomeProd}
-            onChangeText={handleNomeProdChange}
-            placeholder="Prata"
-            keyboardType="default"
-            inputMode="text"
-          />
-          <View>
-            {!isNomeProdValid && (
-              <Text style={[styles.error]}>Digite o nome do produto!</Text>
-            )}
-          </View>
-        </View>
+    <KeyboardAvoidingView behavior="undefined" style={styles.containerkeyboard}>
+      <View style={styles.container}>
+        <View style={styles.containergeral}>
+          <ScrollView style={styles.scrollcontainer} contentContainerStyle={StyleScrollViewContainer()}>
+            <View style={styles.containerInput}>
+              <Text style={styles.font}>Nome do produto:</Text>
+              <TextInput
+                style={
+                  !isNomeProdValid ? styles.textInputError : styles.textInput
+                }
+                value={nomeProd}
+                onChangeText={handleNomeProdChange}
+                placeholder="Prata"
+                keyboardType="default"
+                inputMode="text"
+              />
+              <View>
+                {!isNomeProdValid && (
+                  <Text style={[styles.error]}>Digite o nome do produto!</Text>
+                )}
+              </View>
+            </View>
 
-        <View style={styles.containerInput}>
-          <DropdownComponent />
-        </View>
-        <View style={styles.containerInput}>
-          <Text style={styles.font}>Preço da compra:</Text>
-          <TextInput
-            style={!isValorProdValid ? styles.textInputError : styles.textInput}
-            value={valorProd}
-            onChangeText={handleValorProdChange}
-            placeholder="50,00"
-            keyboardType="decimal-pad"
-            inputMode="decimal"
-          />
-          <View>
-            {!isValorProdValid && (
-              <Text style={styles.error}>
-                Valor digitado inválido, tente novamente.
-              </Text>
-            )}
-          </View>
-        </View>
+            <View style={styles.containerInput}>
+              <DropdownComponent />
+            </View>
+            <View style={styles.containerInput}>
+              <Text style={styles.font}>Preço da compra:</Text>
+              <TextInput
+                style={
+                  !isValorProdValid ? styles.textInputError : styles.textInput
+                }
+                value={valorProd}
+                onChangeText={handleValorProdChange}
+                placeholder="50,00"
+                keyboardType="decimal-pad"
+                inputMode="decimal"
+              />
+              <View>
+                {!isValorProdValid && (
+                  <Text style={styles.error}>
+                    Valor digitado inválido, tente novamente.
+                  </Text>
+                )}
+              </View>
+            </View>
 
-        <View style={styles.containerInput}>
-          <Text style={styles.font}>Quantidade de produtos comprados:</Text>
-          <View style={styles.containerMaisMenos}>
-            <TouchableOpacity style={styles.button} onPress={menosButton}>
-              <Text style={styles.buttonText}>-</Text>
+            <View style={styles.containerInput}>
+              <Text style={styles.font}>Quantidade de produtos comprados:</Text>
+              <View style={styles.containerMaisMenos}>
+                <TouchableOpacity style={styles.button} onPress={menosButton}>
+                  <Text style={styles.buttonText}>-</Text>
+                </TouchableOpacity>
+                <TextInput
+                  style={
+                    !isQtdProdValid
+                      ? styles.textInputQtdError
+                      : styles.textInputQtd
+                  }
+                  value={qtdProd}
+                  onChangeText={(valor) => handleQtdProdChange(valor)}
+                  keyboardType="numeric"
+                />
+                <TouchableOpacity style={styles.button} onPress={maisButton}>
+                  <Text style={styles.buttonText}>+</Text>
+                </TouchableOpacity>
+              </View>
+              <View>
+                {!isQtdProdValid && (
+                  <Text style={styles.error}>
+                    Valor digitado inválido, tente novamente.
+                  </Text>
+                )}
+              </View>
+            </View>
+            <View style={styles.containerInput}>{TextInputTipo()}</View>
+            <View style={styles.containerInput}>
+              <Text style={styles.font}>Observações:</Text>
+              <TextInput
+                style={styles.textInput}
+                value={obserProd}
+                onChangeText={setObserProd}
+                placeholder="Produto comprado em ..."
+                keyboardType="default"
+                inputMode="text"
+              />
+            </View>
+          </ScrollView>
+          <View style={StyleFuncKeyboard()}>
+            <TouchableOpacity style={styles.botao} onPress={validCheck}>
+              <Text style={styles.font}>{"Cadastrar"}</Text>
             </TouchableOpacity>
-            <TextInput
-              style={
-                !isQtdProdValid ? styles.textInputQtdError : styles.textInputQtd
-              }
-              value={qtdProd}
-              onChangeText={(valor) => handleQtdProdChange(valor)}
-              keyboardType="numeric"
-            />
-            <TouchableOpacity style={styles.button} onPress={maisButton}>
-              <Text style={styles.buttonText}>+</Text>
+
+            <TouchableOpacity
+              style={styles.botao}
+              onPress={() => navigation.navigate("Home")}
+            >
+              <Text style={styles.font}>{"Voltar"}</Text>
             </TouchableOpacity>
           </View>
-          <View>
-            {!isQtdProdValid && (
-              <Text style={styles.error}>
-                Valor digitado inválido, tente novamente.
-              </Text>
-            )}
-          </View>
-        </View>
-        <View style={styles.containerInput}>{TextInputTipo()}</View>
-        <View style={styles.containerInput}>
-          <Text style={styles.font}>Observações:</Text>
-          <TextInput
-            style={styles.textInput}
-            value={obserProd}
-            onChangeText={setObserProd}
-            placeholder="Produto comprado em ..."
-            keyboardType="default"
-            inputMode="text"
-          />
-        </View>
-        <View style={styles.containerButao}>
-          <TouchableOpacity style={styles.botao} onPress={validCheck}>
-            <Text style={styles.font}>{"Cadastrar"}</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.botao}
-            onPress={() => navigation.navigate("Home")}
-          >
-            <Text style={styles.font}>{"Voltar"}</Text>
-          </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
