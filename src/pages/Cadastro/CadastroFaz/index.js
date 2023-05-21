@@ -83,7 +83,7 @@ function CadastroFaz() {
   function validCheck() {
     if (
       nomefaz.length === 0 ||
-      listaFaz.lenght != 0 ||
+      listaFaz.length != 0 ||
       proprietario.length === 0 ||
       tipoprod.length === 0
     ) {
