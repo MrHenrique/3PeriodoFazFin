@@ -98,7 +98,7 @@ function RegistrosLeite() {
       <FlatList
         style={[
           styles.lista,
-          { marginTop: shouldShow ? verticalScale(90) : 0 },
+          { marginTop: shouldShow ? verticalScale(180) : 0 },
         ]}
         data={listaFiltrada}
         renderItem={renderItem}
@@ -120,14 +120,14 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   filtros: {
-    alignSelf: "center",
-    width: scale(300),
     backgroundColor: "rgba(255, 255, 255, 0.9)",
-    borderRadius: 20,
+    borderRadius: 10,
     padding: 10,
     margin: 10,
     position: "absolute",
     top: verticalScale(65),
+    left: 0,
+    right: 0,
   },
   filtrosBotao: {
     backgroundColor: "rgba(15, 109, 0, 0.9)",

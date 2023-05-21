@@ -94,7 +94,7 @@ function Faturamento() {
               <FlatList
                 style={[
                   styles.lista,
-                  { marginTop: shouldShow ? verticalScale(90) : 0 },
+                  { marginTop: shouldShow ? verticalScale(180) : 0 },
                 ]}
                 data={listaFiltrada}
                 renderItem={renderItem}
