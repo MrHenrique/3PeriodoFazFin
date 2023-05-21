@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DropdownComponentMes from "../Dropdown/DropdownMes";
 import { AuthContext } from "../../contexts/auth";
@@ -73,6 +72,7 @@ function FiltrosData(props) {
     hideEndDatePicker();
   };
 
+  /*
   //Data especifica
   const showSpecificDatePicker = () => {
     setIsSpecificDatePickerVisible(true);
@@ -92,8 +92,10 @@ function FiltrosData(props) {
     setSpecificDate(selectedDate);
     hideSpecificDatePicker();
   };
-  //FIM
+  //FIM 
+  */
 
+  /*
   //Filtro por mês
   useEffect(() => {
     if (filtroMes === 13) {
@@ -107,24 +109,28 @@ function FiltrosData(props) {
       setLista(listaFiltradaMes);
     }
   }, [filtroMes]);
+  */
 
   //Código para retornar uma lista do intevalo selecionado pelo usuário (FILTRO INTERVALO ENTRE DATAS)
   const filtrarIntervalo = () => {
-    const listaFiltradaIntervalo = listaRecebida.filter((item) => {
-      //pega todos os itens da lista que foi puxada da (listaRecebida)
-      const itemDataDeCriacao = new Date(item.createdAt); //cria uma nova data com a data do (createdAt do item) e atribui a variavel itemDataDeCriacao
-      const dataInicio = new Date(startDate); //pega a data de inicio escolhida pelo usuario
-      dataInicio.setHours(0, 0, 0); //ajusta o horario para 00:00:00 para garantir que a data de inicio seja no começo do dia.
-      const dataFim = new Date(endDate); //pega a data final escolhida pelo usuario
-      dataFim.setHours(23, 59, 59); //ajusta o horario para 23:59:59 para garantir que a data final sejá no final do dia.
-      return (
-        itemDataDeCriacao.getTime() >= dataInicio.getTime() &&
-        itemDataDeCriacao.getTime() <= dataFim.getTime()
-      );
-    });
-    setLista(listaFiltradaIntervalo);
+    if (startDate != "" && endDate != "") {
+      const listaFiltradaIntervalo = listaRecebida.filter((item) => {
+        //pega todos os itens da lista que foi puxada da (listaRecebida)
+        const itemDataDeCriacao = new Date(item.createdAt); //cria uma nova data com a data do (createdAt do item) e atribui a variavel itemDataDeCriacao
+        const dataInicio = new Date(startDate); //pega a data de inicio escolhida pelo usuario
+        dataInicio.setHours(0, 0, 0); //ajusta o horario para 00:00:00 para garantir que a data de inicio seja no começo do dia.
+        const dataFim = new Date(endDate); //pega a data final escolhida pelo usuario
+        dataFim.setHours(23, 59, 59); //ajusta o horario para 23:59:59 para garantir que a data final sejá no final do dia.
+        return (
+          itemDataDeCriacao.getTime() >= dataInicio.getTime() &&
+          itemDataDeCriacao.getTime() <= dataFim.getTime()
+        );
+      });
+      setLista(listaFiltradaIntervalo);
+    }
   };
 
+  /*
   //Código para retornar uma lista com a data Especifica selecionada pelo usuario (FILTRO POR DATA ESPECIFICA)
   useEffect(() => {
     if (specificDate === null) {
@@ -144,23 +150,18 @@ function FiltrosData(props) {
     }
   }, [specificDate]);
   //FIM
+  */
 
   return (
     <SafeAreaView style={styles.container}>
-      <DropdownComponentMes />
+      {/*<DropdownComponentMes />*/}
       {/*Filtro intervalo entre datas*/}
-      <View style={{ flexDirection: "row" }}>
+      <View style={styles.containerBotoes}>
         <TouchableOpacity
-          style={{
-            flex: 1,
-            backgroundColor: "gray",
-            borderRadius: 30,
-            width: "50%",
-            height: 30,
-          }}
+          style={styles.botoes}
           onPress={showStartDatePicker}
         >
-          <Text style={{ textAlign: "center" }}>{textStartDate}</Text>
+          <Text style={styles.texto}>{textStartDate}</Text>
         </TouchableOpacity>
         <DateTimePickerModal
           isVisible={isStartDatePickerVisible}
@@ -170,16 +171,10 @@ function FiltrosData(props) {
         />
 
         <TouchableOpacity
-          style={{
-            flex: 1,
-            backgroundColor: "#888",
-            borderRadius: 30,
-            width: "50%",
-            height: 30,
-          }}
+          style={styles.botoes}
           onPress={showEndDatePicker}
         >
-          <Text style={{ textAlign: "center" }}>{textEndDate}</Text>
+          <Text style={styles.texto}>{textEndDate}</Text>
         </TouchableOpacity>
         <DateTimePickerModal
           isVisible={isEndDatePickerVisible}
@@ -187,22 +182,11 @@ function FiltrosData(props) {
           onConfirm={handleEndDateConfirm}
           onCancel={hideEndDatePicker}
         />
-        <TouchableOpacity
-          style={{
-            flex: 1,
-            backgroundColor: "gray",
-            borderRadius: 30,
-            width: "50%",
-            height: 30,
-          }}
-          onPress={filtrarIntervalo}
-        >
-          <Text style={{ textAlign: "center" }}>Filtrar</Text>
-        </TouchableOpacity>
       </View>
 
       {/*Filtro data especifica*/}
-      <View style={{ flexDirection: "row" }}>
+      <View style={styles.containerBotoes}>
+        {/*
         <TouchableOpacity
           style={{
             flex: 1,
@@ -220,22 +204,24 @@ function FiltrosData(props) {
           mode="date"
           onConfirm={handleSpecificDateConfirm}
           onCancel={hideSpecificDatePicker}
-        />
+        />*/}
         <TouchableOpacity
-          style={{
-            flex: 1,
-            backgroundColor: "gray",
-            borderRadius: 30,
-            width: "50%",
-            height: 30,
-          }}
+          style={styles.botoes}
+          onPress={filtrarIntervalo}
+        >
+          <Text style={styles.texto}>Filtrar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.botoes}
           onPress={() => {
-            setSpecificDate(null);
-            setTextSpecificDate("Data Especifica");
+            setStartDate("");
+            setEndDate("");
+            setTextStartDate("Data Inicial");
+            setTextEndDate("Data Final");
             setLista(listaRecebida);
           }}
         >
-          <Text style={{ textAlign: "center" }}>Limpar</Text>
+          <Text style={styles.texto}>Limpar</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -244,6 +230,21 @@ function FiltrosData(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  containerBotoes: {
+    flexDirection: "row",
+    padding: 3,
+  },
+  botoes: {
+    flex: 1,
+    backgroundColor: "gray",
+    borderRadius: 30,
+    width: "50%",
+    height: 30,
+    justifyContent: "center",
+  },
+  texto: {
+    textAlign: "center",
   },
 });
 
