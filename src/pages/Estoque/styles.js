@@ -120,6 +120,12 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     minHeight: scale(10),
   },
+  containerButaoestqgeral: {
+    flex: 1.5,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    minHeight: scale(10),
+  },
   containerButaoKeyboardOn: {
     flex: 0.2,
     flexDirection: "column",

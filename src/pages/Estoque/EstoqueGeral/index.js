@@ -347,7 +347,7 @@ function EstoqueGeral() {
             </View>
           </Modal>
 
-          <View style={styles.containerButao}>
+          <View style={styles.containerButaoestqgeral}>
             <TouchableOpacity
               style={styles.botao}
               onPress={() => navigation.navigate("Home")}
