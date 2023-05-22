@@ -107,7 +107,11 @@ function FiltrosData(props) {
         itemDataDeCriacao.setHours(0, 0, 0, 0);
         const dataHoje = new Date();
         dataHoje.setHours(0, 0, 0, 0);
-        const dataUltimoAno = new Date(dataHoje.getFullYear() - 1,dataHoje.getMonth(),dataHoje.getDate());
+        const dataUltimoAno = new Date(
+          dataHoje.getFullYear() - 1,
+          dataHoje.getMonth(),
+          dataHoje.getDate()
+        );
         return (
           itemDataDeCriacao >= dataUltimoAno && itemDataDeCriacao <= dataHoje
         );
@@ -125,7 +129,7 @@ function FiltrosData(props) {
         const dataInicio = new Date(startDate); //pega a data de inicio escolhida pelo usuario
         dataInicio.setHours(0, 0, 0, 0); //ajusta o horario para 00:00:00 para garantir que a data de inicio seja no começo do dia.
         const dataFim = new Date(endDate); //pega a data final escolhida pelo usuario
-        dataFim.setHours(23, 59, 59, 59); //ajusta o horario para 23:59:59 para garantir que a data final sejá no final do dia.
+        dataFim.setHours(23, 59, 59, 999); //ajusta o horario para 23:59:59 para garantir que a data final sejá no final do dia.
         return (
           itemDataDeCriacao.getTime() >= dataInicio.getTime() &&
           itemDataDeCriacao.getTime() <= dataFim.getTime()
