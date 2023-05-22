@@ -131,8 +131,8 @@ function FiltrosData(props) {
         const dataFim = new Date(endDate); //pega a data final escolhida pelo usuario
         dataFim.setHours(23, 59, 59, 999); //ajusta o horario para 23:59:59 para garantir que a data final sejá no final do dia.
         return (
-          itemDataDeCriacao.getTime() >= dataInicio.getTime() &&
-          itemDataDeCriacao.getTime() <= dataFim.getTime()
+          itemDataDeCriacao >= dataInicio &&
+          itemDataDeCriacao <= dataFim
         );
       });
       setLista(listaFiltradaIntervalo);
