@@ -8,11 +8,12 @@ import {
   SafeAreaView,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DropFiltrosData from "../Dropdown/DropFiltrosData";
 import { AuthContext } from "../../contexts/auth";
 
 function FiltrosData(props) {
   const { listaRecebida } = props; // Recebe a lista que vai ser filtrada
-  const { ListaFiltrada } = useContext(AuthContext);
+  const { ListaFiltrada, filtroSelec, FiltroSelec } = useContext(AuthContext);
   const [lista, setLista] = useState(listaRecebida);
   const [startDate, setStartDate] = useState(""); //Filtro Intervalo entre datas
   const [textStartDate, setTextStartDate] = useState("Data Inicial"); //Filtro Intervalo entre datas
@@ -21,7 +22,6 @@ function FiltrosData(props) {
   const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
     useState(false);
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
-
 
   useEffect(() => {
     ListaFiltrada(lista);
@@ -68,6 +68,54 @@ function FiltrosData(props) {
     hideEndDatePicker();
   };
 
+  useEffect(() => {
+    console.log("opa", filtroSelec);
+    if (filtroSelec === "1") {
+      setLista(listaRecebida);
+    } else if (filtroSelec === "2") {
+      const listaUltimosSete = listaRecebida.filter((item) => {
+        const itemDataDeCriacao = new Date(item.createdAt);
+        itemDataDeCriacao.setHours(0, 0, 0, 0);
+        const dataHoje = new Date();
+        dataHoje.setHours(0, 0, 0, 0);
+        const dataSeteDiasAtras = new Date(dataHoje);
+        dataSeteDiasAtras.setDate(dataHoje.getDate() - 7);
+        console.log(dataHoje);
+        return (
+          itemDataDeCriacao >= dataSeteDiasAtras &&
+          itemDataDeCriacao <= dataHoje
+        );
+      });
+      setLista(listaUltimosSete);
+    } else if (filtroSelec === "3") {
+      const listaUltimosTrinta = listaRecebida.filter((item) => {
+        const itemDataDeCriacao = new Date(item.createdAt);
+        itemDataDeCriacao.setHours(0, 0, 0, 0);
+        const dataHoje = new Date();
+        dataHoje.setHours(0, 0, 0, 0);
+        const dataTrintaDiasAtras = new Date(dataHoje);
+        dataTrintaDiasAtras.setDate(dataHoje.getDate() - 30);
+        return (
+          itemDataDeCriacao >= dataTrintaDiasAtras &&
+          itemDataDeCriacao <= dataHoje
+        );
+      });
+      setLista(listaUltimosTrinta);
+    } else if (filtroSelec === "4") {
+      const listaUltimoAno = listaRecebida.filter((item) => {
+        const itemDataDeCriacao = new Date(item.createdAt);
+        itemDataDeCriacao.setHours(0, 0, 0, 0);
+        const dataHoje = new Date();
+        dataHoje.setHours(0, 0, 0, 0);
+        const dataUltimoAno = new Date(dataHoje.getFullYear() - 1,dataHoje.getMonth(),dataHoje.getDate());
+        return (
+          itemDataDeCriacao >= dataUltimoAno && itemDataDeCriacao <= dataHoje
+        );
+      });
+      setLista(listaUltimoAno);
+    }
+  }, [filtroSelec]);
+
   //Código para retornar uma lista do intevalo selecionado pelo usuário (FILTRO INTERVALO ENTRE DATAS)
   const filtrarIntervalo = () => {
     if (startDate != "" && endDate != "") {
@@ -75,9 +123,9 @@ function FiltrosData(props) {
         //pega todos os itens da lista que foi puxada da (listaRecebida)
         const itemDataDeCriacao = new Date(item.createdAt); //cria uma nova data com a data do (createdAt do item) e atribui a variavel itemDataDeCriacao
         const dataInicio = new Date(startDate); //pega a data de inicio escolhida pelo usuario
-        dataInicio.setHours(0, 0, 0); //ajusta o horario para 00:00:00 para garantir que a data de inicio seja no começo do dia.
+        dataInicio.setHours(0, 0, 0, 0); //ajusta o horario para 00:00:00 para garantir que a data de inicio seja no começo do dia.
         const dataFim = new Date(endDate); //pega a data final escolhida pelo usuario
-        dataFim.setHours(23, 59, 59); //ajusta o horario para 23:59:59 para garantir que a data final sejá no final do dia.
+        dataFim.setHours(23, 59, 59, 59); //ajusta o horario para 23:59:59 para garantir que a data final sejá no final do dia.
         return (
           itemDataDeCriacao.getTime() >= dataInicio.getTime() &&
           itemDataDeCriacao.getTime() <= dataFim.getTime()
@@ -89,12 +137,10 @@ function FiltrosData(props) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <DropFiltrosData />
       {/*Filtro intervalo entre datas*/}
       <View style={styles.containerBotoes}>
-        <TouchableOpacity
-          style={styles.botoes}
-          onPress={showStartDatePicker}
-        >
+        <TouchableOpacity style={styles.botoes} onPress={showStartDatePicker}>
           <Text style={styles.texto}>{textStartDate}</Text>
         </TouchableOpacity>
         <DateTimePickerModal
@@ -104,10 +150,7 @@ function FiltrosData(props) {
           onCancel={hideStartDatePicker}
         />
 
-        <TouchableOpacity
-          style={styles.botoes}
-          onPress={showEndDatePicker}
-        >
+        <TouchableOpacity style={styles.botoes} onPress={showEndDatePicker}>
           <Text style={styles.texto}>{textEndDate}</Text>
         </TouchableOpacity>
         <DateTimePickerModal
@@ -120,10 +163,7 @@ function FiltrosData(props) {
 
       {/*Filtro data especifica*/}
       <View style={styles.containerBotoes}>
-        <TouchableOpacity
-          style={styles.botoes}
-          onPress={filtrarIntervalo}
-        >
+        <TouchableOpacity style={styles.botoes} onPress={filtrarIntervalo}>
           <Text style={styles.texto}>Filtrar</Text>
         </TouchableOpacity>
         <TouchableOpacity

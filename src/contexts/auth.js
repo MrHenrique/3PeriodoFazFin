@@ -81,6 +81,10 @@ function AuthProvider({ children }) {
   function IdPageFinanceiro(dataTipo) {
     setIdPageFinanceiro(dataTipo);
   }
+  const [filtroSelec, setFiltroSelec] = useState();
+  function FiltroSelec(tipoFiltro) {
+    setFiltroSelec(tipoFiltro);
+  }
   return (
     <AuthContext.Provider
       value={{
@@ -122,6 +126,8 @@ function AuthProvider({ children }) {
         TipoEstoqueSaida,
         IdPageFinanceiro,
         idPageFinanceiro,
+        FiltroSelec,
+        filtroSelec,
       }}
     >
       {children}

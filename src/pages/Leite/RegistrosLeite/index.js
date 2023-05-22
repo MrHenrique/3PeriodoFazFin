@@ -98,7 +98,7 @@ function RegistrosLeite() {
       <FlatList
         style={[
           styles.lista,
-          { marginTop: shouldShow ? verticalScale(90) : 0 },
+          { marginTop: shouldShow ? verticalScale(140) : 0 },
         ]}
         data={listaFiltrada}
         renderItem={renderItem}
