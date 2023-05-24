@@ -1,17 +1,29 @@
 import * as React from "react";
-import { Text, TouchableOpacity, View, TextInput } from "react-native";
-import { useState, useContext } from "react";
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+  ImageBackground,
+  Keyboard,
+  KeyboardAvoidingView,
+  ScrollView,
+} from "react-native";
+import { useState, useContext, useEffect } from "react";
 import uuid from "react-native-uuid";
 import { AuthContext } from "../../../contexts/auth";
 import { useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
 import { useMainContext } from "../../../contexts/RealmContext";
+import styles from "./styles";
 
 export default function Outros() {
   const realm = useMainContext();
   const navigation = useNavigation();
   const [valorProdString, setValorProd] = useState("");
   const [nomeProd, setNomeProd] = useState("");
+  // listener teclado
+  const [keyboardStatus, setkeyboardStatus] = useState(false);
   const { rebID } = useContext(AuthContext);
   async function handleAddGastos() {
     if (realm) {
@@ -40,34 +52,84 @@ export default function Outros() {
       }
     }
   }
+  // LISTENER DO TECLADO(ATIVADO OU NAO)
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setkeyboardStatus(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setkeyboardStatus(false);
+    });
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+  // RETORNA O ESTILO PARA O BOTAO, decidindo qual estilo, dependendo se o teclado esta ativo ou nao
+  function StyleFuncKeyboard() {
+    if (keyboardStatus) {
+      return styles.containerbutaoKeyboardOn;
+    } else {
+      return styles.containerbutao;
+    }
+  }
+  function StyleScrollViewContainer() {
+    if (keyboardStatus) {
+      return styles.ContainerScrollStyle;
+    } else {
+      return [styles.ContainerScrollStyle, { flex: 1 }];
+    }
+  }
   return (
-    <>
-      <View>
-        <Text>Cadastro de outras despesas.</Text>
-        <View>
-          <Text>{"Descrição:"}</Text>
-          <TextInput
-            value={nomeProd}
-            onChangeText={setNomeProd}
-            placeholder="Exemplo: Reforma pasto"
-          />
-        </View>
-        <View>
-          <Text>{"Total pago:"}</Text>
-          <TextInput
-            value={valorProdString}
-            keyboardType="number-pad"
-            onChangeText={setValorProd}
-            placeholder="Exemplo: 10000.20"
-          />
-        </View>
+    <KeyboardAvoidingView behavior="undefined" style={styles.containerkeyboard}>
+      <View style={styles.container}>
+        <ImageBackground
+          source={require("../../../../assets/adaptive-icon.png")}
+          resizeMode="contain"
+          imageStyle={{ opacity: 0.05 }} // imageStyle={{ margin: 25 }}
+          style={styles.containergeral}
+        >
+          <ScrollView
+            style={styles.scrollcontainer}
+            contentContainerStyle={StyleScrollViewContainer()}
+          >
+            <View style={styles.containerCadastroOutras}>
+              <Text style={styles.txtTitulo}>Cadastro de outras despesas.</Text>
+              <View style={styles.containerOutrasDespesas}>
+                <Text style={styles.txtDescricao}>{"Descrição:"}</Text>
+                <TextInput
+                  style={styles.txtInput}
+                  value={nomeProd}
+                  onChangeText={setNomeProd}
+                  placeholder="Exemplo: Reforma pasto"
+                />
+              </View>
+              <View style={styles.containerOutrasDespesas}>
+                <Text style={styles.txtDescricao}>{"Total pago:"}</Text>
+                <TextInput
+                  style={styles.txtInput}
+                  value={valorProdString}
+                  keyboardType="number-pad"
+                  onChangeText={setValorProd}
+                  placeholder="Exemplo: 10000.20"
+                />
+              </View>
+            </View>
+          </ScrollView>
+          <View style={StyleFuncKeyboard()}>
+            <TouchableOpacity onPress={handleAddGastos} style={styles.botao}>
+              <Text style={styles.txtBotao}>{"Cadastrar"}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Home")}
+              style={styles.botao}
+            >
+              <Text style={styles.txtBotao}>{"Voltar"}</Text>
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
       </View>
-      <TouchableOpacity onPress={handleAddGastos}>
-        <Text>{"Cadastrar"}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-        <Text>{"Voltar"}</Text>
-      </TouchableOpacity>
-    </>
+    </KeyboardAvoidingView>
   );
 }

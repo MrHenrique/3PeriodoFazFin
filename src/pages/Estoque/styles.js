@@ -120,6 +120,12 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     minHeight: scale(10),
   },
+  containerButaoestqgeral: {
+    flex: 1.5,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    minHeight: scale(10),
+  },
   containerButaoKeyboardOn: {
     flex: 0.2,
     flexDirection: "column",
@@ -185,7 +191,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   font: {
-    ...Fonts.txtLarge,
+    ...Fonts.txtMedium,
     color: Colors.white,
   },
   Text: {
