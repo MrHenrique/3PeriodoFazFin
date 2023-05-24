@@ -27,8 +27,12 @@ function SelectFazPage() {
         setListaFaz([...values]);
       });
     }
-  }, [realm]);
-  function CanContinue(fazID) {
+    CanContinue(fazID)
+  }, [realm,fazID]);
+  useEffect(() => {
+    CanContinue();
+  }, [fazID]);
+  function CanContinue() {
     if (typeof fazID == "undefined" || fazID == "") {
       const CanContinue = true;
       return CanContinue;
@@ -37,7 +41,7 @@ function SelectFazPage() {
       return CanContinue;
     }
   }
-  function DisabledStyle(fazID) {
+  function DisabledStyle() {
     if (typeof fazID == "undefined" || fazID == "") {
       const Style = styles.disabledbutton;
       return Style;

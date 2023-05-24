@@ -1,4 +1,4 @@
-import React, { useState, useContext,useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Text,
   View,
@@ -16,18 +16,19 @@ function SelectRebPage({ navigation }) {
   const [listaReb, setListaReb] = useState([]);
   useEffect(() => {
     if (realm) {
-      let data = realm.objectForPrimaryKey("Farm",fazID);
+      let data = realm.objectForPrimaryKey("Farm", fazID);
       setListaReb(data.rebanhos);
       data.rebanhos.sorted("nomeReb").addListener((values) => {
         setListaReb([...values]);
       });
     }
-    CanContinue(rebID)
-  }, [realm,rebID]);
+  }, [realm]);
+  useEffect(() => {
+    CanContinue();
+  }, [rebID]);
+  const { fazID, rebID, FazendaID, RebanhoID } = useContext(AuthContext);
 
-  const { fazID, rebID } = useContext(AuthContext);
-
-  function CanContinue(rebID) {
+  function CanContinue() {
     if (typeof rebID == "undefined" || rebID == "") {
       const CanContinue = true;
       return CanContinue;
@@ -36,7 +37,7 @@ function SelectRebPage({ navigation }) {
       return CanContinue;
     }
   }
-  function DisabledStyle(rebID) {
+  function DisabledStyle() {
     if (typeof rebID == "undefined" || rebID == "") {
       const Style = styles.botaopress4;
       return Style;
@@ -54,7 +55,6 @@ function SelectRebPage({ navigation }) {
         imageStyle={{ opacity: 0.6 }}
       >
         <View style={styles.containergeral}>
-        
           <View style={styles.containerlogo}>
             <Image
               style={styles.logo}
@@ -85,7 +85,11 @@ function SelectRebPage({ navigation }) {
           <View style={styles.containerbotoes}>
             <TouchableOpacity
               style={styles.botaopress2}
-              onPress={() => navigation.navigate("SelectFazPage")}
+              onPress={() => {
+                FazendaID(""),
+                  RebanhoID(""),
+                  navigation.navigate("SelectFazPage");
+              }}
             >
               <Text style={styles.tituloBotao}>{"Voltar"}</Text>
             </TouchableOpacity>

@@ -1,4 +1,5 @@
-import React, { useState, useContext,useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/core";
 import {
   TouchableOpacity,
   Text,
@@ -90,11 +91,17 @@ const Select = ({
       RebanhoID(Rebid);
       setVisible(false);
     }
-    else{
-      RebanhoID("")
-      setSelected(null)
-    }
   }, [data]);
+  useFocusEffect(
+    useCallback(() => {
+      console.log("Teste: " + rebID);
+      if (rebID === "" || rebID === undefined) {
+        RebanhoID("");
+        setSelected(null);
+      }
+      return () => {};
+    }, [])
+  );
   const { TouchableComponent } = touchableComponent(
     touchableText,
     () => setVisible(true),
@@ -125,7 +132,7 @@ const Select = ({
       }
     }
   }
-  const { RebanhoID,rebID } = useContext(AuthContext);
+  const { RebanhoID, rebID } = useContext(AuthContext);
   return (
     <>
       <TouchableComponent />
