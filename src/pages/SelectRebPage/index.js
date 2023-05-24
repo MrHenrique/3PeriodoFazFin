@@ -22,7 +22,8 @@ function SelectRebPage({ navigation }) {
         setListaReb([...values]);
       });
     }
-  }, [realm]);
+    CanContinue(rebID)
+  }, [realm,rebID]);
 
   const { fazID, rebID } = useContext(AuthContext);
 
