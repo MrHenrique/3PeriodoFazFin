@@ -90,6 +90,10 @@ const Select = ({
       RebanhoID(Rebid);
       setVisible(false);
     }
+    else{
+      RebanhoID("")
+      setSelected(null)
+    }
   }, [data]);
   const { TouchableComponent } = touchableComponent(
     touchableText,
@@ -121,7 +125,7 @@ const Select = ({
       }
     }
   }
-  const { RebanhoID } = useContext(AuthContext);
+  const { RebanhoID,rebID } = useContext(AuthContext);
   return (
     <>
       <TouchableComponent />

@@ -94,7 +94,11 @@ const SelectFaz = ({
       var Rebid = "";
       RebanhoID(Rebid);
       setVisible(false);
-      console.log(Fazid);
+    } else {
+      FazendaID("");
+      RebanhoID("");
+      FazendaProp("");
+      setSelected(null);
     }
   }, [data]);
 
