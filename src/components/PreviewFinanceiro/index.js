@@ -1,5 +1,5 @@
-import { View, TouchableOpacity, Text, Alert } from "react-native";
-import React, { useEffect, useContext } from "react";
+import { View, TouchableOpacity, Text } from "react-native";
+import React, { useEffect, useContext, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import { Color } from "./styles";
@@ -10,6 +10,8 @@ import { DespesasTotais } from "../../components/Calculos DB/DespesasTotais";
 import { AuthContext } from "../../contexts/auth";
 
 function PreviewFinanceiro({ Titulo, Id }) {
+  const [Total, setTotal] = useState(0);
+
   const realm = useMainContext();
   const navigation = useNavigation();
 
@@ -77,45 +79,39 @@ function PreviewFinanceiro({ Titulo, Id }) {
     precoCFReb,
     PrecoLeiteReb,
     precoLeiteReb,
-    IdPageFinanceiro,
+    ShouldGoPageFinanceiro,
   } = useContext(AuthContext);
 
   //Funcoes para validar e renderizar
   function getDespesas() {
-    switch (Id) {
-      case 1:
-        if (typeof precoCF !== "undefined") {
-          return Number(precoCF);
-        } else {
-          return 0;
-        }
-        break;
-      case 2:
-        if (typeof precoCFReb !== "undefined") {
-          // console.log(precoCFReb);
-          return Number(precoCFReb);
-        } else {
-          return 0;
-        }
-        break;
+    if (Id === 1) {
+      if (typeof precoCF !== "undefined") {
+        return Number(precoCF);
+      } else {
+        return 0;
+      }
+    } else {
+      if (typeof precoCFReb !== "undefined") {
+        // console.log(precoCFReb);
+        return Number(precoCFReb);
+      } else {
+        return 0;
+      }
     }
   }
   function getReceitas() {
-    switch (Id) {
-      case 1:
-        if (typeof precoLeite !== "undefined") {
-          return Number(precoLeite);
-        } else {
-          return 0;
-        }
-        break;
-      case 2:
-        if (typeof precoLeiteReb !== "undefined") {
-          return Number(precoLeiteReb);
-        } else {
-          return 0;
-        }
-        break;
+    if (Id === 1) {
+      if (typeof precoLeite !== "undefined") {
+        return Number(precoLeite);
+      } else {
+        return 0;
+      }
+    } else {
+      if (typeof precoLeiteReb !== "undefined") {
+        return Number(precoLeiteReb);
+      } else {
+        return 0;
+      }
     }
   }
   function getTotal(despesas, receitas) {
@@ -145,12 +141,12 @@ function PreviewFinanceiro({ Titulo, Id }) {
         onPress={() => {
           switch (Id) {
             case 1:
+              ShouldGoPageFinanceiro(0);
               navigation.navigate("PageFinanceiro");
-              IdPageFinanceiro(0);
               break;
             case 2:
+              ShouldGoPageFinanceiro(1);
               navigation.navigate("PageFinanceiro");
-              IdPageFinanceiro(1);
               break;
           }
         }}
@@ -200,7 +196,8 @@ function PreviewFinanceiro({ Titulo, Id }) {
                 { fontSize: setSize(formattedDespesas, 200) },
               ]}
             >
-              {formattedDespesas}</Text>
+              {formattedDespesas}
+            </Text>
           </View>
           <Text style={styles.bannerText}>
             {"Clique aqui para mais detalhes"}

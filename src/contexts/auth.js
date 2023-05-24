@@ -77,9 +77,9 @@ function AuthProvider({ children }) {
   function TipoEstoqueSaida(dataTipo) {
     SetTipoEstoqueSaida(dataTipo);
   }
-  const [idPageFinanceiro, setIdPageFinanceiro] = useState();
-  function IdPageFinanceiro(dataTipo) {
-    setIdPageFinanceiro(dataTipo);
+  const [shouldGoPageFinanceiro, setShouldGoPageFinanceiro] = useState();
+  function ShouldGoPageFinanceiro(Pagegoto) {
+    setShouldGoPageFinanceiro(Pagegoto);
   }
   return (
     <AuthContext.Provider
@@ -120,8 +120,8 @@ function AuthProvider({ children }) {
         IdEstoqueSaida,
         tipoEstoqueSaida,
         TipoEstoqueSaida,
-        IdPageFinanceiro,
-        idPageFinanceiro,
+        shouldGoPageFinanceiro,
+        ShouldGoPageFinanceiro,
       }}
     >
       {children}

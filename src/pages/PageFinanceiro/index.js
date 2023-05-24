@@ -10,10 +10,21 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 const Tab = createMaterialTopTabNavigator();
 
 function PageFinanceiro() {
+  const { shouldGoPageFinanceiro } = useContext(AuthContext);
+  function setInicialTab() {
+    console.log(shouldGoPageFinanceiro);
+    if (shouldGoPageFinanceiro === 0) {
+      return "Fazenda";
+    } else {
+      return "Rebanho";
+    }
+  }
+
   return (
     <>
       <Header />
       <Tab.Navigator
+        initialRouteName={setInicialTab()}
         screenOptions={{
           tabBarLabelStyle: { color: "#fff" },
           tabBarIndicatorStyle: { backgroundColor: "#fff" },
@@ -29,7 +40,7 @@ function PageFinanceiro() {
 
 const styles = StyleSheet.create({
   tab: {
-    backgroundColor: Colors.green, 
+    backgroundColor: Colors.green,
   },
 });
 
