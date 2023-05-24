@@ -1,11 +1,18 @@
 import * as React from "react";
-import { Text, TouchableOpacity, View, TextInput } from "react-native";
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+  ImageBackground,
+} from "react-native";
 import { useState, useContext } from "react";
 import uuid from "react-native-uuid";
 import { AuthContext } from "../../../contexts/auth";
 import { useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
 import { useMainContext } from "../../../contexts/RealmContext";
+import styles from "./styles";
 
 export default function Outros() {
   const realm = useMainContext();
@@ -41,33 +48,48 @@ export default function Outros() {
     }
   }
   return (
-    <>
-      <View>
-        <Text>Cadastro de outras despesas.</Text>
-        <View>
-          <Text>{"Descrição:"}</Text>
-          <TextInput
-            value={nomeProd}
-            onChangeText={setNomeProd}
-            placeholder="Exemplo: Reforma pasto"
-          />
+    <View style={styles.container}>
+      <ImageBackground
+        source={require("../../../../assets/adaptive-icon.png")}
+        resizeMode="contain"
+        imageStyle={{opacity: 0.05}}        // imageStyle={{ margin: 25 }}
+        style={styles.containergeral}
+      >
+        <View style={styles.containerCadastroOutras}>
+          <Text style={styles.txtTitulo}>Cadastro de outras despesas.</Text>
+          <View style={styles.containerOutrasDespesas}>
+            <Text style={styles.txtDescricao}>{"Descrição:"}</Text>
+            <TextInput
+              style={styles.txtInput}
+              value={nomeProd}
+              onChangeText={setNomeProd}
+              placeholder="Exemplo: Reforma pasto"
+            />
+          </View>
+          <View style={styles.containerOutrasDespesas}>
+            <Text style={styles.txtDescricao}>{"Total pago:"}</Text>
+            <TextInput
+              style={styles.txtInput}
+              value={valorProdString}
+              keyboardType="number-pad"
+              onChangeText={setValorProd}
+              placeholder="Exemplo: 10000.20"
+            />
+          </View>
         </View>
-        <View>
-          <Text>{"Total pago:"}</Text>
-          <TextInput
-            value={valorProdString}
-            keyboardType="number-pad"
-            onChangeText={setValorProd}
-            placeholder="Exemplo: 10000.20"
-          />
+        <View style={styles.containerbutao}>
+          <TouchableOpacity onPress={handleAddGastos} style={styles.botao}>
+            <Text style={styles.txtBotao}>{"Cadastrar"}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Home")}
+            style={styles.botao}
+          >
+            <Text style={styles.txtBotao}>{"Voltar"}</Text>
+          </TouchableOpacity>
         </View>
-      </View>
-      <TouchableOpacity onPress={handleAddGastos}>
-        <Text>{"Cadastrar"}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-        <Text>{"Voltar"}</Text>
-      </TouchableOpacity>
-    </>
+      </ImageBackground>
+    </View>
   );
 }

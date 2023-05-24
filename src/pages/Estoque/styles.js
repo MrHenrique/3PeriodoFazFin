@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   font: {
-    ...Fonts.txtLarge,
+    ...Fonts.txtMedium,
     color: Colors.white,
   },
   Text: {

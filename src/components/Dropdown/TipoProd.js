@@ -37,6 +37,10 @@ const DropdownComponent = () => {
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
+        containerStyle={{
+          borderColor: Colors.white,
+          backgroundColor: Colors.darkgreen,
+        }}
         itemContainerStyle={styles.itemContainerStyle}
         itemTextStyle={styles.itemTextStyle}
         activeColor={Colors.green}
