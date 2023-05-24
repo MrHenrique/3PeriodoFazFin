@@ -14,6 +14,7 @@ import { AuthContext } from "../../contexts/auth";
 function FiltrosData(props) {
   const { listaRecebida } = props; // Recebe a lista que vai ser filtrada
   const { ListaFiltrada, filtroSelec, FiltroSelec } = useContext(AuthContext);
+  const [resetDropdown, setResetDropdown] = useState(false);
   const [lista, setLista] = useState(listaRecebida);
   const [startDate, setStartDate] = useState(""); //Filtro Intervalo entre datas
   const [textStartDate, setTextStartDate] = useState("Data Inicial"); //Filtro Intervalo entre datas
@@ -26,6 +27,16 @@ function FiltrosData(props) {
   useEffect(() => {
     ListaFiltrada(lista);
   }, [lista]);
+
+  const handleResetDropdown = () => {
+    setResetDropdown(true);
+  };
+
+  useEffect(() => {
+    if (resetDropdown) {
+      setResetDropdown(false); // Redefine o valor de resetDropdown para false após ser utilizado
+    }
+  }, [resetDropdown]);
 
   //Codigo do DateTimePickerModal
   //Data Inicial
@@ -80,7 +91,6 @@ function FiltrosData(props) {
         dataHoje.setHours(0, 0, 0, 0);
         const dataSeteDiasAtras = new Date(dataHoje);
         dataSeteDiasAtras.setDate(dataHoje.getDate() - 7);
-        console.log(dataHoje);
         return (
           itemDataDeCriacao >= dataSeteDiasAtras &&
           itemDataDeCriacao <= dataHoje
@@ -130,10 +140,7 @@ function FiltrosData(props) {
         dataInicio.setHours(0, 0, 0, 0); //ajusta o horario para 00:00:00 para garantir que a data de inicio seja no começo do dia.
         const dataFim = new Date(endDate); //pega a data final escolhida pelo usuario
         dataFim.setHours(23, 59, 59, 999); //ajusta o horario para 23:59:59 para garantir que a data final sejá no final do dia.
-        return (
-          itemDataDeCriacao >= dataInicio &&
-          itemDataDeCriacao <= dataFim
-        );
+        return itemDataDeCriacao >= dataInicio && itemDataDeCriacao <= dataFim;
       });
       setLista(listaFiltradaIntervalo);
     }
@@ -141,7 +148,7 @@ function FiltrosData(props) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <DropFiltrosData />
+      <DropFiltrosData resetDropdown={resetDropdown}/>
       {/*Filtro intervalo entre datas*/}
       <View style={styles.containerBotoes}>
         <TouchableOpacity style={styles.botoes} onPress={showStartDatePicker}>
@@ -173,6 +180,7 @@ function FiltrosData(props) {
         <TouchableOpacity
           style={styles.botoes}
           onPress={() => {
+            handleResetDropdown();
             setStartDate("");
             setEndDate("");
             setTextStartDate("Data Inicial");

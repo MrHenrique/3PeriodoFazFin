@@ -10,7 +10,7 @@ const data = [
   { label: "Ultimos 30 dias", value: "3" },
   { label: "Ultimo ano", value: "4" },
 ];
-const DropFiltrosData = () => {
+const DropFiltrosData = ({ resetDropdown }) => {
   const { FiltroSelec } = useContext(AuthContext);
   const [value, setValue] = useState(1);
   const [isFocus, setIsFocus] = useState(false);
@@ -19,6 +19,12 @@ const DropFiltrosData = () => {
     var filtroSelec = value;
     FiltroSelec(filtroSelec);
   }, [value, FiltroSelec]);
+
+  useEffect(() => {
+    if (resetDropdown) {
+      setValue(1); // Redefine o valor inicial do dropdown
+    }
+  }, [resetDropdown]);
 
   return (
     <View style={styles.container}>
