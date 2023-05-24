@@ -3,6 +3,14 @@ import { Buttons, Colors, Fonts, TextInput } from "../../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
+  ContainerScrollStyle: {
+    marginVertical: verticalScale(10),
+  },
+  containerkeyboard: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: Colors.red,
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.darkgreen,
@@ -30,7 +38,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   checkbox: {
-    flex: 0.3,
+    height: "auto",
     marginVertical: verticalScale(4),
     marginHorizontal: scale(10),
     borderRadius: 10,
@@ -39,9 +47,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   containerCheckBox: {
+    flex: 1,
     justifyContent: "center",
     alignSelf: "center",
-    height: "80%",
     backgroundColor: Colors.green,
     borderColor: Colors.green,
     borderRadius: 10,
@@ -99,10 +107,17 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   containerbutao: {
-    flex: 0.5,
+    flex: 0.2,
     flexDirection: "column",
     justifyContent: "flex-end",
     minHeight: scale(10),
+  },
+  containerbutaoKeyboardOn:{
+    flex: 0.3,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    paddingTop: verticalScale(10),
+    minHeight: scale(100),
   },
   botao: {
     flex: 1,

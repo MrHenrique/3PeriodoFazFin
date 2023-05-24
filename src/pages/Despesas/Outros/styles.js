@@ -3,6 +3,14 @@ import { Buttons, Colors, Fonts, TextInput } from "../../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
+  ContainerScrollStyle: {
+    marginVertical: verticalScale(10),
+  },
+  containerkeyboard: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: Colors.red,
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.darkgreen,
@@ -18,6 +26,13 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-end",
     minHeight: scale(10),
+  },
+  containerbutaoKeyboardOn: {
+    flex: 0.3,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    paddingTop: verticalScale(10),
+    minHeight: scale(100),
   },
   containerCadastroOutras: {
     flex: 1,

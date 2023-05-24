@@ -5,6 +5,10 @@ import {
   View,
   TextInput,
   ImageBackground,
+  Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  Keyboard,
 } from "react-native";
 import EstoqueOptions from "../../../components/Dropdown/EstoqueOptions";
 import { useState, useContext, useEffect } from "react";
@@ -13,7 +17,6 @@ import { AuthContext } from "../../../contexts/auth";
 import { useNavigation } from "@react-navigation/native";
 import { CheckBox, Icon } from "react-native-elements";
 import { useMainContext } from "../../../contexts/RealmContext";
-import { Alert } from "react-native";
 import styles from "./styles";
 
 export default function SaidaEstoque() {
@@ -26,6 +29,9 @@ export default function SaidaEstoque() {
   const [newListaEstoque, setNewListaEstoque] = useState([]);
   const [idSelected, setIdSelected] = useState("");
   const [tipo, setTipo] = useState(1);
+  // listener teclado
+  const [keyboardStatus, setkeyboardStatus] = useState(false);
+
   const { fazID, rebID, idEstoqueSaida, TipoEstoqueSaida, IdEstoqueSaida } =
     useContext(AuthContext);
 
@@ -117,122 +123,174 @@ export default function SaidaEstoque() {
       return "-";
     }
   }
-  function functeste() {
-    console.log(shouldShow);
+  // LISTENER DO TECLADO(ATIVADO OU NAO)
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setkeyboardStatus(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setkeyboardStatus(false);
+    });
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+  // RETORNA O ESTILO PARA O BOTAO, decidindo qual estilo, dependendo se o teclado esta ativo ou nao
+  function StyleFuncKeyboard() {
+    if (keyboardStatus) {
+      return styles.containerbutaoKeyboardOn;
+    } else {
+      return styles.containerbutao;
+    }
+  }
+  function StyleScrollViewContainer() {
+    if (keyboardStatus) {
+      return [styles.ContainerScrollStyle, { paddingBottom: 10 }];
+    } else {
+      return [styles.ContainerScrollStyle, { flex: 1 }];
+    }
   }
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={require("../../../../assets/adaptive-icon.png")}
-        resizeMode="contain"
-        imageStyle={{ opacity: 0.05 }}
-        style={styles.containergeral}
-      >
-        {/* CheckBox */}
-        <View style={styles.checkbox}>
-          <CheckBox
-            title="Remédios"
-            checked={tipo === 1}
-            containerStyle={styles.containerCheckBox}
-            textStyle={styles.textCheckBox}
-            uncheckedIcon={
-              <Icon type="ionicon" name="md-square-outline" color={"#fff"} />
-            }
-            checkedIcon={
-              <Icon type="ionicon" name="md-checkbox-outline" color={"#fff"} />
-            }
-            onPress={() => {
-              setTipo(1);
-              IdEstoqueSaida("");
-            }}
-          />
-          <CheckBox
-            title="Alimento"
-            checked={tipo === 2}
-            containerStyle={styles.containerCheckBox}
-            textStyle={styles.textCheckBox}
-            uncheckedIcon={
-              <Icon type="ionicon" name="md-square-outline" color={"#fff"} />
-            }
-            checkedIcon={
-              <Icon type="ionicon" name="md-checkbox-outline" color={"#fff"} />
-            }
-            onPress={() => {
-              setTipo(2);
-              IdEstoqueSaida("");
-            }}
-          />
-        </View>
-        {/* DropDown */}
-        <View style={styles.dropdownContainer}>
-          <EstoqueOptions />
-        </View>
-        {/* Cadastro de produtos */}
-        <View style={styles.containerGeralCadastro}>
-          {/* Visao do produto, preco medio e quantidade */}
-          {functeste()}
-          {shouldShow ? (
-            <View style={styles.containerProduto}>
-              {newListaEstoque.length > 0 ? (
-                <View style={styles.ctnProduto}>
-                  <Text style={styles.textTitulo}>Produto</Text>
-                  <View style={styles.ctntextos}>
-                    <Text style={styles.txtProdTitulo}>Preço Médio:</Text>
-                    <Text style={styles.txtQtdPreco}>{averagePrice()}</Text>
-                  </View>
-                  <View style={styles.ctntextos}>
-                    <Text style={styles.txtProdTitulo}>
-                      Quantidade em Estoque:
-                    </Text>
-                    <Text style={styles.txtQtdPreco}>
-                      {newListaEstoque[0].qtdProd} {tipo === 1 ? "ml" : "kg"}
-                    </Text>
-                  </View>
-                </View>
-              ) : (
-                <></>
-              )}
-            </View>
-          ) : null}
-          {/* cadastro */}
-          <View style={styles.cadastroDespesas}>
-            <Text style={styles.textTitulo}>Cadastro de outras despesas.</Text>
-            <View style={styles.containerTxtInputDespesas}>
-              <Text style={styles.titleTxtInput}>Quantidade utilizada: </Text>
-              <TextInput
-                style={styles.txtInput}
-                value={qtdProd}
-                onChangeText={setQtdProd}
-                placeholder="50"
-              />
-            </View>
-            <View style={styles.containerTxtInputDespesas}>
-              <Text style={styles.titleTxtInput}>Observações: </Text>
-              <TextInput
-                style={styles.txtInput}
-                value={obserProd}
-                onChangeText={setObserProd}
-                placeholder="Observação sobre produto"
-              />
-            </View>
-          </View>
-        </View>
-        <View style={styles.containerbutao}>
-          <TouchableOpacity onPress={handleAddGastos} style={styles.botao}>
-            <Text style={styles.txtBotao}>{"Cadastrar"}</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.botao}
-            onPress={() => {
-              navigation.navigate("Home");
-              IdEstoqueSaida("");
-            }}
+    <KeyboardAvoidingView behavior="undefined" style={styles.containerkeyboard}>
+      <View style={styles.container}>
+        <ImageBackground
+          source={require("../../../../assets/adaptive-icon.png")}
+          resizeMode="contain"
+          imageStyle={{ opacity: 0.05 }}
+          style={styles.containergeral}
+        >
+          <ScrollView
+            style={styles.scrollcontainer}
+            contentContainerStyle={StyleScrollViewContainer()}
           >
-            <Text style={styles.txtBotao}>{"Voltar"}</Text>
-          </TouchableOpacity>
-        </View>
-      </ImageBackground>
-    </View>
+            {/* CheckBox */}
+            <View style={styles.checkbox}>
+              <CheckBox
+                title="Remédios"
+                checked={tipo === 1}
+                containerStyle={styles.containerCheckBox}
+                textStyle={styles.textCheckBox}
+                uncheckedIcon={
+                  <Icon
+                    type="ionicon"
+                    name="md-square-outline"
+                    color={"#fff"}
+                  />
+                }
+                checkedIcon={
+                  <Icon
+                    type="ionicon"
+                    name="md-checkbox-outline"
+                    color={"#fff"}
+                  />
+                }
+                onPress={() => {
+                  setTipo(1);
+                  IdEstoqueSaida("");
+                }}
+              />
+              <CheckBox
+                title="Alimento"
+                checked={tipo === 2}
+                containerStyle={styles.containerCheckBox}
+                textStyle={styles.textCheckBox}
+                uncheckedIcon={
+                  <Icon
+                    type="ionicon"
+                    name="md-square-outline"
+                    color={"#fff"}
+                  />
+                }
+                checkedIcon={
+                  <Icon
+                    type="ionicon"
+                    name="md-checkbox-outline"
+                    color={"#fff"}
+                  />
+                }
+                onPress={() => {
+                  setTipo(2);
+                  IdEstoqueSaida("");
+                }}
+              />
+            </View>
+            {/* DropDown */}
+            <View style={styles.dropdownContainer}>
+              <EstoqueOptions />
+            </View>
+            {/* Cadastro de produtos */}
+            <View style={styles.containerGeralCadastro}>
+              {/* Visao do produto, preco medio e quantidade */}
+              {shouldShow ? (
+                <View style={styles.containerProduto}>
+                  {newListaEstoque.length > 0 ? (
+                    <View style={styles.ctnProduto}>
+                      <Text style={styles.textTitulo}>Produto</Text>
+                      <View style={styles.ctntextos}>
+                        <Text style={styles.txtProdTitulo}>Preço Médio:</Text>
+                        <Text style={styles.txtQtdPreco}>{averagePrice()}</Text>
+                      </View>
+                      <View style={styles.ctntextos}>
+                        <Text style={styles.txtProdTitulo}>
+                          Quantidade em Estoque:
+                        </Text>
+                        <Text style={styles.txtQtdPreco}>
+                          {newListaEstoque[0].qtdProd}{" "}
+                          {tipo === 1 ? "ml" : "kg"}
+                        </Text>
+                      </View>
+                    </View>
+                  ) : (
+                    <></>
+                  )}
+                </View>
+              ) : null}
+              {/* cadastro */}
+              <View style={styles.cadastroDespesas}>
+                <Text style={styles.textTitulo}>
+                  Cadastro de outras despesas.
+                </Text>
+                <View style={styles.containerTxtInputDespesas}>
+                  <Text style={styles.titleTxtInput}>
+                    Quantidade utilizada:{" "}
+                  </Text>
+                  <TextInput
+                    style={styles.txtInput}
+                    value={qtdProd}
+                    onChangeText={setQtdProd}
+                    placeholder="50"
+                  />
+                </View>
+                <View style={styles.containerTxtInputDespesas}>
+                  <Text style={styles.titleTxtInput}>Observações: </Text>
+                  <TextInput
+                    style={styles.txtInput}
+                    value={obserProd}
+                    onChangeText={setObserProd}
+                    placeholder="Observação sobre produto"
+                  />
+                </View>
+              </View>
+            </View>
+          </ScrollView>
+          <View style={StyleFuncKeyboard()}>
+            <TouchableOpacity onPress={handleAddGastos} style={styles.botao}>
+              <Text style={styles.txtBotao}>{"Cadastrar"}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.botao}
+              onPress={() => {
+                navigation.navigate("Home");
+                IdEstoqueSaida("");
+              }}
+            >
+              <Text style={styles.txtBotao}>{"Voltar"}</Text>
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
