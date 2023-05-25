@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   FlatList,
   ScrollView,
-  Image,
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -282,7 +281,12 @@ function EstoqueGeral() {
   };
   return (
     <View style={styles.container}>
-      <View style={styles.containergeral}>
+      <ImageBackground
+        imageStyle={{ opacity: 0.05 }}
+        resizeMode="repeat"
+        source={require("../../../../assets/fazfinwhiteletter.png")}
+        style={styles.containergeral}
+      >
         <View style={styles.containerValor}>
           <View>
             <Text style={styles.font}>
@@ -356,7 +360,7 @@ function EstoqueGeral() {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </ImageBackground>
     </View>
   );
 }

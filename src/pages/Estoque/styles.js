@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: scale(5),
     borderRadius: 10,
-    backgroundColor: Colors.darkgreenTransparent,
+    backgroundColor: Colors.darkgreen,
   },
   containerText: {
     flex: 1,

@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   container: {
-    backgroundColor: Colors.green,
+    backgroundColor: "transparent",
     paddingHorizontal: 20,
     paddingVertical: 5,
   },
@@ -94,10 +94,6 @@ const styles = StyleSheet.create({
   iconStyle: {
     width: 30,
     height: 30,
-  },
-  inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
   },
   label: {
     color: Colors.white,

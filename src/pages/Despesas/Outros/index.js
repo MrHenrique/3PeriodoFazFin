@@ -84,8 +84,8 @@ export default function Outros() {
     <KeyboardAvoidingView behavior="undefined" style={styles.containerkeyboard}>
       <View style={styles.container}>
         <ImageBackground
-          source={require("../../../../assets/adaptive-icon.png")}
-          resizeMode="contain"
+          source={require("../../../../assets/fazfinwhiteletter.png")}
+          resizeMode="repeat"
           imageStyle={{ opacity: 0.05 }} // imageStyle={{ margin: 25 }}
           style={styles.containergeral}
         >

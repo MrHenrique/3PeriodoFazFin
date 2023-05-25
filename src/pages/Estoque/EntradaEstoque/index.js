@@ -8,6 +8,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   ScrollView,
+  ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import DropdownComponent from "../../../components/Dropdown/TipoProd";
@@ -391,7 +392,12 @@ function EntradaEstoque() {
   return (
     <KeyboardAvoidingView behavior="undefined" style={styles.containerkeyboard}>
       <View style={styles.container}>
-        <View style={styles.containergeral}>
+        <ImageBackground
+          imageStyle={{ opacity: 0.05 }}
+          resizeMode="repeat"
+          source={require("../../../../assets/fazfinwhiteletter.png")}
+          style={styles.containergeral}
+        >
           <ScrollView
             style={styles.scrollcontainer}
             contentContainerStyle={StyleScrollViewContainer()}
@@ -492,7 +498,7 @@ function EntradaEstoque() {
               <Text style={styles.font}>{"Voltar"}</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </ImageBackground>
       </View>
     </KeyboardAvoidingView>
   );
