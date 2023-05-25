@@ -17,6 +17,7 @@ import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
 
 function Home({ navigation }) {
+  const { RebanhoID, rebID } = useContext(AuthContext);
   const [Pos, setPos] = useState(0);
   const [PosText, setPosText] = useState("do Rebanho");
 
@@ -123,7 +124,9 @@ function Home({ navigation }) {
             <View style={styles.containerVoltar}>
               <TouchableOpacity
                 style={styles.botaopress}
-                onPress={() => navigation.navigate("SelectRebPage")}
+                onPress={() => {
+                  RebanhoID(""), navigation.navigate("SelectRebPage");
+                }}
               >
                 <Text style={styles.tituloBotao}>{"Voltar"}</Text>
               </TouchableOpacity>

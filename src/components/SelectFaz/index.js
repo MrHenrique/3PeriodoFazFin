@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import {
   TouchableOpacity,
   Text,
@@ -8,6 +8,8 @@ import {
   View,
   Dimensions,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+
 import { scale, verticalScale } from "react-native-size-matters";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
@@ -83,7 +85,6 @@ const SelectFaz = ({
 }) => {
   const [visible, setVisible] = useState(false);
   const [selected, setSelected] = useState(null);
-
   useEffect(() => {
     if (data.length === 1) {
       setSelected(data[0]);
@@ -94,13 +95,21 @@ const SelectFaz = ({
       var Rebid = "";
       RebanhoID(Rebid);
       setVisible(false);
-    } else {
-      FazendaID("");
-      RebanhoID("");
-      FazendaProp("");
-      setSelected(null);
     }
   }, [data]);
+  useFocusEffect(
+    useCallback(() => {
+      if (fazID === "" || fazID === undefined) {
+        FazendaID("");
+        RebanhoID("");
+        FazendaProp("");
+        setSelected(null);
+      }
+      return () => {
+      };
+    }, [])
+  );
+  
 
   const { TouchableComponent } = touchableComponent(
     touchableText,
@@ -125,7 +134,6 @@ const SelectFaz = ({
       var Rebid = "";
       FazendaID(Fazid);
       RebanhoID(Rebid);
-      console.log(Fazid);
     } else {
       setSelected(item);
       setVisible(false);
@@ -136,11 +144,10 @@ const SelectFaz = ({
         RebanhoID(Rebid);
         var FazProp = item.proprietario;
         FazendaProp(FazProp);
-        console.log(Fazid);
       }
     }
   }
-  const { FazendaID, FazendaProp, RebanhoID } = useContext(AuthContext);
+  const { FazendaID, FazendaProp, RebanhoID, fazID } = useContext(AuthContext);
   return (
     <>
       <TouchableComponent />
