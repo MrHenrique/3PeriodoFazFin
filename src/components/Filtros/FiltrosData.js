@@ -80,52 +80,55 @@ function FiltrosData(props) {
   };
 
   useEffect(() => {
-    console.log("opa", filtroSelec);
+    const filtrarPorData = (lista, dataInicio, dataFim) => {
+      return lista.filter((item) => {
+        const itemDataDeCriacao = new Date(item.createdAt);
+        itemDataDeCriacao.setHours(0, 0, 0, 0);
+        return itemDataDeCriacao >= dataInicio && itemDataDeCriacao <= dataFim;
+      });
+    };
     if (filtroSelec === "1") {
       setLista(listaRecebida);
     } else if (filtroSelec === "2") {
-      const listaUltimosSete = listaRecebida.filter((item) => {
-        const itemDataDeCriacao = new Date(item.createdAt);
-        itemDataDeCriacao.setHours(0, 0, 0, 0);
-        const dataHoje = new Date();
-        dataHoje.setHours(0, 0, 0, 0);
-        const dataSeteDiasAtras = new Date(dataHoje);
-        dataSeteDiasAtras.setDate(dataHoje.getDate() - 7);
-        return (
-          itemDataDeCriacao >= dataSeteDiasAtras &&
-          itemDataDeCriacao <= dataHoje
-        );
-      });
-      setLista(listaUltimosSete);
+      const dataHoje = new Date();
+      dataHoje.setHours(0, 0, 0, 0);
+      const listaHoje = filtrarPorData(listaRecebida, dataHoje, dataHoje);
+      setLista(listaHoje);
     } else if (filtroSelec === "3") {
-      const listaUltimosTrinta = listaRecebida.filter((item) => {
-        const itemDataDeCriacao = new Date(item.createdAt);
-        itemDataDeCriacao.setHours(0, 0, 0, 0);
-        const dataHoje = new Date();
-        dataHoje.setHours(0, 0, 0, 0);
-        const dataTrintaDiasAtras = new Date(dataHoje);
-        dataTrintaDiasAtras.setDate(dataHoje.getDate() - 30);
-        return (
-          itemDataDeCriacao >= dataTrintaDiasAtras &&
-          itemDataDeCriacao <= dataHoje
-        );
-      });
-      setLista(listaUltimosTrinta);
+      const dataHoje = new Date();
+      dataHoje.setHours(0, 0, 0, 0);
+      const dataSeteDiasAtras = new Date(dataHoje);
+      dataSeteDiasAtras.setDate(dataHoje.getDate() - 7);
+      const listaUltimosSete = filtrarPorData(
+        listaRecebida,
+        dataSeteDiasAtras,
+        dataHoje
+      );
+      setLista(listaUltimosSete);
     } else if (filtroSelec === "4") {
-      const listaUltimoAno = listaRecebida.filter((item) => {
-        const itemDataDeCriacao = new Date(item.createdAt);
-        itemDataDeCriacao.setHours(0, 0, 0, 0);
-        const dataHoje = new Date();
-        dataHoje.setHours(0, 0, 0, 0);
-        const dataUltimoAno = new Date(
-          dataHoje.getFullYear() - 1,
-          dataHoje.getMonth(),
-          dataHoje.getDate()
-        );
-        return (
-          itemDataDeCriacao >= dataUltimoAno && itemDataDeCriacao <= dataHoje
-        );
-      });
+      const dataHoje = new Date();
+      dataHoje.setHours(0, 0, 0, 0);
+      const dataTrintaDiasAtras = new Date(dataHoje);
+      dataTrintaDiasAtras.setDate(dataHoje.getDate() - 30);
+      const listaUltimosTrinta = filtrarPorData(
+        listaRecebida,
+        dataTrintaDiasAtras,
+        dataHoje
+      );
+      setLista(listaUltimosTrinta);
+    } else if (filtroSelec === "5") {
+      const dataHoje = new Date();
+      dataHoje.setHours(0, 0, 0, 0);
+      const dataUltimoAno = new Date(
+        dataHoje.getFullYear() - 1,
+        dataHoje.getMonth(),
+        dataHoje.getDate()
+      );
+      const listaUltimoAno = filtrarPorData(
+        listaRecebida,
+        dataUltimoAno,
+        dataHoje
+      );
       setLista(listaUltimoAno);
     }
   }, [filtroSelec]);
@@ -148,7 +151,7 @@ function FiltrosData(props) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <DropFiltrosData resetDropdown={resetDropdown}/>
+      <DropFiltrosData resetDropdown={resetDropdown} />
       {/*Filtro intervalo entre datas*/}
       <View style={styles.containerBotoes}>
         <TouchableOpacity style={styles.botoes} onPress={showStartDatePicker}>
@@ -159,6 +162,7 @@ function FiltrosData(props) {
           mode="date"
           onConfirm={handleStartDateConfirm}
           onCancel={hideStartDatePicker}
+          maximumDate={new Date()}
         />
 
         <TouchableOpacity style={styles.botoes} onPress={showEndDatePicker}>
@@ -169,6 +173,7 @@ function FiltrosData(props) {
           mode="date"
           onConfirm={handleEndDateConfirm}
           onCancel={hideEndDatePicker}
+          maximumDate={new Date()}
         />
       </View>
 

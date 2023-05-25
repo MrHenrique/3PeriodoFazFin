@@ -6,9 +6,10 @@ import { Buttons, Colors, Fonts } from "../../styles";
 
 const data = [
   { label: "Todas as datas", value: "1" },
-  { label: "Ultimos 7 dias", value: "2" },
-  { label: "Ultimos 30 dias", value: "3" },
-  { label: "Ultimo ano", value: "4" },
+  { label: "Hoje", value: "2"},
+  { label: "Ultimos 7 dias", value: "3" },
+  { label: "Ultimos 30 dias", value: "4" },
+  { label: "Ultimo ano", value: "5" },
 ];
 const DropFiltrosData = ({ resetDropdown }) => {
   const { FiltroSelec } = useContext(AuthContext);
