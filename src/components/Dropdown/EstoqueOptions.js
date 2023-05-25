@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   container: {
-    backgroundColor: Colors.green,
+    backgroundColor: "transparent",
     paddingHorizontal: 20,
     paddingVertical: 5,
   },

@@ -44,10 +44,8 @@ function Home({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <ImageBackground
+      <View
         style={styles.imgbg}
-        source={require(imgbg1)}
-        imageStyle={{ opacity: 0.6 }}
       >
         <View style={styles.containergeral}>
           <View style={styles.containerPreview}>
@@ -133,7 +131,7 @@ function Home({ navigation }) {
             </View>
           </View>
         </View>
-      </ImageBackground>
+      </View>
     </SafeAreaView>
   );
 }

@@ -5,13 +5,13 @@ import { scale, verticalScale } from "react-native-size-matters";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.Cyan,
+    backgroundColor: Colors.green,
   },
   mainContainer: {
     flex: 1,
     margin: scale(15),
     borderRadius: 10,
-    backgroundColor: Colors.darkgreenTransparent,
+    backgroundColor: Colors.white,
   },
   imgbg: {
     flex: 1,
@@ -27,18 +27,26 @@ const styles = StyleSheet.create({
   },
   texto: {
     ...Fonts.txtLargeBold,
-    color: Colors.white,
+    color: Colors.black,
   },
   viewtext: {
     flex: 1,
     alignSelf: "center",
   },
   campoTexto: {
-    backgroundColor: Colors.white,
-    color: Colors.black,
+    backgroundColor: Colors.green,
+    color: Colors.white,
     textAlign: "center",
     ...Fonts.txtMediumBold,
     ...TextInput.TextInputLargeRounded,
+  },
+  campoTextoErro: {
+    ...Fonts.txtMediumBold,
+    ...TextInput.TextInputLargeRounded,
+    backgroundColor: Colors.green,
+    color: Colors.white,
+    borderWidth: 2,
+    borderColor: Colors.red,
   },
   containerbotoes: {
     flex: 1,
@@ -47,12 +55,12 @@ const styles = StyleSheet.create({
   },
   botaopress: {
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.btngreen,
+    backgroundColor: Colors.darkgreen,
     marginBottom: verticalScale(10),
   },
   botaopress2: {
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.btngreen,
+    backgroundColor: Colors.darkgreen,
   },
   tituloBotao: {
     ...Fonts.txtMediumBold,
@@ -65,14 +73,6 @@ const styles = StyleSheet.create({
     padding: verticalScale(2),
     alignSelf: "center",
     color: "yellow",
-  },
-  campoTextoErro: {
-    ...Fonts.txtMediumBold,
-    ...TextInput.TextInputLargeRounded,
-    backgroundColor: Colors.white,
-    color: Colors.black,
-    borderWidth: 2,
-    borderColor: Colors.red,
   },
 });
 

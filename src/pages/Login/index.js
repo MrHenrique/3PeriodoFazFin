@@ -23,7 +23,7 @@ function Login({ navigation }) {
 
   const [email, setEmail] = useState([]);
   const [password, setPassword] = useState([]);
-  const imgbg1 = "../../../assets/background7.jpg";
+  const imgbg1 = require("../../../assets/background7.jpg");
   useEffect(() => {
     if (realm) {
       let data = realm.objects("Farm").sorted("nomefaz");
@@ -73,55 +73,55 @@ function Login({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
-        style={styles.imgbg}
-        source={require(imgbg1)}
-        imageStyle={{ opacity: 0.6 }}
+        source={imgbg1}
+        imageStyle={{ opacity: 0.3 }}
+        style={styles.containerlogin}
       >
-        <View style={styles.containerlogin}>
-          <Image
-            style={styles.logo}
-            source={require("../../../assets/FazFin.png")}
+        <Image
+          style={styles.logo}
+          source={require("../../../assets/FazFin.png")}
+        />
+        <Text style={styles.title}>Bem-vindo(a)</Text>
+        <View>
+          <Text style={styles.texto}>Digite seu email</Text>
+          <TextInput
+            style={styles.campoTexto}
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Email"
+            inputMode="text"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor={"#fff"}
           />
-          <Text style={styles.title}>Bem-vindo(a)</Text>
-          <View>
-            <Text style={styles.texto}>Digite seu email</Text>
-            <TextInput
-              style={styles.campoTexto}
-              value={email}
-              onChangeText={setEmail}
-              placeholder="Email"
-              inputMode="text"
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-            <Text style={styles.texto}>Digite a senha</Text>
-            <TextInput
-              style={styles.campoTexto}
-              placeholder="Senha"
-              inputMode="text"
-              autoCapitalize="none"
-              onChangeText={setPassword}
-              value={password}
-              secureTextEntry
-            />
-          </View>
+          <Text style={styles.texto}>Digite a senha</Text>
+          <TextInput
+            style={styles.campoTexto}
+            placeholder="Senha"
+            placeholderTextColor={"#fff"}
+            inputMode="text"
+            autoCapitalize="none"
+            onChangeText={setPassword}
+            value={password}
+            secureTextEntry
+          />
+        </View>
 
-          <View style={styles.containerbotoes}>
-            <TouchableOpacity
-              style={styles.botaopress2}
-              onPress={() => navigation.navigate(navigateWhere())}
-            >
-              <Text style={styles.tituloBotao}>{"Login"}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.botaopress}
-              onPress={() => navigation.navigate("SignUp")}
-            >
-              <Text style={styles.tituloBotao}>
-                {"Clique aqui para cadastrar"}
-              </Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.containerbotoes}>
+          <TouchableOpacity
+            style={styles.botaopress2}
+            onPress={() => navigation.navigate(navigateWhere())}
+          >
+            <Text style={styles.tituloBotao}>{"Login"}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.botaopress}
+            onPress={() => navigation.navigate("SignUp")}
+          >
+            <Text style={styles.tituloBotao}>
+              {"Clique aqui para cadastrar"}
+            </Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </SafeAreaView>

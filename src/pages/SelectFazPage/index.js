@@ -13,12 +13,11 @@ import styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import { useMainContext } from "../../contexts/RealmContext";
 function SelectFazPage() {
-  
   const realm = useMainContext();
   const navigation = useNavigation();
   const [listaFaz, setListaFaz] = useState([]);
   const { fazID } = useContext(AuthContext);
-  const imgbg1 = "../../../assets/background7.jpg";
+  const imgbg1 = require("../../../assets/Wallpaper1.jpg");
   useEffect(() => {
     if (realm) {
       let data = realm.objects("Farm").sorted("nomefaz");
@@ -27,8 +26,8 @@ function SelectFazPage() {
         setListaFaz([...values]);
       });
     }
-    CanContinue(fazID)
-  }, [realm,fazID]);
+    CanContinue(fazID);
+  }, [realm, fazID]);
   useEffect(() => {
     CanContinue();
   }, [fazID]);
@@ -52,42 +51,39 @@ function SelectFazPage() {
   }
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        style={styles.imgbg}
-        source={require(imgbg1)}
-        imageStyle={{ opacity: 0.6 }}
-      >
-        <View style={styles.containerlogin}>
-          <Image
-            style={styles.logo}
-            source={require("../../../assets/FazFin.png")}
+      <ImageBackground 
+      imageStyle={{ opacity: 0.3 }}
+      source={imgbg1}
+      style={styles.containerlogin}>
+        <Image
+          style={styles.logo}
+          source={require("../../../assets/FazFin.png")}
+        />
+        <Text style={styles.title}>Bem-vindo(a)</Text>
+        <View style={styles.select}>
+          <Text style={styles.subtitle}>Selecione sua fazenda:</Text>
+          <SelectFaz
+            touchableText="Selecione sua fazenda"
+            title="Fazendas"
+            objKey="_id"
+            objValue="nomefaz"
+            data={listaFaz}
           />
-          <Text style={styles.title}>Bem-vindo(a)</Text>
-          <View style={styles.select}>
-            <Text style={styles.subtitle}>Sua fazenda:</Text>
-            <SelectFaz
-              touchableText="Selecione sua fazenda"
-              title="Fazendas"
-              objKey="_id"
-              objValue="nomefaz"
-              data={listaFaz}
-            />
-          </View>
-          <View style={styles.containerbotoes}>
-            <TouchableOpacity
-              disabled={CanContinue(fazID)}
-              style={DisabledStyle(fazID)}
-              onPress={() => navigation.navigate("SelectRebPage")}
-            >
-              <Text style={styles.tituloBotao}>{"Continuar"}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.botaopress}
-              onPress={() => navigation.navigate("CadastroFaz")}
-            >
-              <Text style={styles.tituloBotao}>{"Cadastrar fazenda"}</Text>
-            </TouchableOpacity>
-          </View>
+        </View>
+        <View style={styles.containerbotoes}>
+          <TouchableOpacity
+            disabled={CanContinue(fazID)}
+            style={DisabledStyle(fazID)}
+            onPress={() => navigation.navigate("SelectRebPage")}
+          >
+            <Text style={styles.tituloBotao}>{"Continuar"}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.botaopress}
+            onPress={() => navigation.navigate("CadastroFaz")}
+          >
+            <Text style={styles.tituloBotao}>{"Cadastrar fazenda"}</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </SafeAreaView>

@@ -121,67 +121,62 @@ function CadastroReb() {
     }
   }
   const navigation = useNavigation();
-  const imgbg1 = "../../../../assets/bg6.jpg";
+  const imgbg1 = require("../../../../assets/bg6.jpg");
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        style={styles.imgbg}
-        source={require(imgbg1)}
-        imageStyle={{ opacity: 0.6 }}
-      >
-        <View style={styles.mainContainer}>
-          <Image
-            style={styles.logo}
-            source={require("../../../../assets/FazFin.png")}
-          />
-          <View style={styles.viewtext}>
-            <Text style={styles.texto}>Nome do rebanho:</Text>
-            <TextInput
-              style={
-                !isNomeRebValid ? styles.campoTextoErro : styles.campoTexto
-              }
-              onChangeText={handleNomeRebChange}
-              value={nomeReb}
-              placeholder="Ex: Vacas solteiras"
-            ></TextInput>
-            {!isNomeRebValid && (
-              <Text style={styles.error}>Digite o nome do rebanho!</Text>
-            )}
-            {rebExist && (
-              <Text style={styles.error}>
-                Um rebanho com esse nome já existe!
-              </Text>
-            )}
-            <Text style={styles.texto}>Quantidade de animais:</Text>
-            <TextInput
-              style={!isQtdAniValid ? styles.campoTextoErro : styles.campoTexto}
-              onChangeText={handleQtdAniChange}
-              value={qtdAni}
-              keyboardType="number-pad"
-              placeholder="Quantos animais no rebanho?"
-            ></TextInput>
-            {!isQtdAniValid && (
-              <Text style={styles.error}>
-                Valor digitado inválido, tente novamente.
-              </Text>
-            )}
-          </View>
-          <View style={styles.containerbotoes}>
-            <TouchableOpacity
-              style={styles.botaopress2}
-              onPress={() => navigation.navigate("SelectRebPage")}
-            >
-              <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.botaopress}
-              onPress={() => {
-                validCheck();
-              }}
-            >
-              <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
-            </TouchableOpacity>
-          </View>
+      <ImageBackground imageStyle={{opacity: 0.3}}
+       source={imgbg1} style={styles.mainContainer}>
+        <Image
+          style={styles.logo}
+          source={require("../../../../assets/FazFin.png")}
+        />
+        <View style={styles.viewtext}>
+          <Text style={styles.texto}>Nome do rebanho:</Text>
+          <TextInput
+            style={!isNomeRebValid ? styles.campoTextoErro : styles.campoTexto}
+            onChangeText={handleNomeRebChange}
+            value={nomeReb}
+            placeholder="Ex: Vacas solteiras"
+            placeholderTextColor={"#d9d9d9"}
+          ></TextInput>
+          {!isNomeRebValid && (
+            <Text style={styles.error}>Digite o nome do rebanho!</Text>
+          )}
+          {rebExist && (
+            <Text style={styles.error}>
+              Um rebanho com esse nome já existe!
+            </Text>
+          )}
+          <Text style={styles.texto}>Quantidade de animais:</Text>
+          <TextInput
+            style={!isQtdAniValid ? styles.campoTextoErro : styles.campoTexto}
+            onChangeText={handleQtdAniChange}
+            value={qtdAni}
+            keyboardType="number-pad"
+            placeholder="Quantos animais no rebanho?"
+            placeholderTextColor={"#d9d9d9"}
+          ></TextInput>
+          {!isQtdAniValid && (
+            <Text style={styles.error}>
+              Valor digitado inválido, tente novamente.
+            </Text>
+          )}
+        </View>
+        <View style={styles.containerbotoes}>
+          <TouchableOpacity
+            style={styles.botaopress2}
+            onPress={() => navigation.navigate("SelectRebPage")}
+          >
+            <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.botaopress}
+            onPress={() => {
+              validCheck();
+            }}
+          >
+            <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </SafeAreaView>

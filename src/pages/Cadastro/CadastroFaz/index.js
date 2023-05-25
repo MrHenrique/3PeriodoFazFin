@@ -106,67 +106,67 @@ function CadastroFaz() {
     }
   }
   const navigation = useNavigation();
-  const imgbg1 = "../../../../assets/backgroundCad.jpg";
+  const imgbg1 = require("../../../../assets/backgroundCad.jpg");
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
-        style={styles.imgbg}
-        source={require(imgbg1)}
-        imageStyle={{ opacity: 0.6 }}
+        source={imgbg1}
+        style={styles.containergeral}
+        imageStyle={{ opacity: 0.5 }}
+        resizeMode="cover"
       >
-        <View style={styles.containergeral}>
-          <Image
-            style={styles.logo}
-            source={require("../../../../assets/FazFin.png")}
-          />
-          <Text style={[styles.texto, { marginTop: verticalScale(40) }]}>
-            Nome da fazenda
-          </Text>
-          <TextInput
-            style={!isNomefazValid ? styles.campoTextoError : styles.campoTexto}
-            onChangeText={handleNomefazChange}
-            value={nomefaz}
-            placeholder="Qual o nome da sua Fazenda?"
-          ></TextInput>
-          {!isNomefazValid && (
-            <Text style={styles.error}>Digite o nome da Fazenda!</Text>
-          )}
-          {nomeExist && (
-            <Text style={styles.error}>
-              Uma Fazenda com esse nome já existe!
-            </Text>
-          )}
-          <Text style={styles.texto}>Proprietário</Text>
-          <TextInput
-            style={!isProprValid ? styles.campoTextoError : styles.campoTexto}
-            onChangeText={handleProprChange}
-            value={proprietario}
-            placeholder="Qual o nome do proprietário?"
-          ></TextInput>
-          {!isProprValid && (
-            <Text style={styles.error}>Digite o nome do proprietário!</Text>
-          )}
-          <Text style={styles.texto}>Tipo de produção</Text>
-          <TextInput
-            style={!isTipoValid ? styles.campoTextoError : styles.campoTexto}
-            onChangeText={handleTipoChange}
-            value={tipoprod}
-            placeholder="Ex: Pecuária Leiteira"
-          ></TextInput>
-          {!isTipoValid && (
-            <Text style={styles.error}>Digite o tipo de produção!</Text>
-          )}
-          <View style={styles.containerbotao}>
-            <TouchableOpacity
-              style={styles.botaopress2}
-              onPress={() => navigation.navigate("SelectFazPage")}
-            >
-              <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.botaopress} onPress={validCheck}>
-              <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
-            </TouchableOpacity>
-          </View>
+        <Image
+          style={styles.logo}
+          source={require("../../../../assets/FazFin.png")}
+        />
+        <Text style={[styles.texto, { marginTop: verticalScale(40) }]}>
+          Nome da fazenda
+        </Text>
+        <TextInput
+          style={!isNomefazValid ? styles.campoTextoError : styles.campoTexto}
+          onChangeText={handleNomefazChange}
+          value={nomefaz}
+          placeholderTextColor={"#f2f2f2"}
+          placeholder="Qual o nome da sua Fazenda?"
+        ></TextInput>
+        {!isNomefazValid && (
+          <Text style={styles.error}>Digite o nome da Fazenda!</Text>
+        )}
+        {nomeExist && (
+          <Text style={styles.error}>Uma Fazenda com esse nome já existe!</Text>
+        )}
+        <Text style={styles.texto}>Proprietário</Text>
+        <TextInput
+          style={!isProprValid ? styles.campoTextoError : styles.campoTexto}
+          onChangeText={handleProprChange}
+          value={proprietario}
+          placeholder="Qual o nome do proprietário?"
+          placeholderTextColor={"#d9d9d9"}
+        ></TextInput>
+        {!isProprValid && (
+          <Text style={styles.error}>Digite o nome do proprietário!</Text>
+        )}
+        <Text style={styles.texto}>Tipo de produção</Text>
+        <TextInput
+          style={!isTipoValid ? styles.campoTextoError : styles.campoTexto}
+          onChangeText={handleTipoChange}
+          value={tipoprod}
+          placeholder="Ex: Pecuária Leiteira"
+          placeholderTextColor={"#d9d9d9"}
+        ></TextInput>
+        {!isTipoValid && (
+          <Text style={styles.error}>Digite o tipo de produção!</Text>
+        )}
+        <View style={styles.containerbotao}>
+          <TouchableOpacity
+            style={styles.botaopress2}
+            onPress={() => navigation.navigate("SelectFazPage")}
+          >
+            <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.botaopress} onPress={validCheck}>
+            <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </SafeAreaView>

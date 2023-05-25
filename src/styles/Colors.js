@@ -1,6 +1,6 @@
 const Colors = {
-    green: "rgba(15, 109, 0, 1)",
-    btngreen: "rgba(15, 109, 0, 0.9)",
+    green: "rgba(42, 95, 45, 1)",
+    btngreen: "rgba(42, 95, 45, 0.9)",
     darkgreen: "#004513",
     darkgreenTransparent: "rgba(0, 0, 0, 0.25)",
     btndarkgreen: "rgba(0,69,19,0.9)",

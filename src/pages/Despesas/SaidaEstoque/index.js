@@ -155,8 +155,8 @@ export default function SaidaEstoque() {
     <KeyboardAvoidingView behavior="undefined" style={styles.containerkeyboard}>
       <View style={styles.container}>
         <ImageBackground
-          source={require("../../../../assets/adaptive-icon.png")}
-          resizeMode="contain"
+          source={require("../../../../assets/fazfinwhiteletter.png")}
+          resizeMode="repeat"
           imageStyle={{ opacity: 0.05 }}
           style={styles.containergeral}
         >

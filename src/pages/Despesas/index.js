@@ -4,6 +4,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import Header from "../../components/Header";
 import Outros from "./Outros";
 import SaidaEstoque from "./SaidaEstoque";
+import { Colors } from "../../styles";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -13,8 +14,8 @@ export default function Despesas() {
       <Header />
       <Tab.Navigator
         screenOptions={{
-          tabBarLabelStyle: { color: "#fff" },
-          tabBarIndicatorStyle: { backgroundColor: "#fff" },
+          tabBarLabelStyle: { color: Colors.white, },
+          tabBarIndicatorStyle: { backgroundColor: Colors.white, },
           tabBarStyle: styles.tab,
         }}
       >
@@ -27,6 +28,6 @@ export default function Despesas() {
 
 const styles = StyleSheet.create({
   tab: {
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
+    backgroundColor: Colors.green,
   },
 });

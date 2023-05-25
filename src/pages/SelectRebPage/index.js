@@ -46,61 +46,59 @@ function SelectRebPage({ navigation }) {
       return Style;
     }
   }
-  const imgbg1 = "../../../assets/bg4.jpg";
+  const imgbg1 = require("../../../assets/bg10.jpg");
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
-        style={styles.imgbg}
-        source={require(imgbg1)}
-        imageStyle={{ opacity: 0.6 }}
+        source={imgbg1}
+        imageStyle={{ opacity: 0.3 }}
+        style={styles.containergeral}
       >
-        <View style={styles.containergeral}>
-          <View style={styles.containerlogo}>
-            <Image
-              style={styles.logo}
-              source={require("../../../assets/FazFin.png")}
-            />
-          </View>
+        <View style={styles.containerlogo}>
+          <Image
+            style={styles.logo}
+            source={require("../../../assets/FazFin.png")}
+          />
+        </View>
 
-          <View style={styles.viewtext}>
-            <Text style={styles.texto}>Selecionar rebanho</Text>
-            <Select
-              touchableText="Selecione seu rebanho"
-              title="Rebanhos"
-              objKey="_id"
-              objValue="nomeReb"
-              data={listaReb}
-            />
-          </View>
+        <View style={styles.viewtext}>
+          <Text style={styles.texto}>Selecionar o rebanho</Text>
+          <Select
+            touchableText="Selecione seu rebanho"
+            title="Rebanhos"
+            objKey="_id"
+            objValue="nomeReb"
+            data={listaReb}
+          />
+        </View>
 
-          <View style={styles.containercadastrarreb}>
-            <TouchableOpacity
-              style={styles.botaoPress3}
-              onPress={() => navigation.navigate("CadastroReb")}
-            >
-              <Text style={styles.tituloBotao2}>{"Cadastrar rebanhos"}</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.containercadastrarreb}>
+          <TouchableOpacity
+            style={styles.botaoPress3}
+            onPress={() => navigation.navigate("CadastroReb")}
+          >
+            <Text style={styles.tituloBotao2}>{"Cadastrar rebanhos"}</Text>
+          </TouchableOpacity>
+        </View>
 
-          <View style={styles.containerbotoes}>
-            <TouchableOpacity
-              style={styles.botaopress2}
-              onPress={() => {
-                FazendaID(""),
-                  RebanhoID(""),
-                  navigation.navigate("SelectFazPage");
-              }}
-            >
-              <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              disabled={CanContinue(rebID)}
-              style={DisabledStyle(rebID)}
-              onPress={() => navigation.navigate("Home")}
-            >
-              <Text style={styles.tituloBotao}>{"Continuar"}</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.containerbotoes}>
+          <TouchableOpacity
+            style={styles.botaopress2}
+            onPress={() => {
+              FazendaID(""),
+                RebanhoID(""),
+                navigation.navigate("SelectFazPage");
+            }}
+          >
+            <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            disabled={CanContinue(rebID)}
+            style={DisabledStyle(rebID)}
+            onPress={() => navigation.navigate("Home")}
+          >
+            <Text style={styles.tituloBotao}>{"Continuar"}</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </SafeAreaView>

@@ -5,14 +5,14 @@ import { scale, verticalScale } from "react-native-size-matters";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.Cyan,
+    backgroundColor: Colors.green,
   },
 
   containergeral: {
     flex: 1,
     margin: scale(15),
     justifyContent: "space-around",
-    backgroundColor: Colors.darkgreenTransparent,
+    backgroundColor: Colors.white,
     borderRadius: 10,
   },
   containercadastrarreb: {
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   botaoPress3: {
     flex: 0.3,
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.btngreen,
+    backgroundColor: Colors.darkgreen,
   },
 
   tituloBotao2: {
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
 
   botaopress: {
     borderRadius: 20,
-    backgroundColor: Colors.btngreen,
+    backgroundColor: Colors.darkgreen,
     width: scale(300),
     height: verticalScale(40),
     alignItems: "center",
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
 
   botaopress4: {
     borderRadius: 20,
-    backgroundColor: Colors.btngreen,
+    backgroundColor: Colors.darkgreen,
     width: scale(300),
     height: verticalScale(40),
     alignItems: "center",
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
 
   botaopress2: {
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.btngreen,
+    backgroundColor: Colors.darkgreen,
     alignItems: "center",
     marginTop: verticalScale(10),
   },
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
 
   texto: {
     ...Fonts.txtLargeBold,
-    color: Colors.white,
+    color: Colors.black,
   },
 
   containerbotoes: {

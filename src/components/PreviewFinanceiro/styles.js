@@ -5,6 +5,7 @@ import { scale, verticalScale } from "react-native-size-matters";
 const styles = StyleSheet.create({
   geralfaz: {
     flex: 1,
+    paddingHorizontal: 15,
   },
   viewtext: {
     flex: 1,
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
 
   bannerButton: {
     flex: 1,
-    backgroundColor: Colors.btngreen,
+    backgroundColor: Colors.darkgreen,
     justifyContent: "center",
     borderRadius: 10,
   },
@@ -75,8 +76,7 @@ const styles = StyleSheet.create({
   },
 
   containerGeralFinan: {
-    marginLeft: scale(40),
-    marginRight: scale(40),
+    marginHorizontal: scale(15),
   },
 
   textoBannerRes: {

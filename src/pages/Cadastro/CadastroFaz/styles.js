@@ -5,7 +5,7 @@ import { Colors, Fonts, Buttons, TextInput } from "../../../styles";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.Cyan,
+    backgroundColor: Colors.green,
   },
   imgbg: {
     flex: 1,
@@ -22,19 +22,21 @@ const styles = StyleSheet.create({
   },
   texto: {
     ...Fonts.txtLarge,
-    color: Colors.white,
+    color: Colors.black,
+    fontWeight: "500",
     alignSelf: "center",
   },
   campoTexto: {
     ...Fonts.txtMediumBold,
+    fontWeight: "500",
     ...TextInput.TextInputLargeRounded,
-    backgroundColor: Colors.white,
-    color: Colors.black,
+    backgroundColor: Colors.green,
+    color: Colors.white,
   },
   campoTextoError: {
     ...Fonts.txtMediumBold,
     ...TextInput.TextInputLargeRounded,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.green,
     color: Colors.red,
     fontWeight: "bold",
     fontSize: 15,
@@ -43,12 +45,12 @@ const styles = StyleSheet.create({
   },
   botaopress: {
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.btngreen,
+    backgroundColor: Colors.darkgreen,
     marginBottom: verticalScale(10),
   },
   botaopress2: {
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.btngreen,
+    backgroundColor: Colors.darkgreen,
   },
   tituloBotao: {
     ...Fonts.txtMediumBold,
@@ -58,7 +60,7 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: scale(15),
     borderRadius: 10,
-    backgroundColor: Colors.darkgreenTransparent,
+    backgroundColor: Colors.white,
   },
   containerbotao: {
     flex: 1,

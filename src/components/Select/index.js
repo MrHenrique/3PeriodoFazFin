@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
+import { Colors } from "../../styles";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
 import { AuthContext } from "../../contexts/auth";
@@ -27,7 +28,7 @@ const Touchable = (
         </Text>
         <MaterialCommunityIcons
           name="chevron-right"
-          color="white"
+          color="black"
           size={verticalScale(30)}
         />
       </TouchableOpacity>
@@ -44,7 +45,7 @@ const Option = (item, value, selected, objKey, onPress) => {
           styles.optionContainer,
           {
             backgroundColor:
-              selected?.[objKey] === item?.[objKey] ? "#0F6D00" : "#004513",
+              selected?.[objKey] === item?.[objKey] ? Colors.darkgreen : Colors.green,
           },
         ]}
         onPress={onPress}
@@ -163,26 +164,26 @@ const Select = ({
 };
 const styles = StyleSheet.create({
   liststyle: {
-    backgroundColor: "#00290C",
+    backgroundColor: Colors.green,
   },
   touchableContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     height: verticalScale(40),
-    borderBottomColor: "white",
-    borderBottomWidth: verticalScale(1),
+    borderBottomColor: "black",
+    borderBottomWidth: verticalScale(2),
     width: scale(300),
   },
   touchableText: {
-    color: "white",
+    color: "black",
     fontSize: verticalScale(16),
     fontWeight: "bold",
   },
   header: {
     height: verticalScale(50),
-    backgroundColor: "#004513",
-    borderBottomColor: "#00290C",
+    backgroundColor: Colors.darkgreen,
+    borderBottomColor: Colors.black,
     borderBottomWidth: verticalScale(1),
     flexDirection: "row-reverse",
     alignItems: "center",
@@ -199,13 +200,13 @@ const styles = StyleSheet.create({
     paddingLeft: scale(20),
   },
   optionContainer: {
-    backgroundColor: "#0F6D00",
+    backgroundColor: Colors.green,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingVertical: verticalScale(15),
     paddingHorizontal: scale(20),
-    borderBottomColor: "#00290C",
+    borderBottomColor: Colors.black,
     borderBottomWidth: verticalScale(1),
   },
   optionText: {
