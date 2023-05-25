@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { AuthContext } from "../../contexts/auth";
 import { Buttons, Colors, Fonts } from "../../styles";
+import { verticalScale } from "react-native-size-matters";
 
 const data = [
   { label: "Todas as datas", value: "1" },
@@ -35,6 +36,10 @@ const DropFiltrosData = ({ resetDropdown }) => {
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
+        containerStyle={{
+          borderColor: Colors.white,
+          backgroundColor: Colors.darkgreen,
+        }}
         itemContainerStyle={styles.itemContainerStyle}
         itemTextStyle={styles.itemTextStyle}
         activeColor={Colors.green}
@@ -59,6 +64,8 @@ export default DropFiltrosData;
 const styles = StyleSheet.create({
   itemContainerStyle: {
     backgroundColor: Colors.darkgreen,
+    borderBottomColor: Colors.white,
+    borderBottomWidth: verticalScale(0.8),
   },
   itemTextStyle: {
     color: Colors.white,
