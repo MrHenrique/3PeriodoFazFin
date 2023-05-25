@@ -124,8 +124,11 @@ function CadastroReb() {
   const imgbg1 = require("../../../../assets/bg6.jpg");
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground imageStyle={{opacity: 0.3}}
-       source={imgbg1} style={styles.mainContainer}>
+      <ImageBackground
+        imageStyle={{ opacity: 0.3 }}
+        source={imgbg1}
+        style={styles.mainContainer}
+      >
         <Image
           style={styles.logo}
           source={require("../../../../assets/FazFin.png")}
