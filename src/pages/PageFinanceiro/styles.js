@@ -4,32 +4,38 @@ import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
   //STYLES COMUM
-
+  //relatorios
+  containerbg: {
+    backgroundColor: Colors.green,
+    marginHorizontal: scale(10),
+    padding: scale(10),
+    borderRadius: scale(10),
+  },
+  containerResumo: {
+    flex: 1,
+    paddingHorizontal: scale(15),
+  },
   //pagina DESPESAS
   preGraf: {
     ...Fonts.txtMedium,
     color: "white",
   },
   container: {
-    backgroundColor: Colors.Cyan,
+    backgroundColor: Colors.darkgreen,
     flex: 1,
   },
   containergeral: {
     flex: 1,
-    paddingVertical: scale(10),
-    marginBottom: scale(15),
+    margin: scale(15),
+    backgroundColor: Colors.green,
+    borderRadius: 10,
   },
   containerInfo: {
-    alignContent: "center",
-    alignSelf: "center",
-    width: scale(300),
+    flex: 1,
     flexDirection: "row",
-    overflow: "hidden",
     justifyContent: "space-between",
+    borderBottomWidth: scale(2),
     borderBottomColor: "white",
-    borderBottomWidth: 1,
-    paddingBottom: scale(5),
-    paddingTop: scale(5),
   },
   lineStyle: {
     backgroundColor: Colors.white,
@@ -44,15 +50,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   Grafico: {
-    marginVertical: verticalScale(20),
+    flex: 2,
+    justifyContent: "center",
   },
   containervoltar: {
-    flex: 1,
+    flex: 0.1,
     flexDirection: "column-reverse",
   },
   botaopress: {
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.darkgreen,
     ...Buttons.btnLargeRounded,
+    marginBottom: verticalScale(10),
   },
   tituloBotao: {
     ...Fonts.txtMediumBold,
@@ -65,10 +73,12 @@ const styles = StyleSheet.create({
   textoValorNeg: {
     color: Colors.red,
     ...Fonts.txtXLargeBold,
+    alignSelf: "center",
   },
   textoValorPos: {
     color: Colors.neongreen,
     ...Fonts.txtXLargeBold,
+    alignSelf: "center",
   },
   texto: {
     color: Colors.white,
@@ -77,7 +87,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   BTN_detalhes: {
-    flex: 1,
+    flex: 2,
   },
   //Modal
   modalContainer: {
@@ -147,6 +157,7 @@ export function Color(total) {
 
 export function setSize(text, width) {
   var fontSize = width / text.toString().length + 3;
+  console.log(text.toString().length);
   var maxSize = width / 10;
   fontSize = Math.min(fontSize, maxSize);
   // console.log(fontSize);

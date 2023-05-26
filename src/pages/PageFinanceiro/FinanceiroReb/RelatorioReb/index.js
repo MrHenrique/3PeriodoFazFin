@@ -80,18 +80,15 @@ function RelatorioReb() {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        style={styles.imgbg}
-        source={require(imgbg1)}
-        imageStyle={{ opacity: 0.6 }}
-      >
-        <View style={styles.containergeral}>
-          <View style={styles.BTN_detalhes}>
-            <TouchableOpacity
-              onPress={() => {
-                toggleModal();
-              }}
-            >
+      <View style={styles.containergeral}>
+        <View style={styles.BTN_detalhes}>
+          <TouchableOpacity
+            style={{ flex: 1, justifyContent: "space-around" }}
+            onPress={() => {
+              toggleModal();
+            }}
+          >
+            <View style={styles.containerResumo}>
               <View style={styles.containerInfo}>
                 <Text style={styles.texto}>Total de receitas:</Text>
                 <Text
@@ -108,7 +105,7 @@ function RelatorioReb() {
                 <Text
                   style={[
                     styles.textoValorNeg,
-                    { fontSize: setSize(formattedDespesas, 250) },
+                    { fontSize: setSize(formattedDespesas, 180) },
                   ]}
                 >
                   {formattedDespesas}
@@ -125,59 +122,59 @@ function RelatorioReb() {
                   {formattedTotal}
                 </Text>
               </View>
-              <View style={styles.Grafico}>
-                <Text style={styles.preGraf}>
-                  Clique no gráfico para mais detalhes.
-                </Text>
-                <View style={styles.containerChart}>
-                  <PieChartReb />
-                </View>
+            </View>
+            <View style={styles.Grafico}>
+              <Text style={styles.preGraf}>
+                Clique no gráfico para mais detalhes.
+              </Text>
+              <View style={styles.containerChart}>
+                <PieChartReb />
               </View>
+            </View>
 
-              <Modal
-                isVisible={isModalVisible}
-                coverScreen={true}
-                backdropColor={"rgba(234,242,215,0.8)"}
-                animationIn="slideInUp"
-                animationOut="slideOutDown"
-              >
-                <View style={styles.modalContainer}>
-                  <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
-                  <FlatList
-                    style={styles.scroll}
-                    data={listaLeiteReb}
-                    renderItem={renderItem2}
-                    keyExtractor={(item) => item._id}
-                  />
-                  <Text style={styles.tituloModal}>Detalhes de despesas:</Text>
-                  <FlatList
-                    style={styles.scroll}
-                    data={listaAliReb}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item._id}
-                  />
-                </View>
-                <TouchableOpacity
-                  style={styles.botaopressM}
-                  onPress={() => {
-                    toggleModal();
-                  }}
-                >
-                  <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-                </TouchableOpacity>
-              </Modal>
-            </TouchableOpacity>
-            <View style={styles.containervoltar}>
+            <Modal
+              isVisible={isModalVisible}
+              coverScreen={true}
+              backdropColor={"rgba(234,242,215,0.8)"}
+              animationIn="slideInUp"
+              animationOut="slideOutDown"
+            >
+              <View style={styles.modalContainer}>
+                <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
+                <FlatList
+                  style={styles.scroll}
+                  data={listaLeiteReb}
+                  renderItem={renderItem2}
+                  keyExtractor={(item) => item._id}
+                />
+                <Text style={styles.tituloModal}>Detalhes de despesas:</Text>
+                <FlatList
+                  style={styles.scroll}
+                  data={listaAliReb}
+                  renderItem={renderItem}
+                  keyExtractor={(item) => item._id}
+                />
+              </View>
               <TouchableOpacity
-                style={styles.botaopress}
-                onPress={() => navigation.navigate("Home")}
+                style={styles.botaopressM}
+                onPress={() => {
+                  toggleModal();
+                }}
               >
                 <Text style={styles.tituloBotao}>{"Voltar"}</Text>
               </TouchableOpacity>
-            </View>
-          </View>
+            </Modal>
+          </TouchableOpacity>
         </View>
-      </ImageBackground>
+        <View style={styles.containervoltar}>
+          <TouchableOpacity
+            style={styles.botaopress}
+            onPress={() => navigation.navigate("Home")}
+          >
+            <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }

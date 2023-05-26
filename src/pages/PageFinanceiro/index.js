@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
-import { StyleSheet, useWindowDimensions, Text } from "react-native";
-import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import { Buttons, Colors, Fonts } from "../../styles";
+import React, { useContext } from "react";
+import { StyleSheet, } from "react-native";
+import { Colors} from "../../styles";
 import { AuthContext } from "../../contexts/auth";
 import Header from "../../components/Header";
 import FinanceiroReb from "./FinanceiroReb";
@@ -12,7 +11,6 @@ const Tab = createMaterialTopTabNavigator();
 function PageFinanceiro() {
   const { shouldGoPageFinanceiro } = useContext(AuthContext);
   function setInicialTab() {
-    console.log(shouldGoPageFinanceiro);
     if (shouldGoPageFinanceiro === 0) {
       return "Fazenda";
     } else {
@@ -26,8 +24,8 @@ function PageFinanceiro() {
       <Tab.Navigator
         initialRouteName={setInicialTab()}
         screenOptions={{
-          tabBarLabelStyle: { color: "#fff" },
-          tabBarIndicatorStyle: { backgroundColor: "#fff" },
+          tabBarLabelStyle: { color: Colors.white },
+          tabBarIndicatorStyle: { backgroundColor:Colors.white },
           tabBarStyle: styles.tab,
         }}
       >
