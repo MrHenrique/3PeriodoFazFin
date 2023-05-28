@@ -5,7 +5,7 @@ import { scale, verticalScale } from "react-native-size-matters";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.darkgreen,
   },
 
   containergeral: {
@@ -29,13 +29,6 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
     width: "100%",
-  },
-
-  bannerButton: {
-    flex: 0.7,
-    backgroundColor: Colors.btngreen,
-    justifyContent: "center",
-    borderRadius: 10,
   },
 
   bannerText: {
@@ -107,7 +100,7 @@ const styles = StyleSheet.create({
   botaoPress3: {
     flex: 0.3,
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
   },
 
   tituloBotao2: {
@@ -118,7 +111,7 @@ const styles = StyleSheet.create({
 
   botaopress: {
     borderRadius: 20,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
     width: scale(300),
     height: verticalScale(40),
     alignItems: "center",
@@ -128,7 +121,7 @@ const styles = StyleSheet.create({
 
   botaopress4: {
     borderRadius: 20,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
     width: scale(300),
     height: verticalScale(40),
     alignItems: "center",
@@ -139,7 +132,7 @@ const styles = StyleSheet.create({
 
   botaopress2: {
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
     alignItems: "center",
     marginTop: verticalScale(10),
   },
