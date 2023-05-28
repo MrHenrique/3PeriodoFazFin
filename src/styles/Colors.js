@@ -1,5 +1,5 @@
 const Colors = {
-    green: "#025920",
+    green: "#035921",
     // green: "rgba(42, 95, 45, 1)", cor antiga
     btngreen: "rgba(42, 95, 45, 0.9)",
     darkgreen: "#014029",
