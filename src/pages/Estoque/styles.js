@@ -1,4 +1,4 @@
-import { Button, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { Buttons, Colors, Fonts, TextInput } from "../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
@@ -9,12 +9,13 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
   },
   containergeral: {
     flex: 1,
     margin: scale(15),
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.white,
+    borderRadius: 10,
   },
   containerkeyboard: {
     flex: 1,
@@ -25,7 +26,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     position: "relative",
-    // backgroundColor: Colors.blue,
   },
   ContainerScrollStyle: {
     marginVertical: verticalScale(10),
@@ -56,15 +56,15 @@ const styles = StyleSheet.create({
   textInput: {
     ...TextInput.TextInputLargeRounded,
     alignSelf: "center",
-    backgroundColor: Colors.white,
-    color: Colors.black,
+    backgroundColor: Colors.green,
+    color: Colors.white,
     fontWeight: "bold",
     fontSize: 15,
   },
   textInputError: {
     ...TextInput.TextInputLargeRounded,
     alignSelf: "center",
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.green,
     color: Colors.red,
     fontWeight: "bold",
     fontSize: 15,
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     maxHeight: 40,
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.btndarkgreen,
+    backgroundColor: Colors.darkgreen,
     justifyContent: "center",
   },
   containerMaisMenos: {
@@ -109,6 +109,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignContent: "center",
     alignItems: "center",
+  },
+  fontBackButton: {
+    ...Fonts.txtMedium,
+    color: Colors.white,
   },
   buttonText: {
     fontSize: 24,
@@ -190,9 +194,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     justifyContent: "center",
   },
-  font: {
-    ...Fonts.txtMedium,
-    color: Colors.white,
+  fonts: {
+    ...Fonts.txtLarge,
+    color: Colors.black,
+    fontWeight: "500",
   },
   Text: {
     ...Fonts.txtLargeBold,
@@ -225,11 +230,14 @@ const styles = StyleSheet.create({
     margin: scale(5),
   },
   botaorelatorioproduto: {
-    backgroundColor: Colors.grey,
     ...Buttons.btnSmallRounded,
     width: scale(140),
     height: "100%",
     justifyContent: "center",
+    backgroundColor: Colors.grey,
+    elevation: 4,
+    borderColor: Colors.black,
+    borderWidth: scale(0.4),
   },
   disabled: {
     opacity: 1,

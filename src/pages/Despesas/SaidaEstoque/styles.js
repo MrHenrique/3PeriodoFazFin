@@ -13,13 +13,13 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
   },
   containergeral: {
     flex: 1,
     margin: scale(15),
     borderRadius: 10,
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.white,
   },
   containerGeralCadastro: {
     flex: 1.5,
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     maxHeight: 40,
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.btndarkgreen,
+    backgroundColor: Colors.darkgreen,
     justifyContent: "center",
   },
 });

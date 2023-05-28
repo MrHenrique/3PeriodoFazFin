@@ -5,7 +5,7 @@ import { scale, verticalScale } from "react-native-size-matters";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
   },
   imgbg: {
     flex: 1,
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   containergeral: {
     flex: 1,
     margin: scale(15),
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.white,
     borderRadius: 10,
   },
   containerPreview: {

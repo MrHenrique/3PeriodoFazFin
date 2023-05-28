@@ -46,14 +46,9 @@ function SelectRebPage({ navigation }) {
       return Style;
     }
   }
-  const imgbg1 = require("../../../assets/bg10.jpg");
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        source={imgbg1}
-        imageStyle={{ opacity: 0.3 }}
-        style={styles.containergeral}
-      >
+      <View style={styles.containergeral}>
         <View style={styles.containerlogo}>
           <Image
             style={styles.logo}
@@ -100,7 +95,7 @@ function SelectRebPage({ navigation }) {
             <Text style={styles.tituloBotao}>{"Continuar"}</Text>
           </TouchableOpacity>
         </View>
-      </ImageBackground>
+      </View>
     </SafeAreaView>
   );
 }

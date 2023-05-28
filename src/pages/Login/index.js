@@ -23,7 +23,6 @@ function Login({ navigation }) {
 
   const [email, setEmail] = useState([]);
   const [password, setPassword] = useState([]);
-  const imgbg1 = require("../../../assets/background7.jpg");
   useEffect(() => {
     if (realm) {
       let data = realm.objects("Farm").sorted("nomefaz");
@@ -72,10 +71,7 @@ function Login({ navigation }) {
   }
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        source={imgbg1}
-        imageStyle={{ opacity: 0.3 }}
-        style={styles.containerlogin}
+      <View style={styles.containerlogin}
       >
         <Image
           style={styles.logo}
@@ -123,7 +119,7 @@ function Login({ navigation }) {
             </Text>
           </TouchableOpacity>
         </View>
-      </ImageBackground>
+      </View>
     </SafeAreaView>
   );
 }

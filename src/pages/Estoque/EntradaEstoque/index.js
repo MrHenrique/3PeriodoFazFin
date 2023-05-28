@@ -319,7 +319,7 @@ function EntradaEstoque() {
     if (tipoProd == 1) {
       return (
         <View style={styles.containerInput}>
-          <Text style={styles.font}>Volume do produto:</Text>
+          <Text style={styles.fonts}>Volume do produto:</Text>
           <TextInput
             style={
               !isVolumeProdValid ? styles.textInputError : styles.textInput
@@ -327,6 +327,7 @@ function EntradaEstoque() {
             value={volumeProd}
             onChangeText={handleVolumeProdChange}
             placeholder="200"
+            placeholderTextColor={"#d9d9d9"}
             keyboardType="decimal-pad"
             inputMode="decimal"
           />
@@ -342,12 +343,13 @@ function EntradaEstoque() {
     }
     return (
       <View style={styles.containerInput}>
-        <Text style={styles.font}>Peso do produto:</Text>
+        <Text style={styles.fonts}>Peso do produto:</Text>
         <TextInput
           style={!isPesoProdValid ? styles.textInputError : styles.textInput}
           value={pesoProd}
           onChangeText={handlePesoProdChange}
           placeholder="60"
+          placeholderTextColor={"#d9d9d9"}
           keyboardType="decimal-pad"
           inputMode="decimal"
         />
@@ -403,7 +405,7 @@ function EntradaEstoque() {
             contentContainerStyle={StyleScrollViewContainer()}
           >
             <View style={styles.containerInput}>
-              <Text style={styles.font}>Nome do produto:</Text>
+              <Text style={styles.fonts}>Nome do produto:</Text>
               <TextInput
                 style={
                   !isNomeProdValid ? styles.textInputError : styles.textInput
@@ -411,6 +413,7 @@ function EntradaEstoque() {
                 value={nomeProd}
                 onChangeText={handleNomeProdChange}
                 placeholder="Prata"
+                placeholderTextColor={"#d9d9d9"}
                 keyboardType="default"
                 inputMode="text"
               />
@@ -425,7 +428,7 @@ function EntradaEstoque() {
               <DropdownComponent />
             </View>
             <View style={styles.containerInput}>
-              <Text style={styles.font}>Preço da compra:</Text>
+              <Text style={styles.fonts}>Preço da compra:</Text>
               <TextInput
                 style={
                   !isValorProdValid ? styles.textInputError : styles.textInput
@@ -433,6 +436,7 @@ function EntradaEstoque() {
                 value={valorProd}
                 onChangeText={handleValorProdChange}
                 placeholder="50,00"
+                placeholderTextColor={"#d9d9d9"}
                 keyboardType="decimal-pad"
                 inputMode="decimal"
               />
@@ -446,7 +450,7 @@ function EntradaEstoque() {
             </View>
 
             <View style={styles.containerInput}>
-              <Text style={styles.font}>Quantidade de produtos comprados:</Text>
+              <Text style={styles.fonts}>Quantidade de produtos comprados:</Text>
               <View style={styles.containerMaisMenos}>
                 <TouchableOpacity style={styles.button} onPress={menosButton}>
                   <Text style={styles.buttonText}>-</Text>
@@ -475,12 +479,13 @@ function EntradaEstoque() {
             </View>
             <View style={styles.containerInput}>{TextInputTipo()}</View>
             <View style={styles.containerInput}>
-              <Text style={styles.font}>Observações:</Text>
+              <Text style={styles.fonts}>Observações:</Text>
               <TextInput
                 style={styles.textInput}
                 value={obserProd}
                 onChangeText={setObserProd}
                 placeholder="Produto comprado em ..."
+                placeholderTextColor={"#d9d9d9"}
                 keyboardType="default"
                 inputMode="text"
               />
@@ -488,14 +493,14 @@ function EntradaEstoque() {
           </ScrollView>
           <View style={StyleFuncKeyboard()}>
             <TouchableOpacity style={styles.botao} onPress={validCheck}>
-              <Text style={styles.font}>{"Cadastrar"}</Text>
+              <Text style={styles.fontBackButton}>{"Cadastrar"}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.botao}
               onPress={() => navigation.navigate("Home")}
             >
-              <Text style={styles.font}>{"Voltar"}</Text>
+              <Text style={styles.fontBackButton}>{"Voltar"}</Text>
             </TouchableOpacity>
           </View>
         </ImageBackground>

@@ -17,7 +17,6 @@ function SelectFazPage() {
   const navigation = useNavigation();
   const [listaFaz, setListaFaz] = useState([]);
   const { fazID } = useContext(AuthContext);
-  const imgbg1 = require("../../../assets/Wallpaper1.jpg");
   useEffect(() => {
     if (realm) {
       let data = realm.objects("Farm").sorted("nomefaz");
@@ -51,10 +50,7 @@ function SelectFazPage() {
   }
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground 
-      imageStyle={{ opacity: 0.3 }}
-      source={imgbg1}
-      style={styles.containerlogin}>
+      <View style={styles.containerlogin}>
         <Image
           style={styles.logo}
           source={require("../../../assets/FazFin.png")}
@@ -85,7 +81,7 @@ function SelectFazPage() {
             <Text style={styles.tituloBotao}>{"Cadastrar fazenda"}</Text>
           </TouchableOpacity>
         </View>
-      </ImageBackground>
+      </View>
     </SafeAreaView>
   );
 }

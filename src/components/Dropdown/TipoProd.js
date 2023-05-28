@@ -2,7 +2,9 @@ import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { AuthContext } from "../../contexts/auth";
-import { Buttons, Colors, Fonts } from "../../styles";
+import { Colors, Fonts } from "../../styles";
+import { scale, verticalScale } from "react-native-size-matters";
+import { AntDesign, Entypo } from "@expo/vector-icons";
 
 const data = [
   { label: "Farmácia", value: "1" },
@@ -28,23 +30,30 @@ const DropdownComponent = () => {
     }
     return null;
   };
+  const renderItem = (item) => {
+    return (
+      <View style={styles.item}>
+        <Text style={styles.textItem}>{item.label}</Text>
+        {item.value === value && (
+          <AntDesign style={styles.icon} color="white" name="check" size={20} />
+        )}
+      </View>
+    );
+  };
   return (
     <View style={styles.container}>
       {renderLabel()}
       <Dropdown
         style={[styles.dropdown, isFocus && { borderColor: "black" }]}
-        placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
         containerStyle={{
-          borderColor: Colors.white,
+          borderColor: Colors.black,
           backgroundColor: Colors.darkgreen,
         }}
         itemContainerStyle={styles.itemContainerStyle}
-        itemTextStyle={styles.itemTextStyle}
-        activeColor={Colors.green}
-        iconColor={"white"}
+        activeColor={Colors.darkgreen}
+        iconColor={"black"}
         data={data}
         maxHeight={400}
         labelField="label"
@@ -57,6 +66,20 @@ const DropdownComponent = () => {
           setValue(item.value);
           setIsFocus(false);
         }}
+        renderItem={renderItem}
+        statusBarIsTranslucent={true}
+        renderRightIcon={() => (
+          <Entypo
+            style={
+              isFocus
+                ? [styles.icon, { transform: [{ rotate: "180deg" }] }]
+                : styles.icon
+            }
+            color="black"
+            name="chevron-thin-down"
+            size={24}
+          />
+        )}
       />
     </View>
   );
@@ -64,39 +87,51 @@ const DropdownComponent = () => {
 export default DropdownComponent;
 const styles = StyleSheet.create({
   itemContainerStyle: {
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
   },
   itemTextStyle: {
     color: Colors.white,
   },
   container: {
     backgroundColor: "transparent",
-    paddingHorizontal: 20,
-    paddingVertical: 5,
+    paddingHorizontal:scale(20),
+    paddingVertical: scale(5),
   },
   dropdown: {
-    borderBottomColor: Colors.white,
-    borderBottomWidth: 0.8,
+    borderBottomColor: Colors.black,
+    borderBottomWidth: scale(2),
   },
   icon: {
-    marginRight: 5,
+    marginRight: scale(5),
   },
   placeholderStyle: {
     ...Fonts.txtLarge,
     textAlign: "left",
-    color: Colors.white,
+    color: Colors.black,
   },
   selectedTextStyle: {
     ...Fonts.txtLarge,
     textAlign: "left",
-    color: Colors.white,
+    color: Colors.black,
+    fontWeight: "500",
   },
   iconStyle: {
     width: 30,
     height: 30,
   },
   label: {
-    color: Colors.white,
+    color: Colors.black,
     ...Fonts.txtLargeBold,
+  },
+  item: {
+    paddingVertical: scale(16),
+    paddingHorizontal: scale(10),
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  textItem: {
+    flex: 1,
+    fontSize: 16,
+    color: Colors.white,
   },
 });

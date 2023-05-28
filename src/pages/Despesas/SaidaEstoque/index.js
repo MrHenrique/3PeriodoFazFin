@@ -274,6 +274,7 @@ export default function SaidaEstoque() {
               </View>
             </View>
           </ScrollView>
+
           <View style={StyleFuncKeyboard()}>
             <TouchableOpacity onPress={handleAddGastos} style={styles.botao}>
               <Text style={styles.txtBotao}>{"Cadastrar"}</Text>

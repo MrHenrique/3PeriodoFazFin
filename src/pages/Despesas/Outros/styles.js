@@ -13,13 +13,13 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
   },
   containergeral: {
     flex: 1,
     margin: scale(15),
     borderRadius: 10,
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.white,
   },
   containerbutao: {
     flex: 0.2,
@@ -37,7 +37,10 @@ const styles = StyleSheet.create({
   containerCadastroOutras: {
     flex: 1,
     marginVertical: verticalScale(10),
+    marginHorizontal: scale(10),
     flexDirection: "column",
+    backgroundColor: Colors.darkgreen,
+    borderRadius: 10,
   },
   containerOutrasDespesas: {
     flex: 1,
@@ -64,7 +67,7 @@ const styles = StyleSheet.create({
     maxHeight: 40,
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.btndarkgreen,
+    backgroundColor: Colors.darkgreen,
     justifyContent: "center",
   },
   //Textinput

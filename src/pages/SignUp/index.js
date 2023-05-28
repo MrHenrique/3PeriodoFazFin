@@ -46,11 +46,7 @@ function SignUp() {
   }
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        style={styles.imgbg}
-        source={require(imgbg1)}
-        imageStyle={{ opacity: 0.6 }}
-      >
+      <View style={styles.imgbg}>
         <View style={styles.containergeral}>
           <Image
             style={styles.logo}
@@ -64,6 +60,7 @@ function SignUp() {
             onChangeText={setNomeProp}
             value={nomeProp}
             placeholder="Nome"
+            placeholderTextColor={"#d9d9d9"}
           />
           <Text style={styles.texto}>Digite seu email</Text>
           <TextInput
@@ -74,6 +71,7 @@ function SignUp() {
             inputMode="text"
             keyboardType="email-address"
             autoCapitalize="none"
+            placeholderTextColor={"#d9d9d9"}
           />
           <Text style={styles.texto}>Digite a senha</Text>
           <TextInput
@@ -84,6 +82,7 @@ function SignUp() {
             onChangeText={setPassword}
             value={password}
             secureTextEntry
+            placeholderTextColor={"#d9d9d9"}
           />
           <Text style={styles.texto}>Confirme a senha</Text>
           <TextInput
@@ -94,6 +93,7 @@ function SignUp() {
             onChangeText={setPasswordConfirm}
             value={passwordConfirm}
             secureTextEntry
+            placeholderTextColor={"#d9d9d9"}
           />
           <View style={styles.containerbotoes}>
             <TouchableOpacity
@@ -110,7 +110,7 @@ function SignUp() {
             </TouchableOpacity>
           </View>
         </View>
-      </ImageBackground>
+      </View>
     </SafeAreaView>
   );
 }
