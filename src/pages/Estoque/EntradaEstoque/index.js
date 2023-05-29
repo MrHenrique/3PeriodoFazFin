@@ -329,6 +329,11 @@ function EntradaEstoque() {
           <TextInput
             label="Volume Produto"
             style={styles.textInput}
+            placeholderTextColor={Colors.grey}
+            textColor={Colors.black}
+            activeUnderlineColor={Colors.green}
+            underlineColor={Colors.blue}
+            underlineStyle={{ paddingBottom: 3 }}
             value={volumeProd}
             onChangeText={handleVolumeProdChange}
             keyboardType="decimal-pad"
@@ -423,7 +428,11 @@ function EntradaEstoque() {
               />
               <HelperText
                 type="error"
-                style={{ color: MD3Colors.error60, fontSize: 14, lineHeight: 12 }}
+                style={{
+                  color: MD3Colors.error60,
+                  fontSize: 14,
+                  lineHeight: 12,
+                }}
                 visible={!isNomeProdValid}
                 padding="20"
               >
@@ -435,7 +444,11 @@ function EntradaEstoque() {
               <DropdownComponent />
               <HelperText
                 type="error"
-                style={{ color: MD3Colors.error60, fontSize: 14, lineHeight: 12 }}
+                style={{
+                  color: MD3Colors.error60,
+                  fontSize: 14,
+                  lineHeight: 12,
+                }}
                 visible={false}
                 padding="20"
               >
@@ -460,7 +473,11 @@ function EntradaEstoque() {
               />
               <HelperText
                 type="error"
-                style={{ color: MD3Colors.error60, fontSize: 14, lineHeight: 12 }}
+                style={{
+                  color: MD3Colors.error60,
+                  fontSize: 14,
+                  lineHeight: 12,
+                }}
                 visible={!isValorProdValid}
                 padding="20"
               >
@@ -502,7 +519,11 @@ function EntradaEstoque() {
               </View>
               <HelperText
                 type="error"
-                style={{ color: MD3Colors.error60, fontSize: 14, lineHeight: 12 }}
+                style={{
+                  color: MD3Colors.error60,
+                  fontSize: 14,
+                  lineHeight: 12,
+                }}
                 visible={!isQtdProdValid}
                 padding="20"
               >
@@ -535,10 +556,7 @@ function EntradaEstoque() {
 
             <TouchableOpacity
               style={styles.botao}
-              // onPress={() => navigation.navigate("Home")}
-              onPress={() => {
-                console.log(valorProd);
-              }}
+              onPress={() => navigation.navigate("Home")}
             >
               <Text style={styles.fontBackButton}>{"Voltar"}</Text>
             </TouchableOpacity>
