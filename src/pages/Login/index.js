@@ -124,7 +124,7 @@ function Login({ navigation }) {
             error={false}
             activeUnderlineColor={Colors.green}
             textColor={Colors.black}
-            placeholder="ex: seuemail@gmail.com"
+            placeholder="Ex: seuemail@gmail.com"
             inputMode="text"
             keyboardType="email-address"
             autoCapitalize="none"
