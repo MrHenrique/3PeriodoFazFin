@@ -13,13 +13,13 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.darkgreen,
   },
   containergeral: {
     flex: 1,
     margin: scale(15),
     borderRadius: 10,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.darkgreen,
   },
   containerbutao: {
     flex: 0.2,
@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
     marginVertical: verticalScale(10),
     marginHorizontal: scale(10),
     flexDirection: "column",
-    backgroundColor: Colors.darkgreen,
     borderRadius: 10,
   },
   containerOutrasDespesas: {
@@ -52,11 +51,6 @@ const styles = StyleSheet.create({
     ...Fonts.txtLarge,
     color: Colors.white,
   },
-  txtTitulo: {
-    display: "none",
-    ...Fonts.txtLargeBold,
-    color: Colors.white,
-  },
   txtBotao: {
     ...Fonts.txtMedium,
     color: Colors.white,
@@ -67,15 +61,11 @@ const styles = StyleSheet.create({
     maxHeight: 40,
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
     justifyContent: "center",
   },
   //Textinput
   txtInput: {
-    ...Fonts.txtMedium,
-    ...TextInput.TextInputLargeRounded,
-    width: "95%",
-    maxHeight: verticalScale(40),
     backgroundColor: Colors.white,
   },
 });

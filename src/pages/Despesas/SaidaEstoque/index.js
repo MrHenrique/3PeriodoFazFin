@@ -156,9 +156,9 @@ export default function SaidaEstoque() {
     <KeyboardAvoidingView behavior="undefined" style={styles.containerkeyboard}>
       <View style={styles.container}>
         <ImageBackground
-          // source={require("../../../../assets/fazfinwhiteletter.png")}
-          // resizeMode="repeat"
-          // imageStyle={{ opacity: 0.05 }}
+          source={require("../../../../assets/fazfinwhiteletter.png")}
+          resizeMode="repeat"
+          imageStyle={{ opacity: 0.02 }}
           style={styles.containergeral}
         >
           <ScrollView

@@ -3,13 +3,14 @@ import {
   Text,
   TouchableOpacity,
   View,
-  TextInput,
   ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
   ScrollView,
 } from "react-native";
 import { useState, useContext, useEffect } from "react";
+import { TextInput, HelperText } from "react-native-paper";
+import { Colors } from "../../../styles";
 import uuid from "react-native-uuid";
 import { AuthContext } from "../../../contexts/auth";
 import { useNavigation } from "@react-navigation/native";
@@ -86,7 +87,7 @@ export default function Outros() {
         <ImageBackground
           source={require("../../../../assets/fazfinwhiteletter.png")}
           resizeMode="repeat"
-          imageStyle={{ opacity: 0.05 }} // imageStyle={{ margin: 25 }}
+          imageStyle={{ opacity: 0.02 }} // imageStyle={{ margin: 25 }}
           style={styles.containergeral}
         >
           <ScrollView
@@ -94,26 +95,39 @@ export default function Outros() {
             contentContainerStyle={StyleScrollViewContainer()}
           >
             <View style={styles.containerCadastroOutras}>
-              <Text style={styles.txtTitulo}>Cadastro de outras despesas.</Text>
               <View style={styles.containerOutrasDespesas}>
-                <Text style={styles.txtDescricao}>{"Descrição:"}</Text>
                 <TextInput
+                  mode="flat"
+                  label={"Descrição"}
                   style={styles.txtInput}
+                  placeholderTextColor={Colors.grey}
+                  textColor={Colors.black}
+                  activeUnderlineColor={Colors.green}
+                  underlineColor={Colors.blue}
+                  underlineStyle={{ paddingBottom: 3 }}
                   value={nomeProd}
                   onChangeText={setNomeProd}
                   placeholder="Exemplo: Reforma pasto"
                 />
               </View>
+              <HelperText></HelperText>
               <View style={styles.containerOutrasDespesas}>
-                <Text style={styles.txtDescricao}>{"Total pago:"}</Text>
                 <TextInput
+                  mode="flat"
+                  label={"Total Pago"}
                   style={styles.txtInput}
+                  placeholderTextColor={Colors.grey}
+                  textColor={Colors.black}
+                  activeUnderlineColor={Colors.green}
+                  underlineColor={Colors.blue}
+                  underlineStyle={{ paddingBottom: 3 }}
                   value={valorProdString}
                   keyboardType="number-pad"
                   onChangeText={setValorProd}
                   placeholder="Exemplo: 10000.20"
                 />
               </View>
+              <HelperText></HelperText>
             </View>
           </ScrollView>
           <View style={StyleFuncKeyboard()}>

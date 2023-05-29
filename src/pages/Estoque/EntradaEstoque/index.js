@@ -346,7 +346,7 @@ function EntradaEstoque() {
             visible={!isVolumeProdValid}
             padding="20"
           >
-            Erro: Peso do produto inválido!!
+            Erro: Volume do produto inválido!!
           </HelperText>
         </View>
       );
