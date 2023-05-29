@@ -124,10 +124,7 @@ function CadastroReb() {
   const imgbg1 = require("../../../../assets/bg6.jpg");
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        imageStyle={{ opacity: 0.3 }}
-        source={imgbg1}
-        style={styles.mainContainer}
+      <View style={styles.mainContainer}
       >
         <Image
           style={styles.logo}
@@ -140,7 +137,7 @@ function CadastroReb() {
             onChangeText={handleNomeRebChange}
             value={nomeReb}
             placeholder="Ex: Vacas solteiras"
-            placeholderTextColor={"#d9d9d9"}
+            placeholderTextColor={"#2e2e2e"}
           ></TextInput>
           {!isNomeRebValid && (
             <Text style={styles.error}>Digite o nome do rebanho!</Text>
@@ -157,7 +154,7 @@ function CadastroReb() {
             value={qtdAni}
             keyboardType="number-pad"
             placeholder="Quantos animais no rebanho?"
-            placeholderTextColor={"#d9d9d9"}
+            placeholderTextColor={"#2e2e2e"}
           ></TextInput>
           {!isQtdAniValid && (
             <Text style={styles.error}>
@@ -181,7 +178,7 @@ function CadastroReb() {
             <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
           </TouchableOpacity>
         </View>
-      </ImageBackground>
+      </View>
     </SafeAreaView>
   );
 }

@@ -29,7 +29,7 @@ const Touchable = (
         </Text>
         <MaterialCommunityIcons
           name="chevron-right"
-          color="black"
+          color="white"
           size={verticalScale(30)}
         />
       </TouchableOpacity>
@@ -186,19 +186,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     height: verticalScale(40),
-    borderBottomColor: "black",
+    borderBottomColor: Colors.white,
     borderBottomWidth: verticalScale(2),
     width: scale(300),
   },
   touchableText: {
-    color: "black",
+    color: Colors.white,
     fontSize: verticalScale(16),
     fontWeight: "bold",
   },
   header: {
     height: verticalScale(50),
     backgroundColor: Colors.darkgreen,
-    borderBottomColor: Colors.black,
+    borderBottomColor: Colors.white,
     borderBottomWidth: verticalScale(1),
     flexDirection: "row-reverse",
     alignItems: "center",

@@ -2,6 +2,7 @@ const Colors = {
     green: "#035921",
     darkgreen: "#00472F",
     plusdarkgreen: "#014029",
+    lightgreen: "#e6f4e9",
     // green: "rgba(42, 95, 45, 1)", cor antiga
     // darkgreen: "#004513", cor antiga
     darkgreenTransparent: "rgba(0, 0, 0, 0.25)",
@@ -18,6 +19,7 @@ const Colors = {
     grey: "#D9D9D9",
     neongreen: "#04f000",
     btnred: "rgba(255, 0, 0, 0.5)",
+    txtinputdisabledblack: "#2e2e2e"
 
 }
 export default Colors;

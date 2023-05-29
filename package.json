@@ -26,6 +26,7 @@
     "react-native-datepicker": "^1.7.2",
     "react-native-element-dropdown": "^2.7.1",
     "react-native-elements": "^3.4.3",
+    "react-native-floating-label-input": "^1.4.2",
     "react-native-gesture-handler": "~2.8.0",
     "react-native-get-random-values": "~1.8.0",
     "react-native-modal": "^13.0.1",

@@ -281,11 +281,7 @@ function EstoqueGeral() {
   };
   return (
     <View style={styles.container}>
-      <ImageBackground
-        imageStyle={{ opacity: 0.05 }}
-        resizeMode="repeat"
-        source={require("../../../../assets/fazfinwhiteletter.png")}
-        style={styles.containergeral}
+      <View style={styles.containergeral}
       >
         <View style={styles.containerValor}>
           <View>
@@ -360,7 +356,7 @@ function EstoqueGeral() {
             </TouchableOpacity>
           </View>
         </View>
-      </ImageBackground>
+      </View>
     </View>
   );
 }

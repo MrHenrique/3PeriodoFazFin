@@ -9,12 +9,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.darkgreen,
   },
   containergeral: {
     flex: 1,
     margin: scale(15),
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.darkgreen,
     borderRadius: 10,
   },
   containerkeyboard: {
@@ -56,15 +56,17 @@ const styles = StyleSheet.create({
   textInput: {
     ...TextInput.TextInputLargeRounded,
     alignSelf: "center",
-    backgroundColor: Colors.green,
-    color: Colors.white,
+    backgroundColor: Colors.white,
+    color: Colors.black,
     fontWeight: "bold",
     fontSize: 15,
+    elevation: 10,
+    shadowColor: "black",
   },
   textInputError: {
     ...TextInput.TextInputLargeRounded,
     alignSelf: "center",
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.white,
     color: Colors.red,
     fontWeight: "bold",
     fontSize: 15,
@@ -92,7 +94,7 @@ const styles = StyleSheet.create({
     maxHeight: 40,
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
     justifyContent: "center",
   },
   containerMaisMenos: {
@@ -184,7 +186,9 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: scale(5),
     borderRadius: 10,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
+    elevation: 10,
+    shadowColor: "black",
   },
   containerText: {
     flex: 1,
@@ -196,7 +200,7 @@ const styles = StyleSheet.create({
   },
   fonts: {
     ...Fonts.txtLarge,
-    color: Colors.black,
+    color: Colors.lightgreen,
     fontWeight: "500",
   },
   Text: {
@@ -211,11 +215,13 @@ const styles = StyleSheet.create({
     transform: [{ rotate: "180deg" }],
   },
   containerValor: {
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
     margin: scale(10),
     borderRadius: 10,
     flex: 0.5,
     padding: scale(10),
+    elevation: 10,
+    shadowColor: "black",
   },
   containerlista: {
     flex: 4,
@@ -236,6 +242,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: Colors.grey,
     elevation: 4,
+    shadowColor: "black",
     borderColor: Colors.black,
     borderWidth: scale(0.4),
   },
@@ -251,8 +258,10 @@ const styles = StyleSheet.create({
     borderStyle: "dashed",
   },
   containerItems: {
-    backgroundColor: Colors.btndarkgreen,
+    backgroundColor: Colors.green,
     marginHorizontal: scale(5),
+    elevation: 10,
+    shadowColor: "black",
   },
   fontvalortotal: {
     paddingTop: scale(5),

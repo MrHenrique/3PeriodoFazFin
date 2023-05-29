@@ -47,13 +47,13 @@ const DropdownComponent = () => {
         style={[styles.dropdown, isFocus && { borderColor: "black" }]}
         selectedTextStyle={styles.selectedTextStyle}
         iconStyle={styles.iconStyle}
+        placeholderStyle={styles.placeholderStyle}
         containerStyle={{
           borderColor: Colors.black,
           backgroundColor: Colors.darkgreen,
         }}
         itemContainerStyle={styles.itemContainerStyle}
         activeColor={Colors.darkgreen}
-        iconColor={"black"}
         data={data}
         maxHeight={400}
         labelField="label"
@@ -75,7 +75,7 @@ const DropdownComponent = () => {
                 ? [styles.icon, { transform: [{ rotate: "180deg" }] }]
                 : styles.icon
             }
-            color="black"
+            color="white"
             name="chevron-thin-down"
             size={24}
           />
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     paddingVertical: scale(5),
   },
   dropdown: {
-    borderBottomColor: Colors.black,
+    borderBottomColor: Colors.white,
     borderBottomWidth: scale(2),
   },
   icon: {
@@ -107,12 +107,13 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     ...Fonts.txtLarge,
     textAlign: "left",
-    color: Colors.black,
+    color: Colors.white,
+    fontWeight: "300",
   },
   selectedTextStyle: {
     ...Fonts.txtLarge,
     textAlign: "left",
-    color: Colors.black,
+    color: Colors.white,
     fontWeight: "500",
   },
   iconStyle: {
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     height: 30,
   },
   label: {
-    color: Colors.black,
+    color: Colors.white,
     ...Fonts.txtLargeBold,
   },
   item: {

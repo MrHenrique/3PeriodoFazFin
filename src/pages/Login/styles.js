@@ -5,7 +5,7 @@ import { Colors, Fonts, Buttons, TextInput } from "../../styles";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.darkgreen,
   },
   imgbg: {
     flex: 1,
@@ -19,21 +19,23 @@ const styles = StyleSheet.create({
   },
   title: {
     ...Fonts.Title,
-    color: Colors.black,
+    color: Colors.white,
     top: verticalScale(25),
     marginBottom: verticalScale(30),
   },
   texto: {
     ...Fonts.txtLarge,
     fontWeight: "500",
-    color: Colors.black,
+    color: Colors.white,
     alignSelf: "center",
   },
   campoTexto: {
     ...Fonts.txtMediumBold,
     ...TextInput.TextInputLargeRounded,
-    backgroundColor: Colors.green,
-    color: Colors.white,
+    backgroundColor: Colors.white,
+    borderBottomColor: Colors.green,
+    borderBottomWidth: scale(2),
+    color: Colors.black,
   },
   subtitle: {
     ...Fonts.txtLarge,
@@ -42,12 +44,12 @@ const styles = StyleSheet.create({
   },
   botaopress: {
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
     marginBottom: verticalScale(10),
   },
   botaopress2: {
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
     flexDirection: "row-reverse",
   },
   disabledbutton: {
@@ -67,18 +69,12 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: scale(15),
     borderRadius: 10,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.darkgreen,
   },
   containerbotoes: {
     flex: 1,
     padding: verticalScale(10),
     flexDirection: "column-reverse",
-  },
-  containergeral: {
-    flex: 1,
-    margin: scale(15),
-    borderRadius: 10,
-    backgroundColor: Colors.darkgreenTransparent,
   },
 });
 export default styles;

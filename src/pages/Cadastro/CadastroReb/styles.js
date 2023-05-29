@@ -27,26 +27,28 @@ const styles = StyleSheet.create({
   },
   texto: {
     ...Fonts.txtLargeBold,
-    color: Colors.black,
+    color: Colors.green,
   },
   viewtext: {
     flex: 1,
     alignSelf: "center",
   },
   campoTexto: {
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.white,
     color: Colors.white,
     textAlign: "center",
     ...Fonts.txtMediumBold,
     ...TextInput.TextInputLargeRounded,
+    borderBottomColor: Colors.green,
+    borderBottomWidth: 2,
   },
   campoTextoErro: {
     ...Fonts.txtMediumBold,
     ...TextInput.TextInputLargeRounded,
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.white,
     color: Colors.white,
-    borderWidth: 2,
-    borderColor: Colors.red,
+    borderBottomColor: Colors.red,
+    borderBottomWidth: 2,
   },
   containerbotoes: {
     flex: 1,

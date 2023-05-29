@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: scale(15),
     justifyContent: "space-around",
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.darkgreen,
     borderRadius: 10,
   },
   containercadastrarreb: {
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
 
   texto: {
     ...Fonts.txtLargeBold,
-    color: Colors.black,
+    color: Colors.white,
   },
 
   containerbotoes: {

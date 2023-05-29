@@ -6,7 +6,6 @@ import {
   Image,
   TouchableOpacity,
   View,
-  ImageBackground,
   TextInput,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -15,6 +14,7 @@ import styles from "./styles";
 import { AuthContext } from "../../../contexts/auth";
 import { useMainContext } from "../../../contexts/RealmContext";
 import { Alert } from "react-native";
+import { FloatingLabelInput } from 'react-native-floating-label-input';
 function CadastroFaz() {
   const realm = useMainContext();
   const { FazendaID, FazendaProp, RebanhoID } = useContext(AuthContext);
@@ -106,15 +106,9 @@ function CadastroFaz() {
     }
   }
   const navigation = useNavigation();
-  const imgbg1 = require("../../../../assets/backgroundCad.jpg");
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        source={imgbg1}
-        style={styles.containergeral}
-        imageStyle={{ opacity: 0.5 }}
-        resizeMode="cover"
-      >
+      <View style={styles.containergeral}>
         <Image
           style={styles.logo}
           source={require("../../../../assets/FazFin.png")}
@@ -122,11 +116,12 @@ function CadastroFaz() {
         <Text style={[styles.texto, { marginTop: verticalScale(40) }]}>
           Nome da fazenda
         </Text>
+
         <TextInput
           style={!isNomefazValid ? styles.campoTextoError : styles.campoTexto}
           onChangeText={handleNomefazChange}
           value={nomefaz}
-          placeholderTextColor={"#f2f2f2"}
+          placeholderTextColor={"#2e2e2e"}
           placeholder="Qual o nome da sua Fazenda?"
         ></TextInput>
         {!isNomefazValid && (
@@ -141,7 +136,7 @@ function CadastroFaz() {
           onChangeText={handleProprChange}
           value={proprietario}
           placeholder="Qual o nome do proprietário?"
-          placeholderTextColor={"#d9d9d9"}
+          placeholderTextColor={"#2e2e2e"}
         ></TextInput>
         {!isProprValid && (
           <Text style={styles.error}>Digite o nome do proprietário!</Text>
@@ -152,7 +147,7 @@ function CadastroFaz() {
           onChangeText={handleTipoChange}
           value={tipoprod}
           placeholder="Ex: Pecuária Leiteira"
-          placeholderTextColor={"#d9d9d9"}
+          placeholderTextColor={"#2e2e2e"}
         ></TextInput>
         {!isTipoValid && (
           <Text style={styles.error}>Digite o tipo de produção!</Text>
@@ -168,7 +163,7 @@ function CadastroFaz() {
             <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
           </TouchableOpacity>
         </View>
-      </ImageBackground>
+      </View>
     </SafeAreaView>
   );
 }

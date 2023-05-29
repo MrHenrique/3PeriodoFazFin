@@ -36,9 +36,10 @@ const styles = StyleSheet.create({
 
   bannerButton: {
     flex: 1,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
     justifyContent: "center",
     borderRadius: 10,
+    elevation: 10,
   },
 
   bannerText: {

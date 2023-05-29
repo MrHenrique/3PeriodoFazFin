@@ -40,7 +40,6 @@ function Home({ navigation }) {
     }
   };
 
-  const imgbg1 = "../../../assets/bg3.jpg";
   return (
     <SafeAreaView style={styles.container}>
       <Header />

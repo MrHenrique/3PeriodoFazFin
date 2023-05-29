@@ -327,7 +327,7 @@ function EntradaEstoque() {
             value={volumeProd}
             onChangeText={handleVolumeProdChange}
             placeholder="200"
-            placeholderTextColor={"#d9d9d9"}
+            placeholderTextColor={"#2e2e2e"}
             keyboardType="decimal-pad"
             inputMode="decimal"
           />
@@ -349,7 +349,7 @@ function EntradaEstoque() {
           value={pesoProd}
           onChangeText={handlePesoProdChange}
           placeholder="60"
-          placeholderTextColor={"#d9d9d9"}
+          placeholderTextColor={"#2e2e2e"}
           keyboardType="decimal-pad"
           inputMode="decimal"
         />
@@ -395,9 +395,9 @@ function EntradaEstoque() {
     <KeyboardAvoidingView behavior="undefined" style={styles.containerkeyboard}>
       <View style={styles.container}>
         <ImageBackground
-          imageStyle={{ opacity: 0.05 }}
+          // imageStyle={{ opacity: 0.05 }}
           resizeMode="repeat"
-          source={require("../../../../assets/fazfinwhiteletter.png")}
+          // source={require("../../../../assets/fazfinwhiteletter.png")}
           style={styles.containergeral}
         >
           <ScrollView
@@ -413,7 +413,7 @@ function EntradaEstoque() {
                 value={nomeProd}
                 onChangeText={handleNomeProdChange}
                 placeholder="Prata"
-                placeholderTextColor={"#d9d9d9"}
+                placeholderTextColor={"#2e2e2e"}
                 keyboardType="default"
                 inputMode="text"
               />
@@ -436,7 +436,7 @@ function EntradaEstoque() {
                 value={valorProd}
                 onChangeText={handleValorProdChange}
                 placeholder="50,00"
-                placeholderTextColor={"#d9d9d9"}
+                placeholderTextColor={"#2e2e2e"}
                 keyboardType="decimal-pad"
                 inputMode="decimal"
               />
@@ -485,7 +485,7 @@ function EntradaEstoque() {
                 value={obserProd}
                 onChangeText={setObserProd}
                 placeholder="Produto comprado em ..."
-                placeholderTextColor={"#d9d9d9"}
+                placeholderTextColor={"#2e2e2e"}
                 keyboardType="default"
                 inputMode="text"
               />

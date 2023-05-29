@@ -30,7 +30,7 @@ function Header() {
 }
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.plusdarkgreen,
     height: verticalScale(42),
     paddingLeft: scale(5),
     flexDirection: "row-reverse",

@@ -88,13 +88,13 @@ function Login({ navigation }) {
             inputMode="text"
             keyboardType="email-address"
             autoCapitalize="none"
-            placeholderTextColor={"#fff"}
+            placeholderTextColor={"#2e2e2e"}
           />
           <Text style={styles.texto}>Digite a senha</Text>
           <TextInput
             style={styles.campoTexto}
             placeholder="Senha"
-            placeholderTextColor={"#fff"}
+            placeholderTextColor={"#2e2e2e"}
             inputMode="text"
             autoCapitalize="none"
             onChangeText={setPassword}
