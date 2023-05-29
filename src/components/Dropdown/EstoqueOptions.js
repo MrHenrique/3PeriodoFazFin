@@ -68,10 +68,11 @@ const EstoqueOptions = () => {
         itemContainerStyle={styles.itemContainerStyle}
         itemTextStyle={styles.itemTextStyle}
         activeColor={Colors.green}
-        iconColor={"black"}
+        iconColor={"white"}
         data={data}
         maxHeight={300}
         labelField="label"
+        statusBarIsTranslucent={true}
         valueField="value"
         idField="_id"
         placeholder={"Clique aqui"}
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   dropdown: {
-    borderBottomColor: Colors.black,
+    borderBottomColor: Colors.white,
     borderBottomWidth: scale(2),
   },
   icon: {
@@ -108,12 +109,12 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     ...Fonts.txtLarge,
     textAlign: "left",
-    color: Colors.black,
+    color: Colors.white,
   },
   selectedTextStyle: {
     ...Fonts.txtLarge,
     textAlign: "left",
-    color: Colors.black,
+    color: Colors.white,
     fontWeight: "500",
   },
   iconStyle: {

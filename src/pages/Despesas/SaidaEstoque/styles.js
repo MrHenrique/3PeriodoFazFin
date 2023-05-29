@@ -13,13 +13,13 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.darkgreen,
   },
   containergeral: {
     flex: 1,
     margin: scale(15),
     borderRadius: 10,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.darkgreen,
   },
   containerGeralCadastro: {
     flex: 1.5,
@@ -31,11 +31,12 @@ const styles = StyleSheet.create({
   containerTxtInputDespesas: {},
   containerProduto: {
     flex: 2,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
     marginHorizontal: scale(10),
     paddingHorizontal: scale(10),
     marginBottom: scale(10),
     borderRadius: 10,
+    elevation: 5,
   },
   checkbox: {
     height: "auto",
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   cadastroDespesas: {
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
     marginHorizontal: scale(10),
     paddingHorizontal: scale(10),
     borderRadius: 10,
@@ -79,10 +80,6 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   txtInput: {
-    ...Fonts.txtMedium,
-    ...TextInput.TextInputLargeRounded,
-    width: "100%",
-    maxHeight: verticalScale(40),
     backgroundColor: Colors.white,
   },
   textCheckBox: {
@@ -124,7 +121,7 @@ const styles = StyleSheet.create({
     maxHeight: 40,
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
     justifyContent: "center",
   },
 });

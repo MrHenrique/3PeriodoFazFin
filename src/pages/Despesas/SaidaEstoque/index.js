@@ -3,13 +3,14 @@ import {
   Text,
   TouchableOpacity,
   View,
-  TextInput,
   ImageBackground,
   Alert,
   KeyboardAvoidingView,
   ScrollView,
   Keyboard,
 } from "react-native";
+import { TextInput, HelperText } from "react-native-paper";
+import { Colors } from "../../../styles";
 import EstoqueOptions from "../../../components/Dropdown/EstoqueOptions";
 import { useState, useContext, useEffect } from "react";
 import uuid from "react-native-uuid";
@@ -155,9 +156,9 @@ export default function SaidaEstoque() {
     <KeyboardAvoidingView behavior="undefined" style={styles.containerkeyboard}>
       <View style={styles.container}>
         <ImageBackground
-          source={require("../../../../assets/fazfinwhiteletter.png")}
-          resizeMode="repeat"
-          imageStyle={{ opacity: 0.05 }}
+          // source={require("../../../../assets/fazfinwhiteletter.png")}
+          // resizeMode="repeat"
+          // imageStyle={{ opacity: 0.05 }}
           style={styles.containergeral}
         >
           <ScrollView
@@ -248,28 +249,37 @@ export default function SaidaEstoque() {
               ) : null}
               {/* cadastro */}
               <View style={styles.cadastroDespesas}>
-                <Text style={styles.textTitulo}>
-                  Cadastro de outras despesas.
-                </Text>
                 <View style={styles.containerTxtInputDespesas}>
-                  <Text style={styles.titleTxtInput}>
-                    Quantidade utilizada:{" "}
-                  </Text>
                   <TextInput
+                    label={"Quantidade utilizada"}
                     style={styles.txtInput}
+                    placeholderTextColor={Colors.grey}
+                    textColor={Colors.black}
+                    activeUnderlineColor={Colors.green}
+                    underlineColor={Colors.blue}
+                    underlineStyle={{ paddingBottom: 3 }}
                     value={qtdProd}
                     onChangeText={setQtdProd}
+                    keyboardType="decimal-pad"
+                    inputMode="decimal"
                     placeholder="50"
                   />
+                  <HelperText></HelperText>
                 </View>
                 <View style={styles.containerTxtInputDespesas}>
-                  <Text style={styles.titleTxtInput}>Observações: </Text>
                   <TextInput
+                    label="Obsercação"
                     style={styles.txtInput}
+                    placeholderTextColor={Colors.grey}
+                    textColor={Colors.black}
+                    activeUnderlineColor={Colors.green}
+                    underlineColor={Colors.blue}
+                    underlineStyle={{ paddingBottom: 3 }}
                     value={obserProd}
                     onChangeText={setObserProd}
                     placeholder="Observação sobre produto"
                   />
+                  <HelperText></HelperText>
                 </View>
               </View>
             </View>
