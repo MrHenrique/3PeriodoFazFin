@@ -177,8 +177,8 @@ function CadastroFaz() {
               padding="20"
             >
               {!isNomefazValid
-                ? "Erro: Nome da fazenda inválido!!"
-                : "Erro: Nome da fazenda duplicado!!"}
+                ? "Nome da fazenda inválido!"
+                : "Já existe uma fazenda com este nome!"}
             </HelperText>
             {/* Nome Do Proprietario */}
             <TextInput
@@ -205,7 +205,7 @@ function CadastroFaz() {
               visible={!isProprValid}
               padding="20"
             >
-              Erro: Nome do proprietario inválido!!
+              Nome do proprietario inválido!!
             </HelperText>
             {/* Tipo de Pecuaria */}
             <TextInput
@@ -232,7 +232,7 @@ function CadastroFaz() {
               visible={!isTipoValid}
               padding="20"
             >
-              Erro: Tipo de Pecuaria inválido!!
+              Tipo de Pecuaria inválido!!
             </HelperText>
           </ScrollView>
           <View style={StyleFuncKeyboard()}>

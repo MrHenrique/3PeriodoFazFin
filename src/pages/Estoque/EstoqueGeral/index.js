@@ -142,7 +142,7 @@ function EstoqueGeral() {
         const valor = ((item.volumeProd / item.qtdProd) * item.qtdProd).toFixed(
           2
         );
-        const formattedValor = `${valor.replace(".", ",")}ml`;
+        const formattedValor = `${valor.replace(".", ",")}`;
         return (
           <View style={styles.containerlist}>
             <View style={styles.ListItem}>

@@ -192,8 +192,8 @@ function CadastroReb() {
                 padding="20"
               >
                 {!isNomeRebValid
-                  ? "Erro: Nome da fazenda inválido!!"
-                  : "Erro: Nome da fazenda duplicado!!"}
+                  ? "Nome do rebanho inválido!!"
+                  : "Nome do rebanho duplicado! tente outro!"}
               </HelperText>
               <TextInput
                 label="Quantidade Animais"
@@ -219,7 +219,7 @@ function CadastroReb() {
                 visible={!isQtdAniValid}
                 padding="20"
               >
-                Erro: Quantidade de animais inválido!!
+                Quantidade de animais deve ser maior que zero!!
               </HelperText>
             </View>
           </ScrollView>
