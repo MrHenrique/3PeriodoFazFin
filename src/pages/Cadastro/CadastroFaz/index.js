@@ -154,14 +154,14 @@ function CadastroFaz() {
             {/* Nome Rebanho */}
             <TextInput
               mode="flat"
-              label="Nome Rebanho"
+              label="Nome da Fazenda"
               style={styles.campoTexto}
               placeholderTextColor={Colors.grey}
               textColor={Colors.black}
               activeUnderlineColor={Colors.green}
               underlineColor={Colors.blue}
               underlineStyle={{ paddingBottom: 3 }}
-              placeholder="Ex: Pastos Norte"
+              placeholder="Ex: Fazenda Sonho meu"
               onChangeText={handleNomefazChange}
               value={nomefaz}
               error={!isNomefazValid}
@@ -177,8 +177,8 @@ function CadastroFaz() {
               padding="20"
             >
               {!isNomefazValid
-                ? "Erro: Nome da fazenda inválido!!"
-                : "Erro: Nome da fazenda duplicado!!"}
+                ? "Digite o nome da fazenda!!"
+                : "Já existe uma fazenda com esse nome!!"}
             </HelperText>
             {/* Nome Do Proprietario */}
             <TextInput
@@ -189,7 +189,7 @@ function CadastroFaz() {
               activeUnderlineColor={Colors.green}
               underlineColor={Colors.blue}
               underlineStyle={{ paddingBottom: 3 }}
-              label="Nome Proprietario"
+              label="Nome do Proprietario"
               placeholder="Ex: Jose Ferreira Pires"
               onChangeText={handleProprChange}
               value={proprietario}
@@ -205,12 +205,12 @@ function CadastroFaz() {
               visible={!isProprValid}
               padding="20"
             >
-              Erro: Nome do proprietario inválido!!
+              Digite o nome do Proprietário!!
             </HelperText>
             {/* Tipo de Pecuaria */}
             <TextInput
               mode="flat"
-              label="Tipo Pecuaria"
+              label="Tipo da Pecuária"
               style={styles.campoTexto}
               placeholderTextColor={Colors.grey}
               textColor={Colors.black}
@@ -232,7 +232,7 @@ function CadastroFaz() {
               visible={!isTipoValid}
               padding="20"
             >
-              Erro: Tipo de Pecuaria inválido!!
+              Digite o tipo de pecuária!!
             </HelperText>
           </ScrollView>
           <View style={StyleFuncKeyboard()}>

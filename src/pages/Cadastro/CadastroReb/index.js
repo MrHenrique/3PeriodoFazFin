@@ -192,11 +192,11 @@ function CadastroReb() {
                 padding="20"
               >
                 {!isNomeRebValid
-                  ? "Erro: Nome da fazenda inválido!!"
-                  : "Erro: Nome da fazenda duplicado!!"}
+                  ? "Digite o nome do rebanho!!"
+                  : "Já existe um rebanho com esse nome!!"}
               </HelperText>
               <TextInput
-                label="Quantidade Animais"
+                label="Quantidade de Animais"
                 style={styles.campoTexto}
                 placeholderTextColor={Colors.grey}
                 textColor={Colors.black}
@@ -206,7 +206,7 @@ function CadastroReb() {
                 onChangeText={handleQtdAniChange}
                 value={qtdAni}
                 keyboardType="number-pad"
-                placeholder="Quantos animais no rebanho?"
+                placeholder="Ex:0"
                 error={!isQtdAniValid}
               />
               <HelperText
@@ -219,7 +219,7 @@ function CadastroReb() {
                 visible={!isQtdAniValid}
                 padding="20"
               >
-                Erro: Quantidade de animais inválido!!
+                Digite a quantidade de animais!!
               </HelperText>
             </View>
           </ScrollView>

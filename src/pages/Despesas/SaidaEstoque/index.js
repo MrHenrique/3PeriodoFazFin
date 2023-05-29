@@ -268,7 +268,7 @@ export default function SaidaEstoque() {
                 </View>
                 <View style={styles.containerTxtInputDespesas}>
                   <TextInput
-                    label="Obsercação"
+                    label="Observação"
                     style={styles.txtInput}
                     placeholderTextColor={Colors.grey}
                     textColor={Colors.black}

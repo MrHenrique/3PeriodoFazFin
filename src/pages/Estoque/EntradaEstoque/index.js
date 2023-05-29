@@ -346,7 +346,7 @@ function EntradaEstoque() {
             visible={!isVolumeProdValid}
             padding="20"
           >
-            Erro: Volume do produto inválido!!
+            Digite um volume de produto válido!!
           </HelperText>
         </View>
       );
@@ -374,7 +374,7 @@ function EntradaEstoque() {
           visible={!isPesoProdValid}
           padding="20"
         >
-          Erro: Peso do produto inválido!!
+          Digite um preço de produto válido!!
         </HelperText>
       </View>
     );
@@ -436,24 +436,12 @@ function EntradaEstoque() {
                 visible={!isNomeProdValid}
                 padding="20"
               >
-                Erro: Nome do produto inválido!!
+                Digite um nome do produto!!
               </HelperText>
             </View>
 
             <View style={styles.containerInput}>
               <DropdownComponent />
-              <HelperText
-                type="error"
-                style={{
-                  color: MD3Colors.error60,
-                  fontSize: 14,
-                  lineHeight: 12,
-                }}
-                visible={false}
-                padding="20"
-              >
-                Erro: Tipo de Produto Inválido!!
-              </HelperText>
             </View>
             <View style={styles.containerInput}>
               <TextInput
@@ -481,7 +469,7 @@ function EntradaEstoque() {
                 visible={!isValorProdValid}
                 padding="20"
               >
-                Erro: Valor do produto inválido!!
+                Digite um preço de compra válido!!
               </HelperText>
             </View>
             <View style={styles.containerInput}>
@@ -527,7 +515,7 @@ function EntradaEstoque() {
                 visible={!isQtdProdValid}
                 padding="20"
               >
-                Erro: Quantidade inválida!!
+                Quantidade inválida!!
               </HelperText>
             </View>
             <View style={styles.containerInput}>{TextInputTipo()}</View>
