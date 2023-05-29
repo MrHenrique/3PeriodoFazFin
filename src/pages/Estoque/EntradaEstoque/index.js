@@ -327,7 +327,7 @@ function EntradaEstoque() {
       return (
         <View style={styles.containerInput}>
           <TextInput
-            label="Volume Produto"
+            label="Volume do Produto"
             style={styles.textInput}
             placeholderTextColor={Colors.grey}
             textColor={Colors.black}
@@ -355,7 +355,7 @@ function EntradaEstoque() {
       <View style={styles.containerInput}>
         <TextInput
           mode="flat"
-          label={"Peso Produto"}
+          label={"Peso do Produto"}
           style={styles.textInput}
           placeholderTextColor={Colors.grey}
           textColor={Colors.black}
@@ -413,7 +413,7 @@ function EntradaEstoque() {
             <View style={styles.containerInput}>
               <TextInput
                 mode="flat"
-                label="Nome Produto"
+                label="Nome do Produto"
                 style={styles.textInput}
                 placeholderTextColor={Colors.grey}
                 textColor={Colors.black}
@@ -436,7 +436,7 @@ function EntradaEstoque() {
                 visible={!isNomeProdValid}
                 padding="20"
               >
-                Digite um nome do produto!!
+                Digite o nome do produto!!
               </HelperText>
             </View>
 
@@ -447,7 +447,7 @@ function EntradaEstoque() {
               <TextInput
                 value={valorProd}
                 mode="flat"
-                label="Preço Compra"
+                label="Preço de Compra"
                 style={styles.textInput}
                 placeholderTextColor={Colors.grey}
                 textColor={Colors.black}
