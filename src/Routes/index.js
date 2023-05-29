@@ -19,9 +19,9 @@ import Manejo from "../pages/Manejo";
 import Leite from "../pages/Leite";
 import GeralReb from "../pages/GeralReb";
 import FinanceiroFaz from "../pages/FinanceiroFaz";
+import CadastroVaca from "../pages/CadastroVaca";
 import FinanceiroReb from "../pages/FinanceiroReb";
-import Estoque from "../pages/Estoque";
-import SelectFazPage from "../pages/SelectFazPage";
+import Reproducao from "../pages/Reprodução"
 const Drawer = createDrawerNavigator();
 function Routes() {
   return (
@@ -42,20 +42,6 @@ function Routes() {
       <Drawer.Screen
         name="HomeDrawer"
         component={StackRoutes}
-        options={{
-          title: "Bem vindo.",
-          drawerIcon: ({ focused, size, color }) => (
-            <Ionicons
-              name={focused ? "home" : "home-outline"}
-              size={size}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="SelectFazPage"
-        component={SelectFazPage}
         options={{
           title: "Bem vindo.",
           drawerIcon: ({ focused, size, color }) => (
@@ -181,6 +167,20 @@ function Routes() {
           ),
         }}
       />
+      <Drawer.Screen
+      name="Reproducao"
+      component={Reproducao}
+      options={{
+        title: "Reproducao",
+        drawerIcon:({focused, size, color }) => (
+          <MaterialIcons
+          name={focused ? "10mp" : "20mp" }
+          size={size}
+          color={color}
+          />
+        )
+      }}
+      />
 
       <Drawer.Screen
         name="Leite"
@@ -211,13 +211,13 @@ function Routes() {
         }}
       />
       <Drawer.Screen
-        name="Estoque"
-        component={Estoque}
+        name="DateForm"
+        component={Manejo}
         options={{
-          title: "Estoque",
+          title: "DateForm",
           drawerIcon: ({ focused, size, color }) => (
             <Fontisto
-              name={focused ? "shopping-store" : "shopping-store"}
+              name={focused ? "injection-syringe" : "injection-syringe"}
               size={size}
               color={color}
             />

@@ -13,10 +13,9 @@ import FinanceiroFaz from "../pages/FinanceiroFaz";
 import Alimentacao from "../pages/Alimentacao";
 import CadastroVaca from "../pages/CadastroVaca";
 import FinanceiroReb from "../pages/FinanceiroReb";
-import Estoque from "../pages/Estoque";
-import AdicionarLeite from "../pages/Leite/AdicionarLeite";
-import RegistrosLeite from "../pages/Leite/RegistrosLeite";
-import SelectFazPage from "../pages/SelectFazPage";
+import Reproducao from "../pages/Reprodução/index";
+
+
 const Stack = createNativeStackNavigator();
 function StackRoutes() {
   return (
@@ -28,21 +27,6 @@ function StackRoutes() {
           headerShown: false,
         }}
       />
-      <Stack.Screen
-        name="SelectFazPage"
-        component={SelectFazPage}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="Estoque"
-        component={Estoque}
-        options={{
-          headerShown: false,
-        }}
-      />
-
       <Stack.Screen
         name="CadastroFaz"
         component={CadastroFaz}
@@ -67,20 +51,6 @@ function StackRoutes() {
       <Stack.Screen
         name="Leite"
         component={Leite}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="AdicionarLeite"
-        component={AdicionarLeite}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="RegistrosLeite"
-        component={RegistrosLeite}
         options={{
           headerShown: false,
         }}
@@ -122,6 +92,14 @@ function StackRoutes() {
       />
 
       <Stack.Screen
+      name="Reproducao"
+      component={Reproducao}
+      options={{
+        headerShown: false,
+      }}
+      />
+
+      < Stack.Screen
         name="FinanceiroFaz"
         component={FinanceiroFaz}
         options={{
@@ -139,6 +117,13 @@ function StackRoutes() {
       <Stack.Screen
         name="FinanceiroReb"
         component={FinanceiroReb}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="DateForm"
+        component={Reproducao}
         options={{
           headerShown: false,
         }}

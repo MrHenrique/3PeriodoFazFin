@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  DatePickerIOS, Button
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { scale, verticalScale } from "react-native-size-matters";
@@ -23,6 +24,7 @@ function CadastroVaca({ navigation }) {
   const [genero, setgenero] = useState();
   const [macho, setmacho] = useState("square");
   const [femea, setfemea] = useState("square");
+}
 
   function CombineData() {
     const newvaca = {
@@ -112,7 +114,6 @@ function CadastroVaca({ navigation }) {
             </View>
           </View>
         </View>
-
         <TouchableOpacity
           style={styles.botaopress}
           onPress={() => {
@@ -132,7 +133,7 @@ function CadastroVaca({ navigation }) {
       </View>
     </ScrollView>
   );
-}
+
 
 const styles = StyleSheet.create({
   container: {
