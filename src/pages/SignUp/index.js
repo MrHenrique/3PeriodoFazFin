@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   SafeAreaView,
   Text,
   Image,
-  ImageBackground,
+  Keyboard,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  ScrollView,
 } from "react-native";
 import styles from "./styles";
-import { TextInput } from "react-native-gesture-handler";
+import { TextInput } from "react-native-paper";
 import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Colors } from "../../styles";
 function SignUp() {
   const navigation = useNavigation();
   const VALID_EMAIL_EXPRESSION =
@@ -19,6 +22,9 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [keyboardStatus, setkeyboardStatus] = useState(false);
+  const [passwordState, setpasswordState] = useState(true);
+  const [passwordConfirmState, setpasswordConfirmState] = useState(true);
   const imgbg1 = "../../../assets/background7.jpg";
 
   function handleUserRegister() {
@@ -44,74 +50,131 @@ function SignUp() {
     Alert.alert("Cadastrado com sucesso");
     navigation.navigate("SelectFazPage");
   }
+  // LISTENER DO TECLADO(ATIVADO OU NAO)
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setkeyboardStatus(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setkeyboardStatus(false);
+    });
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+  // RETORNA O ESTILO PARA O BOTAO, decidindo qual estilo, dependendo se o teclado esta ativo ou nao
+  function StyleFuncKeyboard() {
+    if (keyboardStatus) {
+      return styles.containerButaoKeyboardOn;
+    } else {
+      return styles.containerbotoes;
+    }
+  }
+  //estilo ScrollView
+  function StyleScrollViewContainer() {
+    if (keyboardStatus) {
+      return [styles.ContainerScrollStyle, { paddingBottom: 15 }];
+    } else {
+      return [styles.ContainerScrollStyle, { flex: 1 }];
+    }
+  }
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.imgbg}>
-        <View style={styles.containergeral}>
-          <Image
-            style={styles.logo}
-            source={require("../../../assets/FazFin.png")}
-          />
-          <Text style={styles.title}>Bem-vindo(a)</Text>
-          <Text style={styles.texto}>Digite o seu nome</Text>
-          <TextInput
-            style={styles.campoTexto}
-            inputMode="text"
-            onChangeText={setNomeProp}
-            value={nomeProp}
-            placeholder="Nome"
-            placeholderTextColor={"#d9d9d9"}
-          />
-          <Text style={styles.texto}>Digite seu email</Text>
-          <TextInput
-            style={styles.campoTexto}
-            value={email}
-            onChangeText={setEmail}
-            placeholder="Email"
-            inputMode="text"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            placeholderTextColor={"#d9d9d9"}
-          />
-          <Text style={styles.texto}>Digite a senha</Text>
-          <TextInput
-            style={styles.campoTexto}
-            inputMode="text"
-            placeholder="Senha"
-            autoCapitalize="none"
-            onChangeText={setPassword}
-            value={password}
-            secureTextEntry
-            placeholderTextColor={"#d9d9d9"}
-          />
-          <Text style={styles.texto}>Confirme a senha</Text>
-          <TextInput
-            style={styles.campoTexto}
-            placeholder="Confirme sua senha"
-            inputMode="text"
-            autoCapitalize="none"
-            onChangeText={setPasswordConfirm}
-            value={passwordConfirm}
-            secureTextEntry
-            placeholderTextColor={"#d9d9d9"}
-          />
-          <View style={styles.containerbotoes}>
-            <TouchableOpacity
-              style={styles.botaopress2}
-              onPress={() => navigation.navigate("LoginPage")}
+    <KeyboardAvoidingView behavior="undefined" style={styles.containerkeyboard}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.imgbg}>
+          <View style={styles.containergeral}>
+            <ScrollView
+              contentContainerStyle={StyleScrollViewContainer()}
+              style={{ flex: 1 }}
             >
-              <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.botaopress}
-              onPress={handleUserRegister}
-            >
-              <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
-            </TouchableOpacity>
+              <Image
+                style={keyboardStatus ? { display: "none" } : styles.logo}
+                source={require("../../../assets/FazFin.png")}
+              />
+              <Text style={styles.title}>Bem-vindo(a)</Text>
+              <TextInput
+                mode="flat"
+                label="Nome"
+                activeUnderlineColor={Colors.green}
+                textColor={Colors.black}
+                placeholder="ex: Diego Alves Pereira"
+                inputMode="text"
+                style={styles.campoTexto}
+                onChangeText={setNomeProp}
+                value={nomeProp}
+                error={false}
+              />
+              <TextInput
+                mode="flat"
+                label="Email"
+                activeUnderlineColor={Colors.green}
+                textColor={Colors.black}
+                style={styles.campoTexto}
+                placeholder="ex: seuemail@gmail.com"
+                inputMode="text"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                value={email}
+                onChangeText={setEmail}
+              />
+
+              <TextInput
+              label="Senha"
+                right={
+                  <TextInput.Icon
+                    icon={passwordState ? "eye" : "eye-off"}
+                    onPress={() => {
+                      setpasswordState(!passwordState);
+                    }}
+                  />
+                }
+                secureTextEntry={passwordState}
+                style={styles.campoTexto}
+                inputMode="text"
+                placeholder="Senha"
+                autoCapitalize="none"
+                onChangeText={setPassword}
+                value={password}
+                placeholderTextColor={"#d9d9d9"}
+              />
+              <TextInput
+              label="Confirmar"
+                right={
+                  <TextInput.Icon
+                    icon={passwordConfirmState ? "eye" : "eye-off"}
+                    onPress={() => {
+                      setpasswordConfirmState(!passwordConfirmState);
+                    }}
+                  />
+                }
+                secureTextEntry={passwordConfirmState}
+                style={styles.campoTexto}
+                placeholder="Confirme sua senha"
+                inputMode="text"
+                autoCapitalize="none"
+                onChangeText={setPasswordConfirm}
+                value={passwordConfirm}
+              />
+            </ScrollView>
+            <View style={StyleFuncKeyboard()}>
+              <TouchableOpacity
+                style={styles.botao}
+                onPress={() => navigation.navigate("LoginPage")}
+              >
+                <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.botao}
+                onPress={handleUserRegister}
+              >
+                <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 export default SignUp;

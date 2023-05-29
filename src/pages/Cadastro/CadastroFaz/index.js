@@ -6,15 +6,18 @@ import {
   Image,
   TouchableOpacity,
   View,
-  TextInput,
+  Keyboard,
+  ScrollView,
+  KeyboardAvoidingView,
 } from "react-native";
+import { TextInput } from "react-native-paper";
+import { Colors } from "../../../styles";
 import { useNavigation } from "@react-navigation/native";
 import uuid from "react-native-uuid";
 import styles from "./styles";
 import { AuthContext } from "../../../contexts/auth";
 import { useMainContext } from "../../../contexts/RealmContext";
 import { Alert } from "react-native";
-import { FloatingLabelInput } from 'react-native-floating-label-input';
 function CadastroFaz() {
   const realm = useMainContext();
   const { FazendaID, FazendaProp, RebanhoID } = useContext(AuthContext);
@@ -26,6 +29,7 @@ function CadastroFaz() {
   const [nomeExist, setNomeExist] = useState(false);
   const [isProprValid, setIsProprValid] = useState(true);
   const [isTipoValid, setIsTipoValid] = useState(true);
+  const [keyboardStatus, setkeyboardStatus] = useState(false);
   useEffect(() => {
     if (realm) {
       let data = realm.objects("Farm").sorted("nomefaz");
@@ -106,65 +110,115 @@ function CadastroFaz() {
     }
   }
   const navigation = useNavigation();
+  // LISTENER DO TECLADO(ATIVADO OU NAO)
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setkeyboardStatus(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setkeyboardStatus(false);
+    });
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+  // RETORNA O ESTILO PARA O BOTAO, decidindo qual estilo, dependendo se o teclado esta ativo ou nao
+  function StyleFuncKeyboard() {
+    if (keyboardStatus) {
+      return styles.containerButaoKeyboardOn;
+    } else {
+      return styles.containerbotao;
+    }
+  }
+  //estilo ScrollView
+  function StyleScrollViewContainer() {
+    if (keyboardStatus) {
+      return [styles.ContainerScrollStyle, { paddingBottom: 15 }];
+    } else {
+      return [styles.ContainerScrollStyle, { flex: 1 }];
+    }
+  }
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.containergeral}>
-        <Image
-          style={styles.logo}
-          source={require("../../../../assets/FazFin.png")}
-        />
-        <Text style={[styles.texto, { marginTop: verticalScale(40) }]}>
-          Nome da fazenda
-        </Text>
-
-        <TextInput
-          style={!isNomefazValid ? styles.campoTextoError : styles.campoTexto}
-          onChangeText={handleNomefazChange}
-          value={nomefaz}
-          placeholderTextColor={"#2e2e2e"}
-          placeholder="Qual o nome da sua Fazenda?"
-        ></TextInput>
-        {!isNomefazValid && (
-          <Text style={styles.error}>Digite o nome da Fazenda!</Text>
-        )}
-        {nomeExist && (
-          <Text style={styles.error}>Uma Fazenda com esse nome já existe!</Text>
-        )}
-        <Text style={styles.texto}>Proprietário</Text>
-        <TextInput
-          style={!isProprValid ? styles.campoTextoError : styles.campoTexto}
-          onChangeText={handleProprChange}
-          value={proprietario}
-          placeholder="Qual o nome do proprietário?"
-          placeholderTextColor={"#2e2e2e"}
-        ></TextInput>
-        {!isProprValid && (
-          <Text style={styles.error}>Digite o nome do proprietário!</Text>
-        )}
-        <Text style={styles.texto}>Tipo de produção</Text>
-        <TextInput
-          style={!isTipoValid ? styles.campoTextoError : styles.campoTexto}
-          onChangeText={handleTipoChange}
-          value={tipoprod}
-          placeholder="Ex: Pecuária Leiteira"
-          placeholderTextColor={"#2e2e2e"}
-        ></TextInput>
-        {!isTipoValid && (
-          <Text style={styles.error}>Digite o tipo de produção!</Text>
-        )}
-        <View style={styles.containerbotao}>
-          <TouchableOpacity
-            style={styles.botaopress2}
-            onPress={() => navigation.navigate("SelectFazPage")}
+    <KeyboardAvoidingView behavior="undefined" style={styles.containerkeyboard}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.containergeral}>
+          <ScrollView
+            contentContainerStyle={StyleScrollViewContainer()}
+            style={{ flex: 1 }}
           >
-            <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.botaopress} onPress={validCheck}>
-            <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
-          </TouchableOpacity>
+            <Image
+              style={keyboardStatus ? { display: "none" } : styles.logo}
+              source={require("../../../../assets/FazFin.png")}
+            />
+            {/* Nome Rebanho */}
+            <TextInput
+              mode="flat"
+              label="Nome Rebanho"
+              style={styles.campoTexto}
+              placeholderTextColor={Colors.grey}
+              textColor={Colors.black}
+              activeUnderlineColor={Colors.green}
+              placeholder="Ex: Pastos Norte"
+              onChangeText={handleNomefazChange}
+              value={nomefaz}
+              error={!isNomefazValid}
+            ></TextInput>
+            {!isNomefazValid && (
+              <Text style={styles.error}>Digite o nome da Fazenda!</Text>
+            )}
+            {nomeExist && (
+              <Text style={styles.error}>
+                Uma Fazenda com esse nome já existe!
+              </Text>
+            )}
+            {/* Nome Do Proprietario */}
+            <TextInput
+              mode="flat"
+              style={styles.campoTexto}
+              placeholderTextColor={Colors.grey}
+              textColor={Colors.black}
+              activeUnderlineColor={Colors.green}
+              label="Nome Proprietario"
+              placeholder="Ex: Jose Ferreira Pires"
+              onChangeText={handleProprChange}
+              value={proprietario}
+              error={!isProprValid}
+            ></TextInput>
+            {!isProprValid && (
+              <Text style={styles.error}>Digite o nome do proprietário!</Text>
+            )}
+            {/* Tipo de Pecuaria */}
+            <TextInput
+              mode="flat"
+              label="Tipo Pecuaria"
+              style={styles.campoTexto}
+              placeholderTextColor={Colors.grey}
+              textColor={Colors.black}
+              activeUnderlineColor={Colors.green}
+              placeholder="Ex: Pecuária Leiteira"
+              onChangeText={handleTipoChange}
+              value={tipoprod}
+              error={!isTipoValid}
+            ></TextInput>
+            {!isTipoValid && (
+              <Text style={styles.error}>Digite o tipo de produção!</Text>
+            )}
+          </ScrollView>
+          <View style={StyleFuncKeyboard()}>
+            <TouchableOpacity
+              style={styles.botao}
+              onPress={() => navigation.navigate("SelectFazPage")}
+            >
+              <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.botao} onPress={validCheck}>
+              <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 

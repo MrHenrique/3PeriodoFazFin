@@ -3,15 +3,20 @@ import { Buttons, Colors, Fonts, TextInput } from "../../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
+  containerkeyboard: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: Colors.darkgreen,
+  },
   container: {
     flex: 1,
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.darkgreen,
   },
   mainContainer: {
     flex: 1,
     margin: scale(15),
     borderRadius: 10,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.darkgreen,
   },
   imgbg: {
     flex: 1,
@@ -19,11 +24,12 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   logo: {
-    flex: 1,
     resizeMode: "contain",
     height: verticalScale(150),
     width: verticalScale(150),
+    top: verticalScale(30),
     alignSelf: "center",
+    marginBottom: verticalScale(55),
   },
   texto: {
     ...Fonts.txtLargeBold,
@@ -31,16 +37,10 @@ const styles = StyleSheet.create({
   },
   viewtext: {
     flex: 1,
-    alignSelf: "center",
   },
   campoTexto: {
     backgroundColor: Colors.white,
-    color: Colors.white,
-    textAlign: "center",
-    ...Fonts.txtMediumBold,
-    ...TextInput.TextInputLargeRounded,
-    borderBottomColor: Colors.green,
-    borderBottomWidth: 2,
+    marginBottom: verticalScale(10),
   },
   campoTextoErro: {
     ...Fonts.txtMediumBold,
@@ -51,18 +51,24 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
   },
   containerbotoes: {
-    flex: 1,
+    flex: 0.2,
     padding: verticalScale(10),
     flexDirection: "column-reverse",
   },
-  botaopress: {
-    ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.darkgreen,
-    marginBottom: verticalScale(10),
+  containerButaoKeyboardOn: {
+    flex: 0.2,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    minHeight: scale(40),
+    paddingTop: verticalScale(10),
   },
-  botaopress2: {
+  botao: {
+    flex: 1,
+    maxHeight: 40,
+    marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
+    justifyContent: "center",
   },
   tituloBotao: {
     ...Fonts.txtMediumBold,

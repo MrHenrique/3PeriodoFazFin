@@ -3,6 +3,11 @@ import { scale, verticalScale } from "react-native-size-matters";
 import { Colors, Fonts, Buttons, TextInput } from "../../styles";
 
 const styles = StyleSheet.create({
+  containerkeyboard: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: Colors.darkgreen,
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.darkgreen,
@@ -30,27 +35,21 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   campoTexto: {
-    ...Fonts.txtMediumBold,
-    ...TextInput.TextInputLargeRounded,
     backgroundColor: Colors.white,
-    borderBottomColor: Colors.green,
-    borderBottomWidth: scale(2),
-    color: Colors.black,
+    marginBottom: verticalScale(10),
   },
   subtitle: {
     ...Fonts.txtLarge,
     color: Colors.black,
     alignSelf: "center",
   },
-  botaopress: {
-    ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.green,
+  botao: {
+    flex: 1,
+    maxHeight: 40,
     marginBottom: verticalScale(10),
-  },
-  botaopress2: {
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    flexDirection: "row-reverse",
+    justifyContent: "center",
   },
   disabledbutton: {
     ...Buttons.btnLargeRounded,
@@ -72,9 +71,15 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.darkgreen,
   },
   containerbotoes: {
-    flex: 1,
+    flex: 0.2,
     padding: verticalScale(10),
     flexDirection: "column-reverse",
+  },
+  containerButaoKeyboardOn: {
+    flex: 0.2,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    minHeight: scale(40),
   },
 });
 export default styles;

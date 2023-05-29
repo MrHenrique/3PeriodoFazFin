@@ -2,27 +2,31 @@ import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../contexts/auth";
 import {
   View,
-  SafeAreaView,
   Text,
   Image,
-  ImageBackground,
+  KeyboardAvoidingView,
   TouchableOpacity,
+  ScrollView,
+  Keyboard,
 } from "react-native";
 import styles from "./styles";
 import { useMainContext } from "../../contexts/RealmContext";
-import { TextInput } from "react-native-gesture-handler";
 import { Alert } from "react-native";
+import { TextInput } from "react-native-paper";
+import { Colors } from "../../styles";
 
 function Login({ navigation }) {
   const realm = useMainContext();
   const { FazendaID, RebanhoID, FazendaProp } = useContext(AuthContext);
   const [listaReb, setListaReb] = useState([]);
   const [listaFaz, setListaFaz] = useState([]);
+  const [passwordState, setpasswordState] = useState(true);
+  const [keyboardStatus, setkeyboardStatus] = useState(false);
   const VALID_EMAIL_EXPRESSION =
     /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([\t]*\r\n)?[\t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([\t]*\r\n)?[\t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
 
-  const [email, setEmail] = useState([]);
-  const [password, setPassword] = useState([]);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   useEffect(() => {
     if (realm) {
       let data = realm.objects("Farm").sorted("nomefaz");
@@ -69,49 +73,94 @@ function Login({ navigation }) {
 
     Alert.alert("Cadastrado com sucesso");
   }
+  // LISTENER DO TECLADO(ATIVADO OU NAO)
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setkeyboardStatus(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setkeyboardStatus(false);
+    });
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+  // RETORNA O ESTILO PARA O BOTAO, decidindo qual estilo, dependendo se o teclado esta ativo ou nao
+  function StyleFuncKeyboard() {
+    if (keyboardStatus) {
+      return styles.containerButaoKeyboardOn;
+    } else {
+      return styles.containerbotoes;
+    }
+  }
+  //estilo ScrollView
+  function StyleScrollViewContainer() {
+    if (keyboardStatus) {
+      return [styles.ContainerScrollStyle, { paddingBottom: 15 }];
+    } else {
+      return [styles.ContainerScrollStyle, { flex: 1 }];
+    }
+  }
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.containerlogin}
-      >
-        <Image
-          style={styles.logo}
-          source={require("../../../assets/FazFin.png")}
-        />
-        <Text style={styles.title}>Bem-vindo(a)</Text>
-        <View>
-          <Text style={styles.texto}>Digite seu email</Text>
+    <KeyboardAvoidingView behavior="undefined" style={styles.containerkeyboard}>
+      <View style={styles.containerlogin}>
+        <ScrollView
+          contentContainerStyle={StyleScrollViewContainer()}
+          style={{ flex: 1 }}
+        >
+          <View>
+            <Image
+              style={keyboardStatus ? { display: "none" } : styles.logo}
+              source={require("../../../assets/FazFin.png")}
+            />
+            <Text style={styles.title}>Bem-vindo(a)</Text>
+          </View>
           <TextInput
+            mode="flat"
             style={styles.campoTexto}
-            value={email}
-            onChangeText={setEmail}
-            placeholder="Email"
+            label="Email"
+            // style={styles.campoTexto}
+            error={false}
+            activeUnderlineColor={Colors.green}
+            textColor={Colors.black}
+            placeholder="ex: seuemail@gmail.com"
             inputMode="text"
             keyboardType="email-address"
             autoCapitalize="none"
-            placeholderTextColor={"#2e2e2e"}
+            value={email}
+            onChangeText={setEmail}
           />
-          <Text style={styles.texto}>Digite a senha</Text>
           <TextInput
+            mode="flat"
+            label={<Text style={{ fontSize: 16 }}>Senha</Text>}
             style={styles.campoTexto}
-            placeholder="Senha"
-            placeholderTextColor={"#2e2e2e"}
+            right={
+              <TextInput.Icon
+                icon={passwordState ? "eye" : "eye-off"}
+                onPress={() => {
+                  setpasswordState(!passwordState);
+                }}
+              />
+            }
             inputMode="text"
             autoCapitalize="none"
             onChangeText={setPassword}
             value={password}
-            secureTextEntry
+            secureTextEntry={passwordState}
+            activeUnderlineColor={Colors.green}
+            textColor={Colors.black}
           />
-        </View>
-
-        <View style={styles.containerbotoes}>
+        </ScrollView>
+        <View style={StyleFuncKeyboard()}>
           <TouchableOpacity
-            style={styles.botaopress2}
+            style={styles.botao}
             onPress={() => navigation.navigate(navigateWhere())}
           >
             <Text style={styles.tituloBotao}>{"Login"}</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.botaopress}
+            style={styles.botao}
             onPress={() => navigation.navigate("SignUp")}
           >
             <Text style={styles.tituloBotao}>
@@ -120,7 +169,7 @@ function Login({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 export default Login;

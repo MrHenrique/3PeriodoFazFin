@@ -6,10 +6,13 @@ import {
   Image,
   TouchableOpacity,
   View,
-  ImageBackground,
-  TextInput,
+  Keyboard,
+  KeyboardAvoidingView,
+  ScrollView,
 } from "react-native";
 import uuid from "react-native-uuid";
+import { TextInput } from "react-native-paper";
+import { Colors } from "../../../styles";
 import { useNavigation } from "@react-navigation/native";
 import { useMainContext } from "../../../contexts/RealmContext";
 import { Alert } from "react-native";
@@ -23,6 +26,7 @@ function CadastroReb() {
   const [isNomeRebValid, setIsNomeRebValid] = useState(true);
   const [rebExist, setRebExist] = useState(false);
   const [isQtdAniValid, setIsQtdAniValid] = useState(true);
+  const [keyboardStatus, setkeyboardStatus] = useState(false);
 
   //Escrever no Banco
 
@@ -121,65 +125,106 @@ function CadastroReb() {
     }
   }
   const navigation = useNavigation();
-  const imgbg1 = require("../../../../assets/bg6.jpg");
+  // LISTENER DO TECLADO(ATIVADO OU NAO)
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setkeyboardStatus(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setkeyboardStatus(false);
+    });
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+  // RETORNA O ESTILO PARA O BOTAO, decidindo qual estilo, dependendo se o teclado esta ativo ou nao
+  function StyleFuncKeyboard() {
+    if (keyboardStatus) {
+      return styles.containerButaoKeyboardOn;
+    } else {
+      return styles.containerbotoes;
+    }
+  }
+  //estilo ScrollView
+  function StyleScrollViewContainer() {
+    if (keyboardStatus) {
+      return [{ paddingBottom: 15 }];
+    } else {
+      return [{ flex: 1 }];
+    }
+  }
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.mainContainer}
-      >
-        <Image
-          style={styles.logo}
-          source={require("../../../../assets/FazFin.png")}
-        />
-        <View style={styles.viewtext}>
-          <Text style={styles.texto}>Nome do rebanho:</Text>
-          <TextInput
-            style={!isNomeRebValid ? styles.campoTextoErro : styles.campoTexto}
-            onChangeText={handleNomeRebChange}
-            value={nomeReb}
-            placeholder="Ex: Vacas solteiras"
-            placeholderTextColor={"#2e2e2e"}
-          ></TextInput>
-          {!isNomeRebValid && (
-            <Text style={styles.error}>Digite o nome do rebanho!</Text>
-          )}
-          {rebExist && (
-            <Text style={styles.error}>
-              Um rebanho com esse nome já existe!
-            </Text>
-          )}
-          <Text style={styles.texto}>Quantidade de animais:</Text>
-          <TextInput
-            style={!isQtdAniValid ? styles.campoTextoErro : styles.campoTexto}
-            onChangeText={handleQtdAniChange}
-            value={qtdAni}
-            keyboardType="number-pad"
-            placeholder="Quantos animais no rebanho?"
-            placeholderTextColor={"#2e2e2e"}
-          ></TextInput>
-          {!isQtdAniValid && (
-            <Text style={styles.error}>
-              Valor digitado inválido, tente novamente.
-            </Text>
-          )}
-        </View>
-        <View style={styles.containerbotoes}>
-          <TouchableOpacity
-            style={styles.botaopress2}
-            onPress={() => navigation.navigate("SelectRebPage")}
+    <KeyboardAvoidingView behavior="undefined" style={styles.containerkeyboard}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.mainContainer}>
+          <ScrollView
+            contentContainerStyle={StyleScrollViewContainer()}
+            style={{ flex: 1 }}
           >
-            <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.botaopress}
-            onPress={() => {
-              validCheck();
-            }}
-          >
-            <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
-          </TouchableOpacity>
+            <Image
+              style={keyboardStatus ? { display: "none" } : styles.logo}
+              source={require("../../../../assets/FazFin.png")}
+            />
+            <View style={styles.viewtext}>
+              <TextInput
+                mode="flat"
+                label="Nome do rebanho"
+                style={styles.campoTexto}
+                placeholderTextColor={Colors.grey}
+                textColor={Colors.black}
+                activeUnderlineColor={Colors.green}
+                onChangeText={handleNomeRebChange}
+                value={nomeReb}
+                placeholder="Ex: Vacas solteiras"
+                error={!isNomeRebValid}
+              ></TextInput>
+              {!isNomeRebValid && (
+                <Text style={styles.error}>Digite o nome do rebanho!</Text>
+              )}
+              {rebExist && (
+                <Text style={styles.error}>
+                  Um rebanho com esse nome já existe!
+                </Text>
+              )}
+              <TextInput
+                label="Quantidade Animais"
+                style={styles.campoTexto}
+                placeholderTextColor={Colors.grey}
+                textColor={Colors.black}
+                activeUnderlineColor={Colors.green}
+                onChangeText={handleQtdAniChange}
+                value={qtdAni}
+                keyboardType="number-pad"
+                placeholder="Quantos animais no rebanho?"
+                error={!isQtdAniValid}
+              ></TextInput>
+              {!isQtdAniValid && (
+                <Text style={styles.error}>
+                  Valor digitado inválido, tente novamente.
+                </Text>
+              )}
+            </View>
+          </ScrollView>
+          <View style={StyleFuncKeyboard()}>
+            <TouchableOpacity
+              style={styles.botao}
+              onPress={() => navigation.navigate("SelectRebPage")}
+            >
+              <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.botao}
+              onPress={() => {
+                validCheck();
+              }}
+            >
+              <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 export default CadastroReb;

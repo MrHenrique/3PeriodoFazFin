@@ -3,9 +3,14 @@ import { scale, verticalScale } from "react-native-size-matters";
 import { Colors, Fonts, Buttons, TextInput } from "../../styles";
 
 const styles = StyleSheet.create({
+  containerkeyboard: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: Colors.darkgreen,
+  },
   container: {
     flex: 1,
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.darkgreen,
   },
   imgbg: {
     width: "100%",
@@ -16,7 +21,7 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: scale(15),
     borderRadius: 10,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.darkgreen,
   },
   texto: {
     ...Fonts.txtLarge,
@@ -24,10 +29,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   campoTexto: {
-    ...Fonts.txtMediumBold,
-    ...TextInput.TextInputLargeRounded,
-    backgroundColor: Colors.green,
-    color: Colors.white,
+    backgroundColor: Colors.white,
+    marginBottom: verticalScale(10),
   },
   logo: {
     resizeMode: "contain",
@@ -38,7 +41,7 @@ const styles = StyleSheet.create({
   },
   title: {
     ...Fonts.Title,
-    color: Colors.black,
+    color: Colors.white,
     top: verticalScale(25),
     marginBottom: verticalScale(30),
   },
@@ -47,15 +50,13 @@ const styles = StyleSheet.create({
     color: Colors.white,
     alignSelf: "center",
   },
-  botaopress: {
-    ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.darkgreen,
+  botao: {
+    flex: 1,
+    maxHeight: 40,
     marginBottom: verticalScale(10),
-  },
-  botaopress2: {
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.darkgreen,
-    flexDirection: "row-reverse",
+    backgroundColor: Colors.green,
+    justifyContent: "center",
   },
   disabledbutton: {
     ...Buttons.btnLargeRounded,
@@ -77,9 +78,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.darkgreenTransparent,
   },
   containerbotoes: {
-    flex: 1,
+    flex: 0.2,
     padding: verticalScale(10),
     flexDirection: "column-reverse",
+  },
+  containerButaoKeyboardOn: {
+    flex: 0.2,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    minHeight: scale(40),
+    paddingTop: verticalScale(10),
   },
 });
 export default styles;

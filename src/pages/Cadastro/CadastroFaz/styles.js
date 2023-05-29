@@ -3,9 +3,14 @@ import { scale, verticalScale } from "react-native-size-matters";
 import { Colors, Fonts, Buttons, TextInput } from "../../../styles";
 
 const styles = StyleSheet.create({
+  containerkeyboard: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: Colors.darkgreen,
+  },
   container: {
     flex: 1,
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.darkgreen,
   },
   imgbg: {
     flex: 1,
@@ -19,6 +24,7 @@ const styles = StyleSheet.create({
     top: verticalScale(30),
     alignSelf: "center",
     justifyContent: "center",
+    marginBottom: verticalScale(55),
   },
   texto: {
     ...Fonts.txtLarge,
@@ -27,15 +33,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   campoTexto: {
-    ...Fonts.txtMediumBold,
-    fontWeight: "500",
-    ...TextInput.TextInputLargeRounded,
     backgroundColor: Colors.white,
-    color: Colors.black,
-    fontWeight: "bold",
-    borderBottomWidth: 2,
-    borderBottomColor: Colors.green,
-    position: "relative",
+    marginBottom: verticalScale(10),
   },
   campoTextoError: {
     ...Fonts.txtMediumBold,
@@ -48,14 +47,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: Colors.red,
   },
-  botaopress: {
-    ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.darkgreen,
+  botao: {
+    flex: 1,
+    maxHeight: 40,
     marginBottom: verticalScale(10),
-  },
-  botaopress2: {
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
+    justifyContent: "center",
   },
   tituloBotao: {
     ...Fonts.txtMediumBold,
@@ -65,10 +63,10 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: scale(15),
     borderRadius: 10,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.darkgreen,
   },
   containerbotao: {
-    flex: 1,
+    flex: 0.2,
     flexDirection: "column-reverse",
     padding: verticalScale(10),
   },
@@ -87,6 +85,13 @@ const styles = StyleSheet.create({
     color: Colors.black,
     borderWidth: 2,
     borderColor: Colors.red,
+  },
+  containerButaoKeyboardOn: {
+    flex: 0.2,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    minHeight: scale(40),
+    paddingTop: verticalScale(10),
   },
 });
 export default styles;
