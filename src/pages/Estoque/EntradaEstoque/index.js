@@ -3,13 +3,19 @@ import {
   Keyboard,
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   Alert,
   KeyboardAvoidingView,
   ScrollView,
   ImageBackground,
 } from "react-native";
+import {
+  TextInput,
+  MD3Colors,
+  IconButton,
+  HelperText,
+} from "react-native-paper";
+import { Colors } from "../../../styles";
 import { useNavigation } from "@react-navigation/native";
 import DropdownComponent from "../../../components/Dropdown/TipoProd";
 import uuid from "react-native-uuid";
@@ -33,6 +39,7 @@ function EntradaEstoque() {
   const [isVolumeProdValid, setIsVolumeProdValid] = useState(true);
   const [isPesoProdValid, setIsPesoProdValid] = useState(true);
   const [isQtdProdValid, setIsQtdProdValid] = useState(true);
+  const [teste, setteste] = useState(true);
   const { fazID, tipoProd } = useContext(AuthContext);
   //status teclado
   const [keyboardStatus, setkeyboardStatus] = useState(false);
@@ -319,47 +326,51 @@ function EntradaEstoque() {
     if (tipoProd == 1) {
       return (
         <View style={styles.containerInput}>
-          <Text style={styles.fonts}>Volume do produto:</Text>
           <TextInput
-            style={
-              !isVolumeProdValid ? styles.textInputError : styles.textInput
-            }
+            label="Volume Produto"
+            style={styles.textInput}
             value={volumeProd}
             onChangeText={handleVolumeProdChange}
-            placeholder="200"
-            placeholderTextColor={"#2e2e2e"}
             keyboardType="decimal-pad"
             inputMode="decimal"
+            error={!isVolumeProdValid}
           />
-          <View>
-            {!isVolumeProdValid && (
-              <Text style={styles.error}>
-                Valor digitado inválido, tente novamente.
-              </Text>
-            )}
-          </View>
+          <HelperText
+            type="error"
+            style={{ color: MD3Colors.error60, fontSize: 14, lineHeight: 12 }}
+            visible={!isVolumeProdValid}
+            padding="20"
+          >
+            Erro: Peso do produto inválido!!
+          </HelperText>
         </View>
       );
     }
     return (
       <View style={styles.containerInput}>
-        <Text style={styles.fonts}>Peso do produto:</Text>
         <TextInput
-          style={!isPesoProdValid ? styles.textInputError : styles.textInput}
+          mode="flat"
+          label={"Peso Produto"}
+          style={styles.textInput}
+          placeholderTextColor={Colors.grey}
+          textColor={Colors.black}
+          activeUnderlineColor={Colors.green}
+          underlineColor={Colors.blue}
+          underlineStyle={{ paddingBottom: 3 }}
           value={pesoProd}
           onChangeText={handlePesoProdChange}
-          placeholder="60"
-          placeholderTextColor={"#2e2e2e"}
           keyboardType="decimal-pad"
           inputMode="decimal"
+          error={!isPesoProdValid}
         />
-        <View>
-          {!isPesoProdValid && (
-            <Text style={styles.error}>
-              Valor digitado inválido, tente novamente.
-            </Text>
-          )}
-        </View>
+        <HelperText
+          type="error"
+          style={{ color: MD3Colors.error60, fontSize: 14, lineHeight: 12 }}
+          visible={!isPesoProdValid}
+          padding="20"
+        >
+          Erro: Peso do produto inválido!!
+        </HelperText>
       </View>
     );
   };
@@ -384,13 +395,6 @@ function EntradaEstoque() {
       return styles.containerButao;
     }
   }
-  function StyleScrollViewContainer() {
-    if (keyboardStatus) {
-      return [styles.ContainerScrollStyle, { paddingBottom: 15 }];
-    } else {
-      return [styles.ContainerScrollStyle, { flex: 1 }];
-    }
-  }
   return (
     <KeyboardAvoidingView behavior="undefined" style={styles.containerkeyboard}>
       <View style={styles.container}>
@@ -400,92 +404,125 @@ function EntradaEstoque() {
           // source={require("../../../../assets/fazfinwhiteletter.png")}
           style={styles.containergeral}
         >
-          <ScrollView
-            style={styles.scrollcontainer}
-            contentContainerStyle={StyleScrollViewContainer()}
-          >
+          <ScrollView style={styles.scrollcontainer}>
             <View style={styles.containerInput}>
-              <Text style={styles.fonts}>Nome do produto:</Text>
               <TextInput
-                style={
-                  !isNomeProdValid ? styles.textInputError : styles.textInput
-                }
+                mode="flat"
+                label="Nome Produto"
+                style={styles.textInput}
+                placeholderTextColor={Colors.grey}
+                textColor={Colors.black}
+                activeUnderlineColor={Colors.green}
+                underlineColor={Colors.blue}
+                underlineStyle={{ paddingBottom: 3 }}
                 value={nomeProd}
                 onChangeText={handleNomeProdChange}
-                placeholder="Prata"
-                placeholderTextColor={"#2e2e2e"}
+                placeholder="Ex: Prata"
                 keyboardType="default"
-                inputMode="text"
+                error={!isNomeProdValid}
               />
-              <View>
-                {!isNomeProdValid && (
-                  <Text style={[styles.error]}>Digite o nome do produto!</Text>
-                )}
-              </View>
+              <HelperText
+                type="error"
+                style={{ color: MD3Colors.error60, fontSize: 14, lineHeight: 12 }}
+                visible={!isNomeProdValid}
+                padding="20"
+              >
+                Erro: Nome do produto inválido!!
+              </HelperText>
             </View>
 
             <View style={styles.containerInput}>
               <DropdownComponent />
+              <HelperText
+                type="error"
+                style={{ color: MD3Colors.error60, fontSize: 14, lineHeight: 12 }}
+                visible={true}
+                padding="20"
+              >
+                Erro: Tipo de Produto Inválido!!
+              </HelperText>
             </View>
             <View style={styles.containerInput}>
-              <Text style={styles.fonts}>Preço da compra:</Text>
               <TextInput
-                style={
-                  !isValorProdValid ? styles.textInputError : styles.textInput
-                }
                 value={valorProd}
+                mode="flat"
+                label="Preço Compra"
+                style={styles.textInput}
+                placeholderTextColor={Colors.grey}
+                textColor={Colors.black}
+                activeUnderlineColor={Colors.green}
+                underlineColor={Colors.blue}
+                underlineStyle={{ paddingBottom: 3 }}
                 onChangeText={handleValorProdChange}
-                placeholder="50,00"
-                placeholderTextColor={"#2e2e2e"}
                 keyboardType="decimal-pad"
-                inputMode="decimal"
+                inputMode="text"
+                error={!isValorProdValid}
               />
-              <View>
-                {!isValorProdValid && (
-                  <Text style={styles.error}>
-                    Valor digitado inválido, tente novamente.
-                  </Text>
-                )}
-              </View>
+              <HelperText
+                type="error"
+                style={{ color: MD3Colors.error60, fontSize: 14, lineHeight: 12 }}
+                visible={!isValorProdValid}
+                padding="20"
+              >
+                Erro: Valor do produto inválido!!
+              </HelperText>
             </View>
-
             <View style={styles.containerInput}>
-              <Text style={styles.fonts}>Quantidade de produtos comprados:</Text>
+              <Text style={styles.fonts}>
+                Quantidade de produtos comprados:
+              </Text>
               <View style={styles.containerMaisMenos}>
-                <TouchableOpacity style={styles.button} onPress={menosButton}>
-                  <Text style={styles.buttonText}>-</Text>
-                </TouchableOpacity>
+                <IconButton
+                  icon="minus"
+                  iconColor={MD3Colors.neutral0}
+                  size={20}
+                  onPress={menosButton}
+                  containerColor={MD3Colors.neutral70}
+                />
                 <TextInput
-                  style={
-                    !isQtdProdValid
-                      ? styles.textInputQtdError
-                      : styles.textInputQtd
-                  }
+                  mode="flat"
+                  style={styles.textInputQtd}
+                  placeholderTextColor={Colors.grey}
+                  textColor={Colors.black}
+                  activeUnderlineColor={Colors.green}
+                  underlineColor={Colors.blue}
+                  underlineStyle={{ paddingBottom: 3 }}
                   value={qtdProd}
                   onChangeText={(valor) => handleQtdProdChange(valor)}
                   keyboardType="numeric"
+                  error={!isQtdProdValid}
                 />
-                <TouchableOpacity style={styles.button} onPress={maisButton}>
-                  <Text style={styles.buttonText}>+</Text>
-                </TouchableOpacity>
+                <IconButton
+                  icon="plus"
+                  iconColor={MD3Colors.neutral0}
+                  size={20}
+                  onPress={maisButton}
+                  containerColor={MD3Colors.neutral70}
+                />
               </View>
-              <View>
-                {!isQtdProdValid && (
-                  <Text style={styles.error}>
-                    Valor digitado inválido, tente novamente.
-                  </Text>
-                )}
-              </View>
+              <HelperText
+                type="error"
+                style={{ color: MD3Colors.error60, fontSize: 14, lineHeight: 12 }}
+                visible={!isQtdProdValid}
+                padding="20"
+              >
+                Erro: Quantidade inválida!!
+              </HelperText>
             </View>
             <View style={styles.containerInput}>{TextInputTipo()}</View>
             <View style={styles.containerInput}>
-              <Text style={styles.fonts}>Observações:</Text>
               <TextInput
+                mode="flat"
+                label="Observações"
                 style={styles.textInput}
+                placeholderTextColor={Colors.grey}
+                textColor={Colors.black}
+                activeUnderlineColor={Colors.green}
+                underlineColor={Colors.blue}
+                underlineStyle={{ paddingBottom: 3 }}
                 value={obserProd}
                 onChangeText={setObserProd}
-                placeholder="Produto comprado em ..."
-                placeholderTextColor={"#2e2e2e"}
+                placeholder="Ex: Produto comprado em ..."
                 keyboardType="default"
                 inputMode="text"
               />
@@ -498,7 +535,10 @@ function EntradaEstoque() {
 
             <TouchableOpacity
               style={styles.botao}
-              onPress={() => navigation.navigate("Home")}
+              // onPress={() => navigation.navigate("Home")}
+              onPress={() => {
+                console.log(valorProd);
+              }}
             >
               <Text style={styles.fontBackButton}>{"Voltar"}</Text>
             </TouchableOpacity>

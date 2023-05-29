@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     position: "relative",
+    // minHeight: verticalScale(60),
   },
   ContainerScrollStyle: {
     marginVertical: verticalScale(10),
@@ -54,14 +55,10 @@ const styles = StyleSheet.create({
     ...Fonts.txtLargeBold,
   },
   textInput: {
-    ...TextInput.TextInputLargeRounded,
-    alignSelf: "center",
     backgroundColor: Colors.white,
-    color: Colors.black,
-    fontWeight: "bold",
-    fontSize: 15,
-    elevation: 10,
-    shadowColor: "black",
+    width: scale(300),
+    justifyContent: "center",
+    alignSelf: "center",
   },
   textInputError: {
     ...TextInput.TextInputLargeRounded,
@@ -74,20 +71,21 @@ const styles = StyleSheet.create({
     borderColor: Colors.red,
   },
   textInputQtd: {
-    backgroundColor: Colors.green,
-    paddingHorizontal: verticalScale(45),
+    backgroundColor: Colors.white,
+    justifyContent: "center",
     textAlign: "center",
-    color: Colors.white,
-    ...Fonts.txtLargeBold,
+    paddingHorizontal: verticalScale(45),
+    maxHeight: 40,
   },
   textInputQtdError: {
     backgroundColor: Colors.green,
     paddingHorizontal: verticalScale(45),
-    textAlign: "center",
+
     color: Colors.white,
     ...Fonts.txtLargeBold,
     borderWidth: 2,
     borderColor: Colors.red,
+    maxHeight: 40,
   },
   botao: {
     flex: 1,
@@ -99,8 +97,7 @@ const styles = StyleSheet.create({
   },
   containerMaisMenos: {
     flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "center",
+    justifyContent: "center",
   },
   button: {
     backgroundColor: "lightgray",
