@@ -238,7 +238,6 @@ export default function SaidaEstoque() {
                         </Text>
                         <Text style={styles.txtQtdPreco}>
                           {newListaEstoque[0].qtdProd}{" "}
-                          {tipo === 1 ? "ml" : "kg"}
                         </Text>
                       </View>
                     </View>
