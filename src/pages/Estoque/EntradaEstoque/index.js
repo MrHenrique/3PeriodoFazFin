@@ -346,7 +346,7 @@ function EntradaEstoque() {
             visible={!isVolumeProdValid}
             padding="20"
           >
-            Erro: Volume do produto inválido!!
+          Volume do produto deve ser maior que um!!
           </HelperText>
         </View>
       );
@@ -374,7 +374,7 @@ function EntradaEstoque() {
           visible={!isPesoProdValid}
           padding="20"
         >
-          Erro: Peso do produto inválido!!
+          Peso do produto deve ser maior que um!!
         </HelperText>
       </View>
     );
@@ -436,7 +436,7 @@ function EntradaEstoque() {
                 visible={!isNomeProdValid}
                 padding="20"
               >
-                Erro: Nome do produto inválido!!
+              Nome do produto não pode ser vazio!!
               </HelperText>
             </View>
 
@@ -452,7 +452,7 @@ function EntradaEstoque() {
                 visible={false}
                 padding="20"
               >
-                Erro: Tipo de Produto Inválido!!
+              Tipo de Produto Inválido!!
               </HelperText>
             </View>
             <View style={styles.containerInput}>
@@ -481,7 +481,7 @@ function EntradaEstoque() {
                 visible={!isValorProdValid}
                 padding="20"
               >
-                Erro: Valor do produto inválido!!
+               Valor do produto deve ser maior que zero!!
               </HelperText>
             </View>
             <View style={styles.containerInput}>
