@@ -98,7 +98,7 @@ function FaturamentoReb() {
               <FlatList
                 style={[
                   styles.lista,
-                  { marginTop: shouldShow ? verticalScale(180) : 0 },
+                  { marginTop: shouldShow ? verticalScale(140) : 0 },
                 ]}
                 data={listaFiltrada}
                 renderItem={renderItem}

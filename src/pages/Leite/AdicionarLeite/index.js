@@ -195,6 +195,7 @@ function AdicionarLeite() {
             mode="date"
             onConfirm={handleDateConfirm}
             onCancel={hideDatePicker}
+            maximumDate={new Date()}
           />
         </View>
 
