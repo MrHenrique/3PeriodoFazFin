@@ -10,7 +10,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from "react-native";
-import { TextInput } from "react-native-paper";
+import { TextInput, HelperText, MD3Colors } from "react-native-paper";
 import { Colors } from "../../../styles";
 import { useNavigation } from "@react-navigation/native";
 import uuid from "react-native-uuid";
@@ -159,19 +159,27 @@ function CadastroFaz() {
               placeholderTextColor={Colors.grey}
               textColor={Colors.black}
               activeUnderlineColor={Colors.green}
+              underlineColor={Colors.blue}
+              underlineStyle={{ paddingBottom: 3 }}
               placeholder="Ex: Pastos Norte"
               onChangeText={handleNomefazChange}
               value={nomefaz}
               error={!isNomefazValid}
-            ></TextInput>
-            {!isNomefazValid && (
-              <Text style={styles.error}>Digite o nome da Fazenda!</Text>
-            )}
-            {nomeExist && (
-              <Text style={styles.error}>
-                Uma Fazenda com esse nome já existe!
-              </Text>
-            )}
+            />
+            <HelperText
+              type="error"
+              style={{
+                color: MD3Colors.error60,
+                fontSize: 14,
+                lineHeight: 15,
+              }}
+              visible={!isNomefazValid || nomeExist}
+              padding="20"
+            >
+              {!isNomefazValid
+                ? "Erro: Nome da fazenda inválido!!"
+                : "Erro: Nome da fazenda duplicado!!"}
+            </HelperText>
             {/* Nome Do Proprietario */}
             <TextInput
               mode="flat"
@@ -179,15 +187,26 @@ function CadastroFaz() {
               placeholderTextColor={Colors.grey}
               textColor={Colors.black}
               activeUnderlineColor={Colors.green}
+              underlineColor={Colors.blue}
+              underlineStyle={{ paddingBottom: 3 }}
               label="Nome Proprietario"
               placeholder="Ex: Jose Ferreira Pires"
               onChangeText={handleProprChange}
               value={proprietario}
               error={!isProprValid}
-            ></TextInput>
-            {!isProprValid && (
-              <Text style={styles.error}>Digite o nome do proprietário!</Text>
-            )}
+            />
+            <HelperText
+              type="error"
+              style={{
+                color: MD3Colors.error60,
+                fontSize: 14,
+                lineHeight: 15,
+              }}
+              visible={!isProprValid}
+              padding="20"
+            >
+              Erro: Nome do proprietario inválido!!
+            </HelperText>
             {/* Tipo de Pecuaria */}
             <TextInput
               mode="flat"
@@ -196,14 +215,25 @@ function CadastroFaz() {
               placeholderTextColor={Colors.grey}
               textColor={Colors.black}
               activeUnderlineColor={Colors.green}
+              underlineColor={Colors.blue}
+              underlineStyle={{ paddingBottom: 3 }}
               placeholder="Ex: Pecuária Leiteira"
               onChangeText={handleTipoChange}
               value={tipoprod}
               error={!isTipoValid}
-            ></TextInput>
-            {!isTipoValid && (
-              <Text style={styles.error}>Digite o tipo de produção!</Text>
-            )}
+            />
+            <HelperText
+              type="error"
+              style={{
+                color: MD3Colors.error60,
+                fontSize: 14,
+                lineHeight: 15,
+              }}
+              visible={!isTipoValid}
+              padding="20"
+            >
+              Erro: Tipo de Pecuaria inválido!!
+            </HelperText>
           </ScrollView>
           <View style={StyleFuncKeyboard()}>
             <TouchableOpacity

@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
   },
   campoTexto: {
     backgroundColor: Colors.white,
-    marginBottom: verticalScale(10),
   },
   campoTextoErro: {
     ...Fonts.txtMediumBold,

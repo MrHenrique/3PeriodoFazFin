@@ -436,7 +436,7 @@ function EntradaEstoque() {
               <HelperText
                 type="error"
                 style={{ color: MD3Colors.error60, fontSize: 14, lineHeight: 12 }}
-                visible={true}
+                visible={false}
                 padding="20"
               >
                 Erro: Tipo de Produto Inválido!!

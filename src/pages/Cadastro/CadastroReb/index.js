@@ -11,7 +11,7 @@ import {
   ScrollView,
 } from "react-native";
 import uuid from "react-native-uuid";
-import { TextInput } from "react-native-paper";
+import { TextInput, HelperText, MD3Colors } from "react-native-paper";
 import { Colors } from "../../../styles";
 import { useNavigation } from "@react-navigation/native";
 import { useMainContext } from "../../../contexts/RealmContext";
@@ -174,36 +174,53 @@ function CadastroReb() {
                 placeholderTextColor={Colors.grey}
                 textColor={Colors.black}
                 activeUnderlineColor={Colors.green}
+                underlineColor={Colors.blue}
+                underlineStyle={{ paddingBottom: 3 }}
                 onChangeText={handleNomeRebChange}
                 value={nomeReb}
                 placeholder="Ex: Vacas solteiras"
-                error={!isNomeRebValid}
-              ></TextInput>
-              {!isNomeRebValid && (
-                <Text style={styles.error}>Digite o nome do rebanho!</Text>
-              )}
-              {rebExist && (
-                <Text style={styles.error}>
-                  Um rebanho com esse nome já existe!
-                </Text>
-              )}
+                error={!isNomeRebValid || rebExist}
+              />
+              <HelperText
+                type="error"
+                style={{
+                  color: MD3Colors.error60,
+                  fontSize: 14,
+                  lineHeight: 15,
+                }}
+                visible={!isNomeRebValid || rebExist}
+                padding="20"
+              >
+                {!isNomeRebValid
+                  ? "Erro: Nome da fazenda inválido!!"
+                  : "Erro: Nome da fazenda duplicado!!"}
+              </HelperText>
               <TextInput
                 label="Quantidade Animais"
                 style={styles.campoTexto}
                 placeholderTextColor={Colors.grey}
                 textColor={Colors.black}
                 activeUnderlineColor={Colors.green}
+                underlineColor={Colors.blue}
+                underlineStyle={{ paddingBottom: 3 }}
                 onChangeText={handleQtdAniChange}
                 value={qtdAni}
                 keyboardType="number-pad"
                 placeholder="Quantos animais no rebanho?"
                 error={!isQtdAniValid}
-              ></TextInput>
-              {!isQtdAniValid && (
-                <Text style={styles.error}>
-                  Valor digitado inválido, tente novamente.
-                </Text>
-              )}
+              />
+              <HelperText
+                type="error"
+                style={{
+                  color: MD3Colors.error60,
+                  fontSize: 14,
+                  lineHeight: 15,
+                }}
+                visible={!isQtdAniValid}
+                padding="20"
+              >
+                Erro: Quantidade de animais inválido!!
+              </HelperText>
             </View>
           </ScrollView>
           <View style={StyleFuncKeyboard()}>
