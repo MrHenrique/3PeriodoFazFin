@@ -103,7 +103,10 @@ function Login({ navigation }) {
       senhaValida
     ) {
       //Função de login aqui
-        navigation.navigate(navigateWhere());
+      setpasswordState(true);
+      setPassword("");
+      setEmail("");
+      navigation.navigate(navigateWhere());
     }
   }
   // LISTENER DO TECLADO(ATIVADO OU NAO)

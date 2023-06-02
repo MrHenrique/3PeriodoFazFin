@@ -91,6 +91,11 @@ function SignUp() {
       senhasIguais
     ) {
       //Função de registro no banco aqui
+      setpasswordState(true);
+      setNome("");
+      setPassword("");
+      setPasswordConfirm("");
+      setEmail("");
       navigation.navigate("LoginPage");
     }
   }
