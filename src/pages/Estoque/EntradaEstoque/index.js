@@ -88,8 +88,15 @@ function EntradaEstoque() {
     setQtdProd(parsedValue);
   }
   function validCheck() {
-    if (nomeProd.length === 0) {
-      setIsNomeProdValid(false);
+    if (
+      nomeProd.length === 0 ||
+      valorProd.length === 0 ||
+      qtdProd <= 0 ||
+      (volumeProd.length === 0 && pesoProd.length === 0)
+    ) {
+      if (nomeProd.length === 0) {
+        setIsNomeProdValid(false);
+      }
       if (valorProd.length === 0) {
         setIsValorProdValid(false);
       }
@@ -126,15 +133,16 @@ function EntradaEstoque() {
       if (tipoProd == 1) {
         if (realm) {
           try {
+            let volumeProdT = qtdProdN * volumeProd;
+            let valorProdT = qtdProd * valorProd;
             realm.write(() => {
               let farm = realm.objectForPrimaryKey("Farm", fazID);
               let createdEstoque = realm.create("AtualEstoqueSchema", {
                 nomeProd: nomeProd,
                 _id: uuid.v4(),
-                valorProd,
-                qtdProd: qtdProdN,
+                valorProd: valorProdT,
                 pesoProd: pesoProdNull,
-                volumeProd,
+                volumeProd: volumeProdT,
                 obserProd,
                 createdAt: new Date(),
               });
@@ -161,14 +169,15 @@ function EntradaEstoque() {
       } else if (tipoProd == 2) {
         if (realm) {
           try {
+            let pesoProdT = qtdProdN * pesoProd;
+            let valorProdT = qtdProd * valorProd;
             realm.write(() => {
               let farm = realm.objectForPrimaryKey("Farm", fazID);
               let createdEstoque = realm.create("AtualEstoqueSchema", {
                 nomeProd: nomeProd,
                 _id: uuid.v4(),
-                valorProd,
-                qtdProd: qtdProdN,
-                pesoProd,
+                valorProd: valorProdT,
+                pesoProd: pesoProdT,
                 volumeProd: volumeProdNull,
                 obserProd,
                 createdAt: new Date(),
@@ -198,9 +207,10 @@ function EntradaEstoque() {
     //se produto existe
     else {
       if (tipoProd == 1 && listaEstoqueFiltered[0].volumeProd >= 0) {
-        let valorProdF = valorProd + listaEstoqueFiltered[0].valorProd;
-        let volumeProdF = volumeProd + listaEstoqueFiltered[0].volumeProd;
-        let qtdProdF = qtdProdN + listaEstoqueFiltered[0].qtdProd;
+        let volumeProdT = qtdProdN * volumeProd;
+        let valorProdT = qtdProd * valorProd;
+        let valorProdF = valorProdT + listaEstoqueFiltered[0].valorProd;
+        let volumeProdF = volumeProdT + listaEstoqueFiltered[0].volumeProd;
         if (realm) {
           try {
             realm.write(() => {
@@ -210,7 +220,6 @@ function EntradaEstoque() {
               updateEstoque.valorProd = valorProdF;
               updateEstoque.pesoProd = pesoProdNull;
               updateEstoque.volumeProd = volumeProdF;
-              updateEstoque.qtdProd = qtdProdF;
               updateEstoque.obserProd = obserProd;
               updateEstoque.createdAt = new Date();
 
@@ -235,9 +244,10 @@ function EntradaEstoque() {
           }
         }
       } else if (tipoProd == 2 && listaEstoqueFiltered[0].pesoProd >= 0) {
-        let valorProdF = valorProd + listaEstoqueFiltered[0].valorProd;
-        let pesoProdF = pesoProd + listaEstoqueFiltered[0].pesoProd;
-        let qtdProdF = qtdProdN + listaEstoqueFiltered[0].qtdProd;
+        let pesoProdT = qtdProdN * pesoProd;
+        let valorProdT = qtdProd * valorProd;
+        let valorProdF = valorProdT + listaEstoqueFiltered[0].valorProd;
+        let pesoProdF = pesoProdT + listaEstoqueFiltered[0].pesoProd;
         if (realm) {
           try {
             realm.write(() => {
@@ -247,7 +257,6 @@ function EntradaEstoque() {
               updateEstoque.valorProd = valorProdF;
               updateEstoque.pesoProd = pesoProdF;
               updateEstoque.volumeProd = volumeProdNull;
-              updateEstoque.qtdProd = qtdProdF;
               updateEstoque.obserProd = obserProd;
               updateEstoque.createdAt = new Date();
 
@@ -327,7 +336,7 @@ function EntradaEstoque() {
       return (
         <View style={styles.containerInput}>
           <TextInput
-            label="Volume Produto"
+            label="Volume da unidade do produto"
             style={styles.textInput}
             placeholderTextColor={Colors.grey}
             textColor={Colors.black}
@@ -346,7 +355,7 @@ function EntradaEstoque() {
             visible={!isVolumeProdValid}
             padding="20"
           >
-            Digite um volume de produto válido!!
+            Digite um volumeda unidade do produto.
           </HelperText>
         </View>
       );
@@ -355,7 +364,7 @@ function EntradaEstoque() {
       <View style={styles.containerInput}>
         <TextInput
           mode="flat"
-          label={"Peso Produto"}
+          label={"Peso da unidade do produto"}
           style={styles.textInput}
           placeholderTextColor={Colors.grey}
           textColor={Colors.black}
@@ -374,7 +383,7 @@ function EntradaEstoque() {
           visible={!isPesoProdValid}
           padding="20"
         >
-          Digite um preço de produto válido!!
+          Digite o peso da unidade do produto.
         </HelperText>
       </View>
     );
@@ -413,7 +422,7 @@ function EntradaEstoque() {
             <View style={styles.containerInput}>
               <TextInput
                 mode="flat"
-                label="Nome Produto"
+                label="Nome do produto"
                 style={styles.textInput}
                 placeholderTextColor={Colors.grey}
                 textColor={Colors.black}
@@ -436,7 +445,7 @@ function EntradaEstoque() {
                 visible={!isNomeProdValid}
                 padding="20"
               >
-                Digite um nome do produto!!
+                Digite o nome do produto.
               </HelperText>
             </View>
 
@@ -447,7 +456,7 @@ function EntradaEstoque() {
               <TextInput
                 value={valorProd}
                 mode="flat"
-                label="Preço Compra"
+                label="Preço da unidade do produto."
                 style={styles.textInput}
                 placeholderTextColor={Colors.grey}
                 textColor={Colors.black}
@@ -469,13 +478,11 @@ function EntradaEstoque() {
                 visible={!isValorProdValid}
                 padding="20"
               >
-                Digite um preço de compra válido!!
+                Digite o preço da unidade do produto..
               </HelperText>
             </View>
             <View style={styles.containerInput}>
-              <Text style={styles.fonts}>
-                Quantidade de produtos comprados:
-              </Text>
+              <Text style={styles.fonts}>Quantidade de produtos comprados</Text>
               <View style={styles.containerMaisMenos}>
                 <IconButton
                   icon="minus"
@@ -515,7 +522,7 @@ function EntradaEstoque() {
                 visible={!isQtdProdValid}
                 padding="20"
               >
-                Quantidade inválida!!
+                Quantidade inválida.
               </HelperText>
             </View>
             <View style={styles.containerInput}>{TextInputTipo()}</View>

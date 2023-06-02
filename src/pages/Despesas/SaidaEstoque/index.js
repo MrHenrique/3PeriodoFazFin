@@ -73,53 +73,102 @@ export default function SaidaEstoque() {
 
   async function handleAddGastos() {
     if (realm) {
-      const qtdProdFinal = newListaEstoque[0].qtdProd - Number(qtdProd);
-      const valorProdFinal =
-        (newListaEstoque[0].valorProd / newListaEstoque[0].qtdProd) *
-        qtdProdFinal;
-      const valorMedioTransacao =
-        newListaEstoque[0].valorProd / newListaEstoque[0].qtdProd;
+      if (tipo === 1) {
+        const volumeProdFinal = newListaEstoque[0].volumeProd - Number(qtdProd);
+        const valorProdFinal =
+          (newListaEstoque[0].valorProd / newListaEstoque[0].volumeProd) *
+          volumeProdFinal;
+        const valorMedioTransacao =
+          (newListaEstoque[0].valorProd / newListaEstoque[0].volumeProd) *
+          Number(qtdProd);
+        try {
+          realm.write(() => {
+            let updateEstoque = realm
+              .objects("AtualEstoqueSchema")
+              .filtered(`_id= '${idEstoqueSaida}'`)[0];
+            updateEstoque.obserProd = obserProd;
+            updateEstoque.createdAt = new Date();
+            updateEstoque.valorProd = valorProdFinal;
+            updateEstoque.volumeProd = volumeProdFinal;
 
-      try {
-        realm.write(() => {
-          let updateEstoque = realm
-            .objects("AtualEstoqueSchema")
-            .filtered(`_id= '${idEstoqueSaida}'`)[0];
-          updateEstoque.qtdProd = qtdProdFinal;
-          updateEstoque.obserProd = obserProd;
-          updateEstoque.createdAt = new Date();
-          updateEstoque.valorProd = valorProdFinal;
-
-          let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-          let createdGastos = realm.create("DespesasSchema", {
-            _id: uuid.v4(),
-            createdAt: new Date(),
-            nomeProd: newListaEstoque[0].nomeProd,
-            valorProd: valorMedioTransacao,
-            qtdProd: Number(qtdProd),
-            obserProd: obserProd,
-            pesoProd: 0,
-            volumeProd: 0,
+            let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+            let createdGastos = realm.create("DespesasSchema", {
+              _id: uuid.v4(),
+              createdAt: new Date(),
+              nomeProd: newListaEstoque[0].nomeProd,
+              valorProd: valorMedioTransacao,
+              qtdProd: 1,
+              obserProd: obserProd,
+              pesoProd: 0,
+              volumeProd: Number(qtdProd),
+            });
+            reb.despesas.push(createdGastos);
+            Alert.alert("Dados cadastrados com sucesso!");
           });
-          reb.despesas.push(createdGastos);
-          Alert.alert("Dados cadastrados com sucesso!");
-        });
-      } catch (e) {
-        Alert.alert("Não foi possível cadastrar.");
-      } finally {
-        setObserProd("");
-        setQtdProd("");
-        IdEstoqueSaida("");
+        } catch (e) {
+          Alert.alert("Não foi possível cadastrar.");
+        } finally {
+          setObserProd("");
+          setQtdProd("");
+          IdEstoqueSaida("");
+        }
+      }
+      if (tipo === 2) {
+        const pesoProdFinal = newListaEstoque[0].pesoProd - Number(qtdProd);
+        const valorProdFinal =
+          (newListaEstoque[0].valorProd / newListaEstoque[0].pesoProd) *
+          pesoProdFinal;
+        const valorMedioTransacao =
+          (newListaEstoque[0].valorProd / newListaEstoque[0].pesoProd) *
+          Number(qtdProd);
+        try {
+          realm.write(() => {
+            let updateEstoque = realm
+              .objects("AtualEstoqueSchema")
+              .filtered(`_id= '${idEstoqueSaida}'`)[0];
+            updateEstoque.obserProd = obserProd;
+            updateEstoque.createdAt = new Date();
+            updateEstoque.valorProd = valorProdFinal;
+            updateEstoque.pesoProd = pesoProdFinal;
+            let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+            let createdGastos = realm.create("DespesasSchema", {
+              _id: uuid.v4(),
+              createdAt: new Date(),
+              nomeProd: newListaEstoque[0].nomeProd,
+              valorProd: valorMedioTransacao,
+              qtdProd: 1,
+              obserProd: obserProd,
+              pesoProd: Number(qtdProd),
+              volumeProd: 0,
+            });
+            reb.despesas.push(createdGastos);
+            Alert.alert("Dados cadastrados com sucesso!");
+          });
+        } catch (e) {
+          Alert.alert("Não foi possível cadastrar.");
+        } finally {
+          setObserProd("");
+          setQtdProd("");
+          IdEstoqueSaida("");
+        }
       }
     }
   }
   function averagePrice() {
-    if (newListaEstoque[0].qtdProd > 0) {
-      const valor = (
-        newListaEstoque[0].valorProd / newListaEstoque[0].qtdProd
-      ).toFixed(2);
-      const formattedValor = `R$ ${valor.replace(".", ",")}`;
-      return formattedValor;
+    if (newListaEstoque[0].volumeProd > 0 || newListaEstoque[0].pesoProd > 0) {
+      if (newListaEstoque[0].volumeProd > 0) {
+        const valor = (
+          newListaEstoque[0].valorProd / newListaEstoque[0].volumeProd
+        ).toFixed(2);
+        const formattedValor = `R$ ${valor.replace(".", ",")}`;
+        return formattedValor;
+      } else {
+        const valor = (
+          newListaEstoque[0].valorProd / newListaEstoque[0].pesoProd
+        ).toFixed(2);
+        const formattedValor = `R$ ${valor.replace(".", ",")}`;
+        return formattedValor;
+      }
     } else {
       return "-";
     }
@@ -225,25 +274,55 @@ export default function SaidaEstoque() {
               {/* Visao do produto, preco medio e quantidade */}
               {shouldShow ? (
                 <View style={styles.containerProduto}>
-                  {newListaEstoque.length > 0 ? (
-                    <View style={styles.ctnProduto}>
-                      <Text style={styles.textTitulo}>Produto</Text>
-                      <View style={styles.ctntextos}>
-                        <Text style={styles.txtProdTitulo}>Preço Médio:</Text>
-                        <Text style={styles.txtQtdPreco}>{averagePrice()}</Text>
-                      </View>
-                      <View style={styles.ctntextos}>
-                        <Text style={styles.txtProdTitulo}>
-                          Quantidade em Estoque:
-                        </Text>
-                        <Text style={styles.txtQtdPreco}>
-                          {newListaEstoque[0].qtdProd}{" "}
-                        </Text>
-                      </View>
-                    </View>
-                  ) : (
-                    <></>
-                  )}
+                  {newListaEstoque.length > 0 &&
+                  (newListaEstoque[0].volumeProd >= 0 ||
+                    newListaEstoque[0].pesoProd >= 0) ? (
+                    <>
+                      {newListaEstoque[0].volumeProd >= 0 ? (
+                        <View style={styles.ctnProduto}>
+                          <Text style={styles.textTitulo}>Produto</Text>
+                          <View style={styles.ctntextos}>
+                            <Text style={styles.txtProdTitulo}>
+                              Preço Médio por ml:
+                            </Text>
+                            <Text style={styles.txtQtdPreco}>
+                              {averagePrice()}
+                            </Text>
+                          </View>
+                          <View style={styles.ctntextos}>
+                            <Text style={styles.txtProdTitulo}>
+                              Volume em Estoque:
+                            </Text>
+                            <Text style={styles.txtQtdPreco}>
+                              {newListaEstoque[0].volumeProd}
+                              {" ml"}
+                            </Text>
+                          </View>
+                        </View>
+                      ) : (
+                        <View style={styles.ctnProduto}>
+                          <Text style={styles.textTitulo}>Produto</Text>
+                          <View style={styles.ctntextos}>
+                            <Text style={styles.txtProdTitulo}>
+                              Preço Médio por KG:
+                            </Text>
+                            <Text style={styles.txtQtdPreco}>
+                              {averagePrice()}
+                            </Text>
+                          </View>
+                          <View style={styles.ctntextos}>
+                            <Text style={styles.txtProdTitulo}>
+                              Peso em Estoque:
+                            </Text>
+                            <Text style={styles.txtQtdPreco}>
+                              {newListaEstoque[0].pesoProd}
+                              {" KG"}
+                            </Text>
+                          </View>
+                        </View>
+                      )}
+                    </>
+                  ) : null}
                 </View>
               ) : null}
               {/* cadastro */}

@@ -225,6 +225,12 @@ function Login({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.botao}
+            onPress={() => navigation.navigate(navigateWhere())}
+          >
+            <Text style={styles.tituloBotao}>{"Login Direto"}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.botao}
             onPress={() => navigation.navigate("SignUp")}
           >
             <Text style={styles.tituloBotao}>

@@ -244,6 +244,16 @@ const styles = StyleSheet.create({
   disabled: {
     opacity: 1,
   },
+  listaDet: {
+    borderRadius: 20,
+    backgroundColor: Colors.green,
+    width: scale(300),
+    height: verticalScale(40),
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    marginVertical: verticalScale(5),
+  },
   ListItem: {
     flex: 1,
     flexDirection: "row",
