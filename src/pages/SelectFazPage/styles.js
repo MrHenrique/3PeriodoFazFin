@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   botaopress: {
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    marginBottom: verticalScale(10),
+    marginTop: verticalScale(10),
   },
   botaopress2: {
     ...Buttons.btnLargeRounded,
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
   botaopress3: {
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
+    flex: 0.3,
   },
   disabledbutton: {
     ...Buttons.btnLargeRounded,
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
   },
   select: {
     alignSelf: "center",
-    marginTop: verticalScale(15),
+    marginVertical: scale(15),
   },
   containerlogin: {
     flex: 1,
@@ -70,11 +71,17 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: verticalScale(10),
     flexDirection: "column-reverse",
+    justifyContent: "flex-start"
   },
-  containerbotoes2: {
-    flex: 1,
-    padding: verticalScale(10),
-    flexDirection: "column",
+  containercadastrarfaz: {
+    flex: 1.5,
+    bottom: 0,
+    justifyContent: "center",
+  },
+  titulocadfaz: {
+    ...Fonts.txtMediumBold,
+    fontSize: scale(16),
+    color: Colors.white,
   },
 });
 export default styles;

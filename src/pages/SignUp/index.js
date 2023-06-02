@@ -222,7 +222,7 @@ function SignUp() {
               >
                 {!senhaPreenchido
                   ? "Digite sua senha."
-                  : "Senha possui menos de 6 caracteres, tente novamente."}
+                  : "No mínimo 6 caracteres, tente novamente."}
               </HelperText>
               <TextInput
                 label="Confirme sua senha"

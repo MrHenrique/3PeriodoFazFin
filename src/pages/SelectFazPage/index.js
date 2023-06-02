@@ -66,12 +66,12 @@ function SelectFazPage() {
             data={listaFaz}
           />
         </View>
-        <View style={styles.containerbotoes2}>
+        <View style={styles.containercadastrarfaz}>
           <TouchableOpacity
             style={styles.botaopress3}
             onPress={() => navigation.navigate("CadastroFaz")}
           >
-            <Text style={styles.tituloBotao}>{"Cadastrar fazenda"}</Text>
+            <Text style={styles.titulocadfaz}>{"Cadastrar fazenda"}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.containerbotoes}>
