@@ -66,19 +66,27 @@ function SelectFazPage() {
             data={listaFaz}
           />
         </View>
+        <View style={styles.containerbotoes2}>
+          <TouchableOpacity
+            style={styles.botaopress3}
+            onPress={() => navigation.navigate("CadastroFaz")}
+          >
+            <Text style={styles.tituloBotao}>{"Cadastrar fazenda"}</Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.containerbotoes}>
+          <TouchableOpacity
+            style={styles.botaopress}
+            onPress={() => navigation.navigate("LoginPage")}
+          >
+            <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             disabled={CanContinue(fazID)}
             style={DisabledStyle(fazID)}
             onPress={() => navigation.navigate("SelectRebPage")}
           >
             <Text style={styles.tituloBotao}>{"Continuar"}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.botaopress}
-            onPress={() => navigation.navigate("CadastroFaz")}
-          >
-            <Text style={styles.tituloBotao}>{"Cadastrar fazenda"}</Text>
           </TouchableOpacity>
         </View>
       </View>

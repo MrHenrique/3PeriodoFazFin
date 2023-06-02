@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   botaopress: {
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.green, 
+    backgroundColor: Colors.green,
     marginBottom: verticalScale(10),
   },
   botaopress2: {
@@ -43,10 +43,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.green,
     flexDirection: "row-reverse",
   },
+  botaopress3: {
+    ...Buttons.btnLargeRounded,
+    backgroundColor: Colors.green,
+  },
   disabledbutton: {
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    opacity: 0.4
+    opacity: 0.4,
   },
   tituloBotao: {
     ...Fonts.txtMediumBold,
@@ -66,6 +70,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: verticalScale(10),
     flexDirection: "column-reverse",
+  },
+  containerbotoes2: {
+    flex: 1,
+    padding: verticalScale(10),
+    flexDirection: "column",
   },
 });
 export default styles;
