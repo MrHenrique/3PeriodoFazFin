@@ -10,8 +10,7 @@ import {
   ScrollView,
 } from "react-native";
 import styles from "./styles";
-import { TextInput } from "react-native-paper";
-import { Alert } from "react-native";
+import { TextInput, HelperText, MD3Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../../styles";
 function SignUp() {
@@ -25,30 +24,75 @@ function SignUp() {
   const [keyboardStatus, setkeyboardStatus] = useState(false);
   const [passwordState, setpasswordState] = useState(true);
   const [passwordConfirmState, setpasswordConfirmState] = useState(true);
-  const imgbg1 = "../../../assets/background7.jpg";
-
+  const [nomePreenchido, setNomePreenchido] = useState(true);
+  const [emailPreenchido, setEmailPreenchido] = useState(true);
+  const [emailValido, setEmailValido] = useState(true);
+  const [senhaPreenchido, setSenhaPreenchido] = useState(true);
+  const [senhaValida, setSenhaValida] = useState(true);
+  const [senhasIguais, setSenhasIguais] = useState(true);
+  function handleNomePropChange(text) {
+    const isValid = text.trim().length > 0;
+    setNomePreenchido(isValid);
+    setNomeProp(text);
+  }
+  function handleEmailChange(text) {
+    const isValid = text.trim().length > 0;
+    setEmailPreenchido(isValid);
+    setEmail(text);
+    if (!VALID_EMAIL_EXPRESSION.test(text.toLowerCase())) {
+      setEmailValido(false);
+    } else {
+      setEmailValido(true);
+    }
+  }
+  function handleSenhaChange(text) {
+    const isValid = text.trim().length > 0;
+    setSenhaPreenchido(isValid);
+    setPassword(text);
+    if (text.trim().length < 6) {
+      setSenhaValida(false);
+    } else {
+      setSenhaValida(true);
+    }
+  }
   function handleUserRegister() {
-    if (nomeProp === "") {
-      return Alert.alert("Informe o nome");
+    if (
+      nomeProp.length === 0 ||
+      email.length === 0 ||
+      !VALID_EMAIL_EXPRESSION.test(email.toLowerCase()) ||
+      password.length === 0 ||
+      password.trim() !== passwordConfirm.trim() ||
+      password.trim().length < 6
+    ) {
+      if (nomeProp.length === 0) {
+        setNomePreenchido(false);
+      }
+      if (email.length === 0) {
+        setEmailPreenchido(false);
+      }
+      if (!VALID_EMAIL_EXPRESSION.test(email.toLowerCase())) {
+        setEmailValido(false);
+      }
+      if (password.length === 0) {
+        setSenhaPreenchido(false);
+      }
+      if (password.trim().length < 6) {
+        setSenhaValida(false);
+      }
+      if (password.trim() !== passwordConfirm.trim()) {
+        setSenhasIguais(false);
+      }
+    } else if (
+      nomePreenchido &&
+      emailPreenchido &&
+      emailValido &&
+      senhaPreenchido &&
+      senhaValida &&
+      senhasIguais
+    ) {
+      //Função de registro no banco aqui
+      navigation.navigate("LoginPage");
     }
-    if (email === "") {
-      return Alert.alert("Informe o email");
-    }
-    if (!VALID_EMAIL_EXPRESSION.test(email.toLowerCase())) {
-      return Alert.alert("E-mail inválido");
-    }
-    if (password === "") {
-      return Alert.alert("Informe a senha");
-    }
-    if (password.trim().length < 6) {
-      return Alert.alert("A senha deve ter ao menos 6 dígitos");
-    }
-    if (password.trim() !== passwordConfirm.trim()) {
-      return Alert.alert("As senhas nao conferem");
-    }
-
-    Alert.alert("Cadastrado com sucesso");
-    navigation.navigate("SelectFazPage");
   }
   // LISTENER DO TECLADO(ATIVADO OU NAO)
   useEffect(() => {
@@ -95,19 +139,31 @@ function SignUp() {
               <Text style={styles.title}>Bem-vindo(a)</Text>
               <TextInput
                 mode="flat"
-                label="Nome"
+                label="Digite seu nome"
                 activeUnderlineColor={Colors.green}
                 textColor={Colors.black}
                 placeholder="ex: Diego Alves Pereira"
                 inputMode="text"
                 style={styles.campoTexto}
-                onChangeText={setNomeProp}
+                onChangeText={handleNomePropChange}
                 value={nomeProp}
-                error={false}
+                error={!nomePreenchido}
               />
+              <HelperText
+                type="error"
+                style={{
+                  color: MD3Colors.error60,
+                  fontSize: 14,
+                  lineHeight: 15,
+                }}
+                visible={!nomePreenchido}
+                padding="20"
+              >
+                Digite seu nome.
+              </HelperText>
               <TextInput
                 mode="flat"
-                label="Email"
+                label="Digite seu e-mail"
                 activeUnderlineColor={Colors.green}
                 textColor={Colors.black}
                 style={styles.campoTexto}
@@ -116,11 +172,26 @@ function SignUp() {
                 keyboardType="email-address"
                 autoCapitalize="none"
                 value={email}
-                onChangeText={setEmail}
+                onChangeText={handleEmailChange}
+                error={!emailPreenchido}
               />
+              <HelperText
+                type="error"
+                style={{
+                  color: MD3Colors.error60,
+                  fontSize: 14,
+                  lineHeight: 15,
+                }}
+                visible={!emailPreenchido || !emailValido}
+                padding="20"
+              >
+                {!emailPreenchido
+                  ? "Digite o seu e-mail."
+                  : "E-mail inválido, digite um e-mail válido."}
+              </HelperText>
 
               <TextInput
-              label="Senha"
+                label="Escolha uma senha"
                 right={
                   <TextInput.Icon
                     icon={passwordState ? "eye" : "eye-off"}
@@ -132,14 +203,29 @@ function SignUp() {
                 secureTextEntry={passwordState}
                 style={styles.campoTexto}
                 inputMode="text"
-                placeholder="Senha"
+                placeholder="Utilize no mínimo 6 caracteres"
                 autoCapitalize="none"
-                onChangeText={setPassword}
+                onChangeText={handleSenhaChange}
                 value={password}
                 placeholderTextColor={"#d9d9d9"}
+                error={!senhaPreenchido}
               />
+              <HelperText
+                type="error"
+                style={{
+                  color: MD3Colors.error60,
+                  fontSize: 14,
+                  lineHeight: 15,
+                }}
+                visible={!senhaPreenchido || !senhaValida}
+                padding="20"
+              >
+                {!senhaPreenchido
+                  ? "Digite sua senha."
+                  : "Senha possui menos de 6 caracteres, tente novamente."}
+              </HelperText>
               <TextInput
-              label="Confirmar"
+                label="Confirme sua senha"
                 right={
                   <TextInput.Icon
                     icon={passwordConfirmState ? "eye" : "eye-off"}
@@ -150,12 +236,25 @@ function SignUp() {
                 }
                 secureTextEntry={passwordConfirmState}
                 style={styles.campoTexto}
-                placeholder="Confirme sua senha"
+                placeholder="Digite novamente a senha escolhida"
                 inputMode="text"
                 autoCapitalize="none"
                 onChangeText={setPasswordConfirm}
                 value={passwordConfirm}
+                error={!senhasIguais}
               />
+              <HelperText
+                type="error"
+                style={{
+                  color: MD3Colors.error60,
+                  fontSize: 14,
+                  lineHeight: 15,
+                }}
+                visible={!senhasIguais}
+                padding="20"
+              >
+                Confirmação de senha não confere, tente novamente.
+              </HelperText>
             </ScrollView>
             <View style={StyleFuncKeyboard()}>
               <TouchableOpacity

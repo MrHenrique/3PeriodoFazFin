@@ -234,7 +234,7 @@ function EstoqueGeral() {
             <View style={styles.containerlist}>
               <View style={styles.ListItem}>
                 <Text style={styles.fontsubtitulo}>
-                  Data da ultima compra :
+                  Data da última compra :
                 </Text>
                 <Text style={styles.fontcontainerlistitem}>
                   {item.createdAt.getDate().toString().padStart(2, 0)}/
@@ -300,7 +300,7 @@ function EstoqueGeral() {
                 toggleModal();
               }}
             >
-              <Text style={styles.fontblk}>Relatorios</Text>
+              <Text style={styles.fontblk}>Relatórios</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.botaorelatorioproduto}
