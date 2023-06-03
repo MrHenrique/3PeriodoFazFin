@@ -404,6 +404,7 @@ export default function SaidaEstoque() {
                         onChangeText={setObserProd}
                         placeholder="Observação sobre produto"
                       />
+                      <HelperText/>
                     </View>
                   </View>
                 </>
