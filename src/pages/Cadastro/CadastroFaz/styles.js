@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
   },
   botao: {
     flex: 1,
-    maxHeight: 40,
     marginTop: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,

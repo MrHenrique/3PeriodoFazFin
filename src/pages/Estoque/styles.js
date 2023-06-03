@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     maxHeight: 40,
   },
   botao: {
-    flex: 1,
+    flex: 1.1,
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     minHeight: scale(10),
   },
   containerButaoestqgeral: {
-    flex: 1.5,
+    flex: 1.1,
     flexDirection: "column",
     justifyContent: "flex-end",
     minHeight: scale(10),
