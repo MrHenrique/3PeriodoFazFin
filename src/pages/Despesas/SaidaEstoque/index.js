@@ -196,9 +196,9 @@ export default function SaidaEstoque() {
   }
   function StyleScrollViewContainer() {
     if (keyboardStatus) {
-      return [styles.ContainerScrollStyle, { paddingBottom: 10 }];
+      return [styles.ContainerScrollStyle,];
     } else {
-      return [styles.ContainerScrollStyle, { flex: 1 }];
+      return [styles.ContainerScrollStyle,];
     }
   }
   return (

@@ -4,12 +4,16 @@ import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
   ContainerScrollStyle: {
-    marginVertical: verticalScale(10),
+    paddingVertical: verticalScale(15),
+    
   },
   containerkeyboard: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: Colors.red,
+  },
+  scrollcontainer: {
+    flex: 1,
+    // backgroundColor: Colors.black,
   },
   container: {
     flex: 1,
@@ -28,13 +32,15 @@ const styles = StyleSheet.create({
     flex: 0.4,
     justifyContent: "center",
   },
-  containerTxtInputDespesas: {},
+  containerTxtInputDespesas: {
+    flex: 1,
+  },
   containerProduto: {
-    flex: 2,
+    flex: 1,
     backgroundColor: Colors.green,
     marginHorizontal: scale(10),
-    paddingHorizontal: scale(10),
-    marginBottom: scale(10),
+    padding: scale(10),
+    marginVertical: verticalScale(10),
     borderRadius: 10,
     elevation: 5,
   },
@@ -68,12 +74,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   cadastroDespesas: {
+    flex: 2,
     backgroundColor: Colors.green,
     marginHorizontal: scale(10),
     paddingHorizontal: scale(10),
+    paddingTop: scale(30),
     borderRadius: 10,
     paddingVertical: verticalScale(10),
     justifyContent: "center",
+    marginTop: verticalScale(10),
   },
   titleTxtInput: {
     ...Fonts.txtMedium,
@@ -107,14 +116,13 @@ const styles = StyleSheet.create({
     flex: 0.2,
     flexDirection: "column",
     justifyContent: "flex-end",
-    minHeight: scale(10),
   },
-  containerbutaoKeyboardOn:{
+  containerbutaoKeyboardOn: {
     flex: 0.3,
     flexDirection: "column",
     justifyContent: "flex-end",
     paddingTop: verticalScale(10),
-    minHeight: scale(100),
+    minHeight: verticalScale(50),
   },
   botao: {
     flex: 1,
