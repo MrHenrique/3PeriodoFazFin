@@ -9,7 +9,7 @@ import {
   ScrollView,
   Keyboard,
 } from "react-native";
-import { TextInput, HelperText } from "react-native-paper";
+import { TextInput, HelperText, MD3Colors } from "react-native-paper";
 import { Colors } from "../../../styles";
 import EstoqueOptions from "../../../components/Dropdown/EstoqueOptions";
 import { useState, useContext, useEffect } from "react";
@@ -30,6 +30,8 @@ export default function SaidaEstoque() {
   const [newListaEstoque, setNewListaEstoque] = useState([]);
   const [idSelected, setIdSelected] = useState("");
   const [tipo, setTipo] = useState(1);
+  const [qtdValid, setQtdValid] = useState(true);
+  const [qtdPreenchida, setQtdPreenchida] = useState(true);
   // listener teclado
   const [keyboardStatus, setkeyboardStatus] = useState(false);
 
@@ -58,9 +60,40 @@ export default function SaidaEstoque() {
     setShouldShow(false);
     TipoEstoqueSaida(tipo);
   }, [tipo]);
+
+  //Validacoes
+  function handleQtdChange(text) {
+    const cleanedText = text.replace(",", ".");
+    const parsedValue = parseFloat(cleanedText);
+    setQtdProd(parsedValue);
+    checkQtd(parsedValue, cleanedText);
+  }
+  function validCheck() {
+    if (qtdProd.length === 0) {
+      setQtdPreenchida(false);
+    } else if (qtdPreenchida && qtdValid) {
+      handleAddGastos();
+    }
+  }
+  const checkQtd = (parsedValue, cleanedText) => {
+    if (cleanedText.length > 0) {
+      if (tipo === 1) {
+        if (newListaEstoque[0].volumeProd >= parsedValue && parsedValue > 0) {
+          setQtdValid(true);
+        } else {
+          setQtdValid(false);
+        }
+      } else {
+        if (newListaEstoque[0].pesoProd >= parsedValue && parsedValue > 0) {
+          setQtdValid(true);
+        } else {
+          setQtdValid(false);
+        }
+      }
+    }
+  };
   //funcao filtrar estoque
   const FilterEstoqueData = () => {
-    console.log(idEstoqueSaida);
     if (idEstoqueSaida != undefined && idEstoqueSaida != "") {
       setShouldShow(true);
       setNewListaEstoque(
@@ -273,98 +306,113 @@ export default function SaidaEstoque() {
             <View style={styles.containerGeralCadastro}>
               {/* Visao do produto, preco medio e quantidade */}
               {shouldShow ? (
-                <View style={styles.containerProduto}>
-                  {newListaEstoque.length > 0 &&
-                  (newListaEstoque[0].volumeProd >= 0 ||
-                    newListaEstoque[0].pesoProd >= 0) ? (
-                    <>
-                      {newListaEstoque[0].volumeProd >= 0 ? (
-                        <View style={styles.ctnProduto}>
-                          <Text style={styles.textTitulo}>Produto</Text>
-                          <View style={styles.ctntextos}>
-                            <Text style={styles.txtProdTitulo}>
-                              Preço Médio por ml:
-                            </Text>
-                            <Text style={styles.txtQtdPreco}>
-                              {averagePrice()}
-                            </Text>
+                <>
+                  <View style={styles.containerProduto}>
+                    {newListaEstoque.length > 0 &&
+                    (newListaEstoque[0].volumeProd >= 0 ||
+                      newListaEstoque[0].pesoProd >= 0) ? (
+                      <>
+                        {newListaEstoque[0].volumeProd >= 0 ? (
+                          <View style={styles.ctnProduto}>
+                            <Text style={styles.textTitulo}>Produto</Text>
+                            <View style={styles.ctntextos}>
+                              <Text style={styles.txtProdTitulo}>
+                                Preço Médio por litro:
+                              </Text>
+                              <Text style={styles.txtQtdPreco}>
+                                {averagePrice()}
+                              </Text>
+                            </View>
+                            <View style={styles.ctntextos}>
+                              <Text style={styles.txtProdTitulo}>
+                                Volume em Estoque:
+                              </Text>
+                              <Text style={styles.txtQtdPreco}>
+                                {newListaEstoque[0].volumeProd.toFixed(2)}
+                                {" l"}
+                              </Text>
+                            </View>
                           </View>
-                          <View style={styles.ctntextos}>
-                            <Text style={styles.txtProdTitulo}>
-                              Volume em Estoque:
-                            </Text>
-                            <Text style={styles.txtQtdPreco}>
-                              {newListaEstoque[0].volumeProd}
-                              {" ml"}
-                            </Text>
+                        ) : (
+                          <View style={styles.ctnProduto}>
+                            <Text style={styles.textTitulo}>Produto</Text>
+                            <View style={styles.ctntextos}>
+                              <Text style={styles.txtProdTitulo}>
+                                Preço Médio por KG:
+                              </Text>
+                              <Text style={styles.txtQtdPreco}>
+                                {averagePrice()}
+                              </Text>
+                            </View>
+                            <View style={styles.ctntextos}>
+                              <Text style={styles.txtProdTitulo}>
+                                Peso em Estoque:
+                              </Text>
+                              <Text style={styles.txtQtdPreco}>
+                                {newListaEstoque[0].pesoProd.toFixed(2)}
+                                {" kg"}
+                              </Text>
+                            </View>
                           </View>
-                        </View>
-                      ) : (
-                        <View style={styles.ctnProduto}>
-                          <Text style={styles.textTitulo}>Produto</Text>
-                          <View style={styles.ctntextos}>
-                            <Text style={styles.txtProdTitulo}>
-                              Preço Médio por KG:
-                            </Text>
-                            <Text style={styles.txtQtdPreco}>
-                              {averagePrice()}
-                            </Text>
-                          </View>
-                          <View style={styles.ctntextos}>
-                            <Text style={styles.txtProdTitulo}>
-                              Peso em Estoque:
-                            </Text>
-                            <Text style={styles.txtQtdPreco}>
-                              {newListaEstoque[0].pesoProd}
-                              {" KG"}
-                            </Text>
-                          </View>
-                        </View>
-                      )}
-                    </>
-                  ) : null}
-                </View>
+                        )}
+                      </>
+                    ) : null}
+                  </View>
+
+                  {/* cadastro */}
+                  <View style={styles.cadastroDespesas}>
+                    <View style={styles.containerTxtInputDespesas}>
+                      <TextInput
+                        label={"Quantidade utilizada"}
+                        style={styles.txtInput}
+                        placeholderTextColor={Colors.grey}
+                        textColor={Colors.black}
+                        activeUnderlineColor={Colors.green}
+                        underlineColor={Colors.blue}
+                        underlineStyle={{ paddingBottom: 3 }}
+                        value={qtdProd}
+                        onChangeText={handleQtdChange}
+                        keyboardType="decimal-pad"
+                        inputMode="decimal"
+                        error={!qtdValid}
+                      />
+                      <HelperText
+                        type="error"
+                        style={{
+                          color: MD3Colors.error60,
+                          fontSize: 14,
+                          lineHeight: 15,
+                        }}
+                        visible={!qtdValid || !qtdPreenchida}
+                        padding="20"
+                      >
+                        {!qtdValid
+                          ? "Valor inválido."
+                          : "Preencha o campo quantidade."}
+                      </HelperText>
+                    </View>
+                    <View style={styles.containerTxtInputDespesas}>
+                      <TextInput
+                        label="Observação"
+                        style={styles.txtInput}
+                        placeholderTextColor={Colors.grey}
+                        textColor={Colors.black}
+                        activeUnderlineColor={Colors.green}
+                        underlineColor={Colors.blue}
+                        underlineStyle={{ paddingBottom: 3 }}
+                        value={obserProd}
+                        onChangeText={setObserProd}
+                        placeholder="Observação sobre produto"
+                      />
+                    </View>
+                  </View>
+                </>
               ) : null}
-              {/* cadastro */}
-              <View style={styles.cadastroDespesas}>
-                <View style={styles.containerTxtInputDespesas}>
-                  <TextInput
-                    label={"Quantidade utilizada"}
-                    style={styles.txtInput}
-                    placeholderTextColor={Colors.grey}
-                    textColor={Colors.black}
-                    activeUnderlineColor={Colors.green}
-                    underlineColor={Colors.blue}
-                    underlineStyle={{ paddingBottom: 3 }}
-                    value={qtdProd}
-                    onChangeText={setQtdProd}
-                    keyboardType="decimal-pad"
-                    inputMode="decimal"
-                    placeholder="50"
-                  />
-                  <HelperText></HelperText>
-                </View>
-                <View style={styles.containerTxtInputDespesas}>
-                  <TextInput
-                    label="Observação"
-                    style={styles.txtInput}
-                    placeholderTextColor={Colors.grey}
-                    textColor={Colors.black}
-                    activeUnderlineColor={Colors.green}
-                    underlineColor={Colors.blue}
-                    underlineStyle={{ paddingBottom: 3 }}
-                    value={obserProd}
-                    onChangeText={setObserProd}
-                    placeholder="Observação sobre produto"
-                  />
-                  <HelperText></HelperText>
-                </View>
-              </View>
             </View>
           </ScrollView>
 
           <View style={StyleFuncKeyboard()}>
-            <TouchableOpacity onPress={handleAddGastos} style={styles.botao}>
+            <TouchableOpacity onPress={validCheck} style={styles.botao}>
               <Text style={styles.txtBotao}>{"Cadastrar"}</Text>
             </TouchableOpacity>
 

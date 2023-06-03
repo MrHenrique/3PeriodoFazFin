@@ -155,7 +155,7 @@ function EstoqueGeral() {
         );
       } else {
         const valor = item.volumeProd.toFixed(2);
-        const formattedValor = `${valor.replace(".", ",")}ml`;
+        const formattedValor = `${valor.replace(".", ",")}L`;
         return (
           <View style={styles.containerlist}>
             <View style={styles.ListItem}>
@@ -241,7 +241,7 @@ function EstoqueGeral() {
                 <View style={styles.containerlist}>
                   <View style={styles.ListItem}>
                     <Text style={styles.fontsubtitulo}>
-                      Média de preço por ml:
+                      Média de preço por litro:
                     </Text>
                     <Text style={styles.fontcontainerlistitem}>
                       {formatMediaPreco(item, categoriaProd)}

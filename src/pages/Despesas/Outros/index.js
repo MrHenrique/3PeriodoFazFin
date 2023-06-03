@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useState, useContext, useEffect } from "react";
-import { TextInput, HelperText } from "react-native-paper";
+import { TextInput, HelperText, MD3Colors } from "react-native-paper";
 import { Colors } from "../../../styles";
 import uuid from "react-native-uuid";
 import { AuthContext } from "../../../contexts/auth";
@@ -23,9 +23,31 @@ export default function Outros() {
   const navigation = useNavigation();
   const [valorProdString, setValorProd] = useState("");
   const [nomeProd, setNomeProd] = useState("");
+  const [valorProdValid, setIsValorProdValid] = useState(true);
+  const [valorProdPreenchido, setValorProdPreenchido] = useState(true);
+  const [nomeValid, setNomeValid] = useState(true);
   // listener teclado
   const [keyboardStatus, setkeyboardStatus] = useState(false);
   const { rebID } = useContext(AuthContext);
+  function handleValorChange(text) {
+    const cleanedText = text.replace(",", ".");
+    const parsedValue = parseFloat(cleanedText);
+    const isValid = !isNaN(parsedValue) && parsedValue > 0;
+    setIsValorProdValid(isValid);
+    setValorProd(parsedValue);
+  }
+  function validCheck() {
+    if (valorProdString.length === 0 || nomeProd.length === 0) {
+      if (valorProdString.length === 0) {
+        setValorProdPreenchido(false);
+      }
+      if (nomeProd.length === 0) {
+        setNomeValid(false);
+      }
+    } else if (valorProdPreenchido && valorProdValid) {
+      handleAddGastos();
+    }
+  }
   async function handleAddGastos() {
     if (realm) {
       try {
@@ -108,13 +130,25 @@ export default function Outros() {
                   value={nomeProd}
                   onChangeText={setNomeProd}
                   placeholder="Exemplo: Reforma pasto"
+                  error={!nomeValid}
                 />
+                <HelperText
+                  type="error"
+                  style={{
+                    color: MD3Colors.error60,
+                    fontSize: 14,
+                    lineHeight: 12,
+                  }}
+                  visible={!nomeValid}
+                  padding="20"
+                >
+                  Digite uma descrição.
+                </HelperText>
               </View>
-              <HelperText></HelperText>
               <View style={styles.containerOutrasDespesas}>
                 <TextInput
                   mode="flat"
-                  label={"Total Pago"}
+                  label={"Valor total."}
                   style={styles.txtInput}
                   placeholderTextColor={Colors.grey}
                   textColor={Colors.black}
@@ -122,16 +156,30 @@ export default function Outros() {
                   underlineColor={Colors.blue}
                   underlineStyle={{ paddingBottom: 3 }}
                   value={valorProdString}
-                  keyboardType="number-pad"
-                  onChangeText={setValorProd}
-                  placeholder="Exemplo: 10000.20"
+                  keyboardType="decimal-pad"
+                  inputMode="text"
+                  onChangeText={handleValorChange}
+                  error={!valorProdValid || !valorProdPreenchido}
                 />
+                <HelperText
+                  type="error"
+                  style={{
+                    color: MD3Colors.error60,
+                    fontSize: 14,
+                    lineHeight: 15,
+                  }}
+                  visible={!valorProdValid || !valorProdPreenchido}
+                  padding="20"
+                >
+                  {!valorProdValid
+                    ? "Valor inválido."
+                    : "Preencha o campo valor total."}
+                </HelperText>
               </View>
-              <HelperText></HelperText>
             </View>
           </ScrollView>
           <View style={StyleFuncKeyboard()}>
-            <TouchableOpacity onPress={handleAddGastos} style={styles.botao}>
+            <TouchableOpacity onPress={validCheck} style={styles.botao}>
               <Text style={styles.txtBotao}>{"Cadastrar"}</Text>
             </TouchableOpacity>
 
