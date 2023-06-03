@@ -24,21 +24,102 @@ function FaturamentoReb() {
   const [isModalVisible, setModalVisible] = useState(false);
   const { listaFiltrada } = useContext(AuthContext);
   const [shouldShow, setShouldShow] = useState(false);
+  const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState(null);
 
   function toggleModal() {
     setModalVisible(!isModalVisible);
   }
   const imgbg1 = "../../../../../assets/bg2.jpg";
+
+  const handleItemPress = (itemId) => {
+    if (itemId === selectedItemId) {
+      // Se o itemId for o mesmo do item selecionado atualmente,
+      // feche o modal de detalhes
+      setSelectedItemId(null);
+      setShouldShowDetalhes(false);
+    } else {
+      // Se o itemId for diferente do item selecionado atualmente
+      // atualize o itemId e abra o modal de detalhes
+      setSelectedItemId(itemId);
+      setShouldShowDetalhes(true);
+    }
+  };
+
+  const formatarResultado = (valorRecebido, tipo) => {
+    let formattedResult = "";
+    if (tipo == "preco") {
+      const result = valorRecebido.toFixed(2);
+      formattedResult = `R$ ${result.replace(".", ",")}`;
+    } else if (tipo == "prod") {
+      const result = valorRecebido.toFixed(2);
+      formattedResult = `${result.replace(".", ",")} L`;
+    }
+    return formattedResult;
+  };
+
   const renderItem = ({ item }) => {
+    const result = (item.prodL * item.precoL).toFixed(2);
+    const formattedResult = `R$ ${result.replace(".", ",")}`;
+    const formattedData = `${
+      item.createdAt.getDate().toString().padStart(2, 0) +
+      "/" +
+      (item.createdAt.getMonth() + 1).toString().padStart(2, 0) +
+      "/" +
+      item.createdAt.getFullYear().toString()
+    }`;
+    const isItemSelected = item._id === selectedItemId;
     return (
-      <TouchableOpacity style={styles.listaDet}>
-        <Text style={styles.tituloBotao}>
-          {item.createdAt.getDate().toString().padStart(2, 0)}/
-          {(item.createdAt.getMonth() + 1).toString().padStart(2, 0)}/
-          {item.createdAt.getFullYear().toString()} - {item.description} - R${" "}
-          {(item.prodL * item.precoL).toFixed(2)}
-        </Text>
-      </TouchableOpacity>
+      <>
+        <TouchableOpacity
+          style={styles.listaDet}
+          onPress={() => handleItemPress(item._id)}
+        >
+          <Text style={styles.tituloBotao}>
+            {formattedData} - {formattedResult}
+          </Text>
+        </TouchableOpacity>
+        {shouldShowDetalhes && isItemSelected && (
+          <View style={[styles.containerDetalhes]}>
+            <View>
+              <Text style={styles.tituloDetalhes}>Detalhes</Text>
+            </View>
+            <View style={styles.modalContainerText}>
+              <View style={styles.modalContent}>
+                <Text style={styles.textContent}>Data: </Text>
+                <Text style={styles.textContent}>{formattedData}</Text>
+              </View>
+              <View style={styles.modalContent}>
+                <Text style={styles.textContent}>Horario: </Text>
+                <Text style={styles.textContent}>
+                  {item.createdAt.toLocaleTimeString()}
+                </Text>
+              </View>
+              <View style={styles.modalContent}>
+                <Text style={styles.textContent}>Produção: </Text>
+                <Text style={styles.textContent}>
+                  {formatarResultado(item.prodL, "prod")}
+                </Text>
+              </View>
+              <View style={styles.modalContent}>
+                <Text style={styles.textContent}>Preco: </Text>
+                <Text style={styles.textContent}>
+                  {formatarResultado(item.precoL, "preco")}
+                </Text>
+              </View>
+              <View style={styles.modalContent}>
+                <Text style={styles.textContent}>Valor Total: </Text>
+                <Text style={styles.textContent}>
+                  {formatarResultado(item.precoL * item.prodL, "preco")}
+                </Text>
+              </View>
+              <Text style={styles.textContent}>
+                Descrição: {item.description}
+              </Text>
+            </View>
+          </View>
+        )}
+      </>
     );
   };
   function getReceitas() {

@@ -25,7 +25,7 @@ function RegistrosLeite() {
   const [shouldShow, setShouldShow] = useState(false);
   const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
   const [modalEditarVisible, setModalEditarVisible] = useState(false);
-  const [selectedItemIds, setSelectedItemIds] = useState([]);
+  const [selectedItemId, setSelectedItemId] = useState(null);
   const [description, setDescription] = useState("");
   const [prodLV, setProdLV] = useState("");
   const [idDoItemSelecionado, setIdDoItemSelecionado] = useState("");
@@ -108,21 +108,33 @@ function RegistrosLeite() {
   };
   //Fim do código da data .....
 
-  //Confere se o detalhe do item ja está aberto se estiver fecha, se não estiver abre.
   const handleItemPress = (itemId) => {
-    if (selectedItemIds.includes(itemId)) {
-      setSelectedItemIds(selectedItemIds.filter((id) => id !== itemId));
-      setShouldShowDetalhes(selectedItemIds.length > 1);
+    if (itemId === selectedItemId) {
+      // Se o itemId for o mesmo do item selecionado atualmente,
+      // feche o modal de detalhes
+      setSelectedItemId(null);
+      setShouldShowDetalhes(false);
     } else {
-      setSelectedItemIds([...selectedItemIds, itemId]);
+      // Se o itemId for diferente do item selecionado atualmente
+      // atualize o itemId e abra o modal de detalhes
+      setSelectedItemId(itemId);
       setShouldShowDetalhes(true);
     }
   };
 
   //Função para editar os dados do item escolhido
-  const handleEditPress = (idLeite) => () => {
+  const handleEditPress = (item) => () => {
     setModalEditarVisible(true);
-    setIdDoItemSelecionado(idLeite);
+    setIdDoItemSelecionado(item._id);
+    setProdLV(item.prodL.toString());
+    setDescription(item.description);
+    setText(
+      item.createdAt.getDate().toString().padStart(2, "0") +
+        "/" +
+        (item.createdAt.getMonth() + 1).toString().padStart(2, "0") +
+        "/" +
+        item.createdAt.getFullYear().toString()
+    );
   };
 
   const handleDeletePress = () => {
@@ -139,7 +151,7 @@ function RegistrosLeite() {
       "/" +
       item.createdAt.getFullYear().toString()
     }`;
-    const isItemSelected = selectedItemIds.includes(item._id);
+    const isItemSelected = item._id === selectedItemId;
 
     return (
       <>
@@ -154,7 +166,7 @@ function RegistrosLeite() {
             </Text>
             <TouchableOpacity
               style={styles.editButton}
-              onPress={handleEditPress(item._id)}
+              onPress={handleEditPress(item)}
             >
               <AntDesign name="edit" size={24} color="black" />
             </TouchableOpacity>
@@ -166,27 +178,24 @@ function RegistrosLeite() {
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
-        <View
-          style={[
-            styles.containerDetalhes,
-            { display: shouldShowDetalhes && isItemSelected ? "flex" : "none" },
-          ]}
-        >
-          <View>
-            <Text style={styles.tituloDetalhes}>Detalhes</Text>
+        {shouldShowDetalhes && isItemSelected && (
+          <View style={[styles.containerDetalhes]}>
+            <View>
+              <Text style={styles.tituloDetalhes}>Detalhes</Text>
+            </View>
+            <View style={styles.modalContainerText}>
+              <Text style={styles.modalContent}>Data: {formattedData}</Text>
+              <Text style={styles.modalContent}>
+                Horario: {item.createdAt.toLocaleTimeString()}
+              </Text>
+              <Text style={styles.modalContent}>Produção: {item.prodL} </Text>
+              <Text style={styles.modalContent}>Preço: {item.precoL} </Text>
+              <Text style={styles.modalContent}>
+                Descrição: {item.description}
+              </Text>
+            </View>
           </View>
-          <View style={styles.modalContainerText}>
-            <Text style={styles.modalContent}>Data: {formattedData}</Text>
-            <Text style={styles.modalContent}>
-              Horario: {item.createdAt.toLocaleTimeString()}
-            </Text>
-            <Text style={styles.modalContent}>Produção: {item.prodL} </Text>
-            <Text style={styles.modalContent}>Preço: {item.precoL} </Text>
-            <Text style={styles.modalContent}>
-              Descrição: {item.description}
-            </Text>
-          </View>
-        </View>
+        )}
       </>
     );
   };
@@ -232,6 +241,7 @@ function RegistrosLeite() {
 
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
+              date={date}
               mode="date"
               onConfirm={handleDateConfirm}
               onCancel={hideDatePicker}
@@ -247,7 +257,6 @@ function RegistrosLeite() {
               value={prodLV}
               keyboardType="number-pad"
               onChangeText={setProdLV}
-              placeholder="Exemplo: 10.2"
             />
           </View>
           <View style={styles.containerinfos}>
@@ -256,7 +265,6 @@ function RegistrosLeite() {
               style={styles.detalhe}
               value={description}
               onChangeText={setDescription}
-              placeholder="Exemplo: "
             />
           </View>
           <View style={styles.modalContainerBotoes}>
