@@ -8,12 +8,18 @@ import {
   ScrollView,
   ImageBackground,
 } from "react-native";
+import Animated, {
+  FadeIn,
+  FadeOut,
+  SlideInDown,
+} from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../../contexts/auth";
 import Modal from "react-native-modal";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useMainContext } from "../../../contexts/RealmContext";
 import styles from "../styles";
+import { Colors } from "../../../styles";
 function EstoqueGeral() {
   const realm = useMainContext();
 
@@ -29,7 +35,8 @@ function EstoqueGeral() {
   const { fazID } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
   const [shouldShow, setShouldShow] = useState(false);
-  const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
+  const [shouldShowDetalhes, setShouldShowDetalhes] = useState(true);
+  const [shouldShowRelatorio, setShouldShowRelatorio] = useState(false);
   const [nome, setNome] = useState();
   //Funcao, recebe item e retorna nome
   function nameItem(item) {
@@ -310,56 +317,50 @@ function EstoqueGeral() {
             <TouchableOpacity
               style={styles.botaorelatorioproduto}
               onPress={() => {
-                toggleModal();
+                setShouldShowRelatorio(!shouldShowRelatorio);
+                setShouldShowDetalhes(false);
               }}
             >
               <Text style={styles.fontblk}>Relatórios</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.botaorelatorioproduto}
-              onPress={() => setShouldShowDetalhes(!shouldShowDetalhes)}
+              onPress={() => {
+                setShouldShowDetalhes(!shouldShowDetalhes);
+                setShouldShowRelatorio(false);
+              }}
             >
               <Text style={styles.fontblk}>Produtos</Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.containershouldshow}>
+            {/* Produtos */}
             {shouldShowDetalhes ? (
-              <View>
+              <Animated.View entering={FadeIn} exiting={FadeOut}>
                 <FlatList
                   data={listaEstoque}
                   renderItem={renderItemEstoque}
                   keyExtractor={(item) => item._id}
                   numColumns={numcolumns}
                 ></FlatList>
-              </View>
+              </Animated.View>
+            ) : null}
+            {/* Relatorio */}
+            {shouldShowRelatorio ? (
+              <Animated.View
+                entering={FadeIn}
+                exiting={FadeOut}
+                style={styles.containergeral}
+              >
+                <FlatList
+                  data={listaEstoqueEntrada}
+                  renderItem={renderItemEntrada}
+                  keyExtractor={(item) => item._id}
+                ></FlatList>
+              </Animated.View>
             ) : null}
           </View>
-          {/* Modal relatorio de compras */}
-          <Modal
-            isVisible={isModalVisible}
-            coverScreen={true}
-            backdropColor={"rgba(234,242,215,0.8)"}
-            animationIn="slideInUp"
-            animationOut="slideOutDown"
-          >
-            <View style={styles.container}>
-              <Text style={styles.font}>Compras:</Text>
-              <FlatList
-                data={listaEstoqueEntrada}
-                renderItem={renderItemEntrada}
-                keyExtractor={(item) => item._id}
-              ></FlatList>
-              <TouchableOpacity
-                onPress={() => {
-                  toggleModal();
-                }}
-              >
-                <Text style={styles.font}>Voltar</Text>
-              </TouchableOpacity>
-            </View>
-          </Modal>
-
           <View style={styles.containerButaoestqgeral}>
             <TouchableOpacity
               style={styles.botao}

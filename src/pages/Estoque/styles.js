@@ -7,6 +7,10 @@ const styles = StyleSheet.create({
     maxHeight: verticalScale(40),
     backgroundColor: Colors.green,
   },
+  containervoltar: {
+    flex: 0.1,
+    flexDirection: "column-reverse",
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.darkgreen,
@@ -92,6 +96,7 @@ const styles = StyleSheet.create({
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
     justifyContent: "center",
+    elevation: 10,
   },
   containerMaisMenos: {
     flexDirection: "row",
@@ -182,7 +187,7 @@ const styles = StyleSheet.create({
     margin: scale(5),
     borderRadius: 10,
     backgroundColor: Colors.green,
-    elevation: 10,
+    elevation: 0,
     shadowColor: "black",
   },
   containerText: {
