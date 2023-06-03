@@ -139,6 +139,31 @@ const styles = StyleSheet.create({
   scroll: {
     height: verticalScale(525),
   },
+  containerDetalhes: {
+    width: scale(300),
+    backgroundColor: "white",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    alignSelf: "center",
+  },
+  modalContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  textContent: {
+    fontSize: 20,
+  },
+  modalContainerText: {
+    width: "100%",
+    padding: 5,
+  },
+  tituloDetalhes: {
+    color: "black",
+    fontSize: verticalScale(20),
+    marginBottom: verticalScale(10),
+    textAlign: "center",
+    fontWeight: "bold",
+  },
 });
 export default styles;
 
