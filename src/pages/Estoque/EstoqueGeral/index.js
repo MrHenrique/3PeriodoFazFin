@@ -61,7 +61,7 @@ function EstoqueGeral() {
     const formattedValor = `R$ ${valor.replace(".", ",")}`;
     return (
       <ScrollView>
-        <TouchableOpacity>
+        <TouchableOpacity style={styles.listaDet}>
           <Text style={styles.font}>
             {item.nomeProd} - {formattedValor}
           </Text>
@@ -71,11 +71,11 @@ function EstoqueGeral() {
   };
   //recebe volume ou peso, e retorna a categoria do produto
   const TipoAfter = (item) => {
-    if (item.volumeProd > 0) {
+    if (item.volumeProd >= 0) {
       const categoriaProd = "Remédios";
       return categoriaProd;
     }
-    if (item.pesoProd > 0) {
+    if (item.pesoProd >= 0) {
       const categoriaProd = "Alimentos";
       return categoriaProd;
     }
@@ -110,9 +110,19 @@ function EstoqueGeral() {
     return formattedValor;
   };
   function formatMediaPreco(item) {
-    const valor = (item.valorProd / item.qtdProd).toFixed(2);
-    const formattedValor = `R$ ${valor.replace(".", ",")}`;
-    return formattedValor;
+    if (item.volumeProd > 0 || item.pesoProd > 0) {
+      if (item.volumeProd > 0) {
+        const valor = (item.valorProd / item.volumeProd).toFixed(2);
+        const formattedValor = `R$ ${valor.replace(".", ",")}`;
+        return formattedValor;
+      } else {
+        const valor = (item.valorProd / item.pesoProd).toFixed(2);
+        const formattedValor = `R$ ${valor.replace(".", ",")}`;
+        return formattedValor;
+      }
+    } else {
+      return "-";
+    }
   }
   const CategImg = (categoriaProd) => {
     if (categoriaProd == "Alimentos") {
@@ -126,9 +136,7 @@ function EstoqueGeral() {
     const imgCateg = CategImg(categoriaProd);
     function tipoRelatorio(categoriaProd) {
       if (categoriaProd == "Alimentos") {
-        const valor = ((item.pesoProd / item.qtdProd) * item.qtdProd).toFixed(
-          2
-        );
+        const valor = item.pesoProd.toFixed(2);
         const formattedValor = `${valor.replace(".", ",")}kg`;
         return (
           <View style={styles.containerlist}>
@@ -139,9 +147,7 @@ function EstoqueGeral() {
           </View>
         );
       } else {
-        const valor = ((item.volumeProd / item.qtdProd) * item.qtdProd).toFixed(
-          2
-        );
+        const valor = item.volumeProd.toFixed(2);
         const formattedValor = `${valor.replace(".", ",")}ml`;
         return (
           <View style={styles.containerlist}>
@@ -205,25 +211,33 @@ function EstoqueGeral() {
                 </View>
               </View>
             </View>
-            <View style={styles.containerlist}>
-              <View style={styles.ListItem}>
-                <Text style={styles.fontsubtitulo}>Itens em estoque:</Text>
-                <Text style={styles.fontcontainerlistitem}>
-                  {" "}
-                  {item.qtdProd}
-                </Text>
-              </View>
-            </View>
-            {item.qtdProd > 0 ? (
+            {item.pesoProd >= 0 ? (
               <View>
                 {tipoRelatorio(categoriaProd)}
                 <View style={styles.containerlist}>
                   <View style={styles.ListItem}>
                     <Text style={styles.fontsubtitulo}>
-                      Média de preço por item:
+                      Média de preço por kg:
                     </Text>
                     <Text style={styles.fontcontainerlistitem}>
-                      {formatMediaPreco(item)}
+                      {formatMediaPreco(item, categoriaProd)}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            ) : (
+              <></>
+            )}
+            {item.volumeProd >= 0 ? (
+              <View>
+                {tipoRelatorio(categoriaProd)}
+                <View style={styles.containerlist}>
+                  <View style={styles.ListItem}>
+                    <Text style={styles.fontsubtitulo}>
+                      Média de preço por ml:
+                    </Text>
+                    <Text style={styles.fontcontainerlistitem}>
+                      {formatMediaPreco(item, categoriaProd)}
                     </Text>
                   </View>
                 </View>
@@ -281,8 +295,7 @@ function EstoqueGeral() {
   };
   return (
     <View style={styles.container}>
-      <View style={styles.containergeral}
-      >
+      <View style={styles.containergeral}>
         <View style={styles.containerValor}>
           <View>
             <Text style={styles.font}>

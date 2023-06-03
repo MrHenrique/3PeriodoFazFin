@@ -39,7 +39,6 @@ export const AtualEstoqueSchema = {
     nomeProd: "string",
     createdAt: "date",
     valorProd: "float",
-    qtdProd: "float",
     volumeProd: "float?",
     pesoProd: "float?",
     obserProd: "string?",

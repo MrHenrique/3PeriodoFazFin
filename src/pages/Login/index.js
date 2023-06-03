@@ -103,7 +103,10 @@ function Login({ navigation }) {
       senhaValida
     ) {
       //Função de login aqui
-        navigation.navigate(navigateWhere());
+      setpasswordState(true);
+      setPassword("");
+      setEmail("");
+      navigation.navigate(navigateWhere());
     }
   }
   // LISTENER DO TECLADO(ATIVADO OU NAO)
@@ -219,6 +222,12 @@ function Login({ navigation }) {
             onPress={() => handleUserLogin()}
           >
             <Text style={styles.tituloBotao}>{"Login"}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.botao}
+            onPress={() => navigation.navigate(navigateWhere())}
+          >
+            <Text style={styles.tituloBotao}>{"Login Direto"}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.botao}
