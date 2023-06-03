@@ -6,6 +6,7 @@ import { Color } from "./styles";
 import { useMainContext } from "../../contexts/RealmContext";
 import { ReceitasTotais } from "../../components/Calculos DB/ReceitasTotais";
 import { DespesasTotais } from "../../components/Calculos DB/DespesasTotais";
+import { scale, verticalScale } from "react-native-size-matters";
 //--
 import { AuthContext } from "../../contexts/auth";
 
@@ -165,7 +166,7 @@ function PreviewFinanceiro({ Titulo, Id }) {
             <Text
               style={[
                 styles.textResultsPrice,
-                { fontSize: setSize(formattedTotal, 250) },
+                { fontSize: setSize(formattedTotal, verticalScale(250)) },
               ]}
             >
               {formattedTotal}
@@ -179,7 +180,7 @@ function PreviewFinanceiro({ Titulo, Id }) {
             <Text
               style={[
                 styles.textoBannerRec,
-                { fontSize: setSize(formattedReceitas, 200) },
+                { fontSize: setSize(formattedReceitas, verticalScale(200)) },
               ]}
             >
               {formattedReceitas}
@@ -193,7 +194,7 @@ function PreviewFinanceiro({ Titulo, Id }) {
             <Text
               style={[
                 styles.textoBannerDes,
-                { fontSize: setSize(formattedDespesas, 200) },
+                { fontSize: setSize(formattedDespesas, verticalScale(200)) },
               ]}
             >
               {formattedDespesas}

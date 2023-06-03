@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(6),
   },
   containerChart: {
-    justifyContent: "center",
-    alignContent: "center",
+    justifyContent: "flex-start",
+    alignContent: "flex-start",
     alignItems: "center",
   },
   Grafico: {
@@ -91,9 +91,8 @@ const styles = StyleSheet.create({
   },
   //Modal
   modalContainer: {
-    backgroundColor: "rgba(234,242,215,1)",
-    position: "absolute",
-    top: verticalScale(0),
+    flex: 1,
+    backgroundColor: Colors.darkgreen,
     alignSelf: "center",
     width: scale(330),
     borderRadius: 20,
@@ -103,19 +102,19 @@ const styles = StyleSheet.create({
     marginVertical: verticalScale(10),
   },
   tituloModal: {
-    color: Colors.btngreen,
+    color: Colors.white,
     margin: verticalScale(5),
     alignSelf: "center",
     ...Fonts.txtXLargeBold,
   },
   botaopressM: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
+    ...Buttons.btnLargeRounded,
+    backgroundColor: Colors.green,
+    maxHeight: verticalScale(40),
+
     justifyContent: "center",
     alignSelf: "center",
+    elevation: 10,
   },
   listaDet: {
     borderRadius: 20,

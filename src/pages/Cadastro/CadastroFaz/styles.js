@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   botao: {
     flex: 1,
     maxHeight: 40,
-    marginBottom: verticalScale(10),
+    marginTop: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
     justifyContent: "center",
@@ -69,13 +69,12 @@ const styles = StyleSheet.create({
     flexDirection: "column-reverse",
     padding: verticalScale(10),
   },
-  error: {
-    backgroundColor: Colors.red,
-    borderRadius: 20,
-    paddingVertical: verticalScale(2),
-    alignSelf: "center",
-    color: Colors.yellow,
-    position: "relative",
+  containerButaoKeyboardOn: {
+    flex: 0.2,
+    flexDirection: "column-reverse",
+    justifyContent: "flex-end",
+    minHeight: scale(40),
+    paddingTop: verticalScale(10),
   },
   campoTextoErro: {
     ...Fonts.txtMediumBold,
@@ -84,13 +83,6 @@ const styles = StyleSheet.create({
     color: Colors.black,
     borderWidth: 2,
     borderColor: Colors.red,
-  },
-  containerButaoKeyboardOn: {
-    flex: 0.2,
-    flexDirection: "column",
-    justifyContent: "flex-end",
-    minHeight: scale(40),
-    paddingTop: verticalScale(10),
   },
 });
 export default styles;

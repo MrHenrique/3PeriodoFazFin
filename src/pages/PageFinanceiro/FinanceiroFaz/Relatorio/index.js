@@ -9,10 +9,13 @@ import {
   ImageBackground,
   SafeAreaView,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PieChartFaz from "../../../../components/Graficos/PieChart";
 import styles, { Color, setSize } from "../../styles";
+import { Colors } from "../../../../styles";
+import { verticalScale, scale } from "react-native-size-matters";
 import Modal from "react-native-modal";
 import { AuthContext } from "../../../../contexts/auth";
 function Relatorio() {
@@ -86,7 +89,9 @@ function Relatorio() {
                 <Text
                   style={[
                     styles.textoValorPos,
-                    { fontSize: setSize(formattedReceitas, 250) },
+                    {
+                      fontSize: setSize(formattedReceitas, scale(200)),
+                    },
                   ]}
                 >
                   {formattedReceitas}
@@ -97,7 +102,9 @@ function Relatorio() {
                 <Text
                   style={[
                     styles.textoValorNeg,
-                    { fontSize: setSize(formattedDespesas, 200) },
+                    {
+                      fontSize: setSize(formattedDespesas, scale(200)),
+                    },
                   ]}
                 >
                   {formattedDespesas}
@@ -109,7 +116,7 @@ function Relatorio() {
                   style={[
                     Color(total),
                     {
-                      fontSize: setSize(formattedTotal, 250),
+                      fontSize: setSize(formattedTotal, scale(270)),
                       alignSelf: "center",
                     },
                   ]}
@@ -132,34 +139,44 @@ function Relatorio() {
             <Modal
               isVisible={isModalVisible}
               coverScreen={true}
-              backdropColor={"rgba(234,242,215,0.8)"}
+              statusBarTranslucent={true}
+              backdropColor={Colors.black}
+              deviceHeight={Dimensions.get("screen").height}
+              backdropOpacity={0.5}
               animationIn="slideInUp"
               animationOut="slideOutDown"
             >
               <View style={styles.modalContainer}>
-                <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
-                <FlatList
-                  style={styles.scroll}
-                  data={listaLeite}
-                  renderItem={renderItem2}
-                  keyExtractor={(item) => item._id}
-                />
-                <Text style={styles.tituloModal}>Detalhes de despesas:</Text>
-                <FlatList
-                  style={styles.scroll}
-                  data={listaAli}
-                  renderItem={renderItem}
-                  keyExtractor={(item) => item._id}
-                />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
+                  <FlatList
+                    style={styles.scroll}
+                    data={listaLeite}
+                    renderItem={renderItem2}
+                    keyExtractor={(item) => item._id}
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.tituloModal}>Detalhes de despesas:</Text>
+                  <FlatList
+                    style={styles.scroll}
+                    data={listaAli}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item._id}
+                  />
+                </View>
+
+                <View style={{ marginBottom: verticalScale(10) }}>
+                  <TouchableOpacity
+                    style={styles.botaopressM}
+                    onPress={() => {
+                      toggleModal();
+                    }}
+                  >
+                    <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-              <TouchableOpacity
-                style={styles.botaopressM}
-                onPress={() => {
-                  toggleModal();
-                }}
-              >
-                <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-              </TouchableOpacity>
             </Modal>
           </TouchableOpacity>
         </View>

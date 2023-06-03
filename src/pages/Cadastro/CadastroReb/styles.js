@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   },
   containerButaoKeyboardOn: {
     flex: 0.2,
-    flexDirection: "column",
+    flexDirection: "column-reverse",
     justifyContent: "flex-end",
     minHeight: scale(40),
     paddingTop: verticalScale(10),
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   botao: {
     flex: 1,
     maxHeight: 40,
-    marginBottom: verticalScale(10),
+    marginTop: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
     justifyContent: "center",

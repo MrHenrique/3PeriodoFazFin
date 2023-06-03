@@ -8,13 +8,15 @@ import {
   ImageBackground,
   SafeAreaView,
   FlatList,
+  Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import BezierChartDespesas from "../../../../components/Graficos/BezierChartDespesas";
 import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
 import { AuthContext } from "../../../../contexts/auth";
-import styles, { Color, setSize } from "../../styles";
+import styles from "../../styles";
+import { Colors } from "../../../../styles";
 function Despesas() {
   const { precoCF, listaAli } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -41,14 +43,14 @@ function Despesas() {
     }
   }
   const despesas = getDespesas().toFixed(2);
-  const formattedDespesas = `R$ ${despesas.replace(".", ",")}`; 
+  const formattedDespesas = `R$ ${despesas.replace(".", ",")}`;
   const imgbg1 = "../../../../../assets/bg2.jpg";
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
         style={styles.imgbg}
-        source={require(imgbg1)}
+        // source={require(imgbg1)}
         imageStyle={{ opacity: 0.3 }}
       >
         <View style={styles.containergeral}>
@@ -67,11 +69,14 @@ function Despesas() {
               <View style={styles.containerChart}>
                 <BezierChartDespesas />
               </View>
-
+              {/* modal detalhes despesas*/}
               <Modal
                 isVisible={isModalVisible}
                 coverScreen={true}
-                backdropColor={"rgba(234,242,215,0.8)"}
+                statusBarTranslucent={true}
+                backdropColor={Colors.black}
+                deviceHeight={Dimensions.get("screen").height}
+                backdropOpacity={0.5}
                 animationIn="slideInUp"
                 animationOut="slideOutDown"
               >
@@ -84,15 +89,17 @@ function Despesas() {
                     renderItem={renderItem}
                     keyExtractor={(item) => item._id}
                   />
+                  <View style={{ marginBottom: verticalScale(10) }}>
+                    <TouchableOpacity
+                      style={styles.botaopressM}
+                      onPress={() => {
+                        toggleModal();
+                      }}
+                    >
+                      <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-                <TouchableOpacity
-                  style={styles.botaopressM}
-                  onPress={() => {
-                    toggleModal();
-                  }}
-                >
-                  <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-                </TouchableOpacity>
               </Modal>
             </TouchableOpacity>
           </View>
