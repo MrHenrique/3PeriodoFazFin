@@ -7,30 +7,36 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import DropdownComponentMes from "../Dropdown/DropdownMes";
+import DropFiltrosData from "../Dropdown/DropFiltrosData";
 import { AuthContext } from "../../contexts/auth";
 
-function FiltrosData() {
-  const { listaLeiteReb, ListaFiltrada, filtroMes } = useContext(AuthContext);
-  const [lista, setLista] = useState(listaLeiteReb);
+function FiltrosData(props) {
+  const { listaRecebida } = props; // Recebe a lista que vai ser filtrada
+  const { ListaFiltrada, filtroSelec, FiltroSelec } = useContext(AuthContext);
+  const [resetDropdown, setResetDropdown] = useState(false);
+  const [lista, setLista] = useState(listaRecebida);
   const [startDate, setStartDate] = useState(""); //Filtro Intervalo entre datas
   const [textStartDate, setTextStartDate] = useState("Data Inicial"); //Filtro Intervalo entre datas
   const [endDate, setEndDate] = useState(""); //Filtro Intervalo entre datas
   const [textEndDate, setTextEndDate] = useState("Data Final"); //Filtro Intervalo entre datas
-  const [specificDate, setSpecificDate] = useState(null);
-  const [textSpecificDate, setTextSpecificDate] = useState("Data Especifica"); //Filtro data especifica
   const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
     useState(false);
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
-  const [isSpecificDatePickerVisible, setIsSpecificDatePickerVisible] =
-    useState(false);
 
   useEffect(() => {
     ListaFiltrada(lista);
-  }, [lista])
-  
+  }, [lista]);
+
+  const handleResetDropdown = () => {
+    setResetDropdown(true);
+  };
+
+  useEffect(() => {
+    if (resetDropdown) {
+      setResetDropdown(false); // Redefine o valor de resetDropdown para false após ser utilizado
+    }
+  }, [resetDropdown]);
 
   //Codigo do DateTimePickerModal
   //Data Inicial
@@ -73,169 +79,121 @@ function FiltrosData() {
     hideEndDatePicker();
   };
 
-  //Data especifica
-  const showSpecificDatePicker = () => {
-    setIsSpecificDatePickerVisible(true);
-  };
-  const hideSpecificDatePicker = () => {
-    setIsSpecificDatePickerVisible(false);
-  };
-  const handleSpecificDateConfirm = (selectedDate) => {
-    let tempSpecificDate = new Date(selectedDate);
-    let fSpecificDate =
-      tempSpecificDate.getDate().toString().padStart(2, "0") +
-      "/" +
-      (tempSpecificDate.getMonth() + 1).toString().padStart(2, "0") +
-      "/" +
-      tempSpecificDate.getFullYear().toString().padStart(2, "0");
-    setTextSpecificDate(fSpecificDate);
-    setSpecificDate(selectedDate);
-    hideSpecificDatePicker();
-  };
-  //FIM
-
-  //Filtro por mês
   useEffect(() => {
-    if (filtroMes === 13) {
-      setLista(listaLeiteReb);
-    } else {
-      const listaFiltradaMes = listaLeiteReb.filter((item) => {
-        //pega todos os itens da lista que foi puxada da (listaLeiteReb)
-        const itemDataDeCriacao = new Date(item.createdAt); //cria uma nova data com a data do (createdAt do item) e atribui a variavel itemDataDeCriacao
-        return itemDataDeCriacao.getMonth() === filtroMes - 1; // verifica se o mês do item é igual ao escolhido pelo usuário
+    const filtrarPorData = (lista, dataInicio, dataFim) => {
+      return lista.filter((item) => {
+        const itemDataDeCriacao = new Date(item.createdAt);
+        itemDataDeCriacao.setHours(0, 0, 0, 0);
+        return itemDataDeCriacao >= dataInicio && itemDataDeCriacao <= dataFim;
       });
-      setLista(listaFiltradaMes);
+    };
+    if (filtroSelec === "1") {
+      setLista(listaRecebida);
+    } else if (filtroSelec === "2") {
+      const dataHoje = new Date();
+      dataHoje.setHours(0, 0, 0, 0);
+      const listaHoje = filtrarPorData(listaRecebida, dataHoje, dataHoje);
+      setLista(listaHoje);
+    } else if (filtroSelec === "3") {
+      const dataHoje = new Date();
+      dataHoje.setHours(0, 0, 0, 0);
+      const dataSeteDiasAtras = new Date(dataHoje);
+      dataSeteDiasAtras.setDate(dataHoje.getDate() - 7);
+      const listaUltimosSete = filtrarPorData(
+        listaRecebida,
+        dataSeteDiasAtras,
+        dataHoje
+      );
+      setLista(listaUltimosSete);
+    } else if (filtroSelec === "4") {
+      const dataHoje = new Date();
+      dataHoje.setHours(0, 0, 0, 0);
+      const dataTrintaDiasAtras = new Date(dataHoje);
+      dataTrintaDiasAtras.setDate(dataHoje.getDate() - 30);
+      const listaUltimosTrinta = filtrarPorData(
+        listaRecebida,
+        dataTrintaDiasAtras,
+        dataHoje
+      );
+      setLista(listaUltimosTrinta);
+    } else if (filtroSelec === "5") {
+      const dataHoje = new Date();
+      dataHoje.setHours(0, 0, 0, 0);
+      const dataUltimoAno = new Date(
+        dataHoje.getFullYear() - 1,
+        dataHoje.getMonth(),
+        dataHoje.getDate()
+      );
+      const listaUltimoAno = filtrarPorData(
+        listaRecebida,
+        dataUltimoAno,
+        dataHoje
+      );
+      setLista(listaUltimoAno);
     }
-  }, [filtroMes]);
+  }, [filtroSelec]);
 
   //Código para retornar uma lista do intevalo selecionado pelo usuário (FILTRO INTERVALO ENTRE DATAS)
   const filtrarIntervalo = () => {
-    const listaFiltradaIntervalo = listaLeiteReb.filter((item) => {
-      //pega todos os itens da lista que foi puxada da (listaLeiteReb)
-      const itemDataDeCriacao = new Date(item.createdAt); //cria uma nova data com a data do (createdAt do item) e atribui a variavel itemDataDeCriacao
-      const dataInicio = new Date(startDate); //pega a data de inicio escolhida pelo usuario
-      dataInicio.setHours(0, 0, 0); //ajusta o horario para 00:00:00 para garantir que a data de inicio seja no começo do dia.
-      const dataFim = new Date(endDate); //pega a data final escolhida pelo usuario
-      dataFim.setHours(23, 59, 59); //ajusta o horario para 23:59:59 para garantir que a data final sejá no final do dia.
-      return (
-        itemDataDeCriacao.getTime() >= dataInicio.getTime() &&
-        itemDataDeCriacao.getTime() <= dataFim.getTime()
-      );
-    });
-    setLista(listaFiltradaIntervalo);
-  };
-
-  //Código para retornar uma lista com a data Especifica selecionada pelo usuario (FILTRO POR DATA ESPECIFICA)
-  useEffect(() => {
-    if (specificDate === null) {
-      setLista(listaLeiteReb);
-    } else {
-      setLista(
-        listaLeiteReb.filter((item) => {
-          const itemDataDeCriacao = new Date(item.createdAt); // converte a string de data do item para um objeto Date
-          const specificDateObj = new Date(specificDate); // converte a string de busca para um objeto Date
-          return (
-            itemDataDeCriacao.getDate() === specificDateObj.getDate() && // verifica se o dia é igual
-            itemDataDeCriacao.getMonth() === specificDateObj.getMonth() && // verifica se o mês é igual
-            itemDataDeCriacao.getFullYear() === specificDateObj.getFullYear()
-          ); // verifica se o ano é igual
-        })
-      );
+    if (startDate != "" && endDate != "") {
+      const listaFiltradaIntervalo = listaRecebida.filter((item) => {
+        //pega todos os itens da lista que foi puxada da (listaRecebida)
+        const itemDataDeCriacao = new Date(item.createdAt); //cria uma nova data com a data do (createdAt do item) e atribui a variavel itemDataDeCriacao
+        const dataInicio = new Date(startDate); //pega a data de inicio escolhida pelo usuario
+        dataInicio.setHours(0, 0, 0, 0); //ajusta o horario para 00:00:00 para garantir que a data de inicio seja no começo do dia.
+        const dataFim = new Date(endDate); //pega a data final escolhida pelo usuario
+        dataFim.setHours(23, 59, 59, 999); //ajusta o horario para 23:59:59 para garantir que a data final sejá no final do dia.
+        return itemDataDeCriacao >= dataInicio && itemDataDeCriacao <= dataFim;
+      });
+      setLista(listaFiltradaIntervalo);
     }
-  }, [specificDate]);
-  //FIM
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <DropdownComponentMes />
+      <DropFiltrosData resetDropdown={resetDropdown} />
       {/*Filtro intervalo entre datas*/}
-      <View style={{ flexDirection: "row", /*marginBottom: 32*/}}>
-        <TouchableOpacity
-          style={{
-            flex: 1,
-            backgroundColor: "gray",
-            borderRadius: 30,
-            width: "50%",
-            height: 30,
-          }}
-          onPress={showStartDatePicker}
-        >
-          <Text style={{ textAlign: "center" }}>{textStartDate}</Text>
+      <View style={styles.containerBotoes}>
+        <TouchableOpacity style={styles.botoes} onPress={showStartDatePicker}>
+          <Text style={styles.texto}>{textStartDate}</Text>
         </TouchableOpacity>
         <DateTimePickerModal
           isVisible={isStartDatePickerVisible}
           mode="date"
           onConfirm={handleStartDateConfirm}
           onCancel={hideStartDatePicker}
+          maximumDate={new Date()}
         />
 
-        <TouchableOpacity
-          style={{
-            flex: 1,
-            backgroundColor: "#888",
-            borderRadius: 30,
-            width: "50%",
-            height: 30,
-          }}
-          onPress={showEndDatePicker}
-        >
-          <Text style={{ textAlign: "center" }}>{textEndDate}</Text>
+        <TouchableOpacity style={styles.botoes} onPress={showEndDatePicker}>
+          <Text style={styles.texto}>{textEndDate}</Text>
         </TouchableOpacity>
         <DateTimePickerModal
           isVisible={isEndDatePickerVisible}
           mode="date"
           onConfirm={handleEndDateConfirm}
           onCancel={hideEndDatePicker}
+          maximumDate={new Date()}
         />
-        <TouchableOpacity
-          style={{
-            flex: 1,
-            backgroundColor: "gray",
-            borderRadius: 30,
-            width: "50%",
-            height: 30,
-          }}
-          onPress={filtrarIntervalo}
-        >
-          <Text style={{ textAlign: "center" }}>Filtrar</Text>
-        </TouchableOpacity>
       </View>
 
       {/*Filtro data especifica*/}
-      <View style={{ flexDirection: "row" }}>
-        <TouchableOpacity
-          style={{
-            flex: 1,
-            backgroundColor: "gray",
-            borderRadius: 30,
-            width: "50%",
-            height: 30,
-          }}
-          onPress={showSpecificDatePicker}
-        >
-          <Text style={{ textAlign: "center" }}>{textSpecificDate}</Text>
+      <View style={styles.containerBotoes}>
+        <TouchableOpacity style={styles.botoes} onPress={filtrarIntervalo}>
+          <Text style={styles.texto}>Filtrar</Text>
         </TouchableOpacity>
-        <DateTimePickerModal
-          isVisible={isSpecificDatePickerVisible}
-          mode="date"
-          onConfirm={handleSpecificDateConfirm}
-          onCancel={hideSpecificDatePicker}
-        />
         <TouchableOpacity
-          style={{
-            flex: 1,
-            backgroundColor: "gray",
-            borderRadius: 30,
-            width: "50%",
-            height: 30,
-          }}
+          style={styles.botoes}
           onPress={() => {
-            setSpecificDate(null);
-            setTextSpecificDate("Data Especifica");
-            setLista(listaLeiteReb);
+            handleResetDropdown();
+            setStartDate("");
+            setEndDate("");
+            setTextStartDate("Data Inicial");
+            setTextEndDate("Data Final");
+            setLista(listaRecebida);
           }}
         >
-          <Text style={{ textAlign: "center" }}>Limpar</Text>
+          <Text style={styles.texto}>Limpar</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -244,7 +202,21 @@ function FiltrosData() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+  },
+  containerBotoes: {
+    flexDirection: "row",
+    padding: 3,
+  },
+  botoes: {
+    flex: 1,
+    backgroundColor: "gray",
+    borderRadius: 30,
+    width: "50%",
+    height: 30,
+    justifyContent: "center",
+  },
+  texto: {
+    textAlign: "center",
   },
 });
 

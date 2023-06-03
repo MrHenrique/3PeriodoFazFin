@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Text,
   TouchableOpacity,
@@ -9,18 +9,18 @@ import {
   FlatList,
   Platform,
   StatusBar,
+  Alert,
 } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import uuid from "react-native-uuid";
-import writeLeite from "../../../Realm/writeLeite";
-import getAllVacas from "../../../Realm/getAllVacas";
-import { useFocusEffect } from "@react-navigation/native";
 import { AuthContext } from "../../../contexts/auth";
 import Modal from "react-native-modal";
 import { scale, verticalScale } from "react-native-size-matters";
 import { useNavigation } from "@react-navigation/native";
+import { useMainContext } from "../../../contexts/RealmContext";
 
 function AdicionarLeite() {
+  const realm = useMainContext();
   const navigation = useNavigation();
   const [isModalVisible, setModalVisible] = useState(false);
   const [vacaID, setVacaID] = useState("");
@@ -55,30 +55,41 @@ function AdicionarLeite() {
   };
   //Escrever no Banco
   async function handleAddLeite() {
-    const precoL = Number(precoLV);
-    const prodL = Number(prodLV);
-    await writeLeite(
-      {
-        _id: uuid.v4(),
-        precoL,
-        prodL,
-        description,
-        createdAt: new Date(date),
-      },
-      vacaID
-    );
-    navigation.navigate("Contas");
+    if (realm) {
+      try {
+        const precoL = Number(precoLV);
+        const prodL = Number(prodLV);
+        realm.write(() => {
+          let Vacas = realm.objectForPrimaryKey("VacasSchema", vacaID);
+          let createdLeite = realm.create("LeiteSchema", {
+            _id: uuid.v4(),
+            precoL,
+            prodL,
+            description,
+            createdAt: new Date(date),
+          });
+          Vacas.receitas.push(createdLeite);
+          Alert.alert("Dados cadastrados com sucesso!");
+        });
+      } catch (e) {
+        Alert.alert("Não foi possível cadastrar!", e.message);
+      } finally {
+        setPrecoLV("");
+        setProdLV("");
+        setDescription("");
+      }
+    }
   }
   //Buscar no banco
-  async function fetchData(rebID) {
-    const dataVaca = await getAllVacas(rebID);
-    setListaVaca(dataVaca);
-  }
-  useFocusEffect(
-    useCallback(() => {
-      fetchData(rebID);
-    }, [])
-  );
+  useEffect(() => {
+    if (realm) {
+      let dataVaca = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+      setListaVaca(dataVaca.vacas.sorted("nomeVaca"));
+      dataVaca.vacas.sorted("nomeVaca").addListener((values) => {
+        setListaVaca([...values]);
+      });
+    }
+  }, [realm]);
   const { ListaLeite, PrecoLeite, rebID, fazID } = useContext(AuthContext);
   //Background
   const imgbg1 = "../../../assets/bg10.jpg";
@@ -91,10 +102,8 @@ function AdicionarLeite() {
   const [searchText, setSearchText] = useState("");
 
   // Códido para pegar a data ....
-
   const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
-  const [show, setShow] = useState(false);
+  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [text, setText] = useState(
     new Date().getDate().toString().padStart(2, "0") +
       "/" +
@@ -103,26 +112,24 @@ function AdicionarLeite() {
       new Date().getFullYear().toString().padStart(2, "0")
   );
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "IOS");
-    setDate(currentDate);
-
-    let tempDate = new Date(currentDate);
+  const showDatePicker = () => {
+    setIsDatePickerVisible(true);
+  };
+  const hideDatePicker = () => {
+    setIsDatePickerVisible(false);
+  };
+  const handleDateConfirm = (selectedDate) => {
+    let tempDate = new Date(selectedDate);
     let fDate =
       tempDate.getDate().toString().padStart(2, "0") +
       "/" +
       (tempDate.getMonth() + 1).toString().padStart(2, "0") +
       "/" +
-      tempDate.getFullYear();
+      tempDate.getFullYear().toString().padStart(2, "0");
     setText(fDate);
+    setDate(selectedDate);
+    hideDatePicker();
   };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
   //Fim do código da data .....
 
   //-----------------------------
@@ -177,23 +184,19 @@ function AdicionarLeite() {
                 backgroundColor: "grey",
                 borderRadius: 20,
               }}
-              onPress={() => showMode("date")}
+              onPress={showDatePicker}
             >
               <Text style={styles.tituloinfo}>Selecione a data:</Text>
             </TouchableOpacity>
           </View>
 
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={mode}
-              display="default"
-              onChange={onChange}
-            />
-          )}
-
-          <StatusBar style="auto" />
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleDateConfirm}
+            onCancel={hideDatePicker}
+            maximumDate={new Date()}
+          />
         </View>
 
         {/*Descrição*/}
@@ -285,7 +288,7 @@ function AdicionarLeite() {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.botaopress}
-        onPress={() => navigation.navigate("GeralReb")}
+        onPress={() => navigation.navigate("Home")}
       >
         <Text style={styles.textovoltar}>Voltar</Text>
       </TouchableOpacity>

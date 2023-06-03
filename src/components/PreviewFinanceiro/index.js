@@ -1,130 +1,118 @@
-import { View, TouchableOpacity, Text, Alert } from "react-native";
-import React, { useState, useEffect, useContext, useCallback } from "react";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { View, TouchableOpacity, Text } from "react-native";
+import React, { useEffect, useContext, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import { Color } from "./styles";
-//DB
-import getAllGastos from "../../Realm/getAllGastos";
-import getAllGastosReb from "../../Realm/getAllGastosReb";
-import getAllLeite from "../../Realm/getAllLeite";
-import getAllLeiteReb from "../../Realm/getAllLeiteReb";
+import { useMainContext } from "../../contexts/RealmContext";
 import { ReceitasTotais } from "../../components/Calculos DB/ReceitasTotais";
 import { DespesasTotais } from "../../components/Calculos DB/DespesasTotais";
+import { scale, verticalScale } from "react-native-size-matters";
 //--
 import { AuthContext } from "../../contexts/auth";
 
 function PreviewFinanceiro({ Titulo, Id }) {
+  const [Total, setTotal] = useState(0);
+
+  const realm = useMainContext();
   const navigation = useNavigation();
-  const [dataGasto, setDataGastos] = useState([]);
-  const [dataReceitas, setDataReceitas] = useState([]);
-  async function fetchDataReceitas(fazID) {
-    // console.log(Id);
-    var dataRec;
-    switch (Id) {
-      case 1:
-        dataRec = await getAllLeite(fazID);
-        setDataReceitas(dataRec);
-        ListaLeite(dataRec);
-        const precoLeite = ReceitasTotais(dataRec);
-        PrecoLeite(precoLeite);
-        break;
-      case 2:
-        dataRec = await getAllLeiteReb(rebID);
-        setDataReceitas(dataRec);
-        ListaLeiteReb(dataRec);
-        const precoLeiteReb = ReceitasTotais(dataRec);
-        PrecoLeiteReb(precoLeiteReb);
-        break;
-      default:
-        Alert.alert("erro na busca de dados, consultar desenvolvedor");
-        break;
+
+  useEffect(() => {
+    if (realm) {
+      let dataReceitas = realm.objectForPrimaryKey("Farm", fazID);
+      let receitas = [];
+      dataReceitas.rebanhos.forEach((rebanho) => {
+        rebanho.vacas.forEach((vaca) => {
+          receitas.push(...vaca.receitas);
+        });
+      });
+      PrecoLeite(ReceitasTotais(receitas));
+      dataReceitas.rebanhos.addListener((rebanhoResults) => {
+        let newReceitas = [];
+        rebanhoResults.forEach((rebanho) => {
+          rebanho.vacas.forEach((vaca) => {
+            newReceitas.push(...vaca.receitas);
+          });
+        });
+        PrecoLeite(ReceitasTotais(newReceitas));
+      });
     }
-  }
-  async function fetchDataDespesas(fazID) {
-    var dataGas;
-    switch (Id) {
-      case 1:
-        console.log("fazenda");
-        dataGas = await getAllGastos(fazID);
-        setDataGastos(dataGas);
-        ListaAli(dataGas);
-        const precoCF = DespesasTotais(dataGas);
-        PrecoCF(precoCF);
-        break;
-      case 2:
-        console.log("rebanho");
-        dataGas = await getAllGastosReb(rebID);
-        setDataGastos(dataGas);
-        ListaAliReb(dataGas);
-        const precoCFReb = DespesasTotais(dataGas);
-        PrecoCFReb(precoCFReb);
-        break;
-      default:
-        Alert.alert("erro na busca de dados, consultar desenvolvedor");
-        break;
-    }
-  }
-  //atualizar dados
-  useFocusEffect(
-    useCallback(() => {
-      fetchDataReceitas(fazID);
-      fetchDataDespesas(fazID);
-    }, [])
-  );
+    let dataReceitasreb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+    let receitasreb = [];
+    dataReceitasreb.vacas.forEach((vaca) => {
+      receitasreb.push(...vaca.receitas);
+    });
+    PrecoLeiteReb(ReceitasTotais(receitasreb));
+    let newReceitasreb = [];
+    dataReceitasreb.vacas.addListener((values) => {
+      values.forEach((vaca) => {
+        newReceitasreb.push(...vaca.receitas);
+      });
+      PrecoLeiteReb(ReceitasTotais(newReceitasreb));
+    });
+    let dataDespesas = realm.objectForPrimaryKey("Farm", fazID);
+    let despesas = [];
+    dataDespesas.rebanhos.forEach((rebanhos) => {
+      despesas.push(...rebanhos.despesas);
+    });
+    PrecoCF(DespesasTotais(despesas));
+    dataDespesas.rebanhos.addListener((rebanhoResults) => {
+      let newDespesas = [];
+      rebanhoResults.forEach((rebanhos) => {
+        newDespesas.push(...rebanhos.despesas);
+      });
+      PrecoCF(DespesasTotais(newDespesas));
+    });
+    let dataGastos = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+    PrecoCFReb(DespesasTotais(dataGastos.despesas));
+    dataGastos.despesas.addListener((values) => {
+      PrecoCFReb(DespesasTotais([...values]));
+    });
+  }, [realm]);
 
   const {
     precoCF,
     PrecoCF,
-    ListaAli,
     fazID,
     rebID,
-    ListaLeite,
     precoLeite,
     PrecoLeite,
-    ListaAliReb,
     PrecoCFReb,
     precoCFReb,
-    ListaLeiteReb,
     PrecoLeiteReb,
     precoLeiteReb,
+    ShouldGoPageFinanceiro,
   } = useContext(AuthContext);
 
   //Funcoes para validar e renderizar
   function getDespesas() {
-    switch (Id) {
-      case 1:
-        if (typeof precoCF !== "undefined") {
-          return Number(precoCF);
-        } else {
-          return 0;
-        }
-        break;
-      case 2:
-        if (typeof precoCFReb !== "undefined") {
-          console.log(precoCFReb);
-          return Number(precoCFReb);
-        } else {
-          return 0;
-        }
-        break;
+    if (Id === 1) {
+      if (typeof precoCF !== "undefined") {
+        return Number(precoCF);
+      } else {
+        return 0;
+      }
+    } else {
+      if (typeof precoCFReb !== "undefined") {
+        // console.log(precoCFReb);
+        return Number(precoCFReb);
+      } else {
+        return 0;
+      }
     }
   }
   function getReceitas() {
-    switch (Id) {
-      case 1:
-        if (typeof precoLeite !== "undefined") {
-          return Number(precoLeite);
-        } else {
-          return 0;
-        }
-        break;
-      case 2:
-        if (typeof precoLeiteReb !== "undefined") {
-          return Number(precoLeiteReb);
-        } else {
-          return 0;
-        }
-        break;
+    if (Id === 1) {
+      if (typeof precoLeite !== "undefined") {
+        return Number(precoLeite);
+      } else {
+        return 0;
+      }
+    } else {
+      if (typeof precoLeiteReb !== "undefined") {
+        return Number(precoLeiteReb);
+      } else {
+        return 0;
+      }
     }
   }
   function getTotal(despesas, receitas) {
@@ -135,9 +123,12 @@ function PreviewFinanceiro({ Titulo, Id }) {
     }
   }
   // variaveis para rendering
-  const total = getTotal(getDespesas(), getReceitas());
-  const despesas = getDespesas();
-  const receitas = getReceitas();
+  const total = getTotal(getDespesas(), getReceitas()).toFixed(2);
+  const formattedTotal = `${total.replace(".", ",")}`;
+  const despesas = getDespesas().toFixed(2);
+  const formattedDespesas = `R$ ${despesas.replace(".", ",")}`;
+  const receitas = getReceitas().toFixed(2);
+  const formattedReceitas = `R$ ${receitas.replace(".", ",")}`;
   function setSize(text, width) {
     var fontSize = width / text.toString().length;
     var maxSize = width / 10;
@@ -151,10 +142,12 @@ function PreviewFinanceiro({ Titulo, Id }) {
         onPress={() => {
           switch (Id) {
             case 1:
-              navigation.navigate("FinanceiroFaz");
+              ShouldGoPageFinanceiro(0);
+              navigation.navigate("PageFinanceiro");
               break;
             case 2:
-              navigation.navigate("FinanceiroReb");
+              ShouldGoPageFinanceiro(1);
+              navigation.navigate("PageFinanceiro");
               break;
           }
         }}
@@ -166,17 +159,17 @@ function PreviewFinanceiro({ Titulo, Id }) {
           <View
             style={[
               styles.containerSaldoTotal,
-              { borderBottomColor: Color(total) },
+              { borderBottomColor: Color(formattedTotal) },
             ]}
           >
             <Text style={styles.textoRS}>R$ </Text>
             <Text
               style={[
                 styles.textResultsPrice,
-                { fontSize: setSize(total.toFixed(2), 250) },
+                { fontSize: setSize(formattedTotal, verticalScale(250)) },
               ]}
             >
-              {total.toFixed(2)}
+              {formattedTotal}
             </Text>
           </View>
           <View style={styles.textoBannerCat}>
@@ -187,10 +180,10 @@ function PreviewFinanceiro({ Titulo, Id }) {
             <Text
               style={[
                 styles.textoBannerRec,
-                { fontSize: setSize(receitas.toFixed(2), 200) },
+                { fontSize: setSize(formattedReceitas, verticalScale(200)) },
               ]}
             >
-              {receitas.toFixed(2)}
+              {formattedReceitas}
             </Text>
           </View>
           <View style={styles.textoBannerCat}>
@@ -201,10 +194,10 @@ function PreviewFinanceiro({ Titulo, Id }) {
             <Text
               style={[
                 styles.textoBannerDes,
-                { fontSize: setSize(despesas.toFixed(2), 200) },
+                { fontSize: setSize(formattedDespesas, verticalScale(200)) },
               ]}
             >
-              {despesas.toFixed(2)}
+              {formattedDespesas}
             </Text>
           </View>
           <Text style={styles.bannerText}>

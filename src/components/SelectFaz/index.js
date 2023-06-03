@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import {
   TouchableOpacity,
   Text,
@@ -8,7 +8,10 @@ import {
   View,
   Dimensions,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+
 import { scale, verticalScale } from "react-native-size-matters";
+import { Colors, Fonts, Buttons, TextInput } from "../../styles";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
 import { AuthContext } from "../../contexts/auth";
@@ -43,7 +46,9 @@ const Option = (item, value, selected, objKey, onPress) => {
           styles.optionContainer,
           {
             backgroundColor:
-              selected?.[objKey] === item?.[objKey] ? "#0F6D00" : "#004513",
+              selected?.[objKey] === item?.[objKey]
+                ? Colors.darkgreen
+                : Colors.green,
           },
         ]}
         onPress={onPress}
@@ -83,7 +88,6 @@ const SelectFaz = ({
 }) => {
   const [visible, setVisible] = useState(false);
   const [selected, setSelected] = useState(null);
-
   useEffect(() => {
     if (data.length === 1) {
       setSelected(data[0]);
@@ -91,10 +95,22 @@ const SelectFaz = ({
       FazendaID(Fazid);
       var FazProp = data[0].proprietario;
       FazendaProp(FazProp);
+      var Rebid = "";
+      RebanhoID(Rebid);
       setVisible(false);
-      console.log(Fazid)
     }
   }, [data]);
+  useFocusEffect(
+    useCallback(() => {
+      if (fazID === "" || fazID === undefined) {
+        FazendaID("");
+        RebanhoID("");
+        FazendaProp("");
+        setSelected(null);
+      }
+      return () => {};
+    }, [])
+  );
 
   const { TouchableComponent } = touchableComponent(
     touchableText,
@@ -132,7 +148,7 @@ const SelectFaz = ({
       }
     }
   }
-  const { FazendaID, FazendaProp, RebanhoID } = useContext(AuthContext);
+  const { FazendaID, FazendaProp, RebanhoID, fazID } = useContext(AuthContext);
   return (
     <>
       <TouchableComponent />
@@ -163,26 +179,26 @@ const SelectFaz = ({
 };
 const styles = StyleSheet.create({
   liststyle: {
-    backgroundColor: "#00290C",
+    backgroundColor: Colors.green,
   },
   touchableContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     height: verticalScale(40),
-    borderBottomColor: "white",
-    borderBottomWidth: verticalScale(1),
+    borderBottomColor: Colors.white,
+    borderBottomWidth: verticalScale(2),
     width: scale(300),
   },
   touchableText: {
-    color: "white",
+    color: Colors.white,
     fontSize: verticalScale(16),
     fontWeight: "bold",
   },
   header: {
     height: verticalScale(50),
-    backgroundColor: "#004513",
-    borderBottomColor: "#00290C",
+    backgroundColor: Colors.darkgreen,
+    borderBottomColor: Colors.white,
     borderBottomWidth: verticalScale(1),
     flexDirection: "row-reverse",
     alignItems: "center",
@@ -199,13 +215,13 @@ const styles = StyleSheet.create({
     paddingLeft: scale(20),
   },
   optionContainer: {
-    backgroundColor: "#0F6D00",
+    backgroundColor: Colors.green,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingVertical: verticalScale(15),
     paddingHorizontal: scale(20),
-    borderBottomColor: "#00290C",
+    borderBottomColor: Colors.black,
     borderBottomWidth: verticalScale(1),
   },
   optionText: {

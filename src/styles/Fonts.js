@@ -16,16 +16,16 @@ export const txtSmallBold = {
   fontWeight: "bold",
 };
 export const txtMedium = {
-  fontSize: verticalScale(14),
+  fontSize: scale(14),
   textAlign: "center",
   alignSelf: "center",
 };
 export const txtLarge = {
-  fontSize: verticalScale(20),
+  fontSize: scale(20),
   textAlign: "center",
 };
 export const txtXLarge = {
-  fontSize: verticalScale(25),
+  fontSize: scale(25),
   textAlign: "center",
 };
 export const txtLargeBold = {

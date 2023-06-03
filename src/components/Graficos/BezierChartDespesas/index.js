@@ -3,7 +3,7 @@ import { Dimensions } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 import { AuthContext } from "../../../contexts/auth";
 import { useContext } from "react";
-const screenWidth = Dimensions.get("window").width;
+const screenWidth = Dimensions.get("screen").width;
 function BezierChartDespesas() {
   const { listaAli } = useContext(AuthContext);
   const despesasPorMesFaz = {
@@ -40,7 +40,7 @@ function BezierChartDespesas() {
 
   //Percorre todos as despesas
   listaAli.forEach((item) => {
-    const valor = (item.valorAli / item.qtdAli) * item.consumoAli;
+    const valor = item.valorProd * item.qtdProd;
     const mes = item.createdAt.getMonth(); // cria uma variavel que se iguala ao mes de criação do item
 
     despesasPorMesFaz[mes] += valor; //Soma todos as despesas do mês
@@ -71,7 +71,7 @@ function BezierChartDespesas() {
   return (
     <LineChart
       data={data}
-      width={screenWidth}
+      width={screenWidth - 30}
       height={verticalScale(330)}
       chartConfig={chartConfig}
       verticalLabelRotation={60}

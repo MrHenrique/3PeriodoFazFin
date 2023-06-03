@@ -10,6 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { scale, verticalScale } from "react-native-size-matters";
 import { AuthContext } from "../../contexts/auth";
+import { Colors,Fonts } from "../../styles";
 function Header() {
   const { fazProp } = useContext(AuthContext);
   const proprietario = fazProp.FazProp;
@@ -21,7 +22,7 @@ function Header() {
         style={styles.menuButton}
         onPress={() => navigation.openDrawer()}
       >
-        <Feather name="menu" size={verticalScale(30)} color="#FFF" />
+        <Feather name="menu" size={verticalScale(30)} color={Colors.white} />
       </TouchableOpacity>
       <Text style={styles.title}>{header}</Text>
     </SafeAreaView>
@@ -29,8 +30,8 @@ function Header() {
 }
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    height: verticalScale(50),
+    backgroundColor: Colors.plusdarkgreen,
+    height: verticalScale(42),
     paddingLeft: scale(5),
     flexDirection: "row-reverse",
     alignItems: "center",
@@ -40,10 +41,8 @@ const styles = StyleSheet.create({
     paddingLeft: scale(5),
   },
   title: {
-    color: "#FFF",
-    fontSize: verticalScale(22),
-    fontWeight: "bold",
-    textAlign: "center",
+    color: Colors.white,
+    ...Fonts.txtXLargeBold,
     flex: 1,
     paddingLeft: scale(5),
   },

@@ -1,68 +1,87 @@
-import { StyleSheet } from "react-native";
+import { Button, StyleSheet } from "react-native";
 import { Buttons, Colors, Fonts } from "../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.Cyan,
+    backgroundColor: Colors.darkgreen,
   },
   imgbg: {
-    width: "100%",
-    height: "100%",
+    flex: 1,
     resizeMode: "cover",
+    width: "100%",
   },
-  logo: {
-    resizeMode: "contain",
-    height: verticalScale(150),
-    width: verticalScale(150),
-    top: verticalScale(30),
-    alignSelf: "center",
+  // btn voltar despesas estoque
+  botaoPress4: {
+    flex: 1,
+    ...Buttons.btnLargeRounded,
+    backgroundColor: Colors.green,
+    elevation: 10,
   },
-  title: {
-    ...Fonts.Title,
+  // texto - btn voltar despesas estoque
+  tituloBotao2: {
+    ...Fonts.txtXLargeBold,
     color: Colors.white,
-    top: verticalScale(25),
-    marginBottom: verticalScale(30),
   },
-  subtitle: {
-    ...Fonts.txtLarge,
-    color: Colors.white,
-    alignSelf: "center",
-  },
+  // voltar
   botaopress: {
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.btngreen,
-    marginBottom: verticalScale(10),
-  },
-  botaopress2: {
-    ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.btngreen,
-    flexDirection: "row-reverse",
-  },
-  disabledbutton: {
-    ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.btndarkgreen,
-    opacity: 0.4
+    backgroundColor: Colors.green,
   },
   tituloBotao: {
-    ...Fonts.txtMediumBold,
+    ...Fonts.txtMedium,
     color: Colors.white,
   },
-  select: {
-    alignSelf: "center",
-    marginTop: verticalScale(15),
-  },
-  containerlogin: {
+
+  containergeral: {
     flex: 1,
     margin: scale(15),
+    backgroundColor: Colors.darkgreen,
     borderRadius: 10,
-    backgroundColor: Colors.darkgreenTransparent,
   },
-  containerbotoes: {
-    flex: 1,
-    padding: verticalScale(10),
+  containerPreview: {
+    flex: 0.6,
+    justifyContent: "flex-start",
     flexDirection: "column-reverse",
+    // backgroundColor: Colors.white,
+    paddingTop: verticalScale(15),
+  },
+  containerBotoes: {
+    flex: 1,
+    // backgroundColor: Colors.blue,
+  },
+  BTN_route: {
+    flex: 1,
+    justifyContent: "center",
+    paddingBottom: verticalScale(5),
+  },
+  containerVoltar: {
+    justifyContent: "center",
+    padding: verticalScale(10),
+    // backgroundColor: Colors.red,
+  },
+  Preview: {
+    flexDirection: "row",
+  },
+  previewteste: {
+    width: scale(320),
+    paddingBottom: verticalScale(10),
+  },
+  nextPreview: {
+    ...Buttons.btnLargeRounded,
+    backgroundColor: Colors.green,
+    marginBottom: scale(10),
+    elevation: 10,
+  },
+  textPreview: {
+    ...Fonts.txtLargeBold,
+    color: Colors.white,
+
+  },
+  containerScrollPreview: {
+    height: verticalScale(180),
+    marginBottom: verticalScale(-5),
   },
 });
 export default styles;

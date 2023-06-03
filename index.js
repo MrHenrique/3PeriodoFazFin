@@ -5,13 +5,19 @@ import { NavigationContainer } from "@react-navigation/native";
 import { registerRootComponent } from "expo";
 import Routes from "./src/Routes";
 import AuthProvider from "./src/contexts/auth";
+import RealmContextProvider from "./src/contexts/RealmContext";
+import { PaperProvider } from "react-native-paper";
 function App() {
   return (
     <NavigationContainer>
-      <AuthProvider>
-      <StatusBar hidden={true} />
-      <Routes />
-      </AuthProvider>
+      <RealmContextProvider>
+        <AuthProvider>
+          <PaperProvider>
+            <StatusBar hidden={true} />
+            <Routes />
+          </PaperProvider>
+        </AuthProvider>
+      </RealmContextProvider>
     </NavigationContainer>
   );
 }

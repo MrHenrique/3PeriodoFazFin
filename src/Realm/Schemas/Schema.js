@@ -8,6 +8,45 @@ export const Fazenda = {
     tipoprod: "string",
     createdAt: "date",
     rebanhos: "RebanhoSchema[]",
+    entradaEstoque: "EstoqueEntradaSchema[]",
+    atualEstoque: "AtualEstoqueSchema[]",
+  },
+};
+export const EstoqueEntradaSchema = {
+  name: "EstoqueEntradaSchema",
+  primaryKey: "_id",
+  properties: {
+    _id: "string",
+    nomeProd: "string",
+    createdAt: "date",
+    valorProd: "float",
+    qtdProd: "float",
+    volumeProd: "float?",
+    pesoProd: "float?",
+    obserProd: "string?",
+    assignee: {
+      type: "linkingObjects",
+      objectType: "Farm",
+      property: "entradaEstoque",
+    },
+  },
+};
+export const AtualEstoqueSchema = {
+  name: "AtualEstoqueSchema",
+  primaryKey: "_id",
+  properties: {
+    _id: "string",
+    nomeProd: "string",
+    createdAt: "date",
+    valorProd: "float",
+    volumeProd: "float?",
+    pesoProd: "float?",
+    obserProd: "string?",
+    assignee: {
+      type: "linkingObjects",
+      objectType: "Farm",
+      property: "atualEstoque",
+    },
   },
 };
 export const RebanhoSchema = {
@@ -18,11 +57,30 @@ export const RebanhoSchema = {
     nomeReb: "string",
     createdAt: "date",
     vacas: "VacasSchema[]",
-    gastos: "GastosSchema[]",
+    despesas: "DespesasSchema[]",
     assignee: {
       type: "linkingObjects",
       objectType: "Farm",
       property: "rebanhos",
+    },
+  },
+};
+export const DespesasSchema = {
+  name: "DespesasSchema",
+  primaryKey: "_id",
+  properties: {
+    _id: "string",
+    nomeProd: "string",
+    createdAt: "date",
+    valorProd: "float",
+    qtdProd: "float",
+    volumeProd: "float?",
+    pesoProd: "float?",
+    obserProd: "string?",
+    assignee: {
+      type: "linkingObjects",
+      objectType: "RebanhoSchema",
+      property: "despesas",
     },
   },
 };
@@ -54,42 +112,10 @@ export const VacasSchema = {
     createdAt: "date",
     genero: "float",
     receitas: "LeiteSchema[]",
-    reproducao:"ReproducaoSchema[]",
     assignee: {
       type: "linkingObjects",
       objectType: "RebanhoSchema",
       property: "vacas",
-    },
-  },
-};
-export const GastosSchema = {
-  name: "GastosSchema",
-  primaryKey: "_id",
-  properties: {
-    _id: "string",
-    tipoAlim: "string?",
-    qtdAli: "float?",
-    valorAli: "float?",
-    consumoAli: "float?",
-    assignee: {
-      type: "linkingObjects",
-      objectType: "RebanhoSchema",
-      property: "gastos",
-    },
-  },
-};
-export const ReproducaoSchema = {
-  name: "ReproducaoSchema",
-  primaryKey: "_id",
-  properties: {
-    _id: "string",
-    cobertura: "date",
-    cria: "date",
-    cio: "date",
-    assignee: {
-      type: "linkingObjects",
-      objectType: "VacasSchema",
-      property: "reproducao",
     },
   },
 };

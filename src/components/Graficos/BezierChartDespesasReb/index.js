@@ -40,7 +40,7 @@ function BezierChartDespesasReb() {
 
   //Percorre todos as despesas
   listaAliReb.forEach((item) => {
-    const valor = (item.valorAli / item.qtdAli) * item.consumoAli;
+    const valor = item.valorProd * item.qtdProd;
     const mes = item.createdAt.getMonth(); // cria uma variavel que se iguala ao mes de criação do item
 
     despesasPorMesReb[mes] += valor; //Soma todos as despesas do mês
@@ -71,10 +71,10 @@ function BezierChartDespesasReb() {
   return (
     <LineChart
       data={data}
-      width={screenWidth}
+      width={screenWidth - 30}
       height={verticalScale(330)}
       chartConfig={chartConfig}
-      verticalLabelRotation={30}
+      verticalLabelRotation={60}
       fromZero={true}
       bezier
     />

@@ -5,7 +5,7 @@ import { scale, verticalScale } from "react-native-size-matters";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.Cyan,
+    backgroundColor: Colors.darkgreen,
   },
   imgbg: {
     width: "100%",
@@ -18,32 +18,40 @@ const styles = StyleSheet.create({
     width: verticalScale(150),
     top: verticalScale(30),
     alignSelf: "center",
+    borderColor: Colors.white,
+    elevation: 10,
   },
   title: {
     ...Fonts.Title,
     color: Colors.white,
-    top: verticalScale(25),
+    top: verticalScale(35),
     marginBottom: verticalScale(30),
   },
   subtitle: {
     ...Fonts.txtLarge,
     color: Colors.white,
     alignSelf: "center",
+    fontWeight: "500",
   },
   botaopress: {
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.btngreen,
-    marginBottom: verticalScale(10),
+    backgroundColor: Colors.green,
+    marginTop: verticalScale(10),
   },
   botaopress2: {
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.btngreen,
+    backgroundColor: Colors.green,
     flexDirection: "row-reverse",
+  },
+  botaopress3: {
+    ...Buttons.btnLargeRounded,
+    backgroundColor: Colors.green,
+    flex: 0.3,
   },
   disabledbutton: {
     ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.btndarkgreen,
-    opacity: 0.4
+    backgroundColor: Colors.green,
+    opacity: 0.4,
   },
   tituloBotao: {
     ...Fonts.txtMediumBold,
@@ -51,18 +59,29 @@ const styles = StyleSheet.create({
   },
   select: {
     alignSelf: "center",
-    marginTop: verticalScale(15),
+    marginVertical: scale(15),
   },
   containerlogin: {
     flex: 1,
     margin: scale(15),
     borderRadius: 10,
-    backgroundColor: Colors.darkgreenTransparent,
+    backgroundColor: Colors.darkgreen,
   },
   containerbotoes: {
     flex: 1,
     padding: verticalScale(10),
     flexDirection: "column-reverse",
+    justifyContent: "flex-start"
+  },
+  containercadastrarfaz: {
+    flex: 1.5,
+    bottom: 0,
+    justifyContent: "center",
+  },
+  titulocadfaz: {
+    ...Fonts.txtMediumBold,
+    fontSize: scale(16),
+    color: Colors.white,
   },
 });
 export default styles;

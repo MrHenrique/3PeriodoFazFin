@@ -1,4 +1,5 @@
-import React, { useState, useContext,useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/core";
 import {
   TouchableOpacity,
   Text,
@@ -9,6 +10,7 @@ import {
   Dimensions,
 } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
+import { Colors } from "../../styles";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
 import { AuthContext } from "../../contexts/auth";
@@ -43,7 +45,7 @@ const Option = (item, value, selected, objKey, onPress) => {
           styles.optionContainer,
           {
             backgroundColor:
-              selected?.[objKey] === item?.[objKey] ? "#0F6D00" : "#004513",
+              selected?.[objKey] === item?.[objKey] ? Colors.darkgreen : Colors.green,
           },
         ]}
         onPress={onPress}
@@ -89,9 +91,18 @@ const Select = ({
       var Rebid = data[0]._id;
       RebanhoID(Rebid);
       setVisible(false);
-      console.log(Rebid)
     }
   }, [data]);
+  useFocusEffect(
+    useCallback(() => {
+      console.log("Teste: " + rebID);
+      if (rebID === "" || rebID === undefined) {
+        RebanhoID("");
+        setSelected(null);
+      }
+      return () => {};
+    }, [])
+  );
   const { TouchableComponent } = touchableComponent(
     touchableText,
     () => setVisible(true),
@@ -122,7 +133,7 @@ const Select = ({
       }
     }
   }
-  const { RebanhoID } = useContext(AuthContext);
+  const { RebanhoID, rebID } = useContext(AuthContext);
   return (
     <>
       <TouchableComponent />
@@ -153,15 +164,15 @@ const Select = ({
 };
 const styles = StyleSheet.create({
   liststyle: {
-    backgroundColor: "#00290C",
+    backgroundColor: Colors.green,
   },
   touchableContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     height: verticalScale(40),
-    borderBottomColor: "white",
-    borderBottomWidth: verticalScale(1),
+    borderBottomColor: Colors.white,
+    borderBottomWidth: verticalScale(2),
     width: scale(300),
   },
   touchableText: {
@@ -171,8 +182,8 @@ const styles = StyleSheet.create({
   },
   header: {
     height: verticalScale(50),
-    backgroundColor: "#004513",
-    borderBottomColor: "#00290C",
+    backgroundColor: Colors.darkgreen,
+    borderBottomColor: Colors.white,
     borderBottomWidth: verticalScale(1),
     flexDirection: "row-reverse",
     alignItems: "center",
@@ -189,13 +200,13 @@ const styles = StyleSheet.create({
     paddingLeft: scale(20),
   },
   optionContainer: {
-    backgroundColor: "#0F6D00",
+    backgroundColor: Colors.green,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingVertical: verticalScale(15),
     paddingHorizontal: scale(20),
-    borderBottomColor: "#00290C",
+    borderBottomColor: Colors.black,
     borderBottomWidth: verticalScale(1),
   },
   optionText: {
