@@ -71,7 +71,7 @@ const Reproducao = () => {
             }}
             onPress={showDatePicker}
           >
-            <Text style={styles.tituloinfo}>Selecione a data:</Text>
+            <Text style={styles.tituloinfo}>Selecione a data :</Text>
           </TouchableOpacity>
         </View>
 
