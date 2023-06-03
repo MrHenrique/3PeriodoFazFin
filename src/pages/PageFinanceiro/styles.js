@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.darkgreen,
     ...Buttons.btnLargeRounded,
     marginBottom: verticalScale(10),
+    elevation: 5,
   },
   tituloBotao: {
     ...Fonts.txtMediumBold,
@@ -111,7 +112,6 @@ const styles = StyleSheet.create({
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
     maxHeight: verticalScale(40),
-
     justifyContent: "center",
     alignSelf: "center",
     elevation: 10,
