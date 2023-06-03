@@ -39,7 +39,6 @@ function EntradaEstoque() {
   const [isVolumeProdValid, setIsVolumeProdValid] = useState(true);
   const [isPesoProdValid, setIsPesoProdValid] = useState(true);
   const [isQtdProdValid, setIsQtdProdValid] = useState(true);
-  const [teste, setteste] = useState(true);
   const { fazID, tipoProd } = useContext(AuthContext);
   //status teclado
   const [keyboardStatus, setkeyboardStatus] = useState(false);
@@ -336,7 +335,7 @@ function EntradaEstoque() {
       return (
         <View style={styles.containerInput}>
           <TextInput
-            label="Volume da unidade do produto"
+            label="Volume da unidade do produto (litros)"
             style={styles.textInput}
             placeholderTextColor={Colors.grey}
             textColor={Colors.black}
@@ -355,7 +354,7 @@ function EntradaEstoque() {
             visible={!isVolumeProdValid}
             padding="20"
           >
-            Digite um volumeda unidade do produto.
+            Digite o volume da unidade do produto.
           </HelperText>
         </View>
       );
@@ -364,7 +363,7 @@ function EntradaEstoque() {
       <View style={styles.containerInput}>
         <TextInput
           mode="flat"
-          label={"Peso da unidade do produto"}
+          label={"Peso da unidade do produto (KG)"}
           style={styles.textInput}
           placeholderTextColor={Colors.grey}
           textColor={Colors.black}
