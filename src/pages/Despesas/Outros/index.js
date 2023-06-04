@@ -7,9 +7,15 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   ScrollView,
+  FlatList,
 } from "react-native";
 import { useState, useContext, useEffect } from "react";
-import { TextInput, HelperText, MD3Colors } from "react-native-paper";
+import {
+  TextInput,
+  HelperText,
+  MD3Colors,
+  RadioButton,
+} from "react-native-paper";
 import { Colors } from "../../../styles";
 import uuid from "react-native-uuid";
 import { AuthContext } from "../../../contexts/auth";
@@ -17,18 +23,82 @@ import { useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
 import { useMainContext } from "../../../contexts/RealmContext";
 import styles from "./styles";
+import Modal from "react-native-modal";
 
 export default function Outros() {
   const realm = useMainContext();
   const navigation = useNavigation();
+  const [checked, setChecked] = React.useState("rebanho");
   const [valorProdString, setValorProd] = useState("");
   const [nomeProd, setNomeProd] = useState("");
   const [valorProdValid, setIsValorProdValid] = useState(true);
   const [valorProdPreenchido, setValorProdPreenchido] = useState(true);
   const [nomeValid, setNomeValid] = useState(true);
+  const [listaVaca, setListaVaca] = useState([]);
+  const [lista, setLista] = useState(listaVaca);
+  const [searchText, setSearchText] = useState("");
   // listener teclado
   const [keyboardStatus, setkeyboardStatus] = useState(false);
   const { rebID } = useContext(AuthContext);
+  const [vacaID, setVacaID] = useState("");
+  const [isModalVisible, setModalVisible] = useState(false);
+  const renderItem = ({ item }) => {
+    return (
+      <View style={styles.modalContainer2}>
+        <TouchableOpacity
+          onPress={function ReturnID() {
+            const VacaID = item._id;
+            setVacaID(VacaID);
+            toggleModal();
+          }}
+          style={[
+            styles.cardVacas,
+            {
+              backgroundColor:
+                item.brincoVaca % 2 === 0 ? "#0F6D00" : "#004513",
+            },
+          ]}
+        >
+          <Text style={styles.tituloBotao}>
+            Nome: {item.nomeVaca} - Brinco: {item.brincoVaca}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+  useEffect(() => {
+    if (searchText === "") {
+      setLista(listaVaca);
+    } else {
+      setLista(
+        listaVaca.filter(
+          (item) =>
+            item.nomeVaca.toLowerCase().indexOf(searchText.toLowerCase()) > -1
+        )
+      );
+    }
+  }, [searchText]);
+  function toggleModal() {
+    setModalVisible(!isModalVisible);
+    setSearchText("");
+    setLista(listaVaca);
+  }
+  useEffect(() => {
+    if (realm) {
+      let dataVaca = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+      setListaVaca(dataVaca.vacas.sorted("nomeVaca"));
+      dataVaca.vacas.sorted("nomeVaca").addListener((values) => {
+        setListaVaca([...values]);
+      });
+    }
+  }, [realm]);
+  const handleFilterNome = () => {
+    let newList = [...lista];
+    newList.sort((a, b) =>
+      a.nomeVaca > b.nomeVaca ? 1 : b.nomeVaca > a.nomeVaca ? -1 : 0
+    );
+    setLista(newList);
+  };
   function handleValorChange(text) {
     const cleanedText = text.replace(",", ".");
     const parsedValue = parseFloat(cleanedText);
@@ -50,12 +120,57 @@ export default function Outros() {
   }
   async function handleAddGastos() {
     if (realm) {
+      if (checked === "rebanho") {
+        try {
+          let id = uuid.v4();
+          realm.write(() => {
+            let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+            const valorProd = Number(valorProdString);
+            let createdGastosReb = realm.create("DespesaRebSchema", {
+              _id: id,
+              createdAt: new Date(),
+              nomeProd,
+              valorProd,
+              qtdProd: 1,
+              obserProd: "",
+              pesoProd: 0,
+              volumeProd: 0,
+            });
+            reb.despesas.push(createdGastosReb);
+            let nVacas = reb.vacas.length;
+            reb.vacas.forEach((vaca) => {
+              let createdGastos = realm.create("DespesasSchema", {
+                _id: uuid.v4(),
+                idTransacao: id,
+                createdAt: new Date(),
+                nomeProd,
+                valorProd: valorProd / nVacas,
+                qtdProd: 1,
+                obserProd: "",
+                pesoProd: 0,
+                volumeProd: 0,
+              });
+              vaca.despesas.push(createdGastos);
+            });
+            Alert.alert("Dados cadastrados com sucesso!");
+          });
+        } catch (e) {
+          Alert.alert("Não foi possível cadastrar!", e.message);
+        } finally {
+          setNomeProd("");
+          setValorProd("");
+          setVacaID("");
+        }
+      }
+    }
+    if (checked === "vacas") {
       try {
+        let id = uuid.v4();
         realm.write(() => {
           let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
           const valorProd = Number(valorProdString);
-          let createdGastos = realm.create("DespesaRebSchema", {
-            _id: uuid.v4(),
+          let createdGastosReb = realm.create("DespesaRebSchema", {
+            _id: id,
             createdAt: new Date(),
             nomeProd,
             valorProd,
@@ -64,7 +179,20 @@ export default function Outros() {
             pesoProd: 0,
             volumeProd: 0,
           });
-          reb.despesas.push(createdGastos);
+          reb.despesas.push(createdGastosReb);
+          let Vacas = realm.objectForPrimaryKey("VacasSchema", vacaID);
+          let createdGastos = realm.create("DespesasSchema", {
+            _id: uuid.v4(),
+            idTransacao: id,
+            createdAt: new Date(),
+            nomeProd,
+            valorProd,
+            qtdProd: 1,
+            obserProd: "",
+            pesoProd: 0,
+            volumeProd: 0,
+          });
+          Vacas.despesas.push(createdGastos);
           Alert.alert("Dados cadastrados com sucesso!");
         });
       } catch (e) {
@@ -72,6 +200,7 @@ export default function Outros() {
       } finally {
         setNomeProd("");
         setValorProd("");
+        setVacaID("");
       }
     }
   }
@@ -177,6 +306,71 @@ export default function Outros() {
                 </HelperText>
               </View>
             </View>
+            <View style={styles.radioBView}>
+              <RadioButton
+                value="rebanho"
+                status={checked === "rebanho" ? "checked" : "unchecked"}
+                onPress={() => {
+                  setChecked("rebanho"), setVacaID("");
+                }}
+              />
+              <Text>Cadastro por Rebanho</Text>
+              <RadioButton
+                value="vacas"
+                status={checked === "vacas" ? "checked" : "unchecked"}
+                onPress={() => setChecked("vacas")}
+              />
+              <Text>Cadastro individual</Text>
+            </View>
+            {checked === "vacas" ? (
+              <>
+                <TouchableOpacity
+                  onPress={() => {
+                    toggleModal(), setVacaID("");
+                  }}
+                  style={styles.botaoselecionaranimal}
+                >
+                  <Text style={styles.tituloBotao}>Selecionar animal</Text>
+                  <Modal
+                    isVisible={isModalVisible}
+                    coverScreen={true}
+                    backdropColor={"rgba(234,242,215,0.8)"}
+                    animationIn="slideInUp"
+                    animationOut="slideOutDown"
+                  >
+                    <View style={styles.modalContainer}>
+                      <Text style={styles.TituloM}>Selecione um animal</Text>
+                      <TouchableOpacity
+                        style={styles.filtroNome}
+                        onPress={handleFilterNome}
+                      >
+                        <Text style={styles.tituloBotao}>Filtrar por nome</Text>
+                      </TouchableOpacity>
+                      <TextInput
+                        style={styles.search}
+                        placeholder="Pesquise pelo nome."
+                        value={searchText}
+                        onChangeText={(t) => setSearchText(t)}
+                      ></TextInput>
+                      <FlatList
+                        style={styles.scroll}
+                        data={lista}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item._id}
+                      />
+                    </View>
+                    <TouchableOpacity
+                      style={styles.botaopressM}
+                      onPress={() => {
+                        toggleModal();
+                      }}
+                    >
+                      <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+                    </TouchableOpacity>
+                  </Modal>
+                </TouchableOpacity>
+              </>
+            ) : null}
           </ScrollView>
           <View style={StyleFuncKeyboard()}>
             <TouchableOpacity onPress={validCheck} style={styles.botao}>

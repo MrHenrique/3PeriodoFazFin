@@ -3,6 +3,12 @@ import { Buttons, Colors, Fonts, TextInput } from "../../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
+  radioBView: {
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    flex: 1,
+  },
   ContainerScrollStyle: {
     marginVertical: verticalScale(10),
   },

@@ -58,8 +58,6 @@ function PageListavacas({ navigation }) {
         setListaVaca([...values]);
       });
       setisInfoeditable(false);
-      var gasto = precoCFReb / dataVacas.vacas.length;
-      setGastoReb(gasto);
     }
   }, [realm]);
   //Search Bar
@@ -78,10 +76,17 @@ function PageListavacas({ navigation }) {
   //Resultado por vaca
   function getResultL(item) {
     var resultLeite = 0;
-    for (var i in item.receitas) {
-      resultLeite += item.receitas[i].prodL * item.receitas[i].precoL;
-    }
+    item.receitas.forEach((receitas) => {
+      resultLeite += receitas.prodL * receitas.precoL;
+    });
     return resultLeite;
+  }
+  function getResultD(item) {
+    var resultDespesas = 0;
+    item.despesas.forEach((receitas) => {
+      resultDespesas += receitas.qtdProd * receitas.valorProd;
+    });
+    return resultDespesas;
   }
   function setInputs(item) {
     verificagenero();
@@ -93,9 +98,11 @@ function PageListavacas({ navigation }) {
     ListaReceitaVacas(item.receitas); //Usado para criar um array com as receitas das Vacas para usar no Graficodetalhesvacas
     var idvaca = item._id;
     setIdVaca(idvaca);
-    const resultLeite = getResultL(item);
+    let resultLeite = getResultL(item);
+    let resultDespesas = getResultD(item);
     setResultL(resultLeite);
-    GrafVaca(resultLeite - gastoReb);
+    setGastoReb(resultDespesas);
+    GrafVaca(resultLeite - resultDespesas);
   }
   //modificar detalhes
   async function UpdateinfoVaca() {
@@ -157,14 +164,13 @@ function PageListavacas({ navigation }) {
   }
 
   function getResultNumber(item) {
-    const result = (getResultL(item) - gastoReb).toFixed(2);
+    const result = (getResultL(item) - getResultD(item)).toFixed(2);
     const formattedResult = `R$ ${result.replace(".", ",")}`;
     return formattedResult;
   }
   function getResultNumberColor(item) {
-    const result = (getResultL(item) - gastoReb).toFixed(2);
+    const result = (getResultL(item) - getResultD(item)).toFixed(2);
     return result;
-
   }
 
   return (
@@ -365,7 +371,8 @@ function PageListavacas({ navigation }) {
                   </Text>
                   <Text
                     style={{
-                      color: getResultNumberColor(item) >= 0 ? "#0FFF50" : "#FF3131",
+                      color:
+                        getResultNumberColor(item) >= 0 ? "#0FFF50" : "#FF3131",
                       fontWeight: "bold",
                       fontSize: scale(15),
                     }}

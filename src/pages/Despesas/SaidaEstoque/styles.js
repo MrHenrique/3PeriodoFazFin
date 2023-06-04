@@ -5,7 +5,12 @@ import { scale, verticalScale } from "react-native-size-matters";
 const styles = StyleSheet.create({
   ContainerScrollStyle: {
     paddingVertical: verticalScale(15),
-    
+  },
+  radioBView: {
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    flex: 1,
   },
   containerkeyboard: {
     flex: 1,
