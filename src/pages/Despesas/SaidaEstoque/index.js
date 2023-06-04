@@ -125,7 +125,7 @@ export default function SaidaEstoque() {
             updateEstoque.volumeProd = volumeProdFinal;
 
             let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-            let createdGastos = realm.create("DespesasSchema", {
+            let createdGastos = realm.create("DespesaRebSchema", {
               _id: uuid.v4(),
               createdAt: new Date(),
               nomeProd: newListaEstoque[0].nomeProd,
@@ -164,7 +164,7 @@ export default function SaidaEstoque() {
             updateEstoque.valorProd = valorProdFinal;
             updateEstoque.pesoProd = pesoProdFinal;
             let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-            let createdGastos = realm.create("DespesasSchema", {
+            let createdGastos = realm.create("DespesaRebSchema", {
               _id: uuid.v4(),
               createdAt: new Date(),
               nomeProd: newListaEstoque[0].nomeProd,

@@ -21,33 +21,21 @@ function PreviewFinanceiro({ Titulo, Id }) {
       let dataReceitas = realm.objectForPrimaryKey("Farm", fazID);
       let receitas = [];
       dataReceitas.rebanhos.forEach((rebanho) => {
-        rebanho.vacas.forEach((vaca) => {
-          receitas.push(...vaca.receitas);
-        });
+        receitas.push(...rebanho.receitas);
       });
       PrecoLeite(ReceitasTotais(receitas));
       dataReceitas.rebanhos.addListener((rebanhoResults) => {
         let newReceitas = [];
         rebanhoResults.forEach((rebanho) => {
-          rebanho.vacas.forEach((vaca) => {
-            newReceitas.push(...vaca.receitas);
-          });
+          newReceitas.push(...rebanho.receitas);
         });
         PrecoLeite(ReceitasTotais(newReceitas));
       });
     }
     let dataReceitasreb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-    let receitasreb = [];
-    dataReceitasreb.vacas.forEach((vaca) => {
-      receitasreb.push(...vaca.receitas);
-    });
-    PrecoLeiteReb(ReceitasTotais(receitasreb));
-    let newReceitasreb = [];
-    dataReceitasreb.vacas.addListener((values) => {
-      values.forEach((vaca) => {
-        newReceitasreb.push(...vaca.receitas);
-      });
-      PrecoLeiteReb(ReceitasTotais(newReceitasreb));
+    PrecoLeiteReb(ReceitasTotais(dataReceitasreb.receitas));
+    dataReceitasreb.receitas.addListener((values) => {
+      PrecoLeiteReb(ReceitasTotais([...values]));
     });
     let dataDespesas = realm.objectForPrimaryKey("Farm", fazID);
     let despesas = [];

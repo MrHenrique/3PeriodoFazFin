@@ -33,9 +33,7 @@ export default function FinanceiroFaz() {
       let dataReceitas = realm.objectForPrimaryKey("Farm", fazID);
       let receitas = [];
       dataReceitas.rebanhos.forEach((rebanho) => {
-        rebanho.vacas.forEach((vaca) => {
-          receitas.push(...vaca.receitas);
-        });
+        receitas.push(...rebanho.receitas);
       });
       if (receitas.length > 0) {
         receitas = receitas.sort((a, b) => a.createdAt - b.createdAt);

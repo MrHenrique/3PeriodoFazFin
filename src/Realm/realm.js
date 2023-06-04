@@ -1,11 +1,13 @@
 import {
-  LeiteSchema,
   Fazenda,
   RebanhoSchema,
   VacasSchema,
   EstoqueEntradaSchema,
   AtualEstoqueSchema,
   DespesasSchema,
+  ReceitaSchema,
+  DespesaRebSchema,
+  ReceitaRebSchema,
 } from "../../src/Realm/Schemas/Schema";
 import Realm from "realm";
 
@@ -13,14 +15,16 @@ export const getRealm = async () =>
   await Realm.open({
     path: "fazfin-app",
     schema: [
-      LeiteSchema,
       Fazenda,
       RebanhoSchema,
       VacasSchema,
       DespesasSchema,
+      ReceitaSchema,
       EstoqueEntradaSchema,
       AtualEstoqueSchema,
+      DespesaRebSchema,
+      ReceitaRebSchema,
     ],
-    schemaVersion: 1,
+    schemaVersion: 2,
     deleteRealmIfMigrationNeeded: true,
   });

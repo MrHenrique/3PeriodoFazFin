@@ -54,7 +54,7 @@ export default function Outros() {
         realm.write(() => {
           let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
           const valorProd = Number(valorProdString);
-          let createdGastos = realm.create("DespesasSchema", {
+          let createdGastos = realm.create("DespesaRebSchema", {
             _id: uuid.v4(),
             createdAt: new Date(),
             nomeProd,
