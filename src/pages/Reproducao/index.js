@@ -94,6 +94,143 @@ const Reproducao = () => {
       </TouchableOpacity>
     </View>
   );
+  const [newsdate, setNewsDate] = useState(new Date());
+  const [isNewsDatePickerVisible, setIsNewsDatePickerVisible] = useState(false);
+  const [newstext, setNewsText] = useState(
+    new Date().getDate().toString().padStart(2, "0") +
+      "/" +
+      (new Date().getMonth() + 1).toString().padStart(2, "0") +
+      "/" +
+      new Date().getFullYear().toString().padStart(2, "0")
+  );
+
+  const NewsshowDatePicker = () => {
+    setIsNewsDatePickerVisibley(true);
+  };
+  const NewshideDatePicker = () => {
+    setIsNewsDatePickerVisibley(false);
+  };
+  const newshandleDateConfirm = (selectedDate) => {
+    let tempDate = new Date(selectedDate);
+    let fDate =
+      tempDate.getDate().toString().padStart(2, "0") +
+      "/" +
+      (tempDate.getMonth() + 1).toString().padStart(2, "0") +
+      "/" +
+      tempDate.getFullYear().toString().padStart(2, "0");
+    setText(fDate);
+    setDate(selectedDate);
+    newhideDatePicker();
+  };
+  //Fim do código da data .....
+
+return (
+    <View>
+      <Text>Registro de Eventos</Text>
+      <Text>Data de Prenhez:</Text>
+      <View style={styles.containerinfos}>
+        <Text style={styles.tituloinfo}>{text}</Text>
+        <View>
+          <TouchableOpacity
+            style={{
+              backgroundColor: "grey",
+              borderRadius: 20,
+            }}
+            onPress={newsshowDatePicker}
+          >
+            <Text style={styles.tituloinfo}>Selecione a data :</Text>
+          </TouchableOpacity>
+        </View>
+
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={handlenewsDateConfirm}
+          onCancel={newshideDatePicker}
+          maximumDate={new Date()}
+        />
+      </View>
+      <TouchableOpacity style={styles.botaopress6} onPress={registerEvents}>
+        <Text style={styles.textovoltar}>Cadastrar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.botaopress}
+        onPress={() => navigation.navigate("Home")}
+      >
+        <Text style={styles.textovoltar}>Voltar</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const [newDate, setNewDate] = useState(new Date());
+  const [isNewDatePickerVisible, setIsNewDatePickerVisible] = useState(false);
+  const [newText, setNewText] = useState(
+    new Date().getDate().toString().padStart(2, "0") +
+      "/" +
+      (new Date().getMonth() + 1).toString().padStart(2, "0") +
+      "/" +
+      new Date().getFullYear().toString().padStart(2, "0")
+  );
+
+  const newshowDatePicker = () => {
+    setIsNewDatePickerVisible(true);
+  };
+  const newhideDatePicker = () => {
+    setIsNewDatePickerVisible(false);
+  };
+  const handleNewDateConfirm = (selectedDate) => {
+    let tempDate = new Date(selectedDate);
+    let fDate =
+      tempDate.getDate().toString().padStart(2, "0") +
+      "/" +
+      (tempDate.getMonth() + 1).toString().padStart(2, "0") +
+      "/" +
+      tempDate.getFullYear().toString().padStart(2, "0");
+    setNewText(fDate);
+    setNewDate(selectedDate);
+    newhideDatePicker();
+  };
+  //Fim do código da data .....
+
+return (
+    <View>
+      <Text>Registro de Eventos</Text>
+      <Text>Data do cio:</Text>
+      <View style={styles.containerinfos}>
+        <Text style={styles.tituloinfo}>{newText}</Text>
+        <View>
+          <TouchableOpacity
+            style={{
+              backgroundColor: "grey",
+              borderRadius: 20,
+            }}
+            onPress={newshowDatePicker}
+          >
+            <Text style={styles.tituloinfo}>Selecione a data :</Text>
+          </TouchableOpacity>
+        </View>
+
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={handleNewDateConfirm}
+          onCancel={newhideDatePicker}
+          maximumDate={new Date()}
+        />
+      </View>
+      <TouchableOpacity style={styles.botaopress6} onPress={registerEvents}>
+        <Text style={styles.textovoltar}>Cadastrar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.botaopress}
+        onPress={() => navigation.navigate("Home")}
+      >
+        <Text style={styles.textovoltar}>Voltar</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+
 };
 
 const styles = StyleSheet.create({
