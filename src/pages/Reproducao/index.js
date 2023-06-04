@@ -17,6 +17,43 @@ const Reproducao = () => {
       "/" +
       new Date().getFullYear().toString().padStart(2, "0")
   );
+  const [newsDate, setNewsDate] = useState(new Date());
+  const [isNewsDatePickerVisible, setIsNewsDatePickerVisible] = useState(false);
+  const [newsText, setNewsText] = useState(
+    new Date().getDate().toString().padStart(2, "0") +
+      "/" +
+      (new Date().getMonth() + 1).toString().padStart(2, "0") +
+      "/" +
+      new Date().getFullYear().toString().padStart(2, "0")
+  );
+  const [newDate, setNewDate] = useState(new Date());
+  const [isNewDatePickerVisible, setIsNewDatePickerVisible] = useState(false);
+  const [newText, setNewText] = useState(
+    new Date().getDate().toString().padStart(2, "0") +
+      "/" +
+      (new Date().getMonth() + 1).toString().padStart(2, "0") +
+      "/" +
+      new Date().getFullYear().toString().padStart(2, "0")
+  );
+
+  const newShowDatePicker = () => {
+    setIsNewDatePickerVisible(true);
+  };
+  const newHideDatePicker = () => {
+    setIsNewDatePickerVisible(false);
+  };
+  const handleNewDateConfirm = (selectedDate) => {
+    let tempDate = new Date(selectedDate);
+    let fDate =
+      tempDate.getDate().toString().padStart(2, "0") +
+      "/" +
+      (tempDate.getMonth() + 1).toString().padStart(2, "0") +
+      "/" +
+      tempDate.getFullYear().toString().padStart(2, "0");
+    setNewText(fDate);
+    setNewDate(selectedDate);
+    newHideDatePicker();
+  };
 
   const showDatePicker = () => {
     setIsDatePickerVisible(true);
@@ -38,6 +75,24 @@ const Reproducao = () => {
   };
   //Fim do código da data .....
 
+  const newsShowDatePicker = () => {
+    setIsNewsDatePickerVisibley(true);
+  };
+  const newsHideDatePicker = () => {
+    setIsNewsDatePickerVisibley(false);
+  };
+  const newsHandleDateConfirm = (selectedDate) => {
+    let tempDate = new Date(selectedDate);
+    let fDate =
+      tempDate.getDate().toString().padStart(2, "0") +
+      "/" +
+      (tempDate.getMonth() + 1).toString().padStart(2, "0") +
+      "/" +
+      tempDate.getFullYear().toString().padStart(2, "0");
+    setNewsText(fDate);
+    setNewsDate(selectedDate);
+    newsHideDatePicker();
+  };
   const handleCoverageDateChange = (selectedDate) => {
     setCoverageDate(selectedDate);
   };
@@ -83,60 +138,16 @@ const Reproducao = () => {
           maximumDate={new Date()}
         />
       </View>
-      <TouchableOpacity style={styles.botaopress6} onPress={registerEvents}>
-        <Text style={styles.textovoltar}>Cadastrar</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.botaopress}
-        onPress={() => navigation.navigate("Home")}
-      >
-        <Text style={styles.textovoltar}>Voltar</Text>
-      </TouchableOpacity>
-    </View>
-  );
-  const [newsdate, setNewsDate] = useState(new Date());
-  const [isNewsDatePickerVisible, setIsNewsDatePickerVisible] = useState(false);
-  const [newstext, setNewsText] = useState(
-    new Date().getDate().toString().padStart(2, "0") +
-      "/" +
-      (new Date().getMonth() + 1).toString().padStart(2, "0") +
-      "/" +
-      new Date().getFullYear().toString().padStart(2, "0")
-  );
-
-  const NewsshowDatePicker = () => {
-    setIsNewsDatePickerVisibley(true);
-  };
-  const NewshideDatePicker = () => {
-    setIsNewsDatePickerVisibley(false);
-  };
-  const newshandleDateConfirm = (selectedDate) => {
-    let tempDate = new Date(selectedDate);
-    let fDate =
-      tempDate.getDate().toString().padStart(2, "0") +
-      "/" +
-      (tempDate.getMonth() + 1).toString().padStart(2, "0") +
-      "/" +
-      tempDate.getFullYear().toString().padStart(2, "0");
-    setText(fDate);
-    setDate(selectedDate);
-    newhideDatePicker();
-  };
-  //Fim do código da data .....
-
-return (
-    <View>
-      <Text>Registro de Eventos</Text>
       <Text>Data de Prenhez:</Text>
       <View style={styles.containerinfos}>
-        <Text style={styles.tituloinfo}>{text}</Text>
+        <Text style={styles.tituloinfo}>{newsText}</Text>
         <View>
           <TouchableOpacity
             style={{
               backgroundColor: "grey",
               borderRadius: 20,
             }}
-            onPress={newsshowDatePicker}
+            onPress={newsShowDatePicker}
           >
             <Text style={styles.tituloinfo}>Selecione a data :</Text>
           </TouchableOpacity>
@@ -145,56 +156,11 @@ return (
         <DateTimePickerModal
           isVisible={isDatePickerVisible}
           mode="date"
-          onConfirm={handlenewsDateConfirm}
-          onCancel={newshideDatePicker}
+          onConfirm={newsHandleDateConfirm}
+          onCancel={newsHideDatePicker}
           maximumDate={new Date()}
         />
       </View>
-      <TouchableOpacity style={styles.botaopress6} onPress={registerEvents}>
-        <Text style={styles.textovoltar}>Cadastrar</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.botaopress}
-        onPress={() => navigation.navigate("Home")}
-      >
-        <Text style={styles.textovoltar}>Voltar</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
-  const [newDate, setNewDate] = useState(new Date());
-  const [isNewDatePickerVisible, setIsNewDatePickerVisible] = useState(false);
-  const [newText, setNewText] = useState(
-    new Date().getDate().toString().padStart(2, "0") +
-      "/" +
-      (new Date().getMonth() + 1).toString().padStart(2, "0") +
-      "/" +
-      new Date().getFullYear().toString().padStart(2, "0")
-  );
-
-  const newshowDatePicker = () => {
-    setIsNewDatePickerVisible(true);
-  };
-  const newhideDatePicker = () => {
-    setIsNewDatePickerVisible(false);
-  };
-  const handleNewDateConfirm = (selectedDate) => {
-    let tempDate = new Date(selectedDate);
-    let fDate =
-      tempDate.getDate().toString().padStart(2, "0") +
-      "/" +
-      (tempDate.getMonth() + 1).toString().padStart(2, "0") +
-      "/" +
-      tempDate.getFullYear().toString().padStart(2, "0");
-    setNewText(fDate);
-    setNewDate(selectedDate);
-    newhideDatePicker();
-  };
-  //Fim do código da data .....
-
-return (
-    <View>
-      <Text>Registro de Eventos</Text>
       <Text>Data do cio:</Text>
       <View style={styles.containerinfos}>
         <Text style={styles.tituloinfo}>{newText}</Text>
@@ -204,7 +170,7 @@ return (
               backgroundColor: "grey",
               borderRadius: 20,
             }}
-            onPress={newshowDatePicker}
+            onPress={newShowDatePicker}
           >
             <Text style={styles.tituloinfo}>Selecione a data :</Text>
           </TouchableOpacity>
@@ -214,7 +180,7 @@ return (
           isVisible={isDatePickerVisible}
           mode="date"
           onConfirm={handleNewDateConfirm}
-          onCancel={newhideDatePicker}
+          onCancel={newHideDatePicker}
           maximumDate={new Date()}
         />
       </View>
@@ -229,8 +195,6 @@ return (
       </TouchableOpacity>
     </View>
   );
-
-
 };
 
 const styles = StyleSheet.create({
