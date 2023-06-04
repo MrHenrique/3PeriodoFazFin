@@ -4,6 +4,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import Header from "../../components/Header";
 import AdicionarLeite from "./AdicionarLeite";
 import RegistrosLeite from "./RegistrosLeite";
+import styles, { estilo } from "./styles";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -12,8 +13,8 @@ function Leite() {
     <>
       <Tab.Navigator
         screenOptions={{
-          tabBarLabelStyle: { color: "#fff" },
-          tabBarIndicatorStyle: { backgroundColor: "#fff" },
+          tabBarLabelStyle: { ...estilo.tabarlabel },
+          tabBarIndicatorStyle: { ...estilo.tabBarIndicator },
           tabBarStyle: styles.tab,
         }}
       >
@@ -23,11 +24,5 @@ function Leite() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  tab: {
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-  },
-});
 
 export default Leite;

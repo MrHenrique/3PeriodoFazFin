@@ -95,7 +95,6 @@ const Select = ({
   }, [data]);
   useFocusEffect(
     useCallback(() => {
-      console.log("Teste: " + rebID);
       if (rebID === "" || rebID === undefined) {
         RebanhoID("");
         setSelected(null);

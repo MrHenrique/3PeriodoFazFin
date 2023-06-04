@@ -13,6 +13,7 @@ import Estoque from "../pages/Estoque";
 import SelectFazPage from "../pages/SelectFazPage";
 import Despesas from "../pages/Despesas";
 import SignUp from "../pages/SignUp";
+import PageDetalheVaca from "../pages/PageAnimais/PageDetalheVaca";
 const Stack = createNativeStackNavigator();
 function StackRoutes() {
   return (
@@ -104,6 +105,13 @@ function StackRoutes() {
       <Stack.Screen
         name="SignUp"
         component={SignUp}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PageDetalheVaca"
+        component={PageDetalheVaca}
         options={{
           headerShown: false,
         }}

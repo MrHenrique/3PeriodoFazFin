@@ -7,6 +7,10 @@ const styles = StyleSheet.create({
     maxHeight: verticalScale(40),
     backgroundColor: Colors.green,
   },
+  containervoltar: {
+    flex: 0.1,
+    flexDirection: "column-reverse",
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.darkgreen,
@@ -87,11 +91,12 @@ const styles = StyleSheet.create({
     maxHeight: 40,
   },
   botao: {
-    flex: 1,
+    flex: 1.1,
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
     justifyContent: "center",
+    elevation: 10,
   },
   containerMaisMenos: {
     flexDirection: "row",
@@ -120,12 +125,14 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-end",
     minHeight: scale(10),
+    marginTop: verticalScale(30)
   },
   containerButaoestqgeral: {
-    flex: 1.5,
+    flex: 1.1,
     flexDirection: "column",
     justifyContent: "flex-end",
     minHeight: scale(10),
+    marginTop: verticalScale(20),
   },
   containerButaoKeyboardOn: {
     flex: 0.2,
@@ -182,7 +189,7 @@ const styles = StyleSheet.create({
     margin: scale(5),
     borderRadius: 10,
     backgroundColor: Colors.green,
-    elevation: 10,
+    elevation: 0,
     shadowColor: "black",
   },
   containerText: {
@@ -244,6 +251,16 @@ const styles = StyleSheet.create({
   disabled: {
     opacity: 1,
   },
+  listaDet: {
+    borderRadius: 20,
+    backgroundColor: Colors.green,
+    width: scale(300),
+    height: verticalScale(40),
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    marginVertical: verticalScale(5),
+  },
   ListItem: {
     flex: 1,
     flexDirection: "row",
@@ -270,6 +287,31 @@ const styles = StyleSheet.create({
   scrollcontainer: {
     flex: 1,
     // backgroundColor: Colors.black,
+  },
+  modalContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  textContent: {
+    fontSize: 20,
+  },
+  modalContainerText: {
+    width: "100%",
+    padding: 5,
+  },
+  tituloDetalhes: {
+    color: "black",
+    fontSize: verticalScale(20),
+    marginBottom: verticalScale(10),
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  containerDetalhes: {
+    width: scale(300),
+    backgroundColor: "white",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    alignSelf: "center",
   },
 });
 // estilo tab

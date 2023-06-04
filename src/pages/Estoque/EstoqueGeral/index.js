@@ -8,12 +8,29 @@ import {
   ScrollView,
   ImageBackground,
 } from "react-native";
+import Animated, {
+  BounceInDown,
+  BounceInLeft,
+  BounceOutRight,
+  FadeIn,
+  FadeInDown,
+  FadeOut,
+  LightSpeedInLeft,
+  LightSpeedInRight,
+  RollInLeft,
+  SlideInDown,
+  SlideInLeft,
+  SlideInRight,
+  SlideOutRight,
+  ZoomIn,
+} from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../../contexts/auth";
 import Modal from "react-native-modal";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useMainContext } from "../../../contexts/RealmContext";
 import styles from "../styles";
+import { Colors } from "../../../styles";
 function EstoqueGeral() {
   const realm = useMainContext();
 
@@ -29,7 +46,11 @@ function EstoqueGeral() {
   const { fazID } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
   const [shouldShow, setShouldShow] = useState(false);
-  const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
+  const [shouldShowDetalhes, setShouldShowDetalhes] = useState(true);
+  const [shouldShowDetalhesEntrada, setShouldShowDetalhesEntrada] =
+    useState(false);
+  const [shouldShowRelatorio, setShouldShowRelatorio] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState(null);
   const [nome, setNome] = useState();
   //Funcao, recebe item e retorna nome
   function nameItem(item) {
@@ -55,27 +76,148 @@ function EstoqueGeral() {
     }
   }, [realm]);
 
+  const handleItemPress = (itemId) => {
+    if (itemId === selectedItemId) {
+      // Se o itemId for o mesmo do item selecionado atualmente,
+      // feche o modal de detalhes
+      setSelectedItemId(null);
+      setShouldShowDetalhesEntrada(false);
+    } else {
+      // Se o itemId for diferente do item selecionado atualmente
+      // atualize o itemId e abra o modal de detalhes
+      setSelectedItemId(itemId);
+      setShouldShowDetalhesEntrada(true);
+    }
+  };
+
+  const formatarResultado = (valorRecebido, tipo) => {
+    let formattedResult = "";
+    if (tipo == "preco") {
+      const result = valorRecebido.toFixed(2);
+      formattedResult = `R$ ${result.replace(".", ",")}`;
+    } else if (tipo == "litro") {
+      const result = valorRecebido.toFixed(2);
+      formattedResult = `${result.replace(".", ",")} L`;
+    } else if (tipo == "peso") {
+      const result = valorRecebido.toFixed(2);
+      formattedResult = `${result.replace(".", ",")} Kg`;
+    }
+    return formattedResult;
+  };
+
   //renderiza flat list com transações de entrada
   const renderItemEntrada = ({ item }) => {
+    const categoriaProd = TipoAfter(item);
     const valor = (item.valorProd * item.qtdProd).toFixed(2);
     const formattedValor = `R$ ${valor.replace(".", ",")}`;
+    const formattedData = `${
+      item.createdAt.getDate().toString().padStart(2, 0) +
+      "/" +
+      (item.createdAt.getMonth() + 1).toString().padStart(2, 0) +
+      "/" +
+      item.createdAt.getFullYear().toString()
+    }`;
+    const isItemSelected = item._id === selectedItemId;
     return (
       <ScrollView>
-        <TouchableOpacity>
+        <TouchableOpacity
+          style={styles.listaDet}
+          onPress={() => handleItemPress(item._id)}
+        >
           <Text style={styles.font}>
             {item.nomeProd} - {formattedValor}
           </Text>
         </TouchableOpacity>
+        {shouldShowDetalhesEntrada && isItemSelected && (
+          <View style={[styles.containerDetalhes]}>
+            <View>
+              <Text style={styles.tituloDetalhes}>Detalhes</Text>
+            </View>
+            <View style={styles.modalContainerText}>
+              <View style={styles.modalContent}>
+                <Text style={styles.textContent}>Data: </Text>
+                <Text style={styles.textContent}>{formattedData}</Text>
+              </View>
+              <View style={styles.modalContent}>
+                <Text style={styles.textContent}>Horario: </Text>
+                <Text style={styles.textContent}>
+                  {item.createdAt.toLocaleTimeString()}
+                </Text>
+              </View>
+              <View style={styles.modalContent}>
+                <Text style={styles.textContent}>Preço Unitário: </Text>
+                <Text style={styles.textContent}>
+                  {formatarResultado(item.valorProd, "preco")}
+                </Text>
+              </View>
+
+              {categoriaProd === "Alimentos" ? (
+                <>
+                  <View style={styles.modalContent}>
+                    <Text style={styles.textContent}>Peso Unitário: </Text>
+                    <Text style={styles.textContent}>
+                      {formatarResultado(item.pesoProd, "peso")}
+                    </Text>
+                  </View>
+                  <View style={styles.modalContent}>
+                    <Text style={styles.textContent}>Quantidade: </Text>
+                    <Text style={styles.textContent}>{item.qtdProd}</Text>
+                  </View>
+                  <View style={styles.modalContent}>
+                    <Text style={styles.textContent}>Peso Total: </Text>
+                    <Text style={styles.textContent}>
+                      {formatarResultado(item.pesoProd * item.qtdProd, "peso")}
+                    </Text>
+                  </View>
+                </>
+              ) : (
+                <>
+                  <View style={styles.modalContent}>
+                    <Text style={styles.textContent}>Volume Unitário: </Text>
+                    <Text style={styles.textContent}>
+                      {formatarResultado(item.volumeProd, "litro")}
+                    </Text>
+                  </View>
+                  <View style={styles.modalContent}>
+                    <Text style={styles.textContent}>Quantidade: </Text>
+                    <Text style={styles.textContent}>
+                      {item.qtdProd}
+                    </Text>
+                  </View>
+                  <View style={styles.modalContent}>
+                    <Text style={styles.textContent}>Volume Total: </Text>
+                    <Text style={styles.textContent}>
+                      {formatarResultado(
+                        item.volumeProd * item.qtdProd,
+                        "litro"
+                      )}
+                    </Text>
+                  </View>
+                </>
+              )}
+
+              <View style={styles.modalContent}>
+                <Text style={styles.textContent}>Valor Total: </Text>
+                <Text style={styles.textContent}>
+                  {formatarResultado(item.valorProd * item.qtdProd, "preco")}
+                </Text>
+              </View>
+              <Text style={styles.textContent}>
+                Descrição: {item.obserProd}
+              </Text>
+            </View>
+          </View>
+        )}
       </ScrollView>
     );
   };
   //recebe volume ou peso, e retorna a categoria do produto
   const TipoAfter = (item) => {
-    if (item.volumeProd > 0) {
+    if (item.volumeProd >= 0) {
       const categoriaProd = "Remédios";
       return categoriaProd;
     }
-    if (item.pesoProd > 0) {
+    if (item.pesoProd >= 0) {
       const categoriaProd = "Alimentos";
       return categoriaProd;
     }
@@ -110,9 +252,19 @@ function EstoqueGeral() {
     return formattedValor;
   };
   function formatMediaPreco(item) {
-    const valor = (item.valorProd / item.qtdProd).toFixed(2);
-    const formattedValor = `R$ ${valor.replace(".", ",")}`;
-    return formattedValor;
+    if (item.volumeProd > 0 || item.pesoProd > 0) {
+      if (item.volumeProd > 0) {
+        const valor = (item.valorProd / item.volumeProd).toFixed(2);
+        const formattedValor = `R$ ${valor.replace(".", ",")}`;
+        return formattedValor;
+      } else {
+        const valor = (item.valorProd / item.pesoProd).toFixed(2);
+        const formattedValor = `R$ ${valor.replace(".", ",")}`;
+        return formattedValor;
+      }
+    } else {
+      return "-";
+    }
   }
   const CategImg = (categoriaProd) => {
     if (categoriaProd == "Alimentos") {
@@ -126,9 +278,7 @@ function EstoqueGeral() {
     const imgCateg = CategImg(categoriaProd);
     function tipoRelatorio(categoriaProd) {
       if (categoriaProd == "Alimentos") {
-        const valor = ((item.pesoProd / item.qtdProd) * item.qtdProd).toFixed(
-          2
-        );
+        const valor = item.pesoProd.toFixed(2);
         const formattedValor = `${valor.replace(".", ",")}kg`;
         return (
           <View style={styles.containerlist}>
@@ -139,10 +289,8 @@ function EstoqueGeral() {
           </View>
         );
       } else {
-        const valor = ((item.volumeProd / item.qtdProd) * item.qtdProd).toFixed(
-          2
-        );
-        const formattedValor = `${valor.replace(".", ",")}ml`;
+        const valor = item.volumeProd.toFixed(2);
+        const formattedValor = `${valor.replace(".", ",")}L`;
         return (
           <View style={styles.containerlist}>
             <View style={styles.ListItem}>
@@ -205,25 +353,33 @@ function EstoqueGeral() {
                 </View>
               </View>
             </View>
-            <View style={styles.containerlist}>
-              <View style={styles.ListItem}>
-                <Text style={styles.fontsubtitulo}>Itens em estoque:</Text>
-                <Text style={styles.fontcontainerlistitem}>
-                  {" "}
-                  {item.qtdProd}
-                </Text>
-              </View>
-            </View>
-            {item.qtdProd > 0 ? (
+            {item.pesoProd >= 0 ? (
               <View>
                 {tipoRelatorio(categoriaProd)}
                 <View style={styles.containerlist}>
                   <View style={styles.ListItem}>
                     <Text style={styles.fontsubtitulo}>
-                      Média de preço por item:
+                      Média de preço por kg:
                     </Text>
                     <Text style={styles.fontcontainerlistitem}>
-                      {formatMediaPreco(item)}
+                      {formatMediaPreco(item, categoriaProd)}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            ) : (
+              <></>
+            )}
+            {item.volumeProd >= 0 ? (
+              <View>
+                {tipoRelatorio(categoriaProd)}
+                <View style={styles.containerlist}>
+                  <View style={styles.ListItem}>
+                    <Text style={styles.fontsubtitulo}>
+                      Média de preço por litro:
+                    </Text>
+                    <Text style={styles.fontcontainerlistitem}>
+                      {formatMediaPreco(item, categoriaProd)}
                     </Text>
                   </View>
                 </View>
@@ -234,7 +390,7 @@ function EstoqueGeral() {
             <View style={styles.containerlist}>
               <View style={styles.ListItem}>
                 <Text style={styles.fontsubtitulo}>
-                  Data da ultima compra :
+                  Data da última compra :
                 </Text>
                 <Text style={styles.fontcontainerlistitem}>
                   {item.createdAt.getDate().toString().padStart(2, 0)}/
@@ -281,72 +437,65 @@ function EstoqueGeral() {
   };
   return (
     <View style={styles.container}>
-      <View style={styles.containergeral}
-      >
-        <View style={styles.containerValor}>
+      <View style={styles.containergeral}>
+        <Animated.View style={styles.containerValor}>
           <View>
-            <Text style={styles.font}>
+            <Animated.Text style={styles.font}>
               {shouldShow ? "Valor Produto" : "Valor produtos em estoque"}
-            </Text>
+            </Animated.Text>
             <Text style={styles.fontvalortotal}>{EstoqueValorTotal()}</Text>
           </View>
-        </View>
+        </Animated.View>
 
         <View style={styles.containerlista}>
           <View style={styles.relatorioCadastro}>
             <TouchableOpacity
               style={styles.botaorelatorioproduto}
               onPress={() => {
-                toggleModal();
+                setShouldShowRelatorio(!shouldShowRelatorio);
+                setShouldShowDetalhes(false);
               }}
             >
-              <Text style={styles.fontblk}>Relatorios</Text>
+              <Text style={styles.fontblk}>Relatórios</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.botaorelatorioproduto}
-              onPress={() => setShouldShowDetalhes(!shouldShowDetalhes)}
+              onPress={() => {
+                setShouldShowDetalhes(!shouldShowDetalhes);
+                setShouldShowRelatorio(false);
+              }}
             >
               <Text style={styles.fontblk}>Produtos</Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.containershouldshow}>
+            {/* Produtos */}
             {shouldShowDetalhes ? (
-              <View>
+              <Animated.View entering={FadeIn} exiting={FadeOut}>
                 <FlatList
                   data={listaEstoque}
                   renderItem={renderItemEstoque}
                   keyExtractor={(item) => item._id}
                   numColumns={numcolumns}
                 ></FlatList>
-              </View>
+              </Animated.View>
+            ) : null}
+            {/* Relatorio */}
+            {shouldShowRelatorio ? (
+              <Animated.View
+                entering={FadeIn}
+                exiting={FadeOut}
+                style={styles.containergeral}
+              >
+                <FlatList
+                  data={listaEstoqueEntrada}
+                  renderItem={renderItemEntrada}
+                  keyExtractor={(item) => item._id}
+                ></FlatList>
+              </Animated.View>
             ) : null}
           </View>
-          {/* Modal relatorio de compras */}
-          <Modal
-            isVisible={isModalVisible}
-            coverScreen={true}
-            backdropColor={"rgba(234,242,215,0.8)"}
-            animationIn="slideInUp"
-            animationOut="slideOutDown"
-          >
-            <View style={styles.container}>
-              <Text style={styles.font}>Compras:</Text>
-              <FlatList
-                data={listaEstoqueEntrada}
-                renderItem={renderItemEntrada}
-                keyExtractor={(item) => item._id}
-              ></FlatList>
-              <TouchableOpacity
-                onPress={() => {
-                  toggleModal();
-                }}
-              >
-                <Text style={styles.font}>Voltar</Text>
-              </TouchableOpacity>
-            </View>
-          </Modal>
-
           <View style={styles.containerButaoestqgeral}>
             <TouchableOpacity
               style={styles.botao}

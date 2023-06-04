@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
   },
   campoTexto: {
     backgroundColor: Colors.white,
-    marginBottom: verticalScale(10),
   },
   logo: {
     resizeMode: "contain",
@@ -52,7 +51,6 @@ const styles = StyleSheet.create({
   },
   botao: {
     flex: 1,
-    maxHeight: 40,
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
@@ -79,12 +77,12 @@ const styles = StyleSheet.create({
   },
   containerbotoes: {
     flex: 0.2,
-    padding: verticalScale(10),
+    paddingTop: verticalScale(10),
     flexDirection: "column-reverse",
   },
   containerButaoKeyboardOn: {
     flex: 0.2,
-    flexDirection: "column",
+    flexDirection: "column-reverse",
     justifyContent: "flex-end",
     minHeight: scale(40),
     paddingTop: verticalScale(10),

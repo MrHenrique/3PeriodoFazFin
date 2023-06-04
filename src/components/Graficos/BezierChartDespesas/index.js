@@ -40,7 +40,7 @@ function BezierChartDespesas() {
 
   //Percorre todos as despesas
   listaAli.forEach((item) => {
-    const valor = (item.valorProd * item.qtdProd);
+    const valor = item.valorProd * item.qtdProd;
     const mes = item.createdAt.getMonth(); // cria uma variavel que se iguala ao mes de criação do item
 
     despesasPorMesFaz[mes] += valor; //Soma todos as despesas do mês
@@ -71,8 +71,8 @@ function BezierChartDespesas() {
   return (
     <LineChart
       data={data}
-      width={screenWidth}
-      height={330}
+      width={screenWidth - 30}
+      height={verticalScale(330)}
       chartConfig={chartConfig}
       verticalLabelRotation={60}
       fromZero={true}

@@ -25,7 +25,7 @@ function Home({ navigation }) {
   const onPressTouch = () => {
     if (Pos == 0) {
       scrollRef.current?.scrollTo({
-        y: 400,
+        y: 1000,
         animated: true,
       });
       setPos(!Pos);

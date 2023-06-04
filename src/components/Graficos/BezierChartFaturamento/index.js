@@ -71,7 +71,7 @@ function BezierChartFaturamento() {
   return (
     <LineChart
       data={data}
-      width={screenWidth}
+      width={screenWidth - 30}
       height={verticalScale(330)}
       chartConfig={chartConfig}
       verticalLabelRotation={60}

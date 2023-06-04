@@ -7,8 +7,6 @@ import {
   ScrollView,
   TextInput,
   FlatList,
-  Platform,
-  StatusBar,
   Alert,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -18,9 +16,10 @@ import Modal from "react-native-modal";
 import { scale, verticalScale } from "react-native-size-matters";
 import { useNavigation } from "@react-navigation/native";
 import { useMainContext } from "../../../contexts/RealmContext";
-
+import { RadioButton } from "react-native-paper";
 function AdicionarLeite() {
   const realm = useMainContext();
+  const [checked, setChecked] = React.useState("rebanho");
   const navigation = useNavigation();
   const [isModalVisible, setModalVisible] = useState(false);
   const [vacaID, setVacaID] = useState("");
@@ -56,27 +55,83 @@ function AdicionarLeite() {
   //Escrever no Banco
   async function handleAddLeite() {
     if (realm) {
-      try {
-        const precoL = Number(precoLV);
-        const prodL = Number(prodLV);
-        realm.write(() => {
-          let Vacas = realm.objectForPrimaryKey("VacasSchema", vacaID);
-          let createdLeite = realm.create("LeiteSchema", {
-            _id: uuid.v4(),
-            precoL,
-            prodL,
-            description,
-            createdAt: new Date(date),
+      if (checked === "rebanho") {
+        try {
+          const precoL = Number(precoLV);
+          const prodL = Number(prodLV);
+          let id = uuid.v4();
+          realm.write(() => {
+            let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+            let createdLeiteReb = realm.create("ReceitaRebSchema", {
+              _id: id,
+              tipo: 1,
+              precoL,
+              prodL,
+              description,
+              createdAt: new Date(date),
+            });
+            reb.receitas.push(createdLeiteReb);
+            let nVacas = reb.vacas.length;
+            reb.vacas.forEach((vaca) => {
+              let createdLeite = realm.create("ReceitaSchema", {
+                _id: uuid.v4(),
+                idTransacao: id,
+                tipo: 1,
+                precoL,
+                prodL: prodL / nVacas,
+                description,
+                createdAt: new Date(date),
+              });
+              vaca.receitas.push(createdLeite);
+            });
+
+            Alert.alert("Dados cadastrados com sucesso no rebanho!");
           });
-          Vacas.receitas.push(createdLeite);
-          Alert.alert("Dados cadastrados com sucesso!");
-        });
-      } catch (e) {
-        Alert.alert("Não foi possível cadastrar!", e.message);
-      } finally {
-        setPrecoLV("");
-        setProdLV("");
-        setDescription("");
+        } catch (e) {
+          Alert.alert("Não foi possível cadastrar!", e.message);
+        } finally {
+          setPrecoLV("");
+          setProdLV("");
+          setDescription("");
+          setVacaID("");
+        }
+      } else {
+        try {
+          const precoL = Number(precoLV);
+          const prodL = Number(prodLV);
+          let id = uuid.v4();
+          realm.write(() => {
+            let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+            let createdLeiteReb = realm.create("ReceitaRebSchema", {
+              _id: id,
+              tipo: 1,
+              precoL,
+              prodL,
+              description,
+              createdAt: new Date(date),
+            });
+            reb.receitas.push(createdLeiteReb);
+            let Vacas = realm.objectForPrimaryKey("VacasSchema", vacaID);
+            let createdLeite = realm.create("ReceitaSchema", {
+              _id: id,
+              idTransacao: id,
+              tipo: 1,
+              precoL,
+              prodL,
+              description,
+              createdAt: new Date(date),
+            });
+            Vacas.receitas.push(createdLeite);
+            Alert.alert("Dados cadastrados com sucesso!");
+          });
+        } catch (e) {
+          Alert.alert("Não foi possível cadastrar!", e.message);
+        } finally {
+          setPrecoLV("");
+          setProdLV("");
+          setDescription("");
+          setVacaID("");
+        }
       }
     }
   }
@@ -134,8 +189,7 @@ function AdicionarLeite() {
 
   //-----------------------------
   function CanContinue(vacaID) {
-    //console.log(vacaID);
-    if (typeof vacaID == "undefined" || vacaID == "") {
+    if ((typeof vacaID == "undefined" || vacaID == "") && checked === "vacas") {
       const CanContinue = true;
       return CanContinue;
     } else {
@@ -144,7 +198,7 @@ function AdicionarLeite() {
     }
   }
   function DisabledStyle(vacaID) {
-    if (typeof vacaID == "undefined" || vacaID == "") {
+    if ((typeof vacaID == "undefined" || vacaID == "") && checked === "vacas") {
       const Style = styles.botaopressdisabled;
       return Style;
     } else {
@@ -233,52 +287,72 @@ function AdicionarLeite() {
           />
         </View>
         {/*Descrição*/}
-      </ScrollView>
-      <TouchableOpacity
-        onPress={() => {
-          toggleModal();
-        }}
-        style={styles.botaoselecionaranimal}
-      >
-        <Text style={styles.tituloBotao}>Selecionar animal</Text>
-        <Modal
-          isVisible={isModalVisible}
-          coverScreen={true}
-          backdropColor={"rgba(234,242,215,0.8)"}
-          animationIn="slideInUp"
-          animationOut="slideOutDown"
-        >
-          <View style={styles.modalContainer}>
-            <Text style={styles.TituloM}>Selecione um animal</Text>
-            <TouchableOpacity
-              style={styles.filtroNome}
-              onPress={handleFilterNome}
-            >
-              <Text style={styles.tituloBotao}>Filtrar por nome</Text>
-            </TouchableOpacity>
-            <TextInput
-              style={styles.search}
-              placeholder="Pesquise pelo nome."
-              value={searchText}
-              onChangeText={(t) => setSearchText(t)}
-            ></TextInput>
-            <FlatList
-              style={styles.scroll}
-              data={lista}
-              renderItem={renderItem}
-              keyExtractor={(item) => item._id}
-            />
-          </View>
-          <TouchableOpacity
-            style={styles.botaopressM}
+        <View style={styles.radioBView}>
+          <RadioButton
+            value="rebanho"
+            status={checked === "rebanho" ? "checked" : "unchecked"}
             onPress={() => {
-              toggleModal();
+              setChecked("rebanho"), setVacaID("");
             }}
+          />
+          <Text>Cadastro por Rebanho</Text>
+          <RadioButton
+            value="vacas"
+            status={checked === "vacas" ? "checked" : "unchecked"}
+            onPress={() => setChecked("vacas")}
+          />
+          <Text>Cadastro individual</Text>
+        </View>
+      </ScrollView>
+      {checked === "vacas" ? (
+        <>
+          <TouchableOpacity
+            onPress={() => {
+              toggleModal(), setVacaID("");
+            }}
+            style={styles.botaoselecionaranimal}
           >
-            <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+            <Text style={styles.tituloBotao}>Selecionar animal</Text>
+            <Modal
+              isVisible={isModalVisible}
+              coverScreen={true}
+              backdropColor={"rgba(234,242,215,0.8)"}
+              animationIn="slideInUp"
+              animationOut="slideOutDown"
+            >
+              <View style={styles.modalContainer}>
+                <Text style={styles.TituloM}>Selecione um animal</Text>
+                <TouchableOpacity
+                  style={styles.filtroNome}
+                  onPress={handleFilterNome}
+                >
+                  <Text style={styles.tituloBotao}>Filtrar por nome</Text>
+                </TouchableOpacity>
+                <TextInput
+                  style={styles.search}
+                  placeholder="Pesquise pelo nome."
+                  value={searchText}
+                  onChangeText={(t) => setSearchText(t)}
+                ></TextInput>
+                <FlatList
+                  style={styles.scroll}
+                  data={lista}
+                  renderItem={renderItem}
+                  keyExtractor={(item) => item._id}
+                />
+              </View>
+              <TouchableOpacity
+                style={styles.botaopressM}
+                onPress={() => {
+                  toggleModal();
+                }}
+              >
+                <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+              </TouchableOpacity>
+            </Modal>
           </TouchableOpacity>
-        </Modal>
-      </TouchableOpacity>
+        </>
+      ) : null}
       <TouchableOpacity
         disabled={CanContinue(vacaID)}
         style={DisabledStyle(vacaID)}
@@ -296,6 +370,12 @@ function AdicionarLeite() {
   );
 }
 const styles = StyleSheet.create({
+  radioBView: {
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    flex: 1,
+  },
   filtroNome: {
     backgroundColor: "rgba(15, 109, 0, 0.9)",
     borderRadius: 20,

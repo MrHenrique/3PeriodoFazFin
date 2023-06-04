@@ -6,6 +6,7 @@ import { Color } from "./styles";
 import { useMainContext } from "../../contexts/RealmContext";
 import { ReceitasTotais } from "../../components/Calculos DB/ReceitasTotais";
 import { DespesasTotais } from "../../components/Calculos DB/DespesasTotais";
+import { scale, verticalScale } from "react-native-size-matters";
 //--
 import { AuthContext } from "../../contexts/auth";
 
@@ -17,37 +18,28 @@ function PreviewFinanceiro({ Titulo, Id }) {
 
   useEffect(() => {
     if (realm) {
+      //receita Farm
       let dataReceitas = realm.objectForPrimaryKey("Farm", fazID);
       let receitas = [];
       dataReceitas.rebanhos.forEach((rebanho) => {
-        rebanho.vacas.forEach((vaca) => {
-          receitas.push(...vaca.receitas);
-        });
+        receitas.push(...rebanho.receitas);
       });
       PrecoLeite(ReceitasTotais(receitas));
       dataReceitas.rebanhos.addListener((rebanhoResults) => {
         let newReceitas = [];
         rebanhoResults.forEach((rebanho) => {
-          rebanho.vacas.forEach((vaca) => {
-            newReceitas.push(...vaca.receitas);
-          });
+          newReceitas.push(...rebanho.receitas);
         });
         PrecoLeite(ReceitasTotais(newReceitas));
       });
     }
+    //receita Reb
     let dataReceitasreb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-    let receitasreb = [];
-    dataReceitasreb.vacas.forEach((vaca) => {
-      receitasreb.push(...vaca.receitas);
+    PrecoLeiteReb(ReceitasTotais(dataReceitasreb.receitas));
+    dataReceitasreb.receitas.addListener((values) => {
+      PrecoLeiteReb(ReceitasTotais([...values]));
     });
-    PrecoLeiteReb(ReceitasTotais(receitasreb));
-    let newReceitasreb = [];
-    dataReceitasreb.vacas.addListener((values) => {
-      values.forEach((vaca) => {
-        newReceitasreb.push(...vaca.receitas);
-      });
-      PrecoLeiteReb(ReceitasTotais(newReceitasreb));
-    });
+    //despesas Farm
     let dataDespesas = realm.objectForPrimaryKey("Farm", fazID);
     let despesas = [];
     dataDespesas.rebanhos.forEach((rebanhos) => {
@@ -61,9 +53,10 @@ function PreviewFinanceiro({ Titulo, Id }) {
       });
       PrecoCF(DespesasTotais(newDespesas));
     });
-    let dataGastos = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-    PrecoCFReb(DespesasTotais(dataGastos.despesas));
-    dataGastos.despesas.addListener((values) => {
+    //despesas Reb
+    let dataDespesasReb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+    PrecoCFReb(DespesasTotais(dataDespesasReb.despesas));
+    dataDespesasReb.despesas.addListener((values) => {
       PrecoCFReb(DespesasTotais([...values]));
     });
   }, [realm]);
@@ -165,7 +158,7 @@ function PreviewFinanceiro({ Titulo, Id }) {
             <Text
               style={[
                 styles.textResultsPrice,
-                { fontSize: setSize(formattedTotal, 250) },
+                { fontSize: setSize(formattedTotal, verticalScale(250)) },
               ]}
             >
               {formattedTotal}
@@ -179,7 +172,7 @@ function PreviewFinanceiro({ Titulo, Id }) {
             <Text
               style={[
                 styles.textoBannerRec,
-                { fontSize: setSize(formattedReceitas, 200) },
+                { fontSize: setSize(formattedReceitas, verticalScale(200)) },
               ]}
             >
               {formattedReceitas}
@@ -193,7 +186,7 @@ function PreviewFinanceiro({ Titulo, Id }) {
             <Text
               style={[
                 styles.textoBannerDes,
-                { fontSize: setSize(formattedDespesas, 200) },
+                { fontSize: setSize(formattedDespesas, verticalScale(200)) },
               ]}
             >
               {formattedDespesas}

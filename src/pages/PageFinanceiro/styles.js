@@ -4,6 +4,31 @@ import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
   //STYLES COMUM
+  lista: {
+    flex: 1,
+    // backgroundColor: "red",
+  },
+  containerfiltro: {
+    flex: 0.1,
+    position: "relative",
+    zIndex: 1,
+    justifyContent: "center",
+  },
+  filtrosBotao: {
+    maxHeight: scale(40),
+    flex: 0.1,
+    backgroundColor: Colors.green,
+    padding: scale(10),
+    width: scale(100),
+    flexDirection: "row",
+    borderRadius: 20,
+    justifyContent: "space-around",
+    alignSelf: "center",
+    position: "relative",
+  },
+  tab: {
+    backgroundColor: Colors.green,
+  },
   //relatorios
   containerbg: {
     backgroundColor: Colors.green,
@@ -45,8 +70,8 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(6),
   },
   containerChart: {
-    justifyContent: "center",
-    alignContent: "center",
+    justifyContent: "flex-start",
+    alignContent: "flex-start",
     alignItems: "center",
   },
   Grafico: {
@@ -61,6 +86,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.darkgreen,
     ...Buttons.btnLargeRounded,
     marginBottom: verticalScale(10),
+    elevation: 5,
+  },
+  containerTituloBotao: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   tituloBotao: {
     ...Fonts.txtMediumBold,
@@ -91,31 +122,30 @@ const styles = StyleSheet.create({
   },
   //Modal
   modalContainer: {
-    backgroundColor: "rgba(234,242,215,1)",
-    position: "absolute",
-    top: verticalScale(0),
+    flex: 1,
+    backgroundColor: Colors.darkgreen,
     alignSelf: "center",
     width: scale(330),
     borderRadius: 20,
+    position: "relative",
   },
   modalScroll: {
     height: verticalScale(500),
     marginVertical: verticalScale(10),
   },
   tituloModal: {
-    color: Colors.btngreen,
+    color: Colors.white,
     margin: verticalScale(5),
     alignSelf: "center",
     ...Fonts.txtXLargeBold,
   },
   botaopressM: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
+    ...Buttons.btnLargeRounded,
+    backgroundColor: Colors.green,
+    maxHeight: verticalScale(40),
     justifyContent: "center",
     alignSelf: "center",
+    elevation: 10,
   },
   listaDet: {
     borderRadius: 20,
@@ -140,6 +170,43 @@ const styles = StyleSheet.create({
   scroll: {
     height: verticalScale(525),
   },
+  containerDetalhes: {
+    width: scale(300),
+    backgroundColor: "white",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    alignSelf: "center",
+  },
+  modalContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  textContent: {
+    fontSize: 20,
+  },
+  modalContainerText: {
+    width: "100%",
+    padding: 5,
+  },
+  tituloDetalhes: {
+    color: "black",
+    fontSize: verticalScale(20),
+    marginBottom: verticalScale(10),
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  filtros: {
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    position: "absolute",
+    width: "90%",
+    alignSelf: "center",
+    borderRadius: 10,
+    padding: 10,
+    margin: 10,
+    top: verticalScale(30),
+    zIndex: 1,
+    top: scale(75),
+  },
 });
 export default styles;
 
@@ -157,9 +224,17 @@ export function Color(total) {
 
 export function setSize(text, width) {
   var fontSize = width / text.toString().length + 3;
-  console.log(text.toString().length);
   var maxSize = width / 10;
   fontSize = Math.min(fontSize, maxSize);
-  // console.log(fontSize);
   return fontSize;
 }
+
+export const estilo = {
+  tabarlabel: {
+    color: Colors.white,
+    ...Fonts.txtSmall,
+  },
+  tabBarIndicator: {
+    backgroundColor: Colors.white,
+  },
+};

@@ -85,6 +85,10 @@ function AuthProvider({ children }) {
   function FiltroSelec(tipoFiltro) {
     setFiltroSelec(tipoFiltro);
   }
+  const [idVaca, setIdVaca] = useState();
+  function IdVaca(idVaca) {
+    setIdVaca(idVaca);
+  }
   return (
     <AuthContext.Provider
       value={{
@@ -128,6 +132,8 @@ function AuthProvider({ children }) {
         ShouldGoPageFinanceiro,
         FiltroSelec,
         filtroSelec,
+        idVaca,
+        IdVaca,
       }}
     >
       {children}

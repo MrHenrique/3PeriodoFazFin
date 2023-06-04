@@ -101,7 +101,6 @@ function CadastroReb() {
       Number.isInteger(parsedValue) &&
       parsedValue >= 0 &&
       parsedValue.toString() === text.trim();
-    console.log(isValid);
 
     setIsQtdAniValid(isValid);
     setQtdAni(text);
@@ -192,8 +191,8 @@ function CadastroReb() {
                 padding="20"
               >
                 {!isNomeRebValid
-                  ? "Digite o nome do rebanho!!"
-                  : "Já existe um rebanho com esse nome!!"}
+                  ? "Digite o nome do rebanho"
+                  : "Já existe um rebanho com esse nome"}
               </HelperText>
               <TextInput
                 label="Quantidade de Animais"
@@ -219,7 +218,7 @@ function CadastroReb() {
                 visible={!isQtdAniValid}
                 padding="20"
               >
-                Digite a quantidade de animais!!
+                Digite a quantidade de animais
               </HelperText>
             </View>
           </ScrollView>

@@ -9,7 +9,7 @@ import { DespesasTotais } from "../../../components/Calculos DB/DespesasTotais";
 import { ReceitasTotais } from "../../../components/Calculos DB/ReceitasTotais";
 import { useMainContext } from "../../../contexts/RealmContext";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { Colors } from "../../../styles/";
+import styles, { estilo } from "../styles";
 export default function FinanceiroFaz() {
   const realm = useMainContext();
   const Tab = createMaterialTopTabNavigator();
@@ -33,9 +33,7 @@ export default function FinanceiroFaz() {
       let dataReceitas = realm.objectForPrimaryKey("Farm", fazID);
       let receitas = [];
       dataReceitas.rebanhos.forEach((rebanho) => {
-        rebanho.vacas.forEach((vaca) => {
-          receitas.push(...vaca.receitas);
-        });
+        receitas.push(...rebanho.receitas);
       });
       if (receitas.length > 0) {
         receitas = receitas.sort((a, b) => a.createdAt - b.createdAt);
@@ -48,8 +46,8 @@ export default function FinanceiroFaz() {
     <>
       <Tab.Navigator
         screenOptions={{
-          tabBarLabelStyle: { color: "#fff" },
-          tabBarIndicatorStyle: { backgroundColor: "#fff" },
+          tabBarLabelStyle: { ...estilo.tabarlabel },
+          tabBarIndicatorStyle: { ...estilo.tabBarIndicator },
           tabBarStyle: styles.tab,
         }}
       >
@@ -60,9 +58,3 @@ export default function FinanceiroFaz() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  tab: {
-    backgroundColor: Colors.btndarkgreen,
-  },
-});

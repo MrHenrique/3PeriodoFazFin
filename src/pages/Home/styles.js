@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.green,
   },
   tituloBotao: {
-    ...Fonts.txtMediumBold,
+    ...Fonts.txtMedium,
     color: Colors.white,
   },
 

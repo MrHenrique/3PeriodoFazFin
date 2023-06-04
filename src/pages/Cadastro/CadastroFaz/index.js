@@ -105,8 +105,6 @@ function CadastroFaz() {
       }
     } else if (isNomefazValid && isProprValid && isTipoValid && !nomeExist) {
       handleAddFarm();
-    } else if (!isNomefazValid || !isProprValid || !isTipoValid || nomeExist) {
-      Alert.alert("Preencha todos os campos e tente novamente.");
     }
   }
   const navigation = useNavigation();
@@ -177,8 +175,8 @@ function CadastroFaz() {
               padding="20"
             >
               {!isNomefazValid
-                ? "Digite o nome da fazenda!!"
-                : "Já existe uma fazenda com esse nome!!"}
+                ? "Digite o nome da fazenda."
+                : "Já existe uma fazenda com esse nome."}
             </HelperText>
             {/* Nome Do Proprietario */}
             <TextInput
@@ -189,7 +187,7 @@ function CadastroFaz() {
               activeUnderlineColor={Colors.green}
               underlineColor={Colors.blue}
               underlineStyle={{ paddingBottom: 3 }}
-              label="Nome do Proprietario"
+              label="Nome do Proprietário"
               placeholder="Ex: Jose Ferreira Pires"
               onChangeText={handleProprChange}
               value={proprietario}
@@ -205,7 +203,7 @@ function CadastroFaz() {
               visible={!isProprValid}
               padding="20"
             >
-              Digite o nome do Proprietário!!
+              Digite o nome do Proprietário.
             </HelperText>
             {/* Tipo de Pecuaria */}
             <TextInput
@@ -232,7 +230,7 @@ function CadastroFaz() {
               visible={!isTipoValid}
               padding="20"
             >
-              Digite o tipo de pecuária!!
+              Digite o tipo de pecuária.
             </HelperText>
           </ScrollView>
           <View style={StyleFuncKeyboard()}>

@@ -25,7 +25,7 @@ function RegistrosLeite() {
   const [shouldShow, setShouldShow] = useState(false);
   const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
   const [modalEditarVisible, setModalEditarVisible] = useState(false);
-  const [selectedItemIds, setSelectedItemIds] = useState([]);
+  const [selectedItemId, setSelectedItemId] = useState(null);
   const [description, setDescription] = useState("");
   const [prodLV, setProdLV] = useState("");
   const [idDoItemSelecionado, setIdDoItemSelecionado] = useState("");
@@ -41,29 +41,18 @@ function RegistrosLeite() {
 
   useEffect(() => {
     if (realm) {
-      let dataReceitas = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+      let dataReceitasreb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+      setListaLeite(dataReceitasreb.receitas);
+      ListaFiltrada(dataReceitasreb.receitas);
 
-      dataReceitas.vacas.addListener((object) => {
-        let NewReceitas = [];
-        object.forEach((vaca) => {
-          NewReceitas.push(...vaca.receitas);
+      dataReceitasreb.receitas.addListener((values) => {
+        const sortedValues = [...values].sort((a, b) => {
+          return new Date(a.createdAt) - new Date(b.createdAt);
         });
-        if (NewReceitas.length > 0) {
-          NewReceitas = NewReceitas.sort((a, b) => a.createdAt - b.createdAt);
-        }
-        setListaLeite(NewReceitas);
-        ListaFiltrada(NewReceitas);
-      });
 
-      let receitas = [];
-      dataReceitas.vacas.forEach((vaca) => {
-        receitas.push(...vaca.receitas);
+        setListaLeite(sortedValues);
+        ListaFiltrada(sortedValues);
       });
-      if (receitas.length > 0) {
-        receitas = receitas.sort((a, b) => a.createdAt - b.createdAt);
-      }
-      setListaLeite(receitas);
-      ListaFiltrada(receitas);
     }
   }, [realm]);
 
@@ -73,12 +62,21 @@ function RegistrosLeite() {
         realm.write(() => {
           const prodL = Number(prodLV);
           let updateLeite = realm.objectForPrimaryKey(
-            "LeiteSchema",
+            "ReceitaRebSchema",
             idDoItemSelecionado
           );
           updateLeite.createdAt = date;
           updateLeite.prodL = prodL;
           updateLeite.description = description;
+          let updateVacaLeite = realm
+            .objects("ReceitaSchema")
+            .filtered(`idTransacao = '${idDoItemSelecionado}'`);
+          let nVacas = updateVacaLeite.length;
+          updateVacaLeite.forEach((receita) => {
+            receita.createdAt = date;
+            receita.prodL = prodL / nVacas;
+            receita.description = description;
+          });
           Alert.alert("Dados modificados com sucesso!");
         });
       } catch (e) {
@@ -108,25 +106,51 @@ function RegistrosLeite() {
   };
   //Fim do código da data .....
 
-  //Confere se o detalhe do item ja está aberto se estiver fecha, se não estiver abre.
+  //Função para mostrar os detalhes dos item escolhido
   const handleItemPress = (itemId) => {
-    if (selectedItemIds.includes(itemId)) {
-      setSelectedItemIds(selectedItemIds.filter((id) => id !== itemId));
-      setShouldShowDetalhes(selectedItemIds.length > 1);
+    if (itemId === selectedItemId) {
+      // Se o itemId for o mesmo do item selecionado atualmente,
+      // feche o modal de detalhes
+      setSelectedItemId(null);
+      setShouldShowDetalhes(false);
     } else {
-      setSelectedItemIds([...selectedItemIds, itemId]);
+      // Se o itemId for diferente do item selecionado atualmente
+      // atualize o itemId e abra o modal de detalhes
+      setSelectedItemId(itemId);
       setShouldShowDetalhes(true);
     }
   };
 
   //Função para editar os dados do item escolhido
-  const handleEditPress = (idLeite) => () => {
+  const handleEditPress = (item) => () => {
     setModalEditarVisible(true);
-    setIdDoItemSelecionado(idLeite);
+    setIdDoItemSelecionado(item._id);
+    setProdLV(item.prodL.toString());
+    setDescription(item.description);
+    setText(
+      item.createdAt.getDate().toString().padStart(2, "0") +
+        "/" +
+        (item.createdAt.getMonth() + 1).toString().padStart(2, "0") +
+        "/" +
+        item.createdAt.getFullYear().toString()
+    );
   };
 
   const handleDeletePress = () => {
     console.log("Excluir pressionado");
+  };
+
+  //Função para formatar os valores mostrado na tela pelo tipo escolhido
+  const formatarResultado = (valorRecebido, tipo) => {
+    let formattedResult = "";
+    if (tipo == "preco") {
+      const result = valorRecebido.toFixed(2);
+      formattedResult = `R$ ${result.replace(".", ",")}`;
+    } else if (tipo == "prod") {
+      const result = valorRecebido.toFixed(2);
+      formattedResult = `${result.replace(".", ",")} L`;
+    }
+    return formattedResult;
   };
 
   const renderItem = ({ item }) => {
@@ -139,7 +163,7 @@ function RegistrosLeite() {
       "/" +
       item.createdAt.getFullYear().toString()
     }`;
-    const isItemSelected = selectedItemIds.includes(item._id);
+    const isItemSelected = item._id === selectedItemId;
 
     return (
       <>
@@ -154,7 +178,7 @@ function RegistrosLeite() {
             </Text>
             <TouchableOpacity
               style={styles.editButton}
-              onPress={handleEditPress(item._id)}
+              onPress={handleEditPress(item)}
             >
               <AntDesign name="edit" size={24} color="black" />
             </TouchableOpacity>
@@ -166,48 +190,55 @@ function RegistrosLeite() {
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
-        <View
-          style={[
-            styles.containerDetalhes,
-            { display: shouldShowDetalhes && isItemSelected ? "flex" : "none" },
-          ]}
-        >
-          <View>
-            <Text style={styles.tituloDetalhes}>Detalhes</Text>
+        {shouldShowDetalhes && isItemSelected && (
+          <View style={[styles.containerDetalhes]}>
+            <View>
+              <Text style={styles.tituloDetalhes}>Detalhes</Text>
+            </View>
+            <View style={styles.modalContainerText}>
+              <View style={styles.modalContent}>
+                <Text style={styles.textContent}>Data: </Text>
+                <Text style={styles.textContent}>{formattedData}</Text>
+              </View>
+              <View style={styles.modalContent}>
+                <Text style={styles.textContent}>Horario: </Text>
+                <Text style={styles.textContent}>
+                  {item.createdAt.toLocaleTimeString()}
+                </Text>
+              </View>
+              <View style={styles.modalContent}>
+                <Text style={styles.textContent}>Produção: </Text>
+                <Text style={styles.textContent}>
+                  {formatarResultado(item.prodL, "prod")}
+                </Text>
+              </View>
+              <View style={styles.modalContent}>
+                <Text style={styles.textContent}>Preco: </Text>
+                <Text style={styles.textContent}>
+                  {formatarResultado(item.precoL, "preco")}
+                </Text>
+              </View>
+              <View style={styles.modalContent}>
+                <Text style={styles.textContent}>Valor Total: </Text>
+                <Text style={styles.textContent}>
+                  {formatarResultado(item.precoL * item.prodL, "preco")}
+                </Text>
+              </View>
+              <Text style={styles.textContent}>
+                Descrição: {item.description}
+              </Text>
+            </View>
           </View>
-          <View style={styles.modalContainerText}>
-            <Text style={styles.modalContent}>Data: {formattedData}</Text>
-            <Text style={styles.modalContent}>
-              Horario: {item.createdAt.toLocaleTimeString()}
-            </Text>
-            <Text style={styles.modalContent}>Produção: {item.prodL} </Text>
-            <Text style={styles.modalContent}>Preço: {item.precoL} </Text>
-            <Text style={styles.modalContent}>
-              Descrição: {item.description}
-            </Text>
-          </View>
-        </View>
+        )}
       </>
     );
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => setShouldShow(!shouldShow)}
-        style={styles.filtrosBotao}
-      >
-        <Text style={styles.tituloBotao}>Filtros</Text>
-      </TouchableOpacity>
-      <View style={[styles.filtros, { display: shouldShow ? "flex" : "none" }]}>
-        {/*filtros*/}
-        <FiltrosData listaRecebida={listaLeite} />
-      </View>
+      <FiltrosData listaRecebida={listaLeite} />
       <FlatList
-        style={[
-          styles.lista,
-          { marginTop: shouldShow ? verticalScale(140) : 0 },
-        ]}
+        style={[styles.lista]}
         data={listaFiltrada}
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
@@ -232,6 +263,7 @@ function RegistrosLeite() {
 
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
+              date={date}
               mode="date"
               onConfirm={handleDateConfirm}
               onCancel={hideDatePicker}
@@ -247,7 +279,6 @@ function RegistrosLeite() {
               value={prodLV}
               keyboardType="number-pad"
               onChangeText={setProdLV}
-              placeholder="Exemplo: 10.2"
             />
           </View>
           <View style={styles.containerinfos}>
@@ -256,7 +287,6 @@ function RegistrosLeite() {
               style={styles.detalhe}
               value={description}
               onChangeText={setDescription}
-              placeholder="Exemplo: "
             />
           </View>
           <View style={styles.modalContainerBotoes}>
@@ -438,6 +468,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  textContent: {
     fontSize: 20,
   },
   modalContainerText: {

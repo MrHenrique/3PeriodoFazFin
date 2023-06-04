@@ -6,14 +6,16 @@ import {
   Text,
   TouchableOpacity,
   SafeAreaView,
+  Modal,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import DropFiltrosData from "../Dropdown/DropFiltrosData";
 import { AuthContext } from "../../contexts/auth";
+import { Chip, RadioButton } from "react-native-paper";
+import { AntDesign } from "@expo/vector-icons";
 
 function FiltrosData(props) {
   const { listaRecebida } = props; // Recebe a lista que vai ser filtrada
-  const { ListaFiltrada, filtroSelec, FiltroSelec } = useContext(AuthContext);
+  const { ListaFiltrada } = useContext(AuthContext);
   const [resetDropdown, setResetDropdown] = useState(false);
   const [lista, setLista] = useState(listaRecebida);
   const [startDate, setStartDate] = useState(""); //Filtro Intervalo entre datas
@@ -23,6 +25,10 @@ function FiltrosData(props) {
   const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
     useState(false);
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [radioValue, setRadioValue] = React.useState(1);
+  const [shouldShowDataRange, setShouldShowDataRange] = useState(false);
 
   useEffect(() => {
     ListaFiltrada(lista);
@@ -87,14 +93,8 @@ function FiltrosData(props) {
         return itemDataDeCriacao >= dataInicio && itemDataDeCriacao <= dataFim;
       });
     };
-    if (filtroSelec === "1") {
-      setLista(listaRecebida);
-    } else if (filtroSelec === "2") {
-      const dataHoje = new Date();
-      dataHoje.setHours(0, 0, 0, 0);
-      const listaHoje = filtrarPorData(listaRecebida, dataHoje, dataHoje);
-      setLista(listaHoje);
-    } else if (filtroSelec === "3") {
+    if (radioValue === 1) {
+      // Ultimos 7 dias
       const dataHoje = new Date();
       dataHoje.setHours(0, 0, 0, 0);
       const dataSeteDiasAtras = new Date(dataHoje);
@@ -105,7 +105,8 @@ function FiltrosData(props) {
         dataHoje
       );
       setLista(listaUltimosSete);
-    } else if (filtroSelec === "4") {
+    } else if (radioValue === 2) {
+      // Ultimos mês
       const dataHoje = new Date();
       dataHoje.setHours(0, 0, 0, 0);
       const dataTrintaDiasAtras = new Date(dataHoje);
@@ -116,23 +117,49 @@ function FiltrosData(props) {
         dataHoje
       );
       setLista(listaUltimosTrinta);
-    } else if (filtroSelec === "5") {
+    } else if (radioValue === 3) {
+      //Ultimos 3 meses
       const dataHoje = new Date();
       dataHoje.setHours(0, 0, 0, 0);
-      const dataUltimoAno = new Date(
-        dataHoje.getFullYear() - 1,
-        dataHoje.getMonth(),
-        dataHoje.getDate()
-      );
-      const listaUltimoAno = filtrarPorData(
+      const dataUltimosTresMeses = new Date(dataHoje);
+      dataUltimosTresMeses.setDate(dataHoje.getDate() - 90);
+      const listaUltimosTresMeses = filtrarPorData(
         listaRecebida,
-        dataUltimoAno,
+        dataUltimosTresMeses,
         dataHoje
       );
-      setLista(listaUltimoAno);
+      setLista(listaUltimosTresMeses);
+    } else if (radioValue === 4) {
+      //Ultimos 6 meses
+      const dataHoje = new Date();
+      dataHoje.setHours(0, 0, 0, 0);
+      const dataUltimosSeisMeses = new Date(dataHoje);
+      dataUltimosSeisMeses.setDate(dataHoje.getDate() - 90);
+      const listaUltimosSeisMeses = filtrarPorData(
+        listaRecebida,
+        dataUltimosSeisMeses,
+        dataHoje
+      );
+      setLista(listaUltimosSeisMeses);
+    } else if (radioValue === 5) {
+      //todas as datas
+      setLista(listaRecebida);
     }
-  }, [filtroSelec]);
+  }, [radioValue]);
 
+  const pegarNome = () => {
+    if (radioValue === 1) {
+      return "Últimos 7 dias";
+    } else if (radioValue === 2) {
+      return "Último mês";
+    } else if (radioValue === 3) {
+      return "Últimos 3 meses";
+    } else if (radioValue === 4) {
+      return "Últimos 6 meses";
+    } else if (radioValue === 5) {
+      return "Todas as datas";
+    }
+  };
   //Código para retornar uma lista do intevalo selecionado pelo usuário (FILTRO INTERVALO ENTRE DATAS)
   const filtrarIntervalo = () => {
     if (startDate != "" && endDate != "") {
@@ -150,62 +177,158 @@ function FiltrosData(props) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <DropFiltrosData resetDropdown={resetDropdown} />
-      {/*Filtro intervalo entre datas*/}
-      <View style={styles.containerBotoes}>
-        <TouchableOpacity style={styles.botoes} onPress={showStartDatePicker}>
-          <Text style={styles.texto}>{textStartDate}</Text>
-        </TouchableOpacity>
-        <DateTimePickerModal
-          isVisible={isStartDatePickerVisible}
-          mode="date"
-          onConfirm={handleStartDateConfirm}
-          onCancel={hideStartDatePicker}
-          maximumDate={new Date()}
-        />
-
-        <TouchableOpacity style={styles.botoes} onPress={showEndDatePicker}>
-          <Text style={styles.texto}>{textEndDate}</Text>
-        </TouchableOpacity>
-        <DateTimePickerModal
-          isVisible={isEndDatePickerVisible}
-          mode="date"
-          onConfirm={handleEndDateConfirm}
-          onCancel={hideEndDatePicker}
-          maximumDate={new Date()}
-        />
-      </View>
-
-      {/*Filtro data especifica*/}
-      <View style={styles.containerBotoes}>
-        <TouchableOpacity style={styles.botoes} onPress={filtrarIntervalo}>
-          <Text style={styles.texto}>Filtrar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.botoes}
-          onPress={() => {
-            handleResetDropdown();
-            setStartDate("");
-            setEndDate("");
-            setTextStartDate("Data Inicial");
-            setTextEndDate("Data Final");
-            setLista(listaRecebida);
-          }}
+    <>
+      <View style={styles.containerChip}>
+        <Chip style={styles.chip} icon="information">
+          Filtros
+        </Chip>
+        <Chip
+          style={styles.chip}
+          icon="calendar"
+          onPress={() => setModalVisible(true)}
         >
-          <Text style={styles.texto}>Limpar</Text>
-        </TouchableOpacity>
+          {pegarNome()}
+        </Chip>
+        <Chip style={styles.chip} icon="information">
+          Valores
+        </Chip>
       </View>
-    </SafeAreaView>
+      <Modal visible={modalVisible} animationType="slide" transparent={true}>
+        <SafeAreaView style={styles.container}>
+          <View style={styles.modalContainer}>
+            <View style={styles.radioButtons}>
+              <Text>Últimos 7 dias</Text>
+              <RadioButton
+                value={1}
+                status={radioValue === 1 ? "checked" : "unchecked"}
+                onPress={() => setRadioValue(1)}
+              />
+            </View>
+            <View style={styles.radioButtons}>
+              <Text>Último mês</Text>
+              <RadioButton
+                value={2}
+                status={radioValue === 2 ? "checked" : "unchecked"}
+                onPress={() => setRadioValue(2)}
+              />
+            </View>
+            <View style={styles.radioButtons}>
+              <Text>Últimos 3 meses</Text>
+              <RadioButton
+                value={3}
+                status={radioValue === 3 ? "checked" : "unchecked"}
+                onPress={() => setRadioValue(3)}
+              />
+            </View>
+            <View style={styles.radioButtons}>
+              <Text>Últimos 6 meses</Text>
+              <RadioButton
+                value={4}
+                status={radioValue === 4 ? "checked" : "unchecked"}
+                onPress={() => setRadioValue(4)}
+              />
+            </View>
+            <View style={styles.radioButtons}>
+              <Text>Todas as datas</Text>
+              <RadioButton
+                value={5}
+                status={radioValue === 5 ? "checked" : "unchecked"}
+                onPress={() => setRadioValue(5)}
+              />
+            </View>
+            {/*Filtro intervalo entre datas*/}
+            <TouchableOpacity
+              onPress={() => setShouldShowDataRange(!shouldShowDataRange)}
+              style={styles.filtrosBotao}
+            >
+              <Text style={styles.tituloBotao}>Data Range</Text>
+              <AntDesign name="down" size={24} color="black" />
+            </TouchableOpacity>
+            <View
+              style={[
+                styles.filtros,
+                { display: shouldShowDataRange ? "flex" : "none" },
+              ]}
+            >
+              <View style={styles.containerBotoes}>
+                <TouchableOpacity
+                  style={styles.botoes}
+                  onPress={showStartDatePicker}
+                >
+                  <Text style={styles.texto}>{textStartDate}</Text>
+                </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={isStartDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleStartDateConfirm}
+                  onCancel={hideStartDatePicker}
+                  maximumDate={new Date()}
+                />
+
+                <TouchableOpacity
+                  style={styles.botoes}
+                  onPress={showEndDatePicker}
+                >
+                  <Text style={styles.texto}>{textEndDate}</Text>
+                </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={isEndDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleEndDateConfirm}
+                  onCancel={hideEndDatePicker}
+                  maximumDate={new Date()}
+                />
+              </View>
+            </View>
+            <View style={styles.containerBotoes}>
+              <TouchableOpacity
+                style={styles.botoes}
+                onPress={filtrarIntervalo}
+              >
+                <Text style={styles.texto}>Filtrar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.botoes}
+                onPress={() => {
+                  handleResetDropdown();
+                  setStartDate("");
+                  setEndDate("");
+                  setTextStartDate("Data Inicial");
+                  setTextEndDate("Data Final");
+                  setLista(listaRecebida);
+                  setModalVisible(false);
+                  setRadioValue(1);
+                }}
+              >
+                <Text style={styles.texto}>Limpar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </SafeAreaView>
+      </Modal>
+    </>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  modalContainer: {
+    height: "60%",
+    backgroundColor: "#fea",
+    top: "40%",
+  },
   containerBotoes: {
     flexDirection: "row",
     padding: 3,
+  },
+  radioButtons: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 1,
+    borderWidth: 2,
+    borderColor: "black",
   },
   botoes: {
     flex: 1,
@@ -217,6 +340,21 @@ const styles = StyleSheet.create({
   },
   texto: {
     textAlign: "center",
+  },
+  containerChip: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  chip: {
+    marginRight: 5,
+  },
+  filtrosBotao: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+    backgroundColor: "rgba(15, 109, 0, 0.9)",
+    borderRadius: 10,
+    padding: 10,
+    marginTop: 3,
   },
 });
 

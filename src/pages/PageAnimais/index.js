@@ -3,7 +3,7 @@ import { StyleSheet, useWindowDimensions } from "react-native";
 import PageListaVacas from "./PageListavacas";
 import Leite from "../Leite";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-
+import styles, { estilo } from "./styles";
 const Tab = createMaterialTopTabNavigator();
 
 export default function PageAnimais() {
@@ -11,8 +11,8 @@ export default function PageAnimais() {
     <>
       <Tab.Navigator
         screenOptions={{
-          tabBarLabelStyle: { color: "#fff" },
-          tabBarIndicatorStyle: { backgroundColor: "#fff" },
+          tabBarLabelStyle: { ...estilo.tabarlabel },
+          tabBarIndicatorStyle: { ...estilo.tabBarIndicator },
           tabBarStyle: styles.tab,
         }}
       >
@@ -22,9 +22,3 @@ export default function PageAnimais() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  tab: {
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-  },
-});

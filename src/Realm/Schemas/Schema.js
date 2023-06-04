@@ -39,7 +39,6 @@ export const AtualEstoqueSchema = {
     nomeProd: "string",
     createdAt: "date",
     valorProd: "float",
-    qtdProd: "float",
     volumeProd: "float?",
     pesoProd: "float?",
     obserProd: "string?",
@@ -58,7 +57,8 @@ export const RebanhoSchema = {
     nomeReb: "string",
     createdAt: "date",
     vacas: "VacasSchema[]",
-    despesas: "DespesasSchema[]",
+    despesas: "DespesaRebSchema[]",
+    receitas: "ReceitaRebSchema[]",
     assignee: {
       type: "linkingObjects",
       objectType: "Farm",
@@ -66,8 +66,8 @@ export const RebanhoSchema = {
     },
   },
 };
-export const DespesasSchema = {
-  name: "DespesasSchema",
+export const DespesaRebSchema = {
+  name: "DespesaRebSchema",
   primaryKey: "_id",
   properties: {
     _id: "string",
@@ -85,11 +85,50 @@ export const DespesasSchema = {
     },
   },
 };
-export const LeiteSchema = {
-  name: "LeiteSchema",
+export const ReceitaRebSchema = {
+  name: "ReceitaRebSchema",
   primaryKey: "_id",
   properties: {
     _id: "string",
+    tipo: "float",
+    precoL: "float",
+    prodL: "float",
+    description: "string",
+    createdAt: "date",
+    assignee: {
+      type: "linkingObjects",
+      objectType: "RebanhoSchema",
+      property: "receitas",
+    },
+  },
+};
+export const DespesasSchema = {
+  name: "DespesasSchema",
+  primaryKey: "_id",
+  properties: {
+    _id: "string",
+    idTransacao: "string",
+    nomeProd: "string",
+    createdAt: "date",
+    valorProd: "float",
+    qtdProd: "float",
+    volumeProd: "float?",
+    pesoProd: "float?",
+    obserProd: "string?",
+    assignee: {
+      type: "linkingObjects",
+      objectType: "VacasSchema",
+      property: "despesas",
+    },
+  },
+};
+export const ReceitaSchema = {
+  name: "ReceitaSchema",
+  primaryKey: "_id",
+  properties: {
+    _id: "string",
+    idTransacao: "string",
+    tipo: "float",
     precoL: "float",
     prodL: "float",
     description: "string",
@@ -101,6 +140,7 @@ export const LeiteSchema = {
     },
   },
 };
+
 export const VacasSchema = {
   name: "VacasSchema",
   primaryKey: "_id",
@@ -112,7 +152,8 @@ export const VacasSchema = {
     descVaca: "string",
     createdAt: "date",
     genero: "float",
-    receitas: "LeiteSchema[]",
+    receitas: "ReceitaSchema[]",
+    despesas: "DespesasSchema[]",
     assignee: {
       type: "linkingObjects",
       objectType: "RebanhoSchema",

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   SafeAreaView,
-  ScrollView,
+  Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PieChartReb from "../../../../components/Graficos/PieChartReb";
@@ -15,6 +15,7 @@ import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
 import { AuthContext } from "../../../../contexts/auth";
 import styles, { Color, setSize } from "../../styles";
+import { Colors } from "../../../../styles";
 function RelatorioReb() {
   const precoTotal = precoLeiteReb - precoCFReb;
   const { precoCFReb, listaAliReb, listaLeiteReb, precoLeiteReb } =
@@ -24,7 +25,6 @@ function RelatorioReb() {
     setModalVisible(!isModalVisible);
   }
   const renderItem2 = ({ item }) => {
-    // console.log(item);
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
@@ -37,7 +37,6 @@ function RelatorioReb() {
     );
   };
   const renderItem = ({ item }) => {
-    // console.log(item.createdAt);
     return (
       <TouchableOpacity style={styles.listaDet}>
         <Text style={styles.tituloBotao}>
@@ -94,7 +93,7 @@ function RelatorioReb() {
                 <Text
                   style={[
                     styles.textoValorPos,
-                    { fontSize: setSize(formattedReceitas, 250) },
+                    { fontSize: setSize(formattedReceitas, scale(230)) },
                   ]}
                 >
                   {formattedReceitas}
@@ -105,7 +104,7 @@ function RelatorioReb() {
                 <Text
                   style={[
                     styles.textoValorNeg,
-                    { fontSize: setSize(formattedDespesas, 180) },
+                    { fontSize: setSize(formattedDespesas, scale(200)) },
                   ]}
                 >
                   {formattedDespesas}
@@ -116,7 +115,7 @@ function RelatorioReb() {
                 <Text
                   style={[
                     Color(total),
-                    { fontSize: setSize(formattedTotal, 250) },
+                    { fontSize: setSize(formattedTotal, scale(250)) },
                   ]}
                 >
                   {formattedTotal}
@@ -135,34 +134,43 @@ function RelatorioReb() {
             <Modal
               isVisible={isModalVisible}
               coverScreen={true}
-              backdropColor={"rgba(234,242,215,0.8)"}
+              statusBarTranslucent={true}
+              backdropColor={Colors.black}
+              deviceHeight={Dimensions.get("screen").height}
+              backdropOpacity={0.5}
               animationIn="slideInUp"
               animationOut="slideOutDown"
             >
               <View style={styles.modalContainer}>
-                <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
-                <FlatList
-                  style={styles.scroll}
-                  data={listaLeiteReb}
-                  renderItem={renderItem2}
-                  keyExtractor={(item) => item._id}
-                />
-                <Text style={styles.tituloModal}>Detalhes de despesas:</Text>
-                <FlatList
-                  style={styles.scroll}
-                  data={listaAliReb}
-                  renderItem={renderItem}
-                  keyExtractor={(item) => item._id}
-                />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
+                  <FlatList
+                    style={styles.scroll}
+                    data={listaLeiteReb}
+                    renderItem={renderItem2}
+                    keyExtractor={(item) => item._id}
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.tituloModal}>Detalhes de despesas:</Text>
+                  <FlatList
+                    style={styles.scroll}
+                    data={listaAliReb}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item._id}
+                  />
+                </View>
+                <View style={{ marginBottom: verticalScale(10) }}>
+                  <TouchableOpacity
+                    style={styles.botaopressM}
+                    onPress={() => {
+                      toggleModal();
+                    }}
+                  >
+                    <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-              <TouchableOpacity
-                style={styles.botaopressM}
-                onPress={() => {
-                  toggleModal();
-                }}
-              >
-                <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-              </TouchableOpacity>
             </Modal>
           </TouchableOpacity>
         </View>
