@@ -195,7 +195,7 @@ function FiltrosData(props) {
       });
       setLista(listaFiltradaIntervalo);
     }
-    setModalVisible(false);
+    setModalFiltroDataVisible(false);
   };
 
   return (
@@ -223,14 +223,13 @@ function FiltrosData(props) {
           style={styles.chip}
         >
           {textValorRadioValue}
-          <AntDesign name="down" size={20} color="black" />
         </Chip>
       </View>
       <Modal
         coverScreen={true}
         backdropColor={"#000"}
-        onBackButtonPress={() => setModalVisible(false)}
-        onBackdropPress={() => setModalVisible(false)}
+        onBackButtonPress={() => setModalFiltroDataVisible(false)}
+        onBackdropPress={() => setModalFiltroDataVisible(false)}
         visible={modalFiltroDataVisible}
         animationType="slide"
         statusBarTranslucent
@@ -304,7 +303,7 @@ function FiltrosData(props) {
               />
             </View>
             <View style={styles.radioButtons}>
-              <Text>Período customizado</Text>
+              <Text style={styles.txtradiobtn}>Período customizado</Text>
               <RadioButton
                 value={6}
                 status={dataRadioValue === 6 ? "checked" : "unchecked"}
@@ -321,65 +320,66 @@ function FiltrosData(props) {
               <Text style={styles.tituloBotao}>Filtrar Por Data</Text>
               <AntDesign name="down" size={scale(25)} color="white" />
             </TouchableOpacity>
+            */}
             <View
               style={[
                 styles.filtros,
-                { display: shouldShowDataRange ? "flex" : "none" },
+                { display: dataRadioValue ? "flex" : "none" },
               ]}
-            >*/}
+            >
+              {dataRadioValue === 6 && (
+                <View style={styles.containerBotoes}>
+                  <TouchableOpacity
+                    style={styles.botoes}
+                    onPress={showStartDatePicker}
+                  >
+                    <Text style={styles.texto}>{textStartDate}</Text>
+                  </TouchableOpacity>
+                  <DateTimePickerModal
+                    isVisible={isStartDatePickerVisible}
+                    mode="date"
+                    onConfirm={handleStartDateConfirm}
+                    onCancel={hideStartDatePicker}
+                    maximumDate={new Date()}
+                  />
 
-            {dataRadioValue === 6 && (
+                  <TouchableOpacity
+                    style={styles.botoes}
+                    onPress={showEndDatePicker}
+                  >
+                    <Text style={styles.texto}>{textEndDate}</Text>
+                  </TouchableOpacity>
+                  <DateTimePickerModal
+                    isVisible={isEndDatePickerVisible}
+                    mode="date"
+                    onConfirm={handleEndDateConfirm}
+                    onCancel={hideEndDatePicker}
+                    maximumDate={new Date()}
+                  />
+                </View>
+              )}
               <View style={styles.containerBotoes}>
                 <TouchableOpacity
                   style={styles.botoes}
-                  onPress={showStartDatePicker}
+                  onPress={filtrarIntervalo}
                 >
-                  <Text style={styles.texto}>{textStartDate}</Text>
+                  <Text style={styles.texto}>Filtrar</Text>
                 </TouchableOpacity>
-                <DateTimePickerModal
-                  isVisible={isStartDatePickerVisible}
-                  mode="date"
-                  onConfirm={handleStartDateConfirm}
-                  onCancel={hideStartDatePicker}
-                  maximumDate={new Date()}
-                />
-
                 <TouchableOpacity
                   style={styles.botoes}
-                  onPress={showEndDatePicker}
+                  onPress={() => {
+                    handleResetDropdown();
+                    setStartDate("");
+                    setEndDate("");
+                    setTextStartDate("Data Inicial");
+                    setTextEndDate("Data Final");
+                    setModalFiltroDataVisible(false);
+                    setDataRadioValue(1);
+                  }}
                 >
-                  <Text style={styles.texto}>{textEndDate}</Text>
+                  <Text style={styles.texto}>Limpar</Text>
                 </TouchableOpacity>
-                <DateTimePickerModal
-                  isVisible={isEndDatePickerVisible}
-                  mode="date"
-                  onConfirm={handleEndDateConfirm}
-                  onCancel={hideEndDatePicker}
-                  maximumDate={new Date()}
-                />
               </View>
-            )}
-            <View style={styles.containerBotoes}>
-              <TouchableOpacity
-                style={styles.botoes}
-                onPress={filtrarIntervalo}
-              >
-                <Text style={styles.texto}>Filtrar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.botoes}
-                onPress={() => {
-                  handleResetDropdown();
-                  setStartDate("");
-                  setEndDate("");
-                  setTextStartDate("Data Inicial");
-                  setTextEndDate("Data Final");
-                  setModalFiltroDataVisible(false);
-                  setDataRadioValue(1);
-                }}
-              >
-                <Text style={styles.texto}>Limpar</Text>
-              </TouchableOpacity>
             </View>
           </View>
         </SafeAreaView>
@@ -452,7 +452,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   modalContainer: {
-    flex: 0.45,
+    flex: 0.5,
     backgroundColor: Colors.darkgreen,
   },
   containerBotoes: {
@@ -466,7 +466,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: scale(1),
     borderWidth: scale(1),
-    borderColor: "black",
+    backgroundColor: Colors.green,
   },
   botoes: {
     flex: 1,
@@ -474,6 +474,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     width: "50%",
     height: verticalScale(30),
+    borderWidth: scale(1),
     justifyContent: "center",
   },
   texto: {
@@ -499,7 +500,7 @@ const styles = StyleSheet.create({
     marginTop: 3,
   },
   tituloinfo: {
-    color: "black",
+    color: "white",
     fontSize: verticalScale(20),
     marginBottom: verticalScale(10),
     textAlign: "center",
