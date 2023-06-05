@@ -212,7 +212,7 @@ function FiltrosData(props) {
           style={styles.chip}
           textStyle={{ fontSize: scale(14), color: Colors.white }}
           icon={() => <Icon name="calendar" size={20} color="white" />}
-          onPress={() => setModalVisible(true)}
+          onPress={() => setModalFiltroDataVisible(true)}
         >
           <Text>{textDataRadioValue}</Text>
           <AntDesign name="down" size={20} color="black" />
@@ -222,7 +222,8 @@ function FiltrosData(props) {
           icon={() => <Icon name="information" size={20} color="white" />}
           style={styles.chip}
         >
-          Valores
+          {textValorRadioValue}
+          <AntDesign name="down" size={20} color="black" />
         </Chip>
       </View>
       <Modal
@@ -230,7 +231,7 @@ function FiltrosData(props) {
         backdropColor={"#000"}
         onBackButtonPress={() => setModalVisible(false)}
         onBackdropPress={() => setModalVisible(false)}
-        visible={modalVisible}
+        visible={modalFiltroDataVisible}
         animationType="slide"
         statusBarTranslucent
       >
@@ -313,7 +314,7 @@ function FiltrosData(props) {
               />
             </View>
             {/*Filtro intervalo entre datas*/}
-            <TouchableOpacity
+            {/*<TouchableOpacity
               onPress={() => setShouldShowDataRange(!shouldShowDataRange)}
               style={styles.filtrosBotao}
             >
@@ -325,60 +326,60 @@ function FiltrosData(props) {
                 styles.filtros,
                 { display: shouldShowDataRange ? "flex" : "none" },
               ]}
-            >
-              {dataRadioValue === 6 && (
-                <View style={styles.containerBotoes}>
-                  <TouchableOpacity
-                    style={styles.botoes}
-                    onPress={showStartDatePicker}
-                  >
-                    <Text style={styles.texto}>{textStartDate}</Text>
-                  </TouchableOpacity>
-                  <DateTimePickerModal
-                    isVisible={isStartDatePickerVisible}
-                    mode="date"
-                    onConfirm={handleStartDateConfirm}
-                    onCancel={hideStartDatePicker}
-                    maximumDate={new Date()}
-                  />
+            >*/}
 
-                  <TouchableOpacity
-                    style={styles.botoes}
-                    onPress={showEndDatePicker}
-                  >
-                    <Text style={styles.texto}>{textEndDate}</Text>
-                  </TouchableOpacity>
-                  <DateTimePickerModal
-                    isVisible={isEndDatePickerVisible}
-                    mode="date"
-                    onConfirm={handleEndDateConfirm}
-                    onCancel={hideEndDatePicker}
-                    maximumDate={new Date()}
-                  />
-                </View>
-              )}
+            {dataRadioValue === 6 && (
               <View style={styles.containerBotoes}>
                 <TouchableOpacity
                   style={styles.botoes}
-                  onPress={filtrarIntervalo}
+                  onPress={showStartDatePicker}
                 >
-                  <Text style={styles.texto}>Filtrar</Text>
+                  <Text style={styles.texto}>{textStartDate}</Text>
                 </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={isStartDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleStartDateConfirm}
+                  onCancel={hideStartDatePicker}
+                  maximumDate={new Date()}
+                />
+
                 <TouchableOpacity
                   style={styles.botoes}
-                  onPress={() => {
-                    handleResetDropdown();
-                    setStartDate("");
-                    setEndDate("");
-                    setTextStartDate("Data Inicial");
-                    setTextEndDate("Data Final");
-                    setModalFiltroDataVisible(false);
-                    setDataRadioValue(1);
-                  }}
+                  onPress={showEndDatePicker}
                 >
-                  <Text style={styles.texto}>Limpar</Text>
+                  <Text style={styles.texto}>{textEndDate}</Text>
                 </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={isEndDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleEndDateConfirm}
+                  onCancel={hideEndDatePicker}
+                  maximumDate={new Date()}
+                />
               </View>
+            )}
+            <View style={styles.containerBotoes}>
+              <TouchableOpacity
+                style={styles.botoes}
+                onPress={filtrarIntervalo}
+              >
+                <Text style={styles.texto}>Filtrar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.botoes}
+                onPress={() => {
+                  handleResetDropdown();
+                  setStartDate("");
+                  setEndDate("");
+                  setTextStartDate("Data Inicial");
+                  setTextEndDate("Data Final");
+                  setModalFiltroDataVisible(false);
+                  setDataRadioValue(1);
+                }}
+              >
+                <Text style={styles.texto}>Limpar</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </SafeAreaView>
