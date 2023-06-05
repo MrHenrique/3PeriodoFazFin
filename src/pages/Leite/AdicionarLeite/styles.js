@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   botaoselecionaranimal: {
     backgroundColor: Colors.darkgreen,
     width: scale(215),
-    height: verticalScale(40),
+    height: "auto",
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",

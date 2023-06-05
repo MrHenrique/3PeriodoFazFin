@@ -207,14 +207,13 @@ function FiltrosData(props) {
         </Chip>
       </View>
       <Modal
+        coverScreen={true}
         backdropColor={"#000"}
-        backdropOpacity={0.7}
         onBackButtonPress={() => setModalVisible(false)}
         onBackdropPress={() => setModalVisible(false)}
         visible={modalVisible}
         animationType="slide"
         statusBarTranslucent
-        coverScreen={true}
       >
         <SafeAreaView style={styles.container}>
           <View style={styles.modalContainer}>
