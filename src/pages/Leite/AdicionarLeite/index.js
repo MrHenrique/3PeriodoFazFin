@@ -5,7 +5,6 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  TextInput,
   FlatList,
   Alert,
 } from "react-native";
@@ -16,17 +15,51 @@ import Modal from "react-native-modal";
 import { scale, verticalScale } from "react-native-size-matters";
 import { useNavigation } from "@react-navigation/native";
 import { useMainContext } from "../../../contexts/RealmContext";
-import { RadioButton } from "react-native-paper";
+import { Colors } from "../../../styles";
+import {
+  RadioButton,
+  TextInput,
+  MD3Colors,
+  HelperText,
+} from "react-native-paper";
 function AdicionarLeite() {
   const realm = useMainContext();
   const [checked, setChecked] = React.useState("rebanho");
   const navigation = useNavigation();
   const [isModalVisible, setModalVisible] = useState(false);
   const [vacaID, setVacaID] = useState("");
+  const [precoValido, setPrecoValido] = useState(true);
+  const [prodValido, setProdValido] = useState(true);
   function toggleModal() {
     setModalVisible(!isModalVisible);
     setSearchText("");
     setLista(listaVaca);
+  }
+  function handlePrecoChange(text) {
+    const cleanedText = text.replace(",", ".");
+    const parsedValue = parseFloat(cleanedText);
+    const isValid = !isNaN(parsedValue) && parsedValue > 0;
+    setPrecoValido(isValid);
+    setPrecoLV(parsedValue);
+  }
+  function handleProdChange(text) {
+    const cleanedText = text.replace(",", ".");
+    const parsedValue = parseFloat(cleanedText);
+    const isValid = !isNaN(parsedValue) && parsedValue > 0;
+    setProdValido(isValid);
+    setProdLV(parsedValue);
+  }
+  function validCheck() {
+    if (precoLV.length === 0 || prodLV.length === 0) {
+      if (precoLV.length === 0) {
+        setPrecoValido(false);
+      }
+      if (prodLV.length === 0) {
+        setProdValido(false);
+      }
+    } else if (precoValido && prodValido) {
+      handleAddLeite();
+    }
   }
   const renderItem = ({ item }) => {
     return (
@@ -252,38 +285,73 @@ function AdicionarLeite() {
             maximumDate={new Date()}
           />
         </View>
-
-        {/*Descrição*/}
-        <View style={styles.containerinfos}>
-          <Text style={styles.tituloinfo}>Descrição:</Text>
-          <TextInput
-            style={styles.detalhe}
-            value={description}
-            onChangeText={setDescription}
-            placeholder="Exemplo: Leite 22/11 Vaca Araçá"
-          />
-        </View>
-
         {/*Preco do leite*/}
         <View style={styles.containerinfos}>
-          <Text style={styles.tituloinfo}>Preço atual do leite(R$):</Text>
           <TextInput
-            style={styles.detalhe}
+            mode="flat"
+            label="Preço do litro do leite"
+            style={styles.campoTexto}
+            placeholderTextColor={Colors.grey}
+            textColor={Colors.black}
+            activeUnderlineColor={Colors.green}
+            underlineColor={Colors.blue}
+            underlineStyle={{ paddingBottom: 3 }}
+            onChangeText={handlePrecoChange}
             value={precoLV}
-            keyboardType="number-pad"
-            onChangeText={setPrecoLV}
-            placeholder="Exemplo: 3.1"
+            error={!precoValido}
           />
+          <HelperText
+            type="error"
+            style={{
+              color: MD3Colors.error60,
+              fontSize: 14,
+              lineHeight: 15,
+            }}
+            visible={!precoValido}
+            padding="20"
+          >
+            Digite um preço válido.
+          </HelperText>
         </View>
         {/*Produção diaria*/}
         <View style={styles.containerinfos}>
-          <Text style={styles.tituloinfo}>Produção da vaca hoje(litros):</Text>
           <TextInput
-            style={styles.detalhe}
+            mode="flat"
+            label="Litros de leite"
+            style={styles.campoTexto}
+            placeholderTextColor={Colors.grey}
+            textColor={Colors.black}
+            activeUnderlineColor={Colors.green}
+            underlineColor={Colors.blue}
+            underlineStyle={{ paddingBottom: 3 }}
+            onChangeText={handleProdChange}
             value={prodLV}
-            keyboardType="number-pad"
-            onChangeText={setProdLV}
-            placeholder="Exemplo: 10.2"
+            error={!prodValido}
+          />
+          <HelperText
+            type="error"
+            style={{
+              color: MD3Colors.error60,
+              fontSize: 14,
+              lineHeight: 15,
+            }}
+            visible={!prodValido}
+            padding="20"
+          >
+            Digite um valor de produção válido.
+          </HelperText>
+        </View>
+        <View style={styles.containerinfos}>
+          <TextInput
+            label="Observações"
+            style={styles.textInput}
+            placeholderTextColor={Colors.grey}
+            textColor={Colors.black}
+            activeUnderlineColor={Colors.green}
+            underlineColor={Colors.blue}
+            underlineStyle={{ paddingBottom: 3 }}
+            value={description}
+            onChangeText={setDescription}
           />
         </View>
         {/*Descrição*/}
@@ -356,7 +424,7 @@ function AdicionarLeite() {
       <TouchableOpacity
         disabled={CanContinue(vacaID)}
         style={DisabledStyle(vacaID)}
-        onPress={handleAddLeite}
+        onPress={validCheck}
       >
         <Text style={styles.textovoltar}>Cadastrar</Text>
       </TouchableOpacity>

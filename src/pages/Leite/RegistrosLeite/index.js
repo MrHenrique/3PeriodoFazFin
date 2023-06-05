@@ -8,7 +8,6 @@ import {
   FlatList,
   Alert,
   Modal,
-  TextInput,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -17,6 +16,13 @@ import { scale, verticalScale } from "react-native-size-matters";
 import { AuthContext } from "../../../contexts/auth";
 import { useMainContext } from "../../../contexts/RealmContext";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { Colors } from "../../../styles";
+import {
+  TextInput,
+  MD3Colors,
+  IconButton,
+  HelperText,
+} from "react-native-paper";
 function RegistrosLeite() {
   const realm = useMainContext();
   const navigation = useNavigation();
@@ -31,6 +37,7 @@ function RegistrosLeite() {
   const [idDoItemSelecionado, setIdDoItemSelecionado] = useState("");
   const [date, setDate] = useState(new Date());
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+  const [isVolumeProdValid, setIsVolumeProdValid] = useState(true);
   const [text, setText] = useState(
     new Date().getDate().toString().padStart(2, "0") +
       "/" +
@@ -78,6 +85,7 @@ function RegistrosLeite() {
             receita.description = description;
           });
           Alert.alert("Dados modificados com sucesso!");
+          setModalEditarVisible(false);
         });
       } catch (e) {
         Alert.alert("Não foi possível modificar!", e.message);
@@ -139,7 +147,23 @@ function RegistrosLeite() {
   const handleDeletePress = () => {
     console.log("Excluir pressionado");
   };
+  function handleVolumeProdChange(text) {
+    const cleanedText = text.replace(",", ".");
+    const parsedValue = parseFloat(cleanedText);
 
+    const isValid = !isNaN(parsedValue) && parsedValue > 0;
+    setIsVolumeProdValid(isValid);
+    setProdLV(parsedValue);
+  }
+  function validCheck() {
+    if (prodLV.length === 0) {
+      if (prodLV.length === 0) {
+        setIsVolumeProdValid(false);
+      }
+    } else if (isVolumeProdValid) {
+      UpdateinfoLeite();
+    }
+  }
   //Função para formatar os valores mostrado na tela pelo tipo escolhido
   const formatarResultado = (valorRecebido, tipo) => {
     let formattedResult = "";
@@ -271,20 +295,37 @@ function RegistrosLeite() {
             />
           </View>
           <View style={styles.containerinfos}>
-            <Text style={styles.tituloinfo}>
-              Produção da vaca hoje(litros):
-            </Text>
             <TextInput
-              style={styles.detalhe}
+              label="Litros de Leite"
+              style={styles.textInput}
+              placeholderTextColor={Colors.grey}
+              textColor={Colors.black}
+              activeUnderlineColor={Colors.green}
+              underlineColor={Colors.blue}
+              underlineStyle={{ paddingBottom: 3 }}
               value={prodLV}
-              keyboardType="number-pad"
-              onChangeText={setProdLV}
+              onChangeText={handleVolumeProdChange}
+              keyboardType="decimal-pad"
+              inputMode="decimal"
+              error={!isVolumeProdValid}
             />
+            <HelperText
+              type="error"
+              style={{ color: MD3Colors.error60, fontSize: 14, lineHeight: 12 }}
+              visible={!isVolumeProdValid}
+              padding="20"
+            >
+              Digite o volume da unidade do produto.
+            </HelperText>
           </View>
-          <View style={styles.containerinfos}>
-            <Text style={styles.tituloinfo}>Descrição:</Text>
-            <TextInput
-              style={styles.detalhe}
+          <View style={styles.containerinfos}><TextInput
+              label="Observações"
+              style={styles.textInput}
+              placeholderTextColor={Colors.grey}
+              textColor={Colors.black}
+              activeUnderlineColor={Colors.green}
+              underlineColor={Colors.blue}
+              underlineStyle={{ paddingBottom: 3 }}
               value={description}
               onChangeText={setDescription}
             />
@@ -293,8 +334,7 @@ function RegistrosLeite() {
             <TouchableOpacity
               style={styles.botaopressM}
               onPress={() => {
-                UpdateinfoLeite();
-                setModalEditarVisible(false);
+                validCheck();
               }}
             >
               <Text style={styles.textovoltar}>Confirmar</Text>
