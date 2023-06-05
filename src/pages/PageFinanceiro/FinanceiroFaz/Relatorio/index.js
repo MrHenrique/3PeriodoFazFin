@@ -35,7 +35,7 @@ function Relatorio() {
   const [totalLeite, setTotalLeite] = useState(0);
   const [mediaLeite, setMediaLeite] = useState(0);
   const [exportDate, setExportDate] = useState(Date.now().toString());
-  const [hora, setHora] = useState("");
+  const [hora, setHora] = useState(new Date().toLocaleTimeString());
   const [text, setText] = useState(
     new Date().getDate().toString().padStart(2, "0") +
       "/" +
@@ -141,7 +141,7 @@ function Relatorio() {
   </html>
   
   `;
-  let generatePDF = async () => {
+  let dateGen = () => {
     let tempDate = new Date();
     let fDate =
       tempDate.getDate().toString().padStart(2, "0") +
@@ -151,6 +151,10 @@ function Relatorio() {
       tempDate.getFullYear().toString().padStart(2, "0");
     setText(fDate);
     setHora(new Date().toLocaleTimeString());
+    console.log(hora);
+    generatePDF();
+  };
+  let generatePDF = async () => {
     const file = await printToFileAsync({ html: html, base64: false });
     await shareAsync(file.uri);
   };
@@ -335,7 +339,7 @@ function Relatorio() {
               <TouchableOpacity
                 style={styles.exportButton}
                 onPress={() => {
-                  generatePDF();
+                  dateGen();
                 }}
               >
                 <Text style={styles.texto2}>Exportar Dados</Text>
