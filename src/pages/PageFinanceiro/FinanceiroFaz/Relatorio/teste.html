@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        height: 100vh;
+        background-color: #f1f1f1;
+      }
+
+      .containerResumo {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        font-size: 36px;
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #333333;
+      }
+      h2 {
+        font-size: 30px;
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #333333;
+      }
+      .containerTitulo {
+        text-align: center;
+      }
+      .containerInfo {
+        margin: 15px;
+        text-align: center;
+      }
+
+      .containerInfo .label {
+        font-weight: bold;
+        font-size: 24px;
+        color: #555555;
+      }
+
+      .containerInfo .value {
+        font-weight: normal;
+        font-size: 20px;
+        color: #777777;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="containerResumo">
+      <div class="containerTitulo">
+        <img src="/assets/fazfinwhiteletter.png" />
+        <h2>Relatório da Fazenda</h2>
+        <span>Data:${exportDate}</span>
+      </div>
+      <div class="containerInfo">
+        <span class="label">Nome da Fazenda:</span>
+        <span class="value">${nomeFaz}</span>
+      </div>
+
+      <div class="containerInfo">
+        <span class="label">Itens em Estoque:</span>
+        <span class="value">${itensEstoque}</span>
+      </div>
+
+      <div class="containerInfo">
+        <span class="label">Valor do Estoque:</span>
+        <span class="value">${totalEstoque}</span>
+      </div>
+
+      <div class="containerInfo">
+        <span class="label">Número de Rebanhos:</span>
+        <span class="value">${nRebanhos}</span>
+      </div>
+
+      <div class="containerInfo">
+        <span class="label">Número de Animais:</span>
+        <span class="value">${totalVacas}</span>
+      </div>
+
+      <div class="containerInfo">
+        <span class="label">Produção de Leite:</span>
+        <span class="value">${totalLeite} Litros</span>
+      </div>
+    </div>
+  </body>
+</html>
