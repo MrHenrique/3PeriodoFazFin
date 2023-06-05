@@ -126,7 +126,7 @@ const Reproducao = () => {
             }}
             onPress={showDatePicker}
           >
-            <Text style={styles.tituloinfo}>Selecione a data :</Text>
+            <Text style={styles.tituloinfo}>Marcar Cobertura :</Text>
           </TouchableOpacity>
         </View>
 
@@ -149,7 +149,7 @@ const Reproducao = () => {
             }}
             onPress={newsShowDatePicker}
           >
-            <Text style={styles.tituloinfo}>Selecione a data :</Text>
+            <Text style={styles.tituloinfo}>Marcar prenhez :</Text>
           </TouchableOpacity>
         </View>
 
@@ -172,7 +172,7 @@ const Reproducao = () => {
             }}
             onPress={newShowDatePicker}
           >
-            <Text style={styles.tituloinfo}>Selecione a data :</Text>
+            <Text style={styles.tituloinfo}>Marcar Cio :</Text>
           </TouchableOpacity>
         </View>
 
