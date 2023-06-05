@@ -6,12 +6,15 @@ import {
   Text,
   TouchableOpacity,
   SafeAreaView,
-  Modal,
 } from "react-native";
+import Modal from "react-native-modal";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { AuthContext } from "../../contexts/auth";
 import { Chip, RadioButton } from "react-native-paper";
 import { AntDesign } from "@expo/vector-icons";
+import { Colors } from "../../styles";
+import { scale, verticalScale } from "react-native-size-matters";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 function FiltrosData(props) {
   const { listaRecebida } = props; // Recebe a lista que vai ser filtrada
@@ -174,63 +177,92 @@ function FiltrosData(props) {
       });
       setLista(listaFiltradaIntervalo);
     }
+    setModalVisible(false);
   };
 
   return (
     <>
       <View style={styles.containerChip}>
-        <Chip style={styles.chip} icon="information">
+        <Chip
+          style={styles.chip}
+          textStyle={{ fontSize: scale(14), color: Colors.white }}
+          icon={() => <Icon name="information" size={20} color="white" />}
+        >
           Filtros
         </Chip>
         <Chip
           style={styles.chip}
-          icon="calendar"
+          textStyle={{ fontSize: scale(14), color: Colors.white }}
+          icon={() => <Icon name="calendar" size={20} color="white" />}
           onPress={() => setModalVisible(true)}
         >
           {pegarNome()}
         </Chip>
-        <Chip style={styles.chip} icon="information">
+        <Chip
+          textStyle={{ fontSize: scale(14), color: Colors.white }}
+          icon={() => <Icon name="information" size={20} color="white" />}
+          style={styles.chip}
+        >
           Valores
         </Chip>
       </View>
-      <Modal visible={modalVisible} animationType="slide" transparent={true}>
+      <Modal
+        backdropColor={"#000"}
+        backdropOpacity={0.7}
+        onBackButtonPress={() => setModalVisible(false)}
+        onBackdropPress={() => setModalVisible(false)}
+        visible={modalVisible}
+        animationType="slide"
+        statusBarTranslucent
+        coverScreen={true}
+      >
         <SafeAreaView style={styles.container}>
           <View style={styles.modalContainer}>
             <View style={styles.radioButtons}>
-              <Text>Últimos 7 dias</Text>
+              <Text style={styles.txtradiobtn}>Últimos 7 dias</Text>
               <RadioButton
+                uncheckedColor={Colors.white}
+                color={Colors.white}
                 value={1}
                 status={radioValue === 1 ? "checked" : "unchecked"}
                 onPress={() => setRadioValue(1)}
               />
             </View>
             <View style={styles.radioButtons}>
-              <Text>Último mês</Text>
+              <Text style={styles.txtradiobtn}>Último mês</Text>
               <RadioButton
+                uncheckedColor={Colors.white}
+                color={Colors.white}
                 value={2}
                 status={radioValue === 2 ? "checked" : "unchecked"}
                 onPress={() => setRadioValue(2)}
               />
             </View>
             <View style={styles.radioButtons}>
-              <Text>Últimos 3 meses</Text>
+              <Text style={styles.txtradiobtn}>Últimos 3 meses</Text>
               <RadioButton
+                uncheckedColor={Colors.white}
+                color={Colors.white}
                 value={3}
                 status={radioValue === 3 ? "checked" : "unchecked"}
                 onPress={() => setRadioValue(3)}
               />
             </View>
             <View style={styles.radioButtons}>
-              <Text>Últimos 6 meses</Text>
+              <Text style={styles.txtradiobtn}>Últimos 6 meses</Text>
               <RadioButton
+                uncheckedColor={Colors.white}
+                color={Colors.white}
                 value={4}
                 status={radioValue === 4 ? "checked" : "unchecked"}
                 onPress={() => setRadioValue(4)}
               />
             </View>
             <View style={styles.radioButtons}>
-              <Text>Todas as datas</Text>
+              <Text style={styles.txtradiobtn}>Todas as datas</Text>
               <RadioButton
+                uncheckedColor={Colors.white}
+                color={Colors.white}
                 value={5}
                 status={radioValue === 5 ? "checked" : "unchecked"}
                 onPress={() => setRadioValue(5)}
@@ -241,8 +273,8 @@ function FiltrosData(props) {
               onPress={() => setShouldShowDataRange(!shouldShowDataRange)}
               style={styles.filtrosBotao}
             >
-              <Text style={styles.tituloBotao}>Data Range</Text>
-              <AntDesign name="down" size={24} color="black" />
+              <Text style={styles.tituloBotao}>Filtrar Por Data</Text>
+              <AntDesign name="down" size={scale(25)} color="white" />
             </TouchableOpacity>
             <View
               style={[
@@ -310,43 +342,56 @@ function FiltrosData(props) {
   );
 }
 const styles = StyleSheet.create({
+  tituloBotao: {
+    fontSize: scale(14),
+    color: Colors.white,
+  },
+  txtradiobtn: {
+    fontSize: scale(15),
+    color: Colors.white,
+  },
   container: {
     flex: 1,
+    justifyContent: "flex-end",
   },
   modalContainer: {
-    height: "60%",
-    backgroundColor: "#fea",
-    top: "40%",
+    flex: 0.45,
+    backgroundColor: Colors.darkgreen,
   },
   containerBotoes: {
     flexDirection: "row",
     padding: 3,
   },
   radioButtons: {
+    padding: scale(10),
     justifyContent: "space-between",
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 1,
-    borderWidth: 2,
+    paddingVertical: scale(1),
+    borderWidth: scale(1),
     borderColor: "black",
   },
   botoes: {
     flex: 1,
-    backgroundColor: "gray",
+    backgroundColor: Colors.green,
     borderRadius: 30,
     width: "50%",
-    height: 30,
+    height: verticalScale(30),
     justifyContent: "center",
   },
   texto: {
+    color: Colors.white,
     textAlign: "center",
+    fontSize: scale(14),
   },
   containerChip: {
     flexDirection: "row",
-    alignItems: "center",
+    justifyContent: "space-between",
   },
   chip: {
-    marginRight: 5,
+    maxWidth: scale(130),
+    backgroundColor: Colors.green,
+    padding: scale(5),
   },
   filtrosBotao: {
     justifyContent: "space-between",
