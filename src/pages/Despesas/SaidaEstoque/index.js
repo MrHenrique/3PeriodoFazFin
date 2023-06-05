@@ -19,6 +19,8 @@ import {
 import Animated, {
   LightSpeedInLeft,
   LightSpeedOutLeft,
+  SlideInLeft,
+  SlideOutRight,
 } from "react-native-reanimated";
 import { Colors } from "../../../styles";
 import EstoqueOptions from "../../../components/Dropdown/EstoqueOptions";
@@ -54,7 +56,7 @@ export default function SaidaEstoque() {
 
   const { fazID, rebID, idEstoqueSaida, TipoEstoqueSaida, IdEstoqueSaida } =
     useContext(AuthContext);
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item, index }) => {
     return (
       <View style={styles.modalContainer2}>
         <TouchableOpacity
@@ -66,8 +68,7 @@ export default function SaidaEstoque() {
           style={[
             styles.cardVacas,
             {
-              backgroundColor:
-                item.brincoVaca % 2 === 0 ? "#0F6D00" : "#004513",
+              backgroundColor: index % 2 === 0 ? "#1B5E20" : "#154c21",
             },
           ]}
         >
@@ -638,22 +639,26 @@ export default function SaidaEstoque() {
 
             <View style={styles.radioBView}>
               <RadioButton
+                uncheckedColor={Colors.white}
+                color={Colors.white}
                 value="rebanho"
                 status={checked === "rebanho" ? "checked" : "unchecked"}
                 onPress={() => {
                   setChecked("rebanho"), setVacaID("");
                 }}
               />
-              <Text>Cadastro por Rebanho</Text>
+              <Text style={styles.RadioTextStyle}>Cadastro por Rebanho</Text>
               <RadioButton
+                uncheckedColor={Colors.white}
+                color={Colors.white}
                 value="vacas"
                 status={checked === "vacas" ? "checked" : "unchecked"}
                 onPress={() => setChecked("vacas")}
               />
-              <Text>Cadastro individual</Text>
+              <Text style={styles.RadioTextStyle}>Cadastro individual</Text>
             </View>
             {checked === "vacas" ? (
-              <>
+              <Animated.View entering={SlideInLeft} exiting={SlideOutRight}>
                 <TouchableOpacity
                   onPress={() => {
                     toggleModal(), setVacaID("");
@@ -664,9 +669,10 @@ export default function SaidaEstoque() {
                   <Modal
                     isVisible={isModalVisible}
                     coverScreen={true}
-                    backdropColor={"rgba(234,242,215,0.8)"}
+                    backdropColor={"black"}
                     animationIn="slideInUp"
                     animationOut="slideOutDown"
+                    statusBarTranslucent
                   >
                     <View style={styles.modalContainer}>
                       <Text style={styles.TituloM}>Selecione um animal</Text>
@@ -699,7 +705,7 @@ export default function SaidaEstoque() {
                     </TouchableOpacity>
                   </Modal>
                 </TouchableOpacity>
-              </>
+              </Animated.View>
             ) : null}
           </ScrollView>
           <View style={StyleFuncKeyboard()}>

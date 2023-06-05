@@ -384,6 +384,7 @@ function AdicionarLeite() {
             <View style={styles.radioBView}>
               <RadioButton
                 value="rebanho"
+                uncheckedColor={Colors.white}
                 color={Colors.white}
                 status={checked === "rebanho" ? "checked" : "unchecked"}
                 onPress={() => {
@@ -393,6 +394,7 @@ function AdicionarLeite() {
               <Text style={styles.RadioTextStyle}>Cadastro por Rebanho</Text>
               <RadioButton
                 value="vacas"
+                uncheckedColor={Colors.white}
                 color={Colors.white}
                 status={checked === "vacas" ? "checked" : "unchecked"}
                 onPress={() => setChecked("vacas")}

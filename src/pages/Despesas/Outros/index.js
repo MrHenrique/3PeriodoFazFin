@@ -10,6 +10,7 @@ import {
   FlatList,
 } from "react-native";
 import { useState, useContext, useEffect } from "react";
+import Animated, { SlideInLeft, SlideOutRight } from "react-native-reanimated";
 import {
   TextInput,
   HelperText,
@@ -42,7 +43,7 @@ export default function Outros() {
   const { rebID } = useContext(AuthContext);
   const [vacaID, setVacaID] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item, index }) => {
     return (
       <View style={styles.modalContainer2}>
         <TouchableOpacity
@@ -54,8 +55,7 @@ export default function Outros() {
           style={[
             styles.cardVacas,
             {
-              backgroundColor:
-                item.brincoVaca % 2 === 0 ? "#0F6D00" : "#004513",
+              backgroundColor: index % 2 === 0 ? "#1B5E20" : "#154c21",
             },
           ]}
         >
@@ -318,67 +318,77 @@ export default function Outros() {
             </View>
             <View style={styles.radioBView}>
               <RadioButton
+                uncheckedColor={Colors.white}
+                color={Colors.white}
                 value="rebanho"
                 status={checked === "rebanho" ? "checked" : "unchecked"}
                 onPress={() => {
                   setChecked("rebanho"), setVacaID("");
                 }}
               />
-              <Text>Cadastro por Rebanho</Text>
+              <Text style={styles.RadioTextStyle}>Cadastro por Rebanho</Text>
               <RadioButton
+                uncheckedColor={Colors.white}
+                color={Colors.white}
                 value="vacas"
                 status={checked === "vacas" ? "checked" : "unchecked"}
                 onPress={() => setChecked("vacas")}
               />
-              <Text>Cadastro individual</Text>
+              <Text style={styles.RadioTextStyle}>Cadastro individual</Text>
             </View>
             {checked === "vacas" ? (
               <>
-                <TouchableOpacity
-                  onPress={() => {
-                    toggleModal(), setVacaID("");
-                  }}
-                  style={styles.botaoselecionaranimal}
-                >
-                  <Text style={styles.tituloBotao}>Selecionar animal</Text>
-                  <Modal
-                    isVisible={isModalVisible}
-                    coverScreen={true}
-                    backdropColor={"rgba(234,242,215,0.8)"}
-                    animationIn="slideInUp"
-                    animationOut="slideOutDown"
+                <Animated.View style={{flex:0.5,}} entering={SlideInLeft} exiting={SlideOutRight}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      toggleModal(), setVacaID("");
+                    }}
+                    style={styles.botaoselecionaranimal}
                   >
-                    <View style={styles.modalContainer}>
-                      <Text style={styles.TituloM}>Selecione um animal</Text>
-                      <TouchableOpacity
-                        style={styles.filtroNome}
-                        onPress={handleFilterNome}
-                      >
-                        <Text style={styles.tituloBotao}>Filtrar por nome</Text>
-                      </TouchableOpacity>
-                      <TextInput
-                        style={styles.search}
-                        placeholder="Pesquise pelo nome."
-                        value={searchText}
-                        onChangeText={(t) => setSearchText(t)}
-                      ></TextInput>
-                      <FlatList
-                        style={styles.scroll}
-                        data={lista}
-                        renderItem={renderItem}
-                        keyExtractor={(item) => item._id}
-                      />
-                    </View>
-                    <TouchableOpacity
-                      style={styles.botaopressM}
-                      onPress={() => {
-                        toggleModal();
-                      }}
+                    <Text style={styles.tituloBotao}>Selecionar animal</Text>
+                    <Modal
+                      isVisible={isModalVisible}
+                      coverScreen={true}
+                      backdropOpacity={0.5}
+                      backdropColor={"black"}
+                      animationIn="slideInUp"
+                      animationOut="slideOutDown"
+                      onBackdropPress={() => setModalVisible(false)}
                     >
-                      <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-                    </TouchableOpacity>
-                  </Modal>
-                </TouchableOpacity>
+                      <View style={styles.modalContainer}>
+                        <Text style={styles.TituloM}>Selecione um animal</Text>
+                        <TouchableOpacity
+                          style={styles.filtroNome}
+                          onPress={handleFilterNome}
+                        >
+                          <Text style={styles.tituloBotao}>
+                            Filtrar por nome
+                          </Text>
+                        </TouchableOpacity>
+                        <TextInput
+                          style={styles.search}
+                          placeholder="Pesquise pelo nome."
+                          value={searchText}
+                          onChangeText={(t) => setSearchText(t)}
+                        ></TextInput>
+                        <FlatList
+                          style={styles.scroll}
+                          data={lista}
+                          renderItem={renderItem}
+                          keyExtractor={(item) => item._id}
+                        />
+                      </View>
+                      <TouchableOpacity
+                        style={styles.botaopressM}
+                        onPress={() => {
+                          toggleModal();
+                        }}
+                      >
+                        <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+                      </TouchableOpacity>
+                    </Modal>
+                  </TouchableOpacity>
+                </Animated.View>
               </>
             ) : null}
           </ScrollView>

@@ -183,9 +183,9 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   containergeral: {
+    flex: 1,
     margin: scale(15),
     backgroundColor: Colors.darkgreen,
-    borderRadius: 10,
   },
 });
 // estilo tab
