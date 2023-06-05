@@ -149,7 +149,7 @@ export const VacasSchema = {
     nomeVaca: "string",
     nascimentoVaca: "string",
     brincoVaca: "string",
-    descVaca: "string",
+    descVaca: "string?",
     createdAt: "date",
     genero: "float",
     receitas: "ReceitaSchema[]",

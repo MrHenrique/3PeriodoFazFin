@@ -105,8 +105,8 @@ function AdicionarLeite() {
               createdAt: new Date(date),
             });
             reb.receitas.push(createdLeiteReb);
-            let nVacas = reb.vacas.length;
-            reb.vacas.forEach((vaca) => {
+            let nVacas = reb.vacas.filtered("genero == 1").length;
+            reb.vacas.filtered("genero == 1").forEach((vaca) => {
               let createdLeite = realm.create("ReceitaSchema", {
                 _id: uuid.v4(),
                 idTransacao: id,
@@ -173,9 +173,9 @@ function AdicionarLeite() {
   useEffect(() => {
     if (realm) {
       let dataVaca = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-      setListaVaca(dataVaca.vacas.sorted("nomeVaca"));
-      dataVaca.vacas.sorted("nomeVaca").addListener((values) => {
-        setListaVaca([...values]);
+      setListaVaca(dataVaca.vacas.filtered("genero == 1").sorted("nomeVaca"));
+      dataVaca.vacas.addListener((values) => {
+        setListaVaca([...values.filtered("genero == 1").sorted("nomeVaca")]);
       });
     }
   }, [realm]);
