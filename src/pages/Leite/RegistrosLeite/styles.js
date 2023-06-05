@@ -4,10 +4,10 @@ import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
   teste: {
-    paddingHorizontal: 20,
+    paddingHorizontal: scale(20),
     flexDirection: "row",
-    alignItens: "center",
-    justifyContent: "space-between",
+    alignItems: "center",
+    justifyContent: "space-evenly",
   },
   containerTextList: {
     flex: 1,
@@ -105,9 +105,7 @@ const styles = StyleSheet.create({
   },
   tituloinfo: {
     color: "white",
-    fontSize: verticalScale(20),
-    marginBottom: verticalScale(10),
-    textAlign: "center",
+    fontSize: scale(20),
     fontWeight: "bold",
   },
   tituloDetalhes: {
@@ -129,10 +127,10 @@ const styles = StyleSheet.create({
   containerinfos: {
     marginVertical: verticalScale(5),
     padding: verticalScale(5),
-    width: scale(320),
-    backgroundColor: "rgba(15, 109, 0, 0.7)",
+    backgroundColor: Colors.green,
     borderRadius: 20,
     alignSelf: "center",
+    width: scale(280)
   },
 
   textavatar: {
@@ -142,8 +140,7 @@ const styles = StyleSheet.create({
     paddingLeft: scale(10),
   },
   modalContainer: {
-    //flex: 1,
-    backgroundColor: "#004513",
+    flex: 1,
     borderRadius: 10,
     margin: 20,
     padding: 20,
@@ -186,7 +183,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   containergeral: {
-    flex: 1,
     margin: scale(15),
     backgroundColor: Colors.darkgreen,
     borderRadius: 10,

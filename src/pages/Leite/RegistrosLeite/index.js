@@ -277,83 +277,87 @@ function RegistrosLeite() {
           <Text style={styles.tituloBotao}>{"Voltar"}</Text>
         </TouchableOpacity>
         <Modal
+          backdropOpacity={0.5}
           backdropColor="black"
           visible={modalEditarVisible}
           animationType="slide"
           transparent={true}
+          statusBarTranslucent
         >
           <View style={styles.modalContainer}>
-            <View style={styles.containerinfos}>
-              <TouchableOpacity style={styles.teste} onPress={showDatePicker}>
-                <Text style={styles.tituloinfo}>{text}</Text>
-                <AntDesign name="calendar" size={24} color="black" />
-              </TouchableOpacity>
+            <View style={styles.containergeral}>
+              <View style={styles.containerinfos}>
+                <TouchableOpacity style={styles.teste} onPress={showDatePicker}>
+                  <Text style={styles.tituloinfo}>{text}</Text>
+                  <AntDesign name="calendar" size={30} color="white" />
+                </TouchableOpacity>
 
-              <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                date={date}
-                mode="date"
-                onConfirm={handleDateConfirm}
-                onCancel={hideDatePicker}
-                maximumDate={new Date()}
-              />
-            </View>
-            <View style={styles.containerinfos}>
-              <TextInput
-                label="Litros de Leite"
-                style={styles.textInput}
-                placeholderTextColor={Colors.grey}
-                textColor={Colors.black}
-                activeUnderlineColor={Colors.green}
-                underlineColor={Colors.blue}
-                underlineStyle={{ paddingBottom: 3 }}
-                value={prodLV}
-                onChangeText={handleVolumeProdChange}
-                keyboardType="decimal-pad"
-                inputMode="decimal"
-                error={!isVolumeProdValid}
-              />
-              <HelperText
-                type="error"
-                style={{
-                  color: MD3Colors.error60,
-                  fontSize: 14,
-                  lineHeight: 12,
-                }}
-                visible={!isVolumeProdValid}
-                padding="20"
-              >
-                Digite o volume da unidade do produto.
-              </HelperText>
-            </View>
-            <View style={styles.containerinfos}>
-              <TextInput
-                label="Observações"
-                style={styles.textInput}
-                placeholderTextColor={Colors.grey}
-                textColor={Colors.black}
-                activeUnderlineColor={Colors.green}
-                underlineColor={Colors.blue}
-                underlineStyle={{ paddingBottom: 3 }}
-                value={description}
-                onChangeText={setDescription}
-              />
-            </View>
-            <View style={styles.modalContainerBotoes}>
-              <TouchableOpacity
-                style={styles.botaopressM}
-                onPress={() => {
-                  validCheck();
-                }}
-              >
-                <Text style={styles.textovoltar}>Confirmar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.botaopressM}
-                onPress={() => setModalEditarVisible(false)}
-              >
-                <Text style={styles.textovoltar}>Voltar</Text>
-              </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={isDatePickerVisible}
+                  date={date}
+                  mode="date"
+                  onConfirm={handleDateConfirm}
+                  onCancel={hideDatePicker}
+                  maximumDate={new Date()}
+                />
+              </View>
+              <View style={styles.containerinfos}>
+                <TextInput
+                  label="Litros de Leite"
+                  style={styles.textInput}
+                  placeholderTextColor={Colors.grey}
+                  textColor={Colors.black}
+                  activeUnderlineColor={Colors.green}
+                  underlineColor={Colors.blue}
+                  underlineStyle={{ paddingBottom: 3 }}
+                  value={prodLV}
+                  onChangeText={handleVolumeProdChange}
+                  keyboardType="decimal-pad"
+                  inputMode="decimal"
+                  error={!isVolumeProdValid}
+                />
+                <HelperText
+                  type="error"
+                  style={{
+                    color: MD3Colors.error60,
+                    fontSize: 14,
+                    lineHeight: 12,
+                  }}
+                  visible={!isVolumeProdValid}
+                  padding="20"
+                >
+                  Digite o volume da unidade do produto.
+                </HelperText>
+              </View>
+              <View style={styles.containerinfos}>
+                <TextInput
+                  label="Observações"
+                  style={styles.textInput}
+                  placeholderTextColor={Colors.grey}
+                  textColor={Colors.black}
+                  activeUnderlineColor={Colors.green}
+                  underlineColor={Colors.blue}
+                  underlineStyle={{ paddingBottom: 3 }}
+                  value={description}
+                  onChangeText={setDescription}
+                />
+              </View>
+              <View style={styles.modalContainerBotoes}>
+                <TouchableOpacity
+                  style={styles.botaopressM}
+                  onPress={() => {
+                    validCheck();
+                  }}
+                >
+                  <Text style={styles.textovoltar}>Confirmar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.botaopressM}
+                  onPress={() => setModalEditarVisible(false)}
+                >
+                  <Text style={styles.textovoltar}>Voltar</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </Modal>
