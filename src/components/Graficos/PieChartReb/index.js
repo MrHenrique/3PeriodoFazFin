@@ -32,7 +32,7 @@ function PieChartReb() {
   return (
     <PieChart
       width={screenWidth}
-      height={verticalScale(220)}
+      height={verticalScale(180)}
       data={data}
       chartConfig={chartConfig}
       accessor={"valor"}

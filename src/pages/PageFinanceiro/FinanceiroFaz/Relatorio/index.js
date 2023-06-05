@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   View,
   FlatList,
@@ -18,13 +18,142 @@ import { Colors } from "../../../../styles";
 import { verticalScale, scale } from "react-native-size-matters";
 import Modal from "react-native-modal";
 import { AuthContext } from "../../../../contexts/auth";
+import { useMainContext } from "../../../../contexts/RealmContext";
+import { printToFileAsync } from "expo-print";
+import { shareAsync } from "expo-sharing";
 function Relatorio() {
+  const realm = useMainContext();
   const precoTotal = precoLeite - precoCF;
-  const { precoCF, listaAli, listaLeite, precoLeite } = useContext(AuthContext);
+  const { precoCF, listaAli, listaLeite, precoLeite, fazID } =
+    useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [nomeFaz, setNomeFaz] = useState("");
+  const [nRebanhos, setNRebanhos] = useState(0);
+  const [totalEstoque, setTotalEstoque] = useState("");
+  const [itensEstoque, setItensEstoque] = useState(0);
+  const [totalVacas, setTotalVacas] = useState(0);
+  const [totalLeite, setTotalLeite] = useState(0);
+  const [mediaLeite, setMediaLeite] = useState(0);
+  const [exportDate, setExportDate] = useState(Date.now().toString());
+  const [hora, setHora] = useState("");
+  const [text, setText] = useState(
+    new Date().getDate().toString().padStart(2, "0") +
+      "/" +
+      (new Date().getMonth() + 1).toString().padStart(2, "0") +
+      "/" +
+      new Date().getFullYear().toString().padStart(2, "0")
+  );
   function toggleModal() {
     setModalVisible(!isModalVisible);
   }
+  const html = `
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <style>
+        body {
+          font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+          margin: 0;
+          padding: 20px;
+          display: flex;
+          justify-content: center;
+          height: 90vh;
+          background-color: #f1f1f1;
+        }
+  
+        .containerResumo {
+          background-color: #ffffff;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+  
+        h1 {
+          font-size: 36px;
+          margin-top: 0;
+          margin-bottom: 20px;
+          color: #333333;
+        }
+        h2 {
+          font-size: 30px;
+          margin-top: 0;
+          margin-bottom: 20px;
+          color: #333333;
+        }
+        .containerTitulo {
+          text-align: center;
+        }
+        .containerInfo {
+          margin: 15px;
+          text-align: center;
+        }
+  
+        .containerInfo .label {
+          font-weight: bold;
+          font-size: 24px;
+          color: #555555;
+        }
+  
+        .containerInfo .value {
+          font-weight: normal;
+          font-size: 20px;
+          color: #777777;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="containerResumo">
+        <div class="containerTitulo">
+          <h2>Relatório da Fazenda</h2>
+          <span>Data:${text} ${hora}</span>
+        </div>
+        <div class="containerInfo">
+          <span class="label">Nome da Fazenda:</span>
+          <span class="value">${nomeFaz}</span>
+        </div>
+  
+        <div class="containerInfo">
+          <span class="label">Itens em Estoque:</span>
+          <span class="value">${itensEstoque}</span>
+        </div>
+  
+        <div class="containerInfo">
+          <span class="label">Valor do Estoque:</span>
+          <span class="value">${totalEstoque}</span>
+        </div>
+  
+        <div class="containerInfo">
+          <span class="label">Número de Rebanhos:</span>
+          <span class="value">${nRebanhos}</span>
+        </div>
+  
+        <div class="containerInfo">
+          <span class="label">Número de Animais:</span>
+          <span class="value">${totalVacas}</span>
+        </div>
+  
+        <div class="containerInfo">
+          <span class="label">Produção de Leite:</span>
+          <span class="value">${totalLeite} Litros</span>
+        </div>
+      </div>
+    </body>
+  </html>
+  
+  `;
+  let generatePDF = async () => {
+    let tempDate = new Date();
+    let fDate =
+      tempDate.getDate().toString().padStart(2, "0") +
+      "/" +
+      (tempDate.getMonth() + 1).toString().padStart(2, "0") +
+      "/" +
+      tempDate.getFullYear().toString().padStart(2, "0");
+    setText(fDate);
+    setHora(new Date().toLocaleTimeString());
+    const file = await printToFileAsync({ html: html, base64: false });
+    await shareAsync(file.uri);
+  };
   const renderItem2 = ({ item }) => {
     return (
       <TouchableOpacity style={styles.listaDet}>
@@ -65,6 +194,37 @@ function Relatorio() {
       return 0;
     }
   }
+  useEffect(() => {
+    if (realm) {
+      let Fazenda = realm.objectForPrimaryKey("Farm", fazID);
+      setNomeFaz(Fazenda.nomefaz);
+      let nRebanhos = Fazenda.rebanhos.length;
+      setNRebanhos(nRebanhos);
+      let ValorTotalEstoque = Fazenda.atualEstoque.reduce(
+        (total, produto) => total + produto.valorProd,
+        0
+      );
+      let formattedValor = `R$ ${ValorTotalEstoque.toFixed(2).replace(
+        ".",
+        ","
+      )}`;
+      setTotalEstoque(formattedValor);
+      setItensEstoque(Fazenda.atualEstoque.length);
+      let totalVacas = Fazenda.rebanhos.reduce(
+        (soma, rebanho) => soma + rebanho.vacas.length,
+        0
+      );
+      setTotalVacas(totalVacas);
+      let totalLeite = Fazenda.rebanhos.reduce((somaRebanho, rebanho) => {
+        let sumProdL = rebanho.receitas.reduce(
+          (somaReceita, receita) => somaReceita + receita.prodL,
+          0
+        );
+        return somaRebanho + sumProdL;
+      }, 0);
+      setTotalLeite(totalLeite);
+    }
+  }, [realm]);
   const total = getTotal(getDespesas(), getReceitas()).toFixed(2);
   const formattedTotal = `R$ ${total.replace(".", ",")}`;
   const despesas = getDespesas().toFixed(2);
@@ -77,57 +237,119 @@ function Relatorio() {
     <SafeAreaView style={styles.container}>
       <View style={styles.containergeral}>
         <View style={styles.BTN_detalhes}>
+          <View style={styles.containerResumo}>
+            <Text
+              style={[
+                styles.texto2,
+                {
+                  fontSize: setSize(nomeFaz, scale(200)),
+                },
+              ]}
+            >
+              {nomeFaz}
+            </Text>
+            <View style={styles.containerInfo2}>
+              <Text style={styles.texto2}>Itens em Estoque: </Text>
+              <Text
+                style={[
+                  styles.texto2,
+                  {
+                    fontSize: setSize(itensEstoque, scale(150)),
+                    alignSelf: "center",
+                  },
+                ]}
+              >
+                {itensEstoque}
+              </Text>
+            </View>
+            <View style={styles.containerInfo2}>
+              <Text style={styles.texto2}>Valor do Estoque: </Text>
+              <Text
+                style={[
+                  styles.texto2,
+                  {
+                    fontSize: setSize(totalEstoque, scale(150)),
+                    alignSelf: "center",
+                  },
+                ]}
+              >
+                {totalEstoque}
+              </Text>
+            </View>
+            <View style={styles.containerInfo2}>
+              <Text style={styles.texto2}>Número de Rebanhos:</Text>
+              <Text
+                style={[
+                  styles.texto2,
+                  {
+                    fontSize: setSize(nRebanhos, scale(150)),
+                  },
+                ]}
+              >
+                {nRebanhos}
+              </Text>
+            </View>
+            <View style={styles.containerInfo2}>
+              <Text style={styles.texto2}>Número de animais: </Text>
+              <Text
+                style={[
+                  styles.texto2,
+                  {
+                    fontSize: setSize(totalVacas, scale(150)),
+                    alignSelf: "center",
+                  },
+                ]}
+              >
+                {totalVacas}
+              </Text>
+            </View>
+            <View style={styles.containerInfo2}>
+              <Text style={styles.texto2}>Produção de Leite: </Text>
+              <Text
+                style={[
+                  styles.texto2,
+                  {
+                    fontSize: setSize(totalLeite, scale(150)),
+                    alignSelf: "center",
+                  },
+                ]}
+              >
+                {totalLeite + " Litros"}
+              </Text>
+            </View>
+            <View style={styles.containerInfo2}>
+              <Text style={styles.texto2}>Média de Produção de Leite: </Text>
+              <Text
+                style={[
+                  styles.texto2,
+                  {
+                    fontSize: setSize(mediaLeite, scale(150)),
+                    alignSelf: "center",
+                  },
+                ]}
+              >
+                {totalLeite / totalVacas + " Litros"}
+              </Text>
+            </View>
+            <View>
+              <TouchableOpacity
+                style={styles.exportButton}
+                onPress={() => {
+                  generatePDF();
+                }}
+              >
+                <Text style={styles.texto2}>Exportar Dados</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
           <TouchableOpacity
             style={{ flex: 1, justifyContent: "space-around" }}
             onPress={() => {
               toggleModal();
             }}
           >
-            <View style={styles.containerResumo}>
-              <View style={styles.containerInfo}>
-                <Text style={styles.texto}>Total de receitas:</Text>
-                <Text
-                  style={[
-                    styles.textoValorPos,
-                    {
-                      fontSize: setSize(formattedReceitas, scale(200)),
-                    },
-                  ]}
-                >
-                  {formattedReceitas}
-                </Text>
-              </View>
-              <View style={styles.containerInfo}>
-                <Text style={styles.texto}>Total de despesas:</Text>
-                <Text
-                  style={[
-                    styles.textoValorNeg,
-                    {
-                      fontSize: setSize(formattedDespesas, scale(200)),
-                    },
-                  ]}
-                >
-                  {formattedDespesas}
-                </Text>
-              </View>
-              <View style={styles.containerInfo}>
-                <Text style={styles.texto}>Balanço final: </Text>
-                <Text
-                  style={[
-                    Color(total),
-                    {
-                      fontSize: setSize(formattedTotal, scale(270)),
-                      alignSelf: "center",
-                    },
-                  ]}
-                >
-                  {formattedTotal}
-                </Text>
-              </View>
-            </View>
-
             <View style={styles.Grafico}>
-              <Text style={styles.preGraf}>
+              <Text style={styles.preGraf2}>
                 Clique no gráfico para mais detalhes.
               </Text>
               <View style={styles.containerChart}>
@@ -146,26 +368,49 @@ function Relatorio() {
               animationIn="slideInUp"
               animationOut="slideOutDown"
             >
-              <View style={styles.modalContainer}>
+              <View style={styles.modalContainer2}>
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
-                  <FlatList
-                    style={styles.scroll}
-                    data={listaLeite}
-                    renderItem={renderItem2}
-                    keyExtractor={(item) => item._id}
-                  />
+                  <View style={styles.containerResumo}>
+                    <View style={styles.containerInfo}>
+                      <Text style={styles.texto}>Total de receitas:</Text>
+                      <Text
+                        style={[
+                          styles.textoValorPos,
+                          {
+                            fontSize: setSize(formattedReceitas, scale(200)),
+                          },
+                        ]}
+                      >
+                        {formattedReceitas}
+                      </Text>
+                    </View>
+                    <View style={styles.containerInfo}>
+                      <Text style={styles.texto}>Total de despesas:</Text>
+                      <Text
+                        style={[
+                          styles.textoValorNeg,
+                          {
+                            fontSize: setSize(formattedDespesas, scale(200)),
+                          },
+                        ]}
+                      >
+                        {formattedDespesas}
+                      </Text>
+                    </View>
+                    <Text style={styles.texto}>Balanço final: </Text>
+                    <Text
+                      style={[
+                        Color(total),
+                        {
+                          fontSize: setSize(formattedTotal, scale(270)),
+                          alignSelf: "center",
+                        },
+                      ]}
+                    >
+                      {formattedTotal}
+                    </Text>
+                  </View>
                 </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.tituloModal}>Detalhes de despesas:</Text>
-                  <FlatList
-                    style={styles.scroll}
-                    data={listaAli}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item._id}
-                  />
-                </View>
-
                 <View style={{ marginBottom: verticalScale(10) }}>
                   <TouchableOpacity
                     style={styles.botaopressM}

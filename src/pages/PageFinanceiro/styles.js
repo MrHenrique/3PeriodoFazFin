@@ -41,6 +41,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(15),
   },
   //pagina DESPESAS
+  preGraf2: {
+    ...Fonts.txtSmall,
+    color: "white",
+  },
   preGraf: {
     ...Fonts.txtMedium,
     color: "white",
@@ -54,6 +58,13 @@ const styles = StyleSheet.create({
     margin: scale(15),
     backgroundColor: Colors.green,
     borderRadius: 10,
+  },
+  containerInfo2: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderBottomWidth: scale(1),
+    borderBottomColor: "white",
   },
   containerInfo: {
     flex: 1,
@@ -77,6 +88,7 @@ const styles = StyleSheet.create({
   Grafico: {
     flex: 2,
     justifyContent: "center",
+    maxHeight: verticalScale(190),
   },
   containervoltar: {
     flex: 0.1,
@@ -87,6 +99,14 @@ const styles = StyleSheet.create({
     ...Buttons.btnLargeRounded,
     marginBottom: verticalScale(10),
     elevation: 5,
+  },
+  exportButton: {
+    backgroundColor: Colors.darkgreen,
+    ...Buttons.btnSmallRounded,
+    elevation: 5,
+    padding: 5,
+    justifyContent: "center",
+    alignSelf: "flex-end",
   },
   containerTituloBotao: {
     flex: 1,
@@ -111,6 +131,12 @@ const styles = StyleSheet.create({
     ...Fonts.txtXLargeBold,
     alignSelf: "center",
   },
+  texto2: {
+    color: Colors.white,
+    fontWeight: "bold",
+    ...Fonts.txtMedium,
+    alignSelf: "center",
+  },
   texto: {
     color: Colors.white,
     fontWeight: "bold",
@@ -121,6 +147,15 @@ const styles = StyleSheet.create({
     flex: 2,
   },
   //Modal
+  modalContainer2: {
+    flex: 1,
+    backgroundColor: Colors.darkgreen,
+    alignSelf: "center",
+    width: scale(330),
+    maxHeight: verticalScale(240),
+    borderRadius: 20,
+    position: "relative",
+  },
   modalContainer: {
     flex: 1,
     backgroundColor: Colors.darkgreen,
@@ -146,6 +181,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     elevation: 10,
+    margin: verticalScale(5),
   },
   listaDet: {
     borderRadius: 20,
