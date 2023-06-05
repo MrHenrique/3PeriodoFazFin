@@ -97,7 +97,7 @@ function CadastroVaca({ navigation }) {
             <View style={{ alignSelf: "center" }}>
               <TouchableOpacity
                 onPress={() => {
-                  setGenero(1), setMacho("check-square"), setFemea("square");
+                  setGenero(0), setMacho("check-square"), setFemea("square");
                 }}
               >
                 <Text style={styles.titulogen}>Macho</Text>
@@ -107,7 +107,7 @@ function CadastroVaca({ navigation }) {
             <View>
               <TouchableOpacity
                 onPress={() => {
-                  setGenero(0), setMacho("square"), setFemea("check-square");
+                  setGenero(1), setMacho("square"), setFemea("check-square");
                 }}
               >
                 <Text style={styles.titulogen}>Fêmea</Text>
