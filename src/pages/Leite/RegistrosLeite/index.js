@@ -277,8 +277,9 @@ function RegistrosLeite() {
           <Text style={styles.tituloBotao}>{"Voltar"}</Text>
         </TouchableOpacity>
         <Modal
-          backdropOpacity={0.5}
+        coverScreen={true}
           backdropColor="black"
+          backdropOpacity={0.5}
           visible={modalEditarVisible}
           animationType="slide"
           transparent={true}

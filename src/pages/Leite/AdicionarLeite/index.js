@@ -24,6 +24,7 @@ import {
   MD3Colors,
   HelperText,
 } from "react-native-paper";
+import Animated, { SlideInLeft, SlideOutRight } from "react-native-reanimated";
 function AdicionarLeite() {
   const realm = useMainContext();
   const [checked, setChecked] = React.useState("rebanho");
@@ -293,7 +294,7 @@ function AdicionarLeite() {
                       {text}
                     </Text>
                   </View>
-                  <View style={{paddingRight: scale(20)}}>
+                  <View style={{ paddingRight: scale(20) }}>
                     <MaterialCommunityIcons
                       name="calendar"
                       size={scale(30)}
@@ -325,6 +326,7 @@ function AdicionarLeite() {
                 onChangeText={handlePrecoChange}
                 value={precoLV}
                 error={!precoValido}
+                keyboardType="decimal-pad"
               />
               <HelperText
                 type="error"
@@ -353,6 +355,7 @@ function AdicionarLeite() {
                 onChangeText={handleProdChange}
                 value={prodLV}
                 error={!prodValido}
+                keyboardType="decimal-pad"
               />
               <HelperText
                 type="error"
@@ -405,55 +408,61 @@ function AdicionarLeite() {
         </View>
         {checked === "vacas" ? (
           <>
-            <TouchableOpacity
-              onPress={() => {
-                toggleModal(), setVacaID("");
-              }}
-              style={styles.botaoselecionaranimal}
+            <Animated.View
+              style={{ flex: 1 }}
+              entering={SlideInLeft}
+              exiting={SlideOutRight}
             >
-              <Text style={styles.tituloBotao}>Selecionar animal</Text>
-              <Modal
-                isVisible={isModalVisible}
-                statusBarTranslucent
-                backdropOpacity={0.5}
-                coverScreen={true}
-                backdropColor={"black"}
-                animationIn="slideInUp"
-                animationOut="slideOutDown"
+              <TouchableOpacity
+                onPress={() => {
+                  toggleModal(), setVacaID("");
+                }}
+                style={styles.botaoselecionaranimal}
               >
-                <View style={styles.modalContainer}>
-                  <Text style={styles.TituloM}>Selecione um animal</Text>
-                  <TouchableOpacity
-                    style={styles.filtroNome}
-                    onPress={handleFilterNome}
-                  >
-                    <Text style={styles.tituloBotao}>Filtrar por nome</Text>
-                  </TouchableOpacity>
-                  <TextInput
-                    style={styles.search}
-                    mode="flat"
-                    placeholder="Pesquise pelo nome."
-                    placeholderTextColor={Colors.greyColor}
-                    value={searchText}
-                    onChangeText={(t) => setSearchText(t)}
-                  ></TextInput>
-                  <FlatList
-                    style={styles.scroll}
-                    data={lista}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item._id}
-                  />
-                </View>
-                <TouchableOpacity
-                  style={styles.botaopressM}
-                  onPress={() => {
-                    toggleModal();
-                  }}
+                <Text style={styles.tituloBotao}>Selecionar animal</Text>
+                <Modal
+                  isVisible={isModalVisible}
+                  statusBarTranslucent
+                  backdropOpacity={0.5}
+                  coverScreen={true}
+                  backdropColor={"black"}
+                  animationIn="slideInUp"
+                  animationOut="slideOutDown"
                 >
-                  <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-                </TouchableOpacity>
-              </Modal>
-            </TouchableOpacity>
+                  <View style={styles.modalContainer}>
+                    <Text style={styles.TituloM}>Selecione um animal</Text>
+                    <TouchableOpacity
+                      style={styles.filtroNome}
+                      onPress={handleFilterNome}
+                    >
+                      <Text style={styles.tituloBotao}>Filtrar por nome</Text>
+                    </TouchableOpacity>
+                    <TextInput
+                      style={styles.search}
+                      mode="flat"
+                      placeholder="Pesquise pelo nome."
+                      placeholderTextColor={Colors.greyColor}
+                      value={searchText}
+                      onChangeText={(t) => setSearchText(t)}
+                    ></TextInput>
+                    <FlatList
+                      style={styles.scroll}
+                      data={lista}
+                      renderItem={renderItem}
+                      keyExtractor={(item) => item._id}
+                    />
+                  </View>
+                  <TouchableOpacity
+                    style={styles.botaopressM}
+                    onPress={() => {
+                      toggleModal();
+                    }}
+                  >
+                    <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+                  </TouchableOpacity>
+                </Modal>
+              </TouchableOpacity>
+            </Animated.View>
           </>
         ) : null}
         <View style={styles.containervoltar}>
