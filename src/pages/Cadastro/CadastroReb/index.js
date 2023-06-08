@@ -38,6 +38,7 @@ function CadastroReb() {
         proximasvacas.push({
           _id: uuid.v4(),
           nomeVaca: "vaca" + i,
+          ativa: true,
           nascimentoVaca: "2022",
           brincoVaca: " 00 " + i,
           genero: 1,

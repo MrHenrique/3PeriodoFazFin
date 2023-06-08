@@ -17,11 +17,16 @@ import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
 
 function Home({ navigation }) {
-  const { RebanhoID, rebID } = useContext(AuthContext);
+  const { RebanhoID, PrecoCF, PrecoLeite, rebID } = useContext(AuthContext);
   const [Pos, setPos] = useState(0);
   const [PosText, setPosText] = useState("do Rebanho");
-
   const scrollRef = useRef();
+  function backAndClear() {
+    RebanhoID("");
+    PrecoCF(0);
+    PrecoLeite(0);
+    navigation.navigate("SelectRebPage");
+  }
   const onPressTouch = () => {
     if (Pos == 0) {
       scrollRef.current?.scrollTo({
@@ -43,9 +48,7 @@ function Home({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <View
-        style={styles.imgbg}
-      >
+      <View style={styles.imgbg}>
         <View style={styles.containergeral}>
           <View style={styles.containerPreview}>
             <View style={styles.containerScrollPreview}>
@@ -121,9 +124,7 @@ function Home({ navigation }) {
             <View style={styles.containerVoltar}>
               <TouchableOpacity
                 style={styles.botaopress}
-                onPress={() => {
-                  RebanhoID(""), navigation.navigate("SelectRebPage");
-                }}
+                onPress={() => backAndClear()}
               >
                 <Text style={styles.tituloBotao}>{"Voltar"}</Text>
               </TouchableOpacity>
