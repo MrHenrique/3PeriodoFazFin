@@ -27,7 +27,11 @@ function SelectRebPage({ navigation }) {
     CanContinue();
   }, [rebID]);
   const { fazID, rebID, FazendaID, RebanhoID } = useContext(AuthContext);
-
+  function backAndClear() {
+    RebanhoID("");
+    FazendaID("");
+    navigation.navigate("SelectFazPage")
+  }
   function CanContinue() {
     if (typeof rebID == "undefined" || rebID == "") {
       const CanContinue = true;
@@ -79,11 +83,7 @@ function SelectRebPage({ navigation }) {
         <View style={styles.containerbotoes}>
           <TouchableOpacity
             style={styles.botaopress2}
-            onPress={() => {
-              FazendaID(""),
-                RebanhoID(""),
-                navigation.navigate("SelectFazPage");
-            }}
+            onPress={() => backAndClear()}
           >
             <Text style={styles.tituloBotao}>{"Voltar"}</Text>
           </TouchableOpacity>
