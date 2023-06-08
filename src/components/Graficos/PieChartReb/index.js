@@ -32,13 +32,13 @@ function PieChartReb() {
   return (
     <PieChart
       width={screenWidth}
-      height={verticalScale(180)}
+      height={verticalScale(150)}
       data={data}
       chartConfig={chartConfig}
       accessor={"valor"}
       backgroundColor={"transparent"}
       paddingLeft={scale(0)}
-      center={[scale(10), verticalScale(10)]}
+      center={[scale(20), verticalScale(-5)]}
       absolute
     />
   );

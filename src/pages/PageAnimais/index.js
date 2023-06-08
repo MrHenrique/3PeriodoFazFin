@@ -2,6 +2,7 @@ import * as React from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
 import PageListaVacas from "./PageListavacas";
 import Leite from "../Leite";
+import Reproducao from "../Reproducao";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import styles, { estilo } from "./styles";
 const Tab = createMaterialTopTabNavigator();
@@ -18,6 +19,7 @@ export default function PageAnimais() {
       >
         <Tab.Screen name="Lista Vacas" component={PageListaVacas} />
         <Tab.Screen name="Leite" component={Leite} />
+        <Tab.Screen name="Reproducão" component={Reproducao} />
       </Tab.Navigator>
     </>
   );

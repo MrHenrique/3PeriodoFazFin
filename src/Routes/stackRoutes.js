@@ -14,6 +14,7 @@ import SelectFazPage from "../pages/SelectFazPage";
 import Despesas from "../pages/Despesas";
 import SignUp from "../pages/SignUp";
 import PageDetalheVaca from "../pages/PageAnimais/PageDetalheVaca";
+import Reproducao from "../pages/Reproducao";
 const Stack = createNativeStackNavigator();
 function StackRoutes() {
   return (
@@ -112,6 +113,13 @@ function StackRoutes() {
       <Stack.Screen
         name="PageDetalheVaca"
         component={PageDetalheVaca}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Reproducao"
+        component={Reproducao}
         options={{
           headerShown: false,
         }}
