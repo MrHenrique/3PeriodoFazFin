@@ -143,13 +143,25 @@ const Reproducao = () => {
                 <Text style={styles.txtInfoCategoria}>Próximo cio:</Text>
                 <Text style={styles.txtInfoCategoria}>10/02/2000</Text>
               </View>
-              <TouchableOpacity
-                style={styles.botaoData}
-                onPress={showDatePicker}
-              >
-                <Text style={styles.tituloinfo}>Marcar Cio:</Text>
-              </TouchableOpacity>
-
+              <View>
+                <Text style={styles.txtInfoCategoria}>Data selecionada</Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  <Text style={styles.txtInfoCategoria}>
+                    {date.toLocaleDateString("pt-BR")}
+                  </Text>
+                  <TouchableOpacity onPress={showDatePicker}>
+                    <AntDesign name="calendar" size={scale(16)} color="white" />
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity style={styles.botaoData}>
+                  <Text style={styles.tituloinfo}>Marcar Cio:</Text>
+                </TouchableOpacity>
+              </View>
               <DateTimePickerModal
                 isVisible={isDatePickerVisible}
                 mode="date"
@@ -168,7 +180,7 @@ const Reproducao = () => {
             </View>
             <View>
               <View style={styles.containerRow}>
-                <Text style={styles.txtInfoCategoria}>Ultima Cobertura:</Text>
+                <Text style={styles.txtInfoCategoria}>Data de Cobertura:</Text>
                 <Text style={styles.txtInfoCategoria}>02/02/2000</Text>
               </View>
               <TouchableOpacity
@@ -202,12 +214,6 @@ const Reproducao = () => {
                 <Text style={styles.txtInfoCategoria}>Previsão de parto:</Text>
                 <Text style={styles.txtInfoCategoria}>02/02/2000</Text>
               </View>
-              <TouchableOpacity
-                style={styles.botaoData}
-                onPress={showDatePicker}
-              >
-                <Text style={styles.tituloinfo}>Marcar Prenhez:</Text>
-              </TouchableOpacity>
               <TouchableOpacity
                 style={styles.botaoData}
                 onPress={showDatePicker}
