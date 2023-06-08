@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Relatório da Fazenda</title>
     <style>
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        margin: 0;
-        padding: 20px;
-        display: flex;
-        justify-content: center;
-        height: 100vh;
+        font-family: Arial, sans-serif;
+        padding: 3vh;
         background-color: #f1f1f1;
       }
 
@@ -17,76 +14,101 @@
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        height: 100%;
       }
 
       h1 {
-        font-size: 36px;
-        margin-top: 0;
-        margin-bottom: 20px;
-        color: #333333;
-      }
-      h2 {
-        font-size: 30px;
-        margin-top: 0;
-        margin-bottom: 20px;
-        color: #333333;
-      }
-      .containerTitulo {
+        margin-top: 0px;
         text-align: center;
-      }
-      .containerInfo {
-        margin: 15px;
-        text-align: center;
+        font-size: 40px;
       }
 
-      .containerInfo .label {
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 1px solid #ddd;
+      }
+
+      th,
+      td {
+        padding: 14px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .left {
+        text-align: left;
         font-weight: bold;
-        font-size: 24px;
-        color: #555555;
+        font-size: 20px;
       }
 
-      .containerInfo .value {
+      .right {
+        text-align: right;
         font-weight: normal;
-        font-size: 20px;
+        font-size: 15px;
+      }
+      .markFazFin {
+        font-weight: 200;
+        font-size: 13px;
         color: #777777;
+      }
+      .fazFin {
+        margin-top: 20px;
+        text-align: center;
+        justify-content: center;
       }
     </style>
   </head>
   <body>
     <div class="containerResumo">
-      <div class="containerTitulo">
-        <img src="/assets/fazfinwhiteletter.png" />
-        <h2>Relatório da Fazenda</h2>
-        <span>Data:${exportDate}</span>
-      </div>
-      <div class="containerInfo">
-        <span class="label">Nome da Fazenda:</span>
-        <span class="value">${nomeFaz}</span>
-      </div>
+      <h1>Relatório da Fazenda</h1>
 
-      <div class="containerInfo">
-        <span class="label">Itens em Estoque:</span>
-        <span class="value">${itensEstoque}</span>
-      </div>
-
-      <div class="containerInfo">
-        <span class="label">Valor do Estoque:</span>
-        <span class="value">${totalEstoque}</span>
-      </div>
-
-      <div class="containerInfo">
-        <span class="label">Número de Rebanhos:</span>
-        <span class="value">${nRebanhos}</span>
-      </div>
-
-      <div class="containerInfo">
-        <span class="label">Número de Animais:</span>
-        <span class="value">${totalVacas}</span>
-      </div>
-
-      <div class="containerInfo">
-        <span class="label">Produção de Leite:</span>
-        <span class="value">${totalLeite} Litros</span>
+      <table>
+        <tr>
+          <td class="left">Nome da Fazenda:</td>
+          <td class="right">${nomeFaz}</td>
+        </tr>
+        <tr>
+          <td class="left">Receitas da Fazenda:</td>
+          <td class="right">${totalReceitasRelatorio}</td>
+        </tr>
+        <tr>
+          <td class="left">Despesas da Fazenda:</td>
+          <td class="right">${totalDespesasRelatorio}</td>
+        </tr>
+        <tr>
+          <td class="left">Resultado da Fazenda:</td>
+          <td class="right">${totalRelatorio}</td>
+        </tr>
+        <tr>
+          <td class="left">Itens em Estoque:</td>
+          <td class="right">${itensEstoque}</td>
+        </tr>
+        <tr>
+          <td class="left">Valor do Estoque:</td>
+          <td class="right">${totalEstoque}</td>
+        </tr>
+        <tr>
+          <td class="left">Número de Rebanhos:</td>
+          <td class="right">${nRebanhos}</td>
+        </tr>
+        <tr>
+          <td class="left">Número de Animais:</td>
+          <td class="right">${totalVacas}</td>
+        </tr>
+        <tr>
+          <td class="left">Média de produção por animal:</td>
+          <td class="right">${mediaLeite}</td>
+        </tr>
+        <tr>
+          <td class="left">Produção de Leite:</td>
+          <td class="right">${totalLeite}</td>
+        </tr>
+      </table>
+      <div class="fazFin">
+        <span class="markFazFin">
+          Relatório Gerado por FazFin em ${text} ${hora}
+        </span>
       </div>
     </div>
   </body>
