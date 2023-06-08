@@ -20,23 +20,15 @@ export default function FinanceiroReb() {
     if (realm) {
       let dataGastos = realm.objectForPrimaryKey("RebanhoSchema", rebID);
       let sortedGastos = [];
-      sortedGastos = dataGastos.despesas;
-      if (sortedGastos > 0) {
-        sortedGastos = dataGastos.despesas.sort(
-          (a, b) => a.createdAt - b.createdAt
-        );
-      }
+      sortedGastos.push(...dataGastos.despesas);
+      sortedGastos = sortedGastos.sort((a, b) => a.createdAt - b.createdAt);
       PrecoCFReb(DespesasTotais(sortedGastos));
       ListaAliReb(sortedGastos);
       //Buscar no banco Receitas Reb
       let dataReceitas = realm.objectForPrimaryKey("RebanhoSchema", rebID);
       let sortedReceitas = [];
-      sortedReceitas = dataReceitas.receitas;
-      if (sortedReceitas > 0) {
-        sortedReceitas = dataReceitas.receitas.sort(
-          (a, b) => a.createdAt - b.createdAt
-        );
-      }
+      sortedReceitas.push(...dataReceitas.receitas);
+      sortedReceitas = sortedReceitas.sort((a, b) => a.createdAt - b.createdAt);
       PrecoLeiteReb(ReceitasTotais(sortedReceitas));
       ListaLeiteReb(sortedReceitas);
     }

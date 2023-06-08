@@ -26,7 +26,6 @@ function CadastroVaca({ navigation }) {
           let createdVaca = realm.create("VacasSchema", {
             _id: uuid.v4(),
             nomeVaca: nomeVaca,
-            ativa: true,
             nascimentoVaca: nascVaca,
             brincoVaca: brincoVaca,
             descVaca: descVaca,
