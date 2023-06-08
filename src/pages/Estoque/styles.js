@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
   font: {
     color: Colors.white,
-    ...Fonts.txtLargeBold,
+    ...Fonts.txtMedium,
   },
   fontsubtitulo: {
     color: Colors.grey,

@@ -24,7 +24,9 @@ import { useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
 import { useMainContext } from "../../../contexts/RealmContext";
 import styles from "./styles";
+import { AntDesign } from "@expo/vector-icons";
 import Modal from "react-native-modal";
+import { scale } from "react-native-size-matters";
 
 export default function Outros() {
   const realm = useMainContext();
@@ -239,7 +241,7 @@ export default function Outros() {
     if (keyboardStatus) {
       return styles.ContainerScrollStyle;
     } else {
-      return [styles.ContainerScrollStyle, { flex: 1 }];
+      return [styles.ContainerScrollStyle];
     }
   }
   return (
@@ -338,7 +340,11 @@ export default function Outros() {
             </View>
             {checked === "vacas" ? (
               <>
-                <Animated.View style={{flex:0.5,}} entering={SlideInLeft} exiting={SlideOutRight}>
+                <Animated.View
+                  style={styles.containerSelecionarAnimal}
+                  entering={SlideInLeft}
+                  exiting={SlideOutRight}
+                >
                   <TouchableOpacity
                     onPress={() => {
                       toggleModal(), setVacaID("");
@@ -346,46 +352,56 @@ export default function Outros() {
                     style={styles.botaoselecionaranimal}
                   >
                     <Text style={styles.tituloBotao}>Selecionar animal</Text>
+                    <AntDesign name="right" size={scale(22)} color="white" />
                     <Modal
                       isVisible={isModalVisible}
                       coverScreen={true}
-                      backdropOpacity={0.5}
                       backdropColor={"black"}
                       animationIn="slideInUp"
                       animationOut="slideOutDown"
-                      onBackdropPress={() => setModalVisible(false)}
+                      statusBarTranslucent
                     >
                       <View style={styles.modalContainer}>
-                        <Text style={styles.TituloM}>Selecione um animal</Text>
-                        <TouchableOpacity
-                          style={styles.filtroNome}
-                          onPress={handleFilterNome}
-                        >
-                          <Text style={styles.tituloBotao}>
-                            Filtrar por nome
+                        <View style={styles.modalContainerSearch}>
+                          <Text style={styles.TituloM}>
+                            Selecione um animal
                           </Text>
-                        </TouchableOpacity>
-                        <TextInput
-                          style={styles.search}
-                          placeholder="Pesquise pelo nome."
-                          value={searchText}
-                          onChangeText={(t) => setSearchText(t)}
-                        ></TextInput>
-                        <FlatList
-                          style={styles.scroll}
-                          data={lista}
-                          renderItem={renderItem}
-                          keyExtractor={(item) => item._id}
-                        />
+                          <View style={{ flex: 1 }}>
+                            <TextInput
+                              style={styles.search}
+                              placeholder="Pesquise pelo nome."
+                              value={searchText}
+                              onChangeText={(t) => setSearchText(t)}
+                              right={
+                                <TextInput.Icon
+                                  icon={"text-search"}
+                                  onPress={() => {
+                                    handleFilterNome;
+                                  }}
+                                />
+                              }
+                            />
+                          </View>
+                        </View>
+                        <View style={styles.modalListContainer}>
+                          <FlatList
+                            style={styles.scroll}
+                            data={lista}
+                            renderItem={renderItem}
+                            keyExtractor={(item) => item._id}
+                          />
+                        </View>
+                        <View style={styles.modalVoltarContainer}>
+                          <TouchableOpacity
+                            style={styles.botaopressM}
+                            onPress={() => {
+                              toggleModal();
+                            }}
+                          >
+                            <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+                          </TouchableOpacity>
+                        </View>
                       </View>
-                      <TouchableOpacity
-                        style={styles.botaopressM}
-                        onPress={() => {
-                          toggleModal();
-                        }}
-                      >
-                        <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-                      </TouchableOpacity>
                     </Modal>
                   </TouchableOpacity>
                 </Animated.View>

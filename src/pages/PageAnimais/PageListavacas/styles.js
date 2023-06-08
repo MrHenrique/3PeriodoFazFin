@@ -100,9 +100,8 @@ const styles = StyleSheet.create({
     borderRadius: scale(8),
   },
   textovoltar: {
-    fontSize: verticalScale(14),
-    fontWeight: "bold",
-    color: "#fff",
+    ...Fonts.txtMedium,
+    color: Colors.white,
   },
   botaoeditar: {
     backgroundColor: "rgba(255, 30, 0, 1)",
