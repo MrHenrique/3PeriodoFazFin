@@ -37,12 +37,12 @@ function CadastroReb() {
       } else {
         proximasvacas.push({
           _id: uuid.v4(),
-          nomeVaca: "vaca" + i,
+          nomeVaca: "Vaca " + (i + 1),
           nascimentoVaca: "2022",
-          brincoVaca: " 00 " + i,
+          brincoVaca: (i + 1).toString(),
           genero: 1,
           receitas: [],
-          descVaca: "Descricao vazia",
+          descVaca: "",
           createdAt: new Date(),
         });
       }
