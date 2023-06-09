@@ -211,7 +211,7 @@ const Reproducao = () => {
                 <Text style={styles.txtInfoCategoria}>02/01/2000</Text>
               </View>
               <View style={styles.containerRow}>
-                <Text style={styles.txtInfoCategoria}>Previsão de parto:</Text>
+                <Text style={styles.txtInfoCategoria}>Possível de parto:</Text>
                 <Text style={styles.txtInfoCategoria}>02/02/2000</Text>
               </View>
               <TouchableOpacity
