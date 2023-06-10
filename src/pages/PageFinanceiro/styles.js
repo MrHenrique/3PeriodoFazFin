@@ -66,6 +66,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: scale(1),
     borderBottomColor: "white",
   },
+  containerInfo3: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   containerInfo: {
     flex: 1,
     flexDirection: "row",
@@ -86,9 +91,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   Grafico: {
-    flex: 2,
+    flex: 3,
     justifyContent: "center",
-    maxHeight: verticalScale(190),
+    maxHeight: verticalScale(250),
   },
   containervoltar: {
     flex: 0.1,
@@ -101,10 +106,11 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   exportButton: {
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: Colors.green,
     ...Buttons.btnSmallRounded,
     elevation: 5,
     padding: 5,
+    margin: 10,
     justifyContent: "center",
     alignSelf: "flex-end",
   },
@@ -152,9 +158,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.darkgreen,
     alignSelf: "center",
     width: scale(330),
-    maxHeight: verticalScale(240),
     borderRadius: 20,
     position: "relative",
+    padding: verticalScale(5),
   },
   modalContainer: {
     flex: 1,
@@ -253,7 +259,11 @@ export function Color(total) {
   } else if (total < 0) {
     return styles.textoValorNeg;
   } else {
-    let style = { color: Colors.white, fontWeight: "bold" };
+    let style = {
+      color: Colors.white,
+      fontWeight: "bold",
+      alignSelf: "center",
+    };
     return style;
   }
 }

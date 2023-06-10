@@ -146,7 +146,6 @@ export const VacasSchema = {
   primaryKey: "_id",
   properties: {
     _id: "string",
-    ativa: "bool",
     nomeVaca: "string",
     nascimentoVaca: "string",
     brincoVaca: "string",
