@@ -42,7 +42,9 @@ function RegistrosLeite() {
     if (realm) {
       try {
         realm.write(() => {
-          const prodL = Number(prodLV);
+          const cleanedText = prodLV.replace(",", ".");
+          const prodL = parseFloat(cleanedText);
+          console.log(prodL)
           let updateLeite = realm.objectForPrimaryKey(
             "ReceitaRebSchema",
             idDoItemSelecionado
@@ -124,10 +126,9 @@ function RegistrosLeite() {
   function handleVolumeProdChange(text) {
     const cleanedText = text.replace(",", ".");
     const parsedValue = parseFloat(cleanedText);
-
     const isValid = !isNaN(parsedValue) && parsedValue > 0;
     setIsVolumeProdValid(isValid);
-    setProdLV(parsedValue);
+    setProdLV(text);
   }
   function validCheck() {
     if (prodLV.length === 0) {

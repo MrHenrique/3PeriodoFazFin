@@ -97,9 +97,15 @@ function AuthProvider({ children }) {
   function Genero(value) {
     setGenero(value);
   }
+  const [nomeEstoqueEntrada, setNomeEstoqueEntrada] = useState();
+  function NomeEstoqueEntrada(value) {
+    setNomeEstoqueEntrada(value);
+  }
   return (
     <AuthContext.Provider
       value={{
+        nomeEstoqueEntrada,
+        NomeEstoqueEntrada,
         Genero,
         genero,
         ListaReceitaVacas,

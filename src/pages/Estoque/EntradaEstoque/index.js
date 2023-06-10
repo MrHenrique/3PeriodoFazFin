@@ -17,7 +17,8 @@ import {
 } from "react-native-paper";
 import { Colors } from "../../../styles";
 import { useNavigation } from "@react-navigation/native";
-import DropdownComponent from "../../../components/Dropdown/TipoProd";
+import { CheckBox, Icon } from "react-native-elements";
+import EstoqueOptionsEntrada from "../../../components/Dropdown/EstoqueOptionsEntrada";
 import uuid from "react-native-uuid";
 import { AuthContext } from "../../../contexts/auth";
 import { useMainContext } from "../../../contexts/RealmContext";
@@ -29,26 +30,40 @@ function EntradaEstoque() {
   const realm = useMainContext();
   const navigation = useNavigation();
   //estados
+  const [listaEstoque, setListaEstoque] = useState([]);
   const [listaEstoqueFiltered, setListaEstoqueFiltered] = useState([]);
+  const [showNomeProd, setShowNomeProd] = useState(false);
   const [nomeProd, setNomeProd] = useState("");
   const [valorProd, setValorProd] = useState("");
   const [volumeProd, setVolumeProd] = useState("");
   const [pesoProd, setPesoProd] = useState("");
   const [obserProd, setObserProd] = useState("");
   const [qtdProd, setQtdProd] = useState("1");
+  const [tipoProd, setTipo] = useState(1);
   const [isNomeProdValid, setIsNomeProdValid] = useState(true);
   const [isValorProdValid, setIsValorProdValid] = useState(true);
   const [isVolumeProdValid, setIsVolumeProdValid] = useState(true);
   const [isPesoProdValid, setIsPesoProdValid] = useState(true);
   const [isQtdProdValid, setIsQtdProdValid] = useState(true);
-  const { fazID, tipoProd } = useContext(AuthContext);
+  const [nomeProdExists, setNomeProdExists] = useState(false);
+  const { fazID, TipoEstoqueSaida, nomeEstoqueEntrada, NomeEstoqueEntrada } =
+    useContext(AuthContext);
   //status teclado
   const [keyboardStatus, setkeyboardStatus] = useState(false);
 
   function handleNomeProdChange(text) {
-    const isValid = text.trim().length > 0;
-    setIsNomeProdValid(isValid);
-    setNomeProd(text);
+    if (nomeEstoqueEntrada !== "") {
+      if (
+        listaEstoque.filter((produtos) => produtos.nomeProd === text).length > 0
+      ) {
+        setNomeProdExists(true);
+      } else {
+        setNomeProdExists(false);
+      }
+      const isValid = text.trim().length > 0;
+      setIsNomeProdValid(isValid);
+      setNomeProd(text);
+    }
   }
 
   function handleValorProdChange(text) {
@@ -88,6 +103,7 @@ function EntradaEstoque() {
     setIsQtdProdValid(isValid);
     setQtdProd(parsedValue);
   }
+
   function validCheck() {
     if (
       nomeProd.length === 0 ||
@@ -122,7 +138,27 @@ function EntradaEstoque() {
       Alert.alert("Preencha todos os campos e tente novamente.");
     }
   }
-
+  useEffect(() => {
+    if (realm) {
+      let dataEstoque = realm.objectForPrimaryKey("Farm", fazID);
+      setListaEstoque(dataEstoque.atualEstoque.sorted("nomeProd"));
+      dataEstoque.atualEstoque.sorted("nomeProd").addListener((values) => {
+        setListaEstoque([...values]);
+      });
+    }
+  }, [realm]);
+  useEffect(() => {
+    TipoEstoqueSaida(tipoProd);
+  }, [tipoProd]);
+  useEffect(() => {
+    if (nomeEstoqueEntrada === "Cadastrar novo produto") {
+      setShowNomeProd(true);
+      setNomeProd("");
+    } else {
+      setShowNomeProd(false);
+      setNomeProd(nomeEstoqueEntrada);
+    }
+  }, [nomeEstoqueEntrada]);
   //Gravar dados em Estoque principal
   async function handleAddEstoque() {
     let qtdProdN = parseInt(qtdProd);
@@ -420,38 +456,91 @@ function EntradaEstoque() {
           style={styles.containergeral}
         >
           <ScrollView style={styles.scrollcontainer}>
-            <View style={styles.containerInput}>
-              <TextInput
-                mode="flat"
-                label="Nome do produto"
-                style={styles.textInput}
-                placeholderTextColor={Colors.grey}
-                textColor={Colors.black}
-                activeUnderlineColor={Colors.green}
-                underlineColor={Colors.blue}
-                underlineStyle={{ paddingBottom: 3 }}
-                value={nomeProd}
-                onChangeText={handleNomeProdChange}
-                placeholder="Ex: Prata"
-                keyboardType="default"
-                error={!isNomeProdValid}
-              />
-              <HelperText
-                type="error"
-                style={{
-                  color: MD3Colors.error60,
-                  fontSize: 14,
-                  lineHeight: 12,
+            {/* CheckBox */}
+            <View style={styles.checkbox}>
+              <CheckBox
+                title="Remédios"
+                checked={tipoProd === 1}
+                containerStyle={styles.containerCheckBox}
+                textStyle={styles.textCheckBox}
+                uncheckedIcon={
+                  <Icon
+                    type="ionicon"
+                    name="md-square-outline"
+                    color={"#fff"}
+                  />
+                }
+                checkedIcon={
+                  <Icon
+                    type="ionicon"
+                    name="md-checkbox-outline"
+                    color={"#fff"}
+                  />
+                }
+                onPress={() => {
+                  setTipo(1);
                 }}
-                visible={!isNomeProdValid}
-                padding="20"
-              >
-                Digite o nome do produto.
-              </HelperText>
+              />
+              <CheckBox
+                title="Alimento"
+                checked={tipoProd === 2}
+                containerStyle={styles.containerCheckBox}
+                textStyle={styles.textCheckBox}
+                uncheckedIcon={
+                  <Icon
+                    type="ionicon"
+                    name="md-square-outline"
+                    color={"#fff"}
+                  />
+                }
+                checkedIcon={
+                  <Icon
+                    type="ionicon"
+                    name="md-checkbox-outline"
+                    color={"#fff"}
+                  />
+                }
+                onPress={() => {
+                  setTipo(2);
+                }}
+              />
             </View>
-
-            <View style={styles.containerInput}>
-              <DropdownComponent />
+            {showNomeProd ? (
+              <View style={styles.containerInput}>
+                <TextInput
+                  mode="flat"
+                  label="Nome do produto"
+                  style={styles.textInput}
+                  placeholderTextColor={Colors.grey}
+                  textColor={Colors.black}
+                  activeUnderlineColor={Colors.green}
+                  underlineColor={Colors.blue}
+                  underlineStyle={{ paddingBottom: 3 }}
+                  value={nomeProd}
+                  onChangeText={handleNomeProdChange}
+                  placeholder="Ex: Prata"
+                  keyboardType="default"
+                  error={!isNomeProdValid || nomeProdExists}
+                />
+                <HelperText
+                  type="error"
+                  style={{
+                    color: MD3Colors.error60,
+                    fontSize: 14,
+                    lineHeight: 12,
+                  }}
+                  visible={!isNomeProdValid || nomeProdExists}
+                  padding="20"
+                >
+                  {!isNomeProdValid
+                    ? "Digite o nome do produto."
+                    : "Produto já cadastrado."}
+                </HelperText>
+              </View>
+            ) : null}
+            {/* DropDown */}
+            <View style={styles.dropdownContainer}>
+              <EstoqueOptionsEntrada />
             </View>
             <View style={styles.containerInput}>
               <TextInput
@@ -483,7 +572,7 @@ function EntradaEstoque() {
               </HelperText>
             </View>
             <View style={styles.containerInput}>
-              <Text style={styles.fonts}>Quantidade de produtos comprados</Text>
+              <Text style={styles.fonts}>Quantidade</Text>
               <View style={styles.containerMaisMenos}>
                 <IconButton
                   icon="minus"

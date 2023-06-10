@@ -1,23 +1,33 @@
-import React, { useState, useContext } from "react";
-import { View, ScrollView, StyleSheet, Text, TextInput } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { scale, verticalScale } from "react-native-size-matters";
+import React, { useState, useContext, useEffect } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
 import { AuthContext } from "../../../contexts/auth";
-import { Feather } from "@expo/vector-icons";
-import uuid from "react-native-uuid";
 import { useMainContext } from "../../../contexts/RealmContext";
+import styles from "./styles";
+import {
+  TextInput,
+  MD3Colors,
+  IconButton,
+  HelperText,
+} from "react-native-paper";
+import { Colors } from "../../../styles";
+import DropdownSexo from "../../../components/Dropdown/DropdownSexo";
 import { Alert } from "react-native";
+import uuid from "react-native-uuid";
 
 function CadastroVaca({ navigation }) {
+  const { rebID, machoFemea } = useContext(AuthContext);
   const realm = useMainContext();
+  const [listaVacas, setListaVacas] = useState([]);
   const [nomeVaca, setNomeVaca] = useState();
-  const [nascVaca, setNascVaca] = useState();
+  const [isNomeVacaValid, setIsNomeVacaValid] = useState(true);
+  const [nomeVacaExists, setNomeVacaExists] = useState(false);
   const [brincoVaca, setBrincoVaca] = useState();
+  const [isBrincoVacaValid, setIsBrincoVacaValid] = useState(true);
+  const [brincoVacaExists, setBrincoVacaExists] = useState(false);
+  const [nascimentoVaca, setNascimentoVaca] = useState();
+  const [isNascimentoVacaValid, setIsNascimentoVacaValid] = useState(true);
   const [descVaca, setDescVaca] = useState();
-  const [genero, setGenero] = useState();
-  const [macho, setMacho] = useState("square");
-  const [femea, setFemea] = useState("square");
-  //Escrever no Banco
+  const [genero, setGenero] = useState(); //update bd
   async function handleAddVaca() {
     if (realm) {
       try {
@@ -26,175 +36,196 @@ function CadastroVaca({ navigation }) {
           let createdVaca = realm.create("VacasSchema", {
             _id: uuid.v4(),
             nomeVaca: nomeVaca,
-            nascimentoVaca: nascVaca,
+            nascimentoVaca: nascimentoVaca,
             brincoVaca: brincoVaca,
             descVaca: descVaca,
             createdAt: new Date(),
-            genero: genero,
+            genero: machoFemea,
           });
           dataReb.vacas.push(createdVaca);
+          navigation.navigate("PageAnimais");
           Alert.alert("Dados cadastrados com sucesso!");
         });
       } catch (e) {
         Alert.alert("Não foi possível cadastrar!", e.message);
-      } finally {
-        setNomeVaca();
-        setNascVaca();
-        setBrincoVaca();
-        setDescVaca();
-        setGenero();
-        setMacho("square");
-        setFemea("square");
       }
     }
   }
-  const { rebID } = useContext(AuthContext);
+  //buscar banco
+  useEffect(() => {
+    if (realm) {
+      let dataVacas = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+      setListaVacas(dataVacas.vacas);
+    }
+  }, [realm]);
+  function handleNomeVacaChange(text) {
+    const isValid = text.trim().length > 0;
+    if (listaVacas.filter((vacas) => vacas.nomeVaca === text).length > 0) {
+      setNomeVacaExists(true);
+    } else {
+      setNomeVacaExists(false);
+    }
+    setIsNomeVacaValid(isValid);
+    setNomeVaca(text);
+  }
+  function handleBrincoVacaChange(text) {
+    const isValid = text.trim().length > 0;
+    if (listaVacas.filter((vacas) => vacas.brincoVaca === text).length > 0) {
+      setBrincoVacaExists(true);
+    } else {
+      setBrincoVacaExists(false);
+    }
+    setIsBrincoVacaValid(isValid);
+    setBrincoVaca(text);
+  }
+  function handleNascimentoVacaChange(text) {
+    const parsedValue = parseInt(text, 10);
+    const isValid =
+      text.trim().length === 4 &&
+      Number.isInteger(parsedValue) &&
+      parsedValue >= 1974 &&
+      parsedValue <= 2023 &&
+      parsedValue.toString() === text.trim();
+    setIsNascimentoVacaValid(isValid);
+    setNascimentoVaca(text);
+  }
+  function validCheck() {
+    if (
+      isNomeVacaValid &&
+      !nomeVacaExists &&
+      !brincoVacaExists &&
+      isBrincoVacaValid &&
+      isNascimentoVacaValid
+    ) {
+      handleAddVaca();
+    } else {
+      Alert.alert("Preencha todos os campos e tente novamente.");
+    }
+  }
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        {/*Nome da Vaca*/}
-        <View style={styles.containerinfos}>
-          <Text style={styles.tituloinfo}>Nome Da Vaca:</Text>
-          <TextInput
-            style={styles.detalhe}
-            value={nomeVaca}
-            onChangeText={setNomeVaca}
-          />
-        </View>
-        {/*Nascimento*/}
-        <View style={styles.containerinfos}>
-          <Text style={styles.tituloinfo}>Ano de Nascimento:</Text>
-          <TextInput
-            style={styles.detalhe}
-            value={nascVaca}
-            onChangeText={setNascVaca}
-            keyboardType="number-pad"
-          />
-        </View>
-        {/*Etiqueta*/}
-        <View style={styles.containerinfos}>
-          <Text style={styles.tituloinfo}>Identificação ou Brinco:</Text>
-          <TextInput
-            style={styles.detalhe}
-            value={brincoVaca}
-            onChangeText={setBrincoVaca}
-          />
-        </View>
-        {/*Descrição*/}
-        <View style={styles.containerinfos}>
-          <Text style={styles.tituloinfo}>Descrição:</Text>
-          <TextInput
-            style={styles.detalhe}
-            value={descVaca}
-            onChangeText={setDescVaca}
-            multiline
-          />
-        </View>
-        {/*Genero*/}
-        <View style={styles.containerinfos}>
-          <Text style={styles.tituloinfo}>Gênero:</Text>
-          <View style={styles.containergenero}>
-            <View style={{ alignSelf: "center" }}>
-              <TouchableOpacity
-                onPress={() => {
-                  setGenero(0), setMacho("check-square"), setFemea("square");
-                }}
-              >
-                <Text style={styles.titulogen}>Macho</Text>
-                <Feather name={macho} size={scale(25)} color="white" />
-              </TouchableOpacity>
-            </View>
-            <View>
-              <TouchableOpacity
-                onPress={() => {
-                  setGenero(1), setMacho("square"), setFemea("check-square");
-                }}
-              >
-                <Text style={styles.titulogen}>Fêmea</Text>
-                <Feather name={femea} size={scale(25)} color="white" />
-              </TouchableOpacity>
-            </View>
+    <View style={styles.container}>
+      <View style={styles.containergeral}>
+        <View style={styles.ContainerInfoCard}>
+          <View style={styles.containerInput}>
+            <TextInput
+              mode="flat"
+              label={"Nome do animal"}
+              style={styles.textInput}
+              placeholderTextColor={Colors.grey}
+              textColor={Colors.black}
+              activeUnderlineColor={Colors.green}
+              underlineColor={Colors.blue}
+              underlineStyle={{ paddingBottom: 3 }}
+              value={nomeVaca}
+              onChangeText={handleNomeVacaChange}
+              error={!isNomeVacaValid || nomeVacaExists}
+            />
+            <HelperText
+              type="error"
+              style={{
+                color: MD3Colors.error60,
+                fontSize: 14,
+                lineHeight: 12,
+              }}
+              visible={!isNomeVacaValid || nomeVacaExists}
+              padding="20"
+            >
+              {!isNomeVacaValid
+                ? "Preencha o nome do animal."
+                : "Nome digitado já está em uso."}
+            </HelperText>
+          </View>
+          <View style={styles.containerInput}>
+            <TextInput
+              mode="flat"
+              label={"Identificação do animal(brinco)"}
+              style={styles.textInput}
+              placeholderTextColor={Colors.grey}
+              textColor={Colors.black}
+              activeUnderlineColor={Colors.green}
+              underlineColor={Colors.blue}
+              underlineStyle={{ paddingBottom: 3 }}
+              value={brincoVaca}
+              onChangeText={handleBrincoVacaChange}
+              error={!isBrincoVacaValid || brincoVacaExists}
+            />
+            <HelperText
+              type="error"
+              style={{
+                color: MD3Colors.error60,
+                fontSize: 14,
+                lineHeight: 12,
+              }}
+              visible={!isBrincoVacaValid || brincoVacaExists}
+              padding="20"
+            >
+              {!isBrincoVacaValid
+                ? "Preencha a identificação do animal."
+                : "Identificação digitada já está em uso."}
+            </HelperText>
+          </View>
+          <View style={styles.containerInput}>
+            <TextInput
+              mode="flat"
+              style={styles.textInput}
+              label={"Ano de nascimento (Ex:2019)"}
+              placeholderTextColor={Colors.grey}
+              textColor={Colors.black}
+              activeUnderlineColor={Colors.green}
+              underlineColor={Colors.blue}
+              underlineStyle={{ paddingBottom: 3 }}
+              value={nascimentoVaca}
+              onChangeText={(valor) => handleNascimentoVacaChange(valor)}
+              keyboardType="numeric"
+              error={!isNascimentoVacaValid}
+            />
+            <HelperText
+              type="error"
+              style={{
+                color: MD3Colors.error60,
+                fontSize: 14,
+                lineHeight: 12,
+              }}
+              visible={!isNascimentoVacaValid}
+              padding="20"
+            >
+              Digite um nascimento válido.
+            </HelperText>
+          </View>
+          <View style={styles.containerInput}>
+            <DropdownSexo />
+          </View>
+          <View style={styles.containerInput}>
+            <TextInput
+              mode="flat"
+              style={styles.textInput}
+              label={"Observações"}
+              placeholderTextColor={Colors.grey}
+              textColor={Colors.black}
+              activeUnderlineColor={Colors.green}
+              underlineColor={Colors.blue}
+              underlineStyle={{ paddingBottom: 3 }}
+              value={descVaca}
+              onChangeText={setDescVaca}
+            />
           </View>
         </View>
-
-        <TouchableOpacity
-          style={styles.botaopress}
-          onPress={() => {
-            handleAddVaca();
-          }}
-        >
-          <Text style={styles.textovoltar}>Cadastrar Animal</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.botaopress, { marginBottom: scale(30) }]}
-          onPress={() => navigation.navigate("PageAnimais")}
-        >
-          <Text style={styles.textovoltar}>Voltar</Text>
-        </TouchableOpacity>
+        <View style={styles.containerEdit}>
+          <TouchableOpacity style={styles.botao} onPress={() => validCheck()}>
+            <Text style={styles.voltarfont}>{"Cadastrar"}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.containerEdit}>
+          <TouchableOpacity
+            style={styles.botao}
+            onPress={() => navigation.navigate("PageAnimais")}
+          >
+            <Text style={styles.voltarfont}>{"Voltar"}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </ScrollView>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#004513",
-  },
-  containerinput: {
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    marginTop: scale(30),
-    padding: scale(20),
-    width: scale(320),
-  },
-  containerinfos: {
-    marginVertical: verticalScale(15),
-    padding: verticalScale(20),
-    width: scale(320),
-    backgroundColor: "rgba(15, 109, 0, 0.7)",
-    borderRadius: 20,
-    alignSelf: "center",
-  },
-  tituloinfo: {
-    color: "white",
-    fontSize: verticalScale(20),
-    marginBottom: verticalScale(10),
-    textAlign: "center",
-  },
-  detalhe: {
-    fontSize: verticalScale(20),
-    color: "black",
-    backgroundColor: "white",
-    borderRadius: verticalScale(5),
-    marginBottom: verticalScale(20),
-  },
-  titulogen: {
-    color: "#c4c4c4ff",
-    fontSize: scale(15),
-  },
-  containergenero: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-around",
-  },
-  botaopress: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    marginTop: scale(10),
-  },
-  textovoltar: {
-    fontSize: verticalScale(14),
-    fontWeight: "bold",
-    color: "#fff",
-  },
-});
 
 export default CadastroVaca;

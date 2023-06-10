@@ -6,7 +6,6 @@ import styles from "./styles";
 import {
   TextInput,
   MD3Colors,
-  IconButton,
   HelperText,
 } from "react-native-paper";
 import { Colors } from "../../../../styles";
@@ -30,7 +29,7 @@ function Vacas({ navigation }) {
   const [nascimentoVaca, setNascimentoVaca] = useState();
   const [isNascimentoVacaValid, setIsNascimentoVacaValid] = useState(true);
   const [descVaca, setDescVaca] = useState();
-  const [genero, setGenero] = useState(); //update bd
+  // update bd
   async function UpdateInfoVaca() {
     if (realm) {
       try {
@@ -59,7 +58,6 @@ function Vacas({ navigation }) {
       setBrincoVaca(dataVaca.brincoVaca);
       setNascimentoVaca(dataVaca.nascimentoVaca);
       setDescVaca(dataVaca.descVaca);
-      setGenero(dataVaca.genero);
       Genero(dataVaca.genero);
       const handleDataChange = (values) => {
         setLista(values);
@@ -67,7 +65,6 @@ function Vacas({ navigation }) {
         setBrincoVaca(values.brincoVaca);
         setNascimentoVaca(values.nascimentoVaca);
         setDescVaca(values.descVaca);
-        setGenero(values.genero);
         Genero(values.genero);
       };
       dataVaca.addListener(handleDataChange);
@@ -120,7 +117,7 @@ function Vacas({ navigation }) {
       isBrincoVacaValid &&
       isNascimentoVacaValid
     ) {
-      handleEditVaca();
+      UpdateInfoVaca();
     } else {
       Alert.alert("Preencha todos os campos e tente novamente.");
     }
@@ -309,7 +306,7 @@ function Vacas({ navigation }) {
             <View style={styles.containervoltar}>
               <TouchableOpacity
                 style={styles.botao}
-                onPress={() => UpdateInfoVaca()}
+                onPress={() => validCheck()}
               >
                 <Text style={styles.voltarfont}>{"Confirmar"}</Text>
               </TouchableOpacity>

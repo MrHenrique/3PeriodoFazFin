@@ -32,6 +32,10 @@ const styles = StyleSheet.create({
     position: "relative",
     // minHeight: verticalScale(60),
   },
+  dropdownContainer: {
+    flex: 0.4,
+    justifyContent: "center",
+  },
   ContainerScrollStyle: {
     marginVertical: verticalScale(10),
   },
@@ -314,6 +318,28 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 10,
     alignSelf: "center",
+  },
+  containerCheckBox: {
+    flex: 1,
+    justifyContent: "center",
+    alignSelf: "center",
+    backgroundColor: Colors.green,
+    borderColor: Colors.green,
+    borderRadius: 10,
+  },
+  textCheckBox: {
+    color: Colors.white,
+    fontWeight: "bold",
+    ...Fonts.txtLarge,
+  },
+  checkbox: {
+    height: "auto",
+    marginVertical: verticalScale(4),
+    marginHorizontal: scale(10),
+    borderRadius: 10,
+    backgroundColor: Colors.darkgreen,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
 // estilo tab
