@@ -2,7 +2,6 @@ import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import Venda from "./PageVenda";
 import RegistrosVendas from "./PageRegistrosVenda";
-import CadastroVaca from "../../Cadastro/CadastroVaca";
 import styles, { estilo } from "./styles";
 
 const Tab = createMaterialTopTabNavigator();
@@ -19,7 +18,6 @@ function PageGerenciar() {
       >
         <Tab.Screen name="Gerar Venda " component={Venda} />
         <Tab.Screen name="Registros de Vendas" component={RegistrosVendas} />
-        <Tab.Screen name="Cadastrar" component={CadastroVaca} />
       </Tab.Navigator>
     </>
   );
