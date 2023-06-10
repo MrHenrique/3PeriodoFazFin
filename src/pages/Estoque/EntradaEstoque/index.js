@@ -25,6 +25,10 @@ import { useMainContext } from "../../../contexts/RealmContext";
 import styles from "../styles";
 import { MaterialIcons } from "@expo/vector-icons";
 import { scale } from "react-native-size-matters";
+import Animated, {
+  LightSpeedInLeft,
+  LightSpeedOutRight,
+} from "react-native-reanimated";
 
 function EntradaEstoque() {
   const realm = useMainContext();
@@ -506,7 +510,11 @@ function EntradaEstoque() {
               />
             </View>
             {showNomeProd ? (
-              <View style={styles.containerInput}>
+              <Animated.View
+                entering={LightSpeedInLeft}
+                exiting={LightSpeedOutRight}
+                style={styles.containerInput}
+              >
                 <TextInput
                   mode="flat"
                   label="Nome do produto"
@@ -536,7 +544,7 @@ function EntradaEstoque() {
                     ? "Digite o nome do produto."
                     : "Produto já cadastrado."}
                 </HelperText>
-              </View>
+              </Animated.View>
             ) : null}
             {/* DropDown */}
             <View style={styles.dropdownContainer}>

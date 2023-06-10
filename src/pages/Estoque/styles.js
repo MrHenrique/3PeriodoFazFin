@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     flex: 0.4,
     justifyContent: "center",
+    paddingBottom: verticalScale(10),
   },
   ContainerScrollStyle: {
     marginVertical: verticalScale(10),
@@ -340,6 +341,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.darkgreen,
     flexDirection: "row",
     justifyContent: "space-between",
+    paddingBottom: verticalScale(10),
   },
 });
 // estilo tab
