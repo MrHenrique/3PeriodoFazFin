@@ -1,8 +1,7 @@
 import * as React from "react";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import {
   View,
-  StyleSheet,
   Text,
   TouchableOpacity,
   FlatList,
@@ -21,8 +20,7 @@ import { TextInput, MD3Colors, HelperText } from "react-native-paper";
 function RegistrosLeite() {
   const realm = useMainContext();
   const navigation = useNavigation();
-  const { rebID, ListaFiltrada, listaFiltrada } = useContext(AuthContext);
-  const [listaLeite, setListaLeite] = useState([]);
+  const { listaFiltrada, listaLeiteReb } = useContext(AuthContext);
   const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
   const [modalEditarVisible, setModalEditarVisible] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
@@ -39,36 +37,6 @@ function RegistrosLeite() {
       "/" +
       new Date().getFullYear().toString().padStart(2, "0")
   );
-
-  useEffect(() => {
-    if (realm) {
-      let dataReceitasreb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-      setListaLeite(dataReceitasreb.receitas);
-      ListaFiltrada(dataReceitasreb.receitas);
-
-      dataReceitasreb.receitas.addListener((values) => {
-        const sortedValues = [...values].sort((a, b) => {
-          return new Date(a.createdAt) - new Date(b.createdAt);
-        });
-
-        setListaLeite(sortedValues);
-
-        const lista7Dias = sortedValues.filter((item) => {
-          const dataHoje = new Date();
-          dataHoje.setHours(0, 0, 0, 0);
-          const dataSeteDiasAtras = new Date(dataHoje);
-          dataSeteDiasAtras.setDate(dataHoje.getDate() - 7);
-          const itemDataDeCriacao = new Date(item.createdAt);
-          itemDataDeCriacao.setHours(0, 0, 0, 0);
-          return (
-            itemDataDeCriacao >= dataSeteDiasAtras &&
-            itemDataDeCriacao <= dataHoje
-          );
-        });
-        ListaFiltrada(lista7Dias); // Para a lista retornar por padrão os valores de 7 dias
-      });
-    }
-  }, [realm]);
 
   async function UpdateinfoLeite() {
     if (realm) {
@@ -269,7 +237,7 @@ function RegistrosLeite() {
     <View style={styles.container}>
       <View style={styles.containergeral}>
         <View>
-          <FiltrosData listaRecebida={listaLeite} ordenarPor={"litro"} />
+          <FiltrosData listaRecebida={listaLeiteReb} ordenarPor={"litro"} />
         </View>
         <FlatList
           style={[styles.lista]}
