@@ -12,6 +12,8 @@ import {
 import { Colors } from "../../../../styles";
 import DropdownSexo from "../../../../components/Dropdown/DropdownSexo";
 import { Alert } from "react-native";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+import { scale } from "react-native-size-matters";
 
 function Vacas({ navigation }) {
   const { idVaca, rebID, machoFemea, Genero } = useContext(AuthContext);
@@ -168,140 +170,150 @@ function Vacas({ navigation }) {
                 <Text style={styles.fontTitulo}>Observações:</Text>
                 <Text style={styles.font}>{lista.descVaca}</Text>
               </View>
-            </View>
-            <View style={styles.containervoltar}>
-              <TouchableOpacity
-                style={styles.botao}
-                onPress={() => setEditMode(true)}
-              >
-                <Text style={styles.voltarfont}>{"Editar"}</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.containervoltar}>
-              <TouchableOpacity
-                style={styles.botao}
-                onPress={() => navigation.navigate("PageAnimais")}
-              >
-                <Text style={styles.voltarfont}>{"Voltar"}</Text>
-              </TouchableOpacity>
+              <View style={styles.containervoltar}>
+                <TouchableOpacity
+                  style={styles.botao}
+                  onPress={() => setEditMode(true)}
+                >
+                  <View style={{ flex: 1, justifyContent: "center" }}>
+                    <Text style={styles.voltarfont}>{"Editar"}</Text>
+                  </View>
+                  <AntDesign name="edit" size={scale(24)} color="white" />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.botao}
+                  onPress={() => navigation.navigate("PageAnimais")}
+                >
+                  <View style={{ flex: 1, justifyContent: "center" }}>
+                    <Text style={styles.voltarfont}>{"Voltar"}</Text>
+                  </View>
+                  <MaterialIcons
+                    name="arrow-back"
+                    size={scale(24)}
+                    color="white"
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </>
         ) : (
           <>
-            <View style={styles.ContainerInfoCard}>
-              <View style={styles.containerInput}>
-                <TextInput
-                  mode="flat"
-                  label={"Nome do animal"}
-                  style={styles.textInput}
-                  placeholderTextColor={Colors.grey}
-                  textColor={Colors.black}
-                  activeUnderlineColor={Colors.green}
-                  underlineColor={Colors.blue}
-                  underlineStyle={{ paddingBottom: 3 }}
-                  value={nomeVaca}
-                  onChangeText={handleNomeVacaChange}
-                  error={!isNomeVacaValid || nomeVacaExists}
-                />
-                <HelperText
-                  type="error"
-                  style={{
-                    color: MD3Colors.error60,
-                    fontSize: 14,
-                    lineHeight: 12,
-                  }}
-                  visible={!isNomeVacaValid || nomeVacaExists}
-                  padding="20"
-                >
-                  {!isNomeVacaValid
-                    ? "Preencha o nome do animal."
-                    : "Nome digitado já está em uso."}
-                </HelperText>
-              </View>
-              <View style={styles.containerInput}>
-                <TextInput
-                  mode="flat"
-                  label={"Identificação do animal(brinco)"}
-                  style={styles.textInput}
-                  placeholderTextColor={Colors.grey}
-                  textColor={Colors.black}
-                  activeUnderlineColor={Colors.green}
-                  underlineColor={Colors.blue}
-                  underlineStyle={{ paddingBottom: 3 }}
-                  value={brincoVaca}
-                  onChangeText={handleBrincoVacaChange}
-                  error={!isBrincoVacaValid || brincoVacaExists}
-                />
-                <HelperText
-                  type="error"
-                  style={{
-                    color: MD3Colors.error60,
-                    fontSize: 14,
-                    lineHeight: 12,
-                  }}
-                  visible={!isBrincoVacaValid || brincoVacaExists}
-                  padding="20"
-                >
-                  {!isBrincoVacaValid
-                    ? "Preencha a identificação do animal."
-                    : "Identificação digitada já está em uso."}
-                </HelperText>
-              </View>
-              <View style={styles.containerInput}>
-                <TextInput
-                  mode="flat"
-                  style={styles.textInput}
-                  label={"Ano de nascimento (Ex:2019)"}
-                  placeholderTextColor={Colors.grey}
-                  textColor={Colors.black}
-                  activeUnderlineColor={Colors.green}
-                  underlineColor={Colors.blue}
-                  underlineStyle={{ paddingBottom: 3 }}
-                  value={nascimentoVaca}
-                  onChangeText={(valor) => handleNascimentoVacaChange(valor)}
-                  keyboardType="numeric"
-                  error={!isNascimentoVacaValid}
-                />
-                <HelperText
-                  type="error"
-                  style={{
-                    color: MD3Colors.error60,
-                    fontSize: 14,
-                    lineHeight: 12,
-                  }}
-                  visible={!isNascimentoVacaValid}
-                  padding="20"
-                >
-                  Digite um nascimento válido.
-                </HelperText>
-              </View>
-              <View style={styles.containerInput}>
-                <DropdownSexo />
-              </View>
-              <View style={styles.containerInput}>
-                <TextInput
-                  mode="flat"
-                  style={styles.textInput}
-                  label={"Observações"}
-                  placeholderTextColor={Colors.grey}
-                  textColor={Colors.black}
-                  activeUnderlineColor={Colors.green}
-                  underlineColor={Colors.blue}
-                  underlineStyle={{ paddingBottom: 3 }}
-                  value={descVaca}
-                  onChangeText={setDescVaca}
-                />
+            <View style={styles.contentContainer}>
+              <View style={styles.ContainerInfoCard}>
+                <View style={styles.containerInput}>
+                  <TextInput
+                    mode="flat"
+                    label={"Nome do animal"}
+                    style={styles.textInput}
+                    placeholderTextColor={Colors.grey}
+                    textColor={Colors.black}
+                    activeUnderlineColor={Colors.green}
+                    underlineColor={Colors.blue}
+                    underlineStyle={{ paddingBottom: 3 }}
+                    value={nomeVaca}
+                    onChangeText={handleNomeVacaChange}
+                    error={!isNomeVacaValid || nomeVacaExists}
+                  />
+                  <HelperText
+                    type="error"
+                    style={{
+                      color: MD3Colors.error60,
+                      fontSize: 14,
+                      lineHeight: 12,
+                    }}
+                    visible={!isNomeVacaValid || nomeVacaExists}
+                    padding="20"
+                  >
+                    {!isNomeVacaValid
+                      ? "Preencha o nome do animal."
+                      : "Nome digitado já está em uso."}
+                  </HelperText>
+                </View>
+                <View style={styles.containerInput}>
+                  <TextInput
+                    mode="flat"
+                    label={"Identificação do animal(brinco)"}
+                    style={styles.textInput}
+                    placeholderTextColor={Colors.grey}
+                    textColor={Colors.black}
+                    activeUnderlineColor={Colors.green}
+                    underlineColor={Colors.blue}
+                    underlineStyle={{ paddingBottom: 3 }}
+                    value={brincoVaca}
+                    onChangeText={handleBrincoVacaChange}
+                    error={!isBrincoVacaValid || brincoVacaExists}
+                  />
+                  <HelperText
+                    type="error"
+                    style={{
+                      color: MD3Colors.error60,
+                      fontSize: 14,
+                      lineHeight: 12,
+                    }}
+                    visible={!isBrincoVacaValid || brincoVacaExists}
+                    padding="20"
+                  >
+                    {!isBrincoVacaValid
+                      ? "Preencha a identificação do animal."
+                      : "Identificação digitada já está em uso."}
+                  </HelperText>
+                </View>
+                <View style={styles.containerInput}>
+                  <TextInput
+                    mode="flat"
+                    style={styles.textInput}
+                    label={"Ano de nascimento (Ex:2019)"}
+                    placeholderTextColor={Colors.grey}
+                    textColor={Colors.black}
+                    activeUnderlineColor={Colors.green}
+                    underlineColor={Colors.blue}
+                    underlineStyle={{ paddingBottom: 3 }}
+                    value={nascimentoVaca}
+                    onChangeText={(valor) => handleNascimentoVacaChange(valor)}
+                    keyboardType="numeric"
+                    error={!isNascimentoVacaValid}
+                  />
+                  <HelperText
+                    type="error"
+                    style={{
+                      color: MD3Colors.error60,
+                      fontSize: 14,
+                      lineHeight: 12,
+                    }}
+                    visible={!isNascimentoVacaValid}
+                    padding="20"
+                  >
+                    Digite um nascimento válido.
+                  </HelperText>
+                </View>
+                <View style={styles.containerInput}>
+                  <DropdownSexo />
+                </View>
+                <View style={styles.containerInput}>
+                  <TextInput
+                    mode="flat"
+                    style={styles.textInput}
+                    label={"Observações"}
+                    placeholderTextColor={Colors.grey}
+                    textColor={Colors.black}
+                    activeUnderlineColor={Colors.green}
+                    underlineColor={Colors.blue}
+                    underlineStyle={{ paddingBottom: 3 }}
+                    value={descVaca}
+                    onChangeText={setDescVaca}
+                  />
+                </View>
               </View>
             </View>
-            <View style={styles.containerEdit}>
+            <View style={styles.containervoltar}>
               <TouchableOpacity
                 style={styles.botao}
                 onPress={() => UpdateInfoVaca()}
               >
                 <Text style={styles.voltarfont}>{"Confirmar"}</Text>
               </TouchableOpacity>
-            </View>
-            <View style={styles.containerEdit}>
+
               <TouchableOpacity
                 style={styles.botao}
                 onPress={() => navigation.navigate("PageAnimais")}

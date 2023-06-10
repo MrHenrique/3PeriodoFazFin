@@ -22,6 +22,8 @@ import uuid from "react-native-uuid";
 import { AuthContext } from "../../../contexts/auth";
 import { useMainContext } from "../../../contexts/RealmContext";
 import styles from "../styles";
+import { MaterialIcons } from "@expo/vector-icons";
+import { scale } from "react-native-size-matters";
 
 function EntradaEstoque() {
   const realm = useMainContext();
@@ -545,14 +547,20 @@ function EntradaEstoque() {
           </ScrollView>
           <View style={StyleFuncKeyboard()}>
             <TouchableOpacity style={styles.botao} onPress={validCheck}>
-              <Text style={styles.fontBackButton}>{"Cadastrar"}</Text>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={styles.fontBackButton}>{"Cadastrar"}</Text>
+              </View>
+              <MaterialIcons name="add" size={scale(24)} color="white" />
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.botao}
               onPress={() => navigation.navigate("Home")}
             >
-              <Text style={styles.fontBackButton}>{"Voltar"}</Text>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={styles.fontBackButton}>{"Voltar"}</Text>
+              </View>
+              <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
             </TouchableOpacity>
           </View>
         </ImageBackground>

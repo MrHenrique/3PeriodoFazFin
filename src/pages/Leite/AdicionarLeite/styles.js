@@ -3,6 +3,9 @@ import { Buttons, Colors, Fonts, TextInput } from "../../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
+  campoTexto: {
+    backgroundColor: Colors.white,
+  },
   radioBView: {
     flex: 1,
     alignItems: "center",
@@ -99,9 +102,9 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   textovoltar: {
-    fontSize: verticalScale(14),
-    fontWeight: "bold",
-    color: "#fff",
+    ...Fonts.txtLargeBold,
+    color: Colors.white,
+    paddingLeft: scale(15),
   },
   tituloinfo: {
     color: "white",
@@ -228,7 +231,8 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    justifyContent: "center",
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
     opacity: 0.2,
     elevation: 10,
   },
@@ -250,10 +254,12 @@ const styles = StyleSheet.create({
   },
   botao: {
     flex: 1.1,
+    paddingHorizontal: scale(80),
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    justifyContent: "center",
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
     elevation: 10,
   },
   botaoselecionaranimal: {

@@ -27,7 +27,10 @@ const styles = StyleSheet.create({
   botaopressM: {
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    justifyContent: "center",
+    paddingHorizontal: scale(80),
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
+    elevation: 10,
   },
   search: {
     backgroundColor: Colors.white,
@@ -191,7 +194,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   txtBotao: {
-    ...Fonts.txtMedium,
+    ...Fonts.txtLargeBold,
     color: Colors.white,
   },
   containerbutao: {
@@ -211,7 +214,10 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    justifyContent: "center",
+    justifyContent: "space-between",
+    flexDirection: "row-reverse",
+    paddingHorizontal: scale(80),
+    elevation: 10,
   },
 });
 

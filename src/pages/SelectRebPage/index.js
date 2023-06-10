@@ -11,6 +11,9 @@ import Select from "../../components/Select";
 import { AuthContext } from "../../contexts/auth";
 import styles from "./styles";
 import { useMainContext } from "../../contexts/RealmContext";
+import { MaterialIcons } from "@expo/vector-icons";
+import { scale } from "react-native-size-matters";
+
 function SelectRebPage({ navigation }) {
   const realm = useMainContext();
   const [listaReb, setListaReb] = useState([]);
@@ -30,7 +33,7 @@ function SelectRebPage({ navigation }) {
   function backAndClear() {
     RebanhoID("");
     FazendaID("");
-    navigation.navigate("SelectFazPage")
+    navigation.navigate("SelectFazPage");
   }
   function CanContinue() {
     if (typeof rebID == "undefined" || rebID == "") {
@@ -85,14 +88,20 @@ function SelectRebPage({ navigation }) {
             style={styles.botaopress2}
             onPress={() => backAndClear()}
           >
-            <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+            </View>
+            <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
           </TouchableOpacity>
           <TouchableOpacity
             disabled={CanContinue(rebID)}
             style={DisabledStyle(rebID)}
             onPress={() => navigation.navigate("Home")}
           >
-            <Text style={styles.tituloBotao}>{"Continuar"}</Text>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text style={styles.tituloBotao}>{"Continuar"}</Text>
+            </View>
+            <MaterialIcons name="arrow-forward" size={scale(24)} color="white" />
           </TouchableOpacity>
         </View>
       </View>

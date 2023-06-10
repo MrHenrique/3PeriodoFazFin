@@ -8,7 +8,7 @@ import {
   FlatList,
   Alert,
 } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import uuid from "react-native-uuid";
 import { AuthContext } from "../../../contexts/auth";
@@ -373,7 +373,7 @@ function AdicionarLeite() {
             <View style={styles.containerinfos}>
               <TextInput
                 label="Observações"
-                style={styles.textInput}
+                style={styles.campoTexto}
                 placeholderTextColor={Colors.grey}
                 textColor={Colors.black}
                 activeUnderlineColor={Colors.green}
@@ -472,13 +472,19 @@ function AdicionarLeite() {
             style={DisabledStyle(vacaID)}
             onPress={validCheck}
           >
-            <Text style={styles.textovoltar}>Cadastrar</Text>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text style={styles.textovoltar}>Cadastrar</Text>
+            </View>
+            <MaterialIcons name="add" size={scale(24)} color="white" />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.botao}
             onPress={() => navigation.navigate("Home")}
           >
-            <Text style={styles.textovoltar}>Voltar</Text>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text style={styles.textovoltar}>Voltar</Text>
+            </View>
+            <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
           </TouchableOpacity>
         </View>
       </View>

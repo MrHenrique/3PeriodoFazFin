@@ -15,20 +15,23 @@ const styles = StyleSheet.create({
   },
   containervoltar: {
     paddingTop: scale(10),
-    flex: 0.2,
+    flex: 0.178,
     flexDirection: "column-reverse",
   },
   botao: {
     flex: 1.1,
+    paddingHorizontal: scale(80),
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    justifyContent: "center",
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
     elevation: 10,
   },
   voltarfont: {
     color: Colors.white,
     ...Fonts.txtLargeBold,
+    paddingLeft: scale(15),
   },
   contentContainer: {
     flex: 2,

@@ -12,6 +12,9 @@ import {
 import styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import { useMainContext } from "../../contexts/RealmContext";
+import { MaterialIcons } from "@expo/vector-icons";
+import { scale } from "react-native-size-matters";
+
 function SelectFazPage() {
   const realm = useMainContext();
   const navigation = useNavigation();
@@ -79,14 +82,20 @@ function SelectFazPage() {
             style={styles.botaopress}
             onPress={() => navigation.navigate("LoginPage")}
           >
-            <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+            </View>
+            <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
           </TouchableOpacity>
           <TouchableOpacity
             disabled={CanContinue(fazID)}
             style={DisabledStyle(fazID)}
             onPress={() => navigation.navigate("SelectRebPage")}
           >
-            <Text style={styles.tituloBotao}>{"Continuar"}</Text>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text style={styles.tituloBotao}>{"Continuar"}</Text>
+            </View>
+            <MaterialIcons name="arrow-forward" size={scale(24)} color="white" />
           </TouchableOpacity>
         </View>
       </View>

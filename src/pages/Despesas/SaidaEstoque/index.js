@@ -33,7 +33,7 @@ import { CheckBox, Icon } from "react-native-elements";
 import { useMainContext } from "../../../contexts/RealmContext";
 import styles from "./styles";
 import Modal from "react-native-modal";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { scale } from "react-native-size-matters";
 
 export default function SaidaEstoque() {
@@ -674,11 +674,7 @@ export default function SaidaEstoque() {
                   style={styles.botaoselecionaranimal}
                 >
                   <Text style={styles.tituloBotao}>Selecionar animal</Text>
-                  <AntDesign
-                    name="right"
-                    size={scale(22)}
-                    color="white"
-                  />
+                  <AntDesign name="right" size={scale(22)} color="white" />
                   <Modal
                     isVisible={isModalVisible}
                     coverScreen={true}
@@ -722,7 +718,14 @@ export default function SaidaEstoque() {
                             toggleModal();
                           }}
                         >
-                          <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+                          <View style={{ flex: 1, justifyContent: "center" }}>
+                            <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+                          </View>
+                          <MaterialIcons
+                            name="arrow-back"
+                            size={scale(24)}
+                            color="white"
+                          />
                         </TouchableOpacity>
                       </View>
                     </View>
@@ -733,7 +736,10 @@ export default function SaidaEstoque() {
           </ScrollView>
           <View style={StyleFuncKeyboard()}>
             <TouchableOpacity onPress={validCheck} style={styles.botao}>
-              <Text style={styles.txtBotao}>{"Cadastrar"}</Text>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={styles.txtBotao}>{"Cadastrar"}</Text>
+              </View>
+              <MaterialIcons name="add" size={scale(24)} color="white" />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -743,7 +749,10 @@ export default function SaidaEstoque() {
                 IdEstoqueSaida("");
               }}
             >
-              <Text style={styles.txtBotao}>{"Voltar"}</Text>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={styles.txtBotao}>{"Voltar"}</Text>
+              </View>
+              <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
             </TouchableOpacity>
           </View>
         </ImageBackground>

@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
   font: {
     color: Colors.white,
-    ...Fonts.txtMedium,
+    ...Fonts.txtLargeBold,
   },
   fontsubtitulo: {
     color: Colors.grey,
@@ -95,7 +95,9 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    justifyContent: "center",
+    paddingHorizontal: scale(80),
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
     elevation: 10,
   },
   containerMaisMenos: {
@@ -113,7 +115,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   fontBackButton: {
-    ...Fonts.txtMedium,
+    ...Fonts.txtLargeBold,
     color: Colors.white,
   },
   buttonText: {
@@ -125,7 +127,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-end",
     minHeight: scale(10),
-    marginTop: verticalScale(30)
+    marginTop: verticalScale(30),
   },
   containerButaoestqgeral: {
     flex: 1.1,

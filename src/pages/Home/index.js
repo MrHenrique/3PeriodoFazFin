@@ -12,7 +12,7 @@ import { scale, verticalScale } from "react-native-size-matters";
 import Header from "../../components/Header";
 import PreviewFinanceiro from "../../components/PreviewFinanceiro";
 import { AuthContext } from "../../contexts/auth";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -126,7 +126,14 @@ function Home({ navigation }) {
                 style={styles.botaopress}
                 onPress={() => backAndClear()}
               >
-                <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+                <View style={{ flex: 1, justifyContent: "center" }}>
+                  <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+                </View>
+                <MaterialIcons
+                  name="arrow-back"
+                  size={scale(24)}
+                  color="white"
+                />
               </TouchableOpacity>
             </View>
           </View>

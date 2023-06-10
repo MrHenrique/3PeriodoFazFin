@@ -139,9 +139,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   textovoltar: {
-    fontSize: verticalScale(14),
-    fontWeight: "bold",
-    color: "#fff",
+    ...Fonts.txtLargeBold,
+    color: Colors.white,
   },
   tituloinfo: {
     color: "white",
@@ -233,10 +232,12 @@ const styles = StyleSheet.create({
   },
   botao: {
     flex: 1.1,
+    paddingHorizontal: scale(80),
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    justifyContent: "center",
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
     elevation: 10,
   },
   botaoselecionaranimal: {

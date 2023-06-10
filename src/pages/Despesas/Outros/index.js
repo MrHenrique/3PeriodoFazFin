@@ -24,7 +24,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
 import { useMainContext } from "../../../contexts/RealmContext";
 import styles from "./styles";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import Modal from "react-native-modal";
 import { scale } from "react-native-size-matters";
 
@@ -398,7 +398,14 @@ export default function Outros() {
                               toggleModal();
                             }}
                           >
-                            <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+                            <View style={{ flex: 1, justifyContent: "center" }}>
+                              <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+                            </View>
+                            <MaterialIcons
+                              name="arrow-back"
+                              size={scale(24)}
+                              color="white"
+                            />
                           </TouchableOpacity>
                         </View>
                       </View>
@@ -410,14 +417,20 @@ export default function Outros() {
           </ScrollView>
           <View style={StyleFuncKeyboard()}>
             <TouchableOpacity onPress={validCheck} style={styles.botao}>
-              <Text style={styles.txtBotao}>{"Cadastrar"}</Text>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={styles.txtBotao}>{"Cadastrar"}</Text>
+              </View>
+              <MaterialIcons name="add" size={scale(24)} color="white" />
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => navigation.navigate("Home")}
               style={styles.botao}
             >
-              <Text style={styles.txtBotao}>{"Voltar"}</Text>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={styles.txtBotao}>{"Voltar"}</Text>
+              </View>
+              <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
             </TouchableOpacity>
           </View>
         </ImageBackground>

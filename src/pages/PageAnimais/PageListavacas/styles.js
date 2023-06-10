@@ -24,11 +24,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 18,
   },
-  textovoltar: {
-    fontSize: verticalScale(14),
-    fontWeight: "bold",
-    color: "#fff",
-  },
   container2: {
     flex: 2,
     maxHeight: scale(110),
@@ -100,8 +95,9 @@ const styles = StyleSheet.create({
     borderRadius: scale(8),
   },
   textovoltar: {
-    ...Fonts.txtMedium,
+    ...Fonts.txtLargeBold,
     color: Colors.white,
+    paddingLeft: scale(15),
   },
   botaoeditar: {
     backgroundColor: "rgba(255, 30, 0, 1)",
@@ -137,14 +133,16 @@ const styles = StyleSheet.create({
   },
   botao: {
     flex: 1.1,
+    paddingHorizontal: scale(80),
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    justifyContent: "center",
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
     elevation: 10,
   },
   containervoltar: {
-    flex: 0.1,
+    flex: 0.11,
     flexDirection: "column-reverse",
     paddingTop: scale(10),
   },
