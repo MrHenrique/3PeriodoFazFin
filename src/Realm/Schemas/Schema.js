@@ -102,6 +102,25 @@ export const ReceitaRebSchema = {
     },
   },
 };
+
+// export const ReceitaRebVendaSchema = {
+//   name: "ReceitaRebVendaSchema",
+//   primaryKey: "_id",
+//   properties: {
+//     _id: "string",
+//     tipo: "float",
+//     precoArroba: "float",
+//     Pesoarroba: "float",
+//     description: "string",
+//     createdAt: "date",
+//     assignee: {
+//       type: "linkingObjects",
+//       objectType: "RebanhoSchema",
+//       property: "receitas",
+//     },
+//   },
+// };
+
 export const DespesasSchema = {
   name: "DespesasSchema",
   primaryKey: "_id",

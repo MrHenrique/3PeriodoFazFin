@@ -139,26 +139,6 @@ function PageListavacas({ navigation, route }) {
               />
             </TouchableOpacity>
           </View>
-          <View
-            style={{
-              flex: 1,
-              alignContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <TouchableOpacity
-              style={styles.btnfiltro}
-              rippleColor={Colors.grey}
-              onPress={() => navigation.navigate("CadastroVaca")}
-            >
-              <Text style={styles.fontBtnFiltro}>Cadastrar</Text>
-              <MaterialCommunityIcons
-                name="plus"
-                size={scale(20)}
-                color="white"
-              />
-            </TouchableOpacity>
-          </View>
         </View>
       </View>
       <ImageBackground
