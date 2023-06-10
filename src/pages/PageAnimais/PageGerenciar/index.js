@@ -1,13 +1,13 @@
-import * as React from "react";
-import { StyleSheet, useWindowDimensions } from "react-native";
-import PageListaVacas from "./PageListavacas";
-import Leite from "../Leite";
-import PageGerenciar from "./PageGerenciar";
+import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import Venda from "./PageVenda";
+import RegistrosVendas from "./PageRegistrosVenda";
+import CadastroVaca from "../../Cadastro/CadastroVaca";
 import styles, { estilo } from "./styles";
+
 const Tab = createMaterialTopTabNavigator();
 
-export default function PageAnimais() {
+function PageGerenciar() {
   return (
     <>
       <Tab.Navigator
@@ -17,10 +17,12 @@ export default function PageAnimais() {
           tabBarStyle: styles.tab,
         }}
       >
-        <Tab.Screen name="Lista Vacas" component={PageListaVacas} />
-        <Tab.Screen name="Leite" component={Leite} />
-        <Tab.Screen name= "Vendas" component={PageGerenciar} />
+        <Tab.Screen name="Gerar Venda " component={Venda} />
+        <Tab.Screen name="Registros de Vendas" component={RegistrosVendas} />
+        <Tab.Screen name="Cadastrar" component={CadastroVaca} />
       </Tab.Navigator>
     </>
   );
 }
+
+export default PageGerenciar;
