@@ -206,19 +206,8 @@ function FaturamentoReb() {
                   <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
 
                   {/*filtros*/}
-                  <TouchableOpacity
-                    onPress={() => setShouldShow(!shouldShow)}
-                    style={styles.filtrosBotao}
-                  >
-                    <Text style={styles.tituloBotao}>Filtros</Text>
-                  </TouchableOpacity>
-                  <View
-                    style={[
-                      styles.filtros,
-                      { display: shouldShow ? "flex" : "none" },
-                    ]}
-                  >
-                    <FiltrosData listaRecebida={listaLeiteReb} />
+                  <View style={{ paddingHorizontal: 20, marginBottom: 5 }}>
+                    <FiltrosData listaRecebida={listaLeiteReb} ordenarPor={"valor"} />
                   </View>
 
                   <FlatList

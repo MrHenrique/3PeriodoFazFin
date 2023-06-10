@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 50,
     borderBottomLeftRadius: 50,
     width: scale(10),
-    height: scale(40),
+    height: scale(34),
   },
 
   textovoltar: {

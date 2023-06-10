@@ -18,7 +18,7 @@ import { scale, verticalScale } from "react-native-size-matters";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 function FiltrosData(props) {
-  const { listaRecebida } = props; // Recebe a lista que vai ser filtrada
+  const { listaRecebida, ordenarPor } = props; // Recebe a lista que vai ser filtrada
   const { ListaFiltrada } = useContext(AuthContext);
   const [lista, setLista] = useState(listaRecebida);
   const [startDate, setStartDate] = useState(""); //Filtro Intervalo entre datas
@@ -28,7 +28,7 @@ function FiltrosData(props) {
   const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
     useState(false);
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
-  const [dataChipValue, setDataChipValue] = React.useState(null);
+  const [dataChipValue, setDataChipValue] = React.useState(1);
   const [textDataChipValue, setTextDataChipValue] = useState("Período");
   const [valorChipValue, setValorChipValue] = React.useState(null);
   const [textValorChipValue, setTextValorChipValue] = useState("Valores");
@@ -83,7 +83,14 @@ function FiltrosData(props) {
   useEffect(() => {
     if (valorChipValue === 1) {
       const filtrarPorValores = (lista) => {
-        const sortedItems = [...lista].sort((a, b) => a.prodL - b.prodL);
+        const sortedItems = [...lista].sort((a, b) => {
+          if (ordenarPor === "litro") {
+            return a.prodL - b.prodL;
+          } else if (ordenarPor === "valor") {
+            return a.precoL * a.prodL - b.precoL * b.prodL;
+          }
+          return 0;
+        });
         return sortedItems;
       };
       const crescente = filtrarPorValores(lista);
@@ -91,7 +98,14 @@ function FiltrosData(props) {
       setTextValorChipValue("Crescente");
     } else if (valorChipValue === 2) {
       const filtrarPorValores = (lista) => {
-        const sortedItems = [...lista].sort((a, b) => b.prodL - a.prodL);
+        const sortedItems = [...lista].sort((a, b) => {
+          if (ordenarPor === "litro") {
+            return b.prodL - a.prodL;
+          } else if (ordenarPor === "valor") {
+            return b.precoL * b.prodL - a.precoL * a.prodL;
+          }
+          return 0;
+        });
         return sortedItems;
       };
       const decrescente = filtrarPorValores(lista);
@@ -171,6 +185,7 @@ function FiltrosData(props) {
       setTextDataChipValue("Período customizado");
     } else {
       setTextDataChipValue("Período");
+      setLista(listaRecebida);
     }
   }, [dataChipValue]);
 
@@ -192,10 +207,23 @@ function FiltrosData(props) {
 
   const handleDataChipPress = (value) => {
     setDataChipValue(value === dataChipValue ? null : value);
+    setValorChipValue(null);
   };
 
   const handleValorChipPress = (value) => {
     setValorChipValue(value === valorChipValue ? null : value);
+  };
+
+  const handleChipPress = (tipo) => {
+    let teste = false;
+    if (tipo === "data") {
+      const dataValoresValidos = [1, 2, 3, 4, 5, 6];
+      teste = dataValoresValidos.includes(dataChipValue);
+    } else if (tipo === "valor") {
+      const valorValoresValidos = [1, 2];
+      teste = valorValoresValidos.includes(valorChipValue);
+    }
+    return teste;
   };
 
   return (
@@ -203,15 +231,23 @@ function FiltrosData(props) {
       <View style={styles.containerChip}>
         <ScrollView horizontal>
           <Chip
-            style={styles.chip}
+            style={[
+              styles.chip,
+              handleChipPress("data") && styles.chipSelected,
+            ]}
             textStyle={{ fontSize: scale(14), color: Colors.white }}
             icon={() => <Icon name="calendar" size={20} color="white" />}
-            onPress={() => setModalFiltrosVisible(true)}
+            onPress={() => {
+              setModalFiltrosVisible(true);
+            }}
           >
             <Text>{textDataChipValue}</Text>
           </Chip>
           <Chip
-            style={styles.chip}
+            style={[
+              styles.chip,
+              handleChipPress("valor") && styles.chipSelected,
+            ]}
             textStyle={{ fontSize: scale(14), color: Colors.white }}
             icon={() => (
               <FontAwesome5 name="dollar-sign" size={20} color="white" />
@@ -239,6 +275,7 @@ function FiltrosData(props) {
                 onPress={() => {
                   setDataChipValue(null);
                   setValorChipValue(null);
+                  setLista(listaRecebida);
                 }}
               >
                 <Text>Limpar</Text>
@@ -407,7 +444,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   modalContainer: {
-    flex: 0.6,
+    //flex: 0.6,
     backgroundColor: Colors.Cyan,
   },
   containerBotoes: {
@@ -422,6 +459,7 @@ const styles = StyleSheet.create({
     height: verticalScale(30),
     borderWidth: scale(1),
     justifyContent: "center",
+    marginHorizontal: 3,
   },
   texto: {
     color: Colors.white,
@@ -433,8 +471,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   chip: {
-    //maxWidth: scale(130),
     backgroundColor: Colors.green,
+    marginRight: scale(10),
     padding: scale(5),
   },
   tituloinfo: {
