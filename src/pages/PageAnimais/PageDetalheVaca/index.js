@@ -4,6 +4,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import styles, { estilo } from "../styles";
 import Vacas from "./Vacas";
 import FinanceiroVaca from "./FinanceiroVaca";
+import Reproducao from "../../Reproducao";
 const Tab = createMaterialTopTabNavigator();
 
 export default function PageAnimais() {
@@ -18,6 +19,7 @@ export default function PageAnimais() {
       >
         <Tab.Screen name="Vacas" component={Vacas} />
         <Tab.Screen name="Financeiro" component={FinanceiroVaca} />
+        <Tab.Screen name="Reprodução" component={Reproducao} />
       </Tab.Navigator>
     </>
   );
