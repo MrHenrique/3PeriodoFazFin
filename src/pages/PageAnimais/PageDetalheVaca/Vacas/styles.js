@@ -3,6 +3,9 @@ import { Buttons, Colors, Fonts, TextInput } from "../../../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
+  btnEditContainer: {
+    flex: 0.5,
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.darkgreen,
@@ -14,8 +17,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   containervoltar: {
-    flex: 0.2,
-    flexDirection: "column-reverse",
+    flex: 0.51,
+    flexDirection: "column",
     paddingTop: scale(10),
   },
   containerEdit: {
@@ -25,18 +28,21 @@ const styles = StyleSheet.create({
   },
   botao: {
     flex: 1.1,
+    paddingHorizontal: scale(80),
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    justifyContent: "center",
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
     elevation: 10,
   },
   voltarfont: {
     color: Colors.white,
     ...Fonts.txtLargeBold,
+    paddingLeft: scale(15),
   },
   contentContainer: {
-    flex: 2,
+    flex: 2.7,
   },
   containerCard: {
     flex: 1,
@@ -50,7 +56,7 @@ const styles = StyleSheet.create({
   },
   ContainerInfoCardOBS: {
     backgroundColor: Colors.green,
-    flex: 2,
+    flex: 1.7,
     margin: scale(4),
     borderRadius: scale(12),
     justifyContent: "flex-start",

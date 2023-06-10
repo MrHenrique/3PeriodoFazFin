@@ -9,14 +9,15 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
-import { TextInput, Button } from "react-native-paper";
+import { scale } from "react-native-size-matters";
+import { TextInput } from "react-native-paper";
 import styles from "./styles";
 import { AuthContext } from "../../../contexts/auth";
 import { Feather } from "@expo/vector-icons";
 import { useMainContext } from "../../../contexts/RealmContext";
 import { Colors, Buttons } from "../../../styles";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const imgbg1 = "../../../../assets/fazfinwhiteletter.png";
 
@@ -216,7 +217,10 @@ function PageListavacas({ navigation, route }) {
             style={styles.botao}
             onPress={() => navigation.navigate("Home")}
           >
-            <Text style={styles.textovoltar}>Voltar</Text>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text style={styles.textovoltar}>Voltar</Text>
+            </View>
+            <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
           </TouchableOpacity>
         </View>
       </ImageBackground>

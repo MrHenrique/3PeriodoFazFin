@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 50,
     borderBottomLeftRadius: 50,
     width: scale(10),
-    height: scale(40),
+    height: scale(34),
   },
 
   textovoltar: {
@@ -185,6 +185,11 @@ const styles = StyleSheet.create({
   containergeral: {
     flex: 1,
     margin: scale(15),
+    backgroundColor: Colors.darkgreen,
+  },
+  containergeralmodal: {
+    flex: 1,
+    padding: scale(20),
     backgroundColor: Colors.darkgreen,
   },
 });

@@ -10,21 +10,15 @@ import {
   Alert,
 } from "react-native";
 import Animated, {
-  BounceInDown,
-  BounceInLeft,
-  BounceOutRight,
   FadeIn,
-  FadeInDown,
   FadeOut,
-  LightSpeedInLeft,
-  LightSpeedInRight,
-  RollInLeft,
-  SlideInDown,
-  SlideInLeft,
-  SlideInRight,
-  SlideOutRight,
-  ZoomIn,
 } from "react-native-reanimated";
+import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../../../contexts/auth";
+import Modal from "react-native-modal";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useMainContext } from "../../../contexts/RealmContext";
+import styles from "../styles";
 import uuid from "react-native-uuid";
 import {
   TextInput,
@@ -32,15 +26,10 @@ import {
   IconButton,
   HelperText,
 } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
-import { AuthContext } from "../../../contexts/auth";
-import Modal from "react-native-modal";
-import { MaterialIcons } from "@expo/vector-icons";
-import { useMainContext } from "../../../contexts/RealmContext";
-import styles from "../styles";
 import { Colors } from "../../../styles";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
+import { scale } from "react-native-size-matters";
 function EstoqueGeral() {
   const realm = useMainContext();
 
@@ -786,7 +775,10 @@ function EstoqueGeral() {
               style={styles.botao}
               onPress={() => navigation.navigate("Home")}
             >
-              <Text style={styles.font}>{"Voltar"}</Text>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={styles.font}>{"Voltar"}</Text>
+              </View>
+              <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
             </TouchableOpacity>
           </View>
         </View>

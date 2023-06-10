@@ -27,10 +27,15 @@ const styles = StyleSheet.create({
   // voltar
   botaopress: {
     ...Buttons.btnLargeRounded,
+    flexDirection: "row-reverse",
     backgroundColor: Colors.green,
+    paddingHorizontal: scale(80),
+    justifyContent: "space-between",
+    elevation: 10,
   },
+
   tituloBotao: {
-    ...Fonts.txtMedium,
+    ...Fonts.txtLargeBold,
     color: Colors.white,
   },
 
@@ -77,7 +82,6 @@ const styles = StyleSheet.create({
   textPreview: {
     ...Fonts.txtLargeBold,
     color: Colors.white,
-
   },
   containerScrollPreview: {
     height: verticalScale(180),

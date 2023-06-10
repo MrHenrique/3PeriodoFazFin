@@ -1,35 +1,21 @@
 import * as React from "react";
 import { useState, useContext, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  Alert,
-} from "react-native";
+import { View, Text, TouchableOpacity, FlatList, Alert } from "react-native";
 import Modal from "react-native-modal";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import FiltrosData from "../../../components/Filtros/FiltrosData";
-import { scale, verticalScale } from "react-native-size-matters";
 import { AuthContext } from "../../../contexts/auth";
 import { useMainContext } from "../../../contexts/RealmContext";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Colors } from "../../../styles";
 import styles from "./styles";
-import {
-  TextInput,
-  MD3Colors,
-  IconButton,
-  HelperText,
-} from "react-native-paper";
+import { TextInput, MD3Colors, HelperText } from "react-native-paper";
 function RegistrosLeite() {
   const realm = useMainContext();
   const navigation = useNavigation();
   const { rebID, ListaFiltrada, listaFiltrada } = useContext(AuthContext);
   const [listaLeite, setListaLeite] = useState([]);
-  const [shouldShow, setShouldShow] = useState(false);
   const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
   const [modalEditarVisible, setModalEditarVisible] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
@@ -59,7 +45,20 @@ function RegistrosLeite() {
         });
 
         setListaLeite(sortedValues);
-        ListaFiltrada(sortedValues);
+
+        const lista7Dias = sortedValues.filter((item) => {
+          const dataHoje = new Date();
+          dataHoje.setHours(0, 0, 0, 0);
+          const dataSeteDiasAtras = new Date(dataHoje);
+          dataSeteDiasAtras.setDate(dataHoje.getDate() - 7);
+          const itemDataDeCriacao = new Date(item.createdAt);
+          itemDataDeCriacao.setHours(0, 0, 0, 0);
+          return (
+            itemDataDeCriacao >= dataSeteDiasAtras &&
+            itemDataDeCriacao <= dataHoje
+          );
+        });
+        ListaFiltrada(lista7Dias); // Para a lista retornar por padrão os valores de 7 dias
       });
     }
   }, [realm]);
@@ -119,8 +118,7 @@ function RegistrosLeite() {
   //Função para mostrar os detalhes dos item escolhido
   const handleItemPress = (itemId) => {
     if (itemId === selectedItemId) {
-      // Se o itemId for o mesmo do item selecionado atualmente,
-      // feche o modal de detalhes
+      // Se o itemId for o mesmo do item selecionado atualmente,feche o modal de detalhes
       setSelectedItemId(null);
       setShouldShowDetalhes(false);
     } else {
@@ -263,7 +261,9 @@ function RegistrosLeite() {
   return (
     <View style={styles.container}>
       <View style={styles.containergeral}>
-        <FiltrosData listaRecebida={listaLeite} />
+        <View>
+          <FiltrosData listaRecebida={listaLeite} ordenarPor={"litro"} />
+        </View>
         <FlatList
           style={[styles.lista]}
           data={listaFiltrada}
@@ -277,7 +277,7 @@ function RegistrosLeite() {
           <Text style={styles.tituloBotao}>{"Voltar"}</Text>
         </TouchableOpacity>
         <Modal
-        coverScreen={true}
+          coverScreen={true}
           backdropColor="black"
           backdropOpacity={0.5}
           visible={modalEditarVisible}
@@ -286,7 +286,7 @@ function RegistrosLeite() {
           statusBarTranslucent
         >
           <View style={styles.modalContainer}>
-            <View style={styles.containergeral}>
+            <View style={styles.containergeralmodal}>
               <View style={styles.containerinfos}>
                 <TouchableOpacity style={styles.teste} onPress={showDatePicker}>
                   <Text style={styles.tituloinfo}>{text}</Text>

@@ -18,7 +18,6 @@ import { AuthContext } from "../../../../contexts/auth";
 import FiltrosData from "../../../../components/Filtros/FiltrosData";
 import styles from "../../styles";
 import { Colors } from "../../../../styles";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function Faturamento() {
   const { precoCF, listaAli, listaLeite, precoLeite, listaFiltrada } =
@@ -88,7 +87,8 @@ function Faturamento() {
           onPress={() => handleItemPress(item._id)}
         >
           <Text style={styles.tituloBotao}>
-            {formatarResultado(item.createdAt, "data")} - {formatarResultado(item.prodL * item.precoL, "preco")}
+            {formatarResultado(item.createdAt, "data")} -{" "}
+            {formatarResultado(item.prodL * item.precoL, "preco")}
           </Text>
         </TouchableOpacity>
         {shouldShowDetalhes && isItemSelected && (
@@ -102,7 +102,9 @@ function Faturamento() {
             <View style={styles.modalContainerText}>
               <View style={styles.modalContent}>
                 <Text style={styles.textContent}>Data: </Text>
-                <Text style={styles.textContent}>{formatarResultado(item.createdAt, "data")}</Text>
+                <Text style={styles.textContent}>
+                  {formatarResultado(item.createdAt, "data")}
+                </Text>
               </View>
               <View style={styles.modalContent}>
                 <Text style={styles.textContent}>Horário: </Text>
@@ -203,24 +205,8 @@ function Faturamento() {
                 <View style={styles.modalContainer}>
                   <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
                   {/*filtros*/}
-                  <TouchableOpacity
-                    onPress={() => setShouldShow(!shouldShow)}
-                    style={styles.filtrosBotao}
-                  >
-                    <MaterialCommunityIcons
-                      name="filter-outline"
-                      size={scale(24)}
-                      color="white"
-                    />
-                    <Text style={styles.tituloBotao}>Filtros</Text>
-                  </TouchableOpacity>
-                  <View
-                    style={[
-                      styles.filtros,
-                      { display: shouldShow ? "flex" : "none" },
-                    ]}
-                  >
-                    <FiltrosData listaRecebida={listaLeite} />
+                  <View style={{ paddingHorizontal: 20, marginBottom: 5 }}>
+                    <FiltrosData listaRecebida={listaLeite} ordenarPor={"valor"} />
                   </View>
 
                   <FlatList

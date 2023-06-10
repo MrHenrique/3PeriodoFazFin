@@ -19,6 +19,7 @@ import {
 import Animated, {
   LightSpeedInLeft,
   LightSpeedOutLeft,
+  LightSpeedOutRight,
   SlideInLeft,
   SlideOutRight,
 } from "react-native-reanimated";
@@ -32,6 +33,8 @@ import { CheckBox, Icon } from "react-native-elements";
 import { useMainContext } from "../../../contexts/RealmContext";
 import styles from "./styles";
 import Modal from "react-native-modal";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+import { scale } from "react-native-size-matters";
 
 export default function SaidaEstoque() {
   const realm = useMainContext();
@@ -519,9 +522,13 @@ export default function SaidaEstoque() {
               />
             </View>
             {/* DropDown */}
-            <View style={styles.dropdownContainer}>
+            <Animated.View
+              entering={LightSpeedInLeft}
+              exiting={LightSpeedOutRight}
+              style={styles.dropdownContainer}
+            >
               <EstoqueOptions />
-            </View>
+            </Animated.View>
             {/* Cadastro de produtos */}
             <View style={styles.containerGeralCadastro}>
               {/* Visao do produto, preco medio e quantidade */}
@@ -529,6 +536,7 @@ export default function SaidaEstoque() {
                 <>
                   <Animated.View
                     entering={LightSpeedInLeft.delay(10)}
+                    exiting={LightSpeedOutRight.duration(500)}
                     style={styles.containerProduto}
                   >
                     {newListaEstoque.length > 0 &&
@@ -666,6 +674,7 @@ export default function SaidaEstoque() {
                   style={styles.botaoselecionaranimal}
                 >
                   <Text style={styles.tituloBotao}>Selecionar animal</Text>
+                  <AntDesign name="right" size={scale(22)} color="white" />
                   <Modal
                     isVisible={isModalVisible}
                     coverScreen={true}
@@ -675,34 +684,51 @@ export default function SaidaEstoque() {
                     statusBarTranslucent
                   >
                     <View style={styles.modalContainer}>
-                      <Text style={styles.TituloM}>Selecione um animal</Text>
-                      <TouchableOpacity
-                        style={styles.filtroNome}
-                        onPress={handleFilterNome}
-                      >
-                        <Text style={styles.tituloBotao}>Filtrar por nome</Text>
-                      </TouchableOpacity>
-                      <TextInput
-                        style={styles.search}
-                        placeholder="Pesquise pelo nome."
-                        value={searchText}
-                        onChangeText={(t) => setSearchText(t)}
-                      ></TextInput>
-                      <FlatList
-                        style={styles.scroll}
-                        data={lista}
-                        renderItem={renderItem}
-                        keyExtractor={(item) => item._id}
-                      />
+                      <View style={styles.modalContainerSearch}>
+                        <Text style={styles.TituloM}>Selecione um animal</Text>
+                        <View style={{ flex: 1 }}>
+                          <TextInput
+                            style={styles.search}
+                            placeholder="Pesquise pelo nome."
+                            value={searchText}
+                            onChangeText={(t) => setSearchText(t)}
+                            right={
+                              <TextInput.Icon
+                                icon={"text-search"}
+                                onPress={() => {
+                                  handleFilterNome;
+                                }}
+                              />
+                            }
+                          />
+                        </View>
+                      </View>
+                      <View style={styles.modalListContainer}>
+                        <FlatList
+                          style={styles.scroll}
+                          data={lista}
+                          renderItem={renderItem}
+                          keyExtractor={(item) => item._id}
+                        />
+                      </View>
+                      <View style={styles.modalVoltarContainer}>
+                        <TouchableOpacity
+                          style={styles.botaopressM}
+                          onPress={() => {
+                            toggleModal();
+                          }}
+                        >
+                          <View style={{ flex: 1, justifyContent: "center" }}>
+                            <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+                          </View>
+                          <MaterialIcons
+                            name="arrow-back"
+                            size={scale(24)}
+                            color="white"
+                          />
+                        </TouchableOpacity>
+                      </View>
                     </View>
-                    <TouchableOpacity
-                      style={styles.botaopressM}
-                      onPress={() => {
-                        toggleModal();
-                      }}
-                    >
-                      <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-                    </TouchableOpacity>
                   </Modal>
                 </TouchableOpacity>
               </Animated.View>
@@ -710,7 +736,10 @@ export default function SaidaEstoque() {
           </ScrollView>
           <View style={StyleFuncKeyboard()}>
             <TouchableOpacity onPress={validCheck} style={styles.botao}>
-              <Text style={styles.txtBotao}>{"Cadastrar"}</Text>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={styles.txtBotao}>{"Cadastrar"}</Text>
+              </View>
+              <MaterialIcons name="add" size={scale(24)} color="white" />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -720,7 +749,10 @@ export default function SaidaEstoque() {
                 IdEstoqueSaida("");
               }}
             >
-              <Text style={styles.txtBotao}>{"Voltar"}</Text>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={styles.txtBotao}>{"Voltar"}</Text>
+              </View>
+              <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
             </TouchableOpacity>
           </View>
         </ImageBackground>

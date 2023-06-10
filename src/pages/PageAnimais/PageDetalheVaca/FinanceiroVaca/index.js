@@ -4,6 +4,8 @@ import { AuthContext } from "../../../../contexts/auth";
 import { useMainContext } from "../../../../contexts/RealmContext";
 import Graficodetalhesvacas from "../../../../components/Graficos/Graficodetalhesvacas";
 import styles from "./styles";
+import { MaterialIcons } from "@expo/vector-icons";
+import { scale } from "react-native-size-matters";
 
 function FinanceiroVaca({ route, navigation }) {
   const { idVaca } = useContext(AuthContext);
@@ -82,7 +84,10 @@ function FinanceiroVaca({ route, navigation }) {
             style={styles.botao}
             onPress={() => navigation.navigate("PageAnimais")}
           >
-            <Text style={styles.voltarfont}>{"Voltar"}</Text>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text style={styles.voltarfont}>{"Voltar"}</Text>
+            </View>
+            <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
           </TouchableOpacity>
         </View>
       </View>

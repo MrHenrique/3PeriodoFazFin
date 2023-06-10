@@ -18,6 +18,9 @@ import styles from "./styles";
 import { AuthContext } from "../../../contexts/auth";
 import { useMainContext } from "../../../contexts/RealmContext";
 import { Alert } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
+import { scale } from "react-native-size-matters";
+
 function CadastroFaz() {
   const realm = useMainContext();
   const { FazendaID, FazendaProp, RebanhoID } = useContext(AuthContext);
@@ -238,10 +241,16 @@ function CadastroFaz() {
               style={styles.botao}
               onPress={() => navigation.navigate("SelectFazPage")}
             >
-              <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+              </View>
+              <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.botao} onPress={validCheck}>
-              <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
+              </View>
+              <MaterialIcons name="add" size={scale(24)} color="white" />
             </TouchableOpacity>
           </View>
         </View>

@@ -1,7 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import Header from "../../components/Header";
 import AdicionarLeite from "./AdicionarLeite";
 import RegistrosLeite from "./RegistrosLeite";
 import styles, { estilo } from "./styles";

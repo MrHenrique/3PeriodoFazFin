@@ -6,20 +6,20 @@ import {
   Text,
   TouchableOpacity,
   SafeAreaView,
+  ScrollView,
 } from "react-native";
 import Modal from "react-native-modal";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { AuthContext } from "../../contexts/auth";
-import { Chip, RadioButton } from "react-native-paper";
-import { AntDesign } from "@expo/vector-icons";
+import { Chip } from "react-native-paper";
+import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import { Colors } from "../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 function FiltrosData(props) {
-  const { listaRecebida } = props; // Recebe a lista que vai ser filtrada
+  const { listaRecebida, ordenarPor } = props; // Recebe a lista que vai ser filtrada
   const { ListaFiltrada } = useContext(AuthContext);
-  const [resetDropdown, setResetDropdown] = useState(false);
   const [lista, setLista] = useState(listaRecebida);
   const [startDate, setStartDate] = useState(""); //Filtro Intervalo entre datas
   const [textStartDate, setTextStartDate] = useState("Data Inicial"); //Filtro Intervalo entre datas
@@ -28,26 +28,15 @@ function FiltrosData(props) {
   const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
     useState(false);
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
-  const [dataRadioValue, setDataRadioValue] = React.useState(null);
-  const [textDataRadioValue, setTextDataRadioValue] = useState("Período");
-  const [modalFiltroDataVisible, setModalFiltroDataVisible] = useState(false);
-  const [valorRadioValue, setValorRadioValue] = React.useState(null);
-  const [textValorRadioValue, setTextValorRadioValue] = useState("Valores");
-  const [modalFiltroValorVisible, setModalFiltroValorVisible] = useState(false);
+  const [dataChipValue, setDataChipValue] = React.useState(1);
+  const [textDataChipValue, setTextDataChipValue] = useState("Período");
+  const [valorChipValue, setValorChipValue] = React.useState(null);
+  const [textValorChipValue, setTextValorChipValue] = useState("Valores");
+  const [modalFiltrosVisible, setModalFiltrosVisible] = useState(false);
 
   useEffect(() => {
     ListaFiltrada(lista);
   }, [lista]);
-
-  const handleResetDropdown = () => {
-    setResetDropdown(true);
-  };
-
-  useEffect(() => {
-    if (resetDropdown) {
-      setResetDropdown(false); // Redefine o valor de resetDropdown para false após ser utilizado
-    }
-  }, [resetDropdown]);
 
   //Codigo do DateTimePickerModal
   //Data Inicial
@@ -92,24 +81,40 @@ function FiltrosData(props) {
 
   // Filtro por Valores
   useEffect(() => {
-    if (valorRadioValue === 1) {
+    if (valorChipValue === 1) {
       const filtrarPorValores = (lista) => {
-        const sortedItems = [...lista].sort((a, b) => a.prodL - b.prodL);
+        const sortedItems = [...lista].sort((a, b) => {
+          if (ordenarPor === "litro") {
+            return a.prodL - b.prodL;
+          } else if (ordenarPor === "valor") {
+            return a.precoL * a.prodL - b.precoL * b.prodL;
+          }
+          return 0;
+        });
         return sortedItems;
       };
       const crescente = filtrarPorValores(lista);
       setLista(crescente);
-      setTextValorRadioValue("Crescente");
-    } else if (valorRadioValue === 2) {
+      setTextValorChipValue("Crescente");
+    } else if (valorChipValue === 2) {
       const filtrarPorValores = (lista) => {
-        const sortedItems = [...lista].sort((a, b) => b.prodL - a.prodL);
+        const sortedItems = [...lista].sort((a, b) => {
+          if (ordenarPor === "litro") {
+            return b.prodL - a.prodL;
+          } else if (ordenarPor === "valor") {
+            return b.precoL * b.prodL - a.precoL * a.prodL;
+          }
+          return 0;
+        });
         return sortedItems;
       };
       const decrescente = filtrarPorValores(lista);
       setLista(decrescente);
-      setTextValorRadioValue("Decrescente");
+      setTextValorChipValue("Decrescente");
+    } else {
+      setTextValorChipValue("Valores");
     }
-  }, [valorRadioValue]);
+  }, [valorChipValue]);
 
   // Filtro por Datas
   useEffect(() => {
@@ -120,7 +125,7 @@ function FiltrosData(props) {
         return itemDataDeCriacao >= dataInicio && itemDataDeCriacao <= dataFim;
       });
     };
-    if (dataRadioValue === 1) {
+    if (dataChipValue === 1) {
       // Ultimos 7 dias
       const dataHoje = new Date();
       dataHoje.setHours(0, 0, 0, 0);
@@ -132,8 +137,8 @@ function FiltrosData(props) {
         dataHoje
       );
       setLista(listaUltimosSete);
-      setTextDataRadioValue("Últimos 7 dias");
-    } else if (dataRadioValue === 2) {
+      setTextDataChipValue("7 dias");
+    } else if (dataChipValue === 2) {
       // Ultimos mês
       const dataHoje = new Date();
       dataHoje.setHours(0, 0, 0, 0);
@@ -145,8 +150,8 @@ function FiltrosData(props) {
         dataHoje
       );
       setLista(listaUltimosTrinta);
-      setTextDataRadioValue("Último mês");
-    } else if (dataRadioValue === 3) {
+      setTextDataChipValue("Último mês");
+    } else if (dataChipValue === 3) {
       //Ultimos 3 meses
       const dataHoje = new Date();
       dataHoje.setHours(0, 0, 0, 0);
@@ -158,8 +163,8 @@ function FiltrosData(props) {
         dataHoje
       );
       setLista(listaUltimosTresMeses);
-      setTextDataRadioValue("Últimos 3 meses");
-    } else if (dataRadioValue === 4) {
+      setTextDataChipValue("3 meses");
+    } else if (dataChipValue === 4) {
       //Ultimos 6 meses
       const dataHoje = new Date();
       dataHoje.setHours(0, 0, 0, 0);
@@ -171,15 +176,18 @@ function FiltrosData(props) {
         dataHoje
       );
       setLista(listaUltimosSeisMeses);
-      setTextDataRadioValue("Últimos 6 meses");
-    } else if (dataRadioValue === 5) {
+      setTextDataChipValue("6 meses");
+    } else if (dataChipValue === 5) {
       //todas as datas
       setLista(listaRecebida);
-      setTextDataRadioValue("Todas as datas");
-    } else if (dataRadioValue === 6) {
-      setTextDataRadioValue("Período customizado");
+      setTextDataChipValue("Todas as datas");
+    } else if (dataChipValue === 6) {
+      setTextDataChipValue("Período customizado");
+    } else {
+      setTextDataChipValue("Período");
+      setLista(listaRecebida);
     }
-  }, [dataRadioValue]);
+  }, [dataChipValue]);
 
   //Código para retornar uma lista do intevalo selecionado pelo usuário (FILTRO INTERVALO ENTRE DATAS)
   const filtrarIntervalo = () => {
@@ -195,139 +203,147 @@ function FiltrosData(props) {
       });
       setLista(listaFiltradaIntervalo);
     }
-    setModalFiltroDataVisible(false);
+  };
+
+  const handleDataChipPress = (value) => {
+    setDataChipValue(value === dataChipValue ? null : value);
+    setValorChipValue(null);
+  };
+
+  const handleValorChipPress = (value) => {
+    setValorChipValue(value === valorChipValue ? null : value);
+  };
+
+  const handleChipPress = (tipo) => {
+    let teste = false;
+    if (tipo === "data") {
+      const dataValoresValidos = [1, 2, 3, 4, 5, 6];
+      teste = dataValoresValidos.includes(dataChipValue);
+    } else if (tipo === "valor") {
+      const valorValoresValidos = [1, 2];
+      teste = valorValoresValidos.includes(valorChipValue);
+    }
+    return teste;
   };
 
   return (
     <>
       <View style={styles.containerChip}>
-        <Chip
-          style={styles.chip}
-          textStyle={{ fontSize: scale(14), color: Colors.white }}
-          icon={() => <Icon name="information" size={20} color="white" />}
-        >
-          Filtros
-        </Chip>
-        <Chip
-          style={styles.chip}
-          textStyle={{ fontSize: scale(14), color: Colors.white }}
-          icon={() => <Icon name="calendar" size={20} color="white" />}
-          onPress={() => setModalFiltroDataVisible(true)}
-        >
-          <Text>{textDataRadioValue}</Text>
-          <AntDesign name="down" size={20} color="black" />
-        </Chip>
-        <Chip
-          textStyle={{ fontSize: scale(14), color: Colors.white }}
-          icon={() => <Icon name="information" size={20} color="white" />}
-          style={styles.chip}
-        >
-          {textValorRadioValue}
-        </Chip>
+        <ScrollView horizontal>
+          <Chip
+            style={[
+              styles.chip,
+              handleChipPress("data") && styles.chipSelected,
+            ]}
+            textStyle={{ fontSize: scale(14), color: Colors.white }}
+            icon={() => <Icon name="calendar" size={20} color="white" />}
+            onPress={() => {
+              setModalFiltrosVisible(true);
+            }}
+          >
+            <Text>{textDataChipValue}</Text>
+          </Chip>
+          <Chip
+            style={[
+              styles.chip,
+              handleChipPress("valor") && styles.chipSelected,
+            ]}
+            textStyle={{ fontSize: scale(14), color: Colors.white }}
+            icon={() => (
+              <FontAwesome5 name="dollar-sign" size={20} color="white" />
+            )}
+            onPress={() => setModalFiltrosVisible(true)}
+          >
+            {textValorChipValue}
+          </Chip>
+        </ScrollView>
       </View>
+
       <Modal
         coverScreen={true}
         backdropColor={"#000"}
-        onBackButtonPress={() => setModalFiltroDataVisible(false)}
-        onBackdropPress={() => setModalFiltroDataVisible(false)}
-        visible={modalFiltroDataVisible}
+        onBackButtonPress={() => setModalFiltrosVisible(false)}
+        onBackdropPress={() => setModalFiltrosVisible(false)}
+        visible={modalFiltrosVisible}
         animationType="slide"
         statusBarTranslucent
       >
         <SafeAreaView style={styles.container}>
           <View style={styles.modalContainer}>
-            <Text style={styles.tituloinfo}>Período</Text>
-            <View style={styles.radioButtons}>
-              <Text style={styles.txtradiobtn}>Últimos 7 dias</Text>
-              <RadioButton
-                uncheckedColor={Colors.white}
-                color={Colors.white}
-                value={1}
-                status={dataRadioValue === 1 ? "checked" : "unchecked"}
+            <View style={styles.topFiltros}>
+              <TouchableOpacity
                 onPress={() => {
-                  setDataRadioValue(1);
-                  setModalFiltroDataVisible(false);
+                  setDataChipValue(null);
+                  setValorChipValue(null);
+                  setLista(listaRecebida);
                 }}
-              />
+              >
+                <Text>Limpar</Text>
+              </TouchableOpacity>
+              <Text style={styles.tituloinfo}>Filtros</Text>
+              <TouchableOpacity onPress={() => setModalFiltrosVisible(false)}>
+                <AntDesign name="close" size={20} color={Colors.white} />
+              </TouchableOpacity>
             </View>
-            <View style={styles.radioButtons}>
-              <Text style={styles.txtradiobtn}>Último mês</Text>
-              <RadioButton
-                uncheckedColor={Colors.white}
-                color={Colors.white}
-                value={2}
-                status={dataRadioValue === 2 ? "checked" : "unchecked"}
-                onPress={() => {
-                  setDataRadioValue(2);
-                  setModalFiltroDataVisible(false);
-                }}
-              />
+            <Text style={styles.tituloinfo1}>Período</Text>
+            <View style={styles.teste}>
+              <Chip
+                style={[
+                  styles.chipsFiltro,
+                  dataChipValue === 1 && styles.chipSelected,
+                ]}
+                onPress={() => handleDataChipPress(1)}
+              >
+                <Text>7 dias</Text>
+              </Chip>
+              <Chip
+                style={[
+                  styles.chipsFiltro,
+                  dataChipValue === 2 && styles.chipSelected,
+                ]}
+                onPress={() => handleDataChipPress(2)}
+              >
+                <Text>Último mês</Text>
+              </Chip>
+              <Chip
+                style={[
+                  styles.chipsFiltro,
+                  dataChipValue === 3 && styles.chipSelected,
+                ]}
+                onPress={() => handleDataChipPress(3)}
+              >
+                <Text>3 meses</Text>
+              </Chip>
+              <Chip
+                style={[
+                  styles.chipsFiltro,
+                  dataChipValue === 4 && styles.chipSelected,
+                ]}
+                onPress={() => handleDataChipPress(4)}
+              >
+                <Text>6 meses</Text>
+              </Chip>
+              <Chip
+                style={[
+                  styles.chipsFiltro,
+                  dataChipValue === 5 && styles.chipSelected,
+                ]}
+                onPress={() => handleDataChipPress(5)}
+              >
+                <Text>Todas as datas</Text>
+              </Chip>
+              <Chip
+                style={[
+                  styles.chipsFiltro,
+                  dataChipValue === 6 && styles.chipSelected,
+                ]}
+                onPress={() => handleDataChipPress(6)}
+              >
+                <Text>Período customizado</Text>
+              </Chip>
             </View>
-            <View style={styles.radioButtons}>
-              <Text style={styles.txtradiobtn}>Últimos 3 meses</Text>
-              <RadioButton
-                uncheckedColor={Colors.white}
-                color={Colors.white}
-                value={3}
-                status={dataRadioValue === 3 ? "checked" : "unchecked"}
-                onPress={() => {
-                  setDataRadioValue(3);
-                  setModalFiltroDataVisible(false);
-                }}
-              />
-            </View>
-            <View style={styles.radioButtons}>
-              <Text style={styles.txtradiobtn}>Últimos 6 meses</Text>
-              <RadioButton
-                uncheckedColor={Colors.white}
-                color={Colors.white}
-                value={4}
-                status={dataRadioValue === 4 ? "checked" : "unchecked"}
-                onPress={() => {
-                  setDataRadioValue(4);
-                  setModalFiltroDataVisible(false);
-                }}
-              />
-            </View>
-            <View style={styles.radioButtons}>
-              <Text style={styles.txtradiobtn}>Todas as datas</Text>
-              <RadioButton
-                uncheckedColor={Colors.white}
-                color={Colors.white}
-                value={5}
-                status={dataRadioValue === 5 ? "checked" : "unchecked"}
-                onPress={() => {
-                  setDataRadioValue(5);
-                  setModalFiltroDataVisible(false);
-                }}
-              />
-            </View>
-            <View style={styles.radioButtons}>
-              <Text style={styles.txtradiobtn}>Período customizado</Text>
-              <RadioButton
-                value={6}
-                status={dataRadioValue === 6 ? "checked" : "unchecked"}
-                onPress={() => {
-                  setDataRadioValue(6);
-                }}
-              />
-            </View>
-            {/*Filtro intervalo entre datas*/}
-            {/*<TouchableOpacity
-              onPress={() => setShouldShowDataRange(!shouldShowDataRange)}
-              style={styles.filtrosBotao}
-            >
-              <Text style={styles.tituloBotao}>Filtrar Por Data</Text>
-              <AntDesign name="down" size={scale(25)} color="white" />
-            </TouchableOpacity>
-            */}
-            <View
-              style={[
-                styles.filtros,
-                { display: dataRadioValue ? "flex" : "none" },
-              ]}
-            >
-              {dataRadioValue === 6 && (
+            {dataChipValue === 6 && (
+              <>
                 <View style={styles.containerBotoes}>
                   <TouchableOpacity
                     style={styles.botoes}
@@ -357,80 +373,48 @@ function FiltrosData(props) {
                     maximumDate={new Date()}
                   />
                 </View>
-              )}
-              <View style={styles.containerBotoes}>
-                <TouchableOpacity
-                  style={styles.botoes}
-                  onPress={filtrarIntervalo}
-                >
-                  <Text style={styles.texto}>Filtrar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.botoes}
-                  onPress={() => {
-                    handleResetDropdown();
-                    setStartDate("");
-                    setEndDate("");
-                    setTextStartDate("Data Inicial");
-                    setTextEndDate("Data Final");
-                    setModalFiltroDataVisible(false);
-                    setDataRadioValue(1);
-                  }}
-                >
-                  <Text style={styles.texto}>Limpar</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </SafeAreaView>
-      </Modal>
+                <View style={styles.containerBotoes}>
+                  <TouchableOpacity
+                    style={styles.botoes}
+                    onPress={filtrarIntervalo}
+                  >
+                    <Text style={styles.texto}>Filtrar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.botoes}
+                    onPress={() => {
+                      setStartDate("");
+                      setEndDate("");
+                      setTextStartDate("Data Inicial");
+                      setTextEndDate("Data Final");
+                    }}
+                  >
+                    <Text style={styles.texto}>Limpar</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            )}
 
-      {/*  FILTRO VALOR  */}
-      <Modal
-        visible={modalFiltroValorVisible}
-        animationType="slide"
-        transparent={true}
-      >
-        <SafeAreaView style={styles.container}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.tituloinfo}>Valores</Text>
-            <View style={styles.radioButtons}>
-              <Text>Crescente</Text>
-              <RadioButton
-                value={1}
-                status={valorRadioValue === 1 ? "checked" : "unchecked"}
-                onPress={() => {
-                  setValorRadioValue(1);
-                  setModalFiltroValorVisible(false);
-                }}
-              />
-            </View>
-            <View style={styles.radioButtons}>
-              <Text>Decrescente</Text>
-              <RadioButton
-                value={2}
-                status={valorRadioValue === 2 ? "checked" : "unchecked"}
-                onPress={() => {
-                  setValorRadioValue(2);
-                  setModalFiltroValorVisible(false);
-                }}
-              />
-            </View>
-            <View style={styles.containerBotoes}>
-              <TouchableOpacity style={styles.botoes} onPress={() => {}}>
-                <Text style={styles.texto}>Filtrar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.botoes}
-                onPress={() => {
-                  setLista(listaRecebida);
-                  setModalFiltroValorVisible(false);
-                  setValorRadioValue(null);
-                  setTextValorRadioValue("Valores");
-                }}
+            <Text style={styles.tituloinfo1}>Valores</Text>
+            <View style={styles.teste}>
+              <Chip
+                style={[
+                  styles.chipsFiltro,
+                  valorChipValue === 1 && styles.chipSelected,
+                ]}
+                onPress={() => handleValorChipPress(1)}
               >
-                <Text style={styles.texto}>Limpar</Text>
-              </TouchableOpacity>
+                <Text>Crescente</Text>
+              </Chip>
+              <Chip
+                style={[
+                  styles.chipsFiltro,
+                  valorChipValue === 2 && styles.chipSelected,
+                ]}
+                onPress={() => handleValorChipPress(2)}
+              >
+                <Text>Decrescente</Text>
+              </Chip>
             </View>
           </View>
         </SafeAreaView>
@@ -439,34 +423,33 @@ function FiltrosData(props) {
   );
 }
 const styles = StyleSheet.create({
-  tituloBotao: {
-    fontSize: scale(14),
-    color: Colors.white,
+  chipSelected: {
+    backgroundColor: "green",
   },
-  txtradiobtn: {
-    fontSize: scale(15),
-    color: Colors.white,
+  topFiltros: {
+    margin: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  chipsFiltro: {
+    marginRight: 10,
+    marginBottom: 10,
+  },
+  teste: {
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   container: {
     flex: 1,
     justifyContent: "flex-end",
   },
   modalContainer: {
-    flex: 0.5,
-    backgroundColor: Colors.darkgreen,
+    //flex: 0.6,
+    backgroundColor: Colors.Cyan,
   },
   containerBotoes: {
     flexDirection: "row",
     padding: 3,
-  },
-  radioButtons: {
-    padding: scale(10),
-    justifyContent: "space-between",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: scale(1),
-    borderWidth: scale(1),
-    backgroundColor: Colors.green,
   },
   botoes: {
     flex: 1,
@@ -476,6 +459,7 @@ const styles = StyleSheet.create({
     height: verticalScale(30),
     borderWidth: scale(1),
     justifyContent: "center",
+    marginHorizontal: 3,
   },
   texto: {
     color: Colors.white,
@@ -487,23 +471,23 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   chip: {
-    maxWidth: scale(130),
     backgroundColor: Colors.green,
+    marginRight: scale(10),
     padding: scale(5),
-  },
-  filtrosBotao: {
-    justifyContent: "space-between",
-    flexDirection: "row",
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    borderRadius: 10,
-    padding: 10,
-    marginTop: 3,
   },
   tituloinfo: {
     color: "white",
     fontSize: verticalScale(20),
     marginBottom: verticalScale(10),
     textAlign: "center",
+    fontWeight: "bold",
+  },
+  tituloinfo1: {
+    paddingHorizontal: verticalScale(10),
+    color: "white",
+    fontSize: verticalScale(20),
+    marginBottom: verticalScale(10),
+    textAlign: "left",
     fontWeight: "bold",
   },
 });
