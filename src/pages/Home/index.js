@@ -53,7 +53,9 @@ function Home({ navigation }) {
       const nameList = savedItems.map((item) => item.nomeProd);
       const nameString = nameList.join(",");
       setloadpage(2);
-      Alert.alert("Itens abaixo do estoque mínimo", nameString);
+      if (nameString.length > 0) {
+        Alert.alert("Itens abaixo do estoque mínimo", nameString);
+      }
     }
   }, [realm, loadpage]);
   const onPressTouch = () => {
