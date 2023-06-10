@@ -42,6 +42,7 @@ export const AtualEstoqueSchema = {
     volumeProd: "float?",
     pesoProd: "float?",
     obserProd: "string?",
+    alert: "AlertEstoqueSchema[]",
     assignee: {
       type: "linkingObjects",
       objectType: "Farm",
@@ -158,6 +159,20 @@ export const VacasSchema = {
       type: "linkingObjects",
       objectType: "RebanhoSchema",
       property: "vacas",
+    },
+  },
+};
+export const AlertEstoqueSchema = {
+  name: "AlertEstoqueSchema",
+  primaryKey: "_id",
+  properties: {
+    _id: "string",
+    alertOn: "bool",
+    alertMin: "int",
+    assignee: {
+      type: "linkingObjects",
+      objectType: "AtualEstoqueSchema",
+      property: "alert",
     },
   },
 };

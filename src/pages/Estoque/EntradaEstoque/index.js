@@ -180,6 +180,7 @@ function EntradaEstoque() {
                 volumeProd: volumeProdT,
                 obserProd,
                 createdAt: new Date(),
+                alert: [{ _id: uuid.v4(), alertOn: false, alertMin: 0 }],
               });
               let createdEstoqueEntrada = realm.create("EstoqueEntradaSchema", {
                 nomeProd: nomeProd,
@@ -216,6 +217,7 @@ function EntradaEstoque() {
                 volumeProd: volumeProdNull,
                 obserProd,
                 createdAt: new Date(),
+                alert: [{ _id: uuid.v4(), alertOn: false, alertMin: 0 }],
               });
               let createdEstoqueEntrada = realm.create("EstoqueEntradaSchema", {
                 nomeProd: nomeProd,

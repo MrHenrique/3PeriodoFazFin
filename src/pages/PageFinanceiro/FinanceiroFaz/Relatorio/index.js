@@ -451,7 +451,7 @@ function Relatorio() {
                       dateGen();
                     }}
                   >
-                    <Text style={styles.texto2}>Exportar Dados</Text>
+                    <Text style={styles.texto2}>Exportar relatório</Text>
                   </TouchableOpacity>
                 </View>
                 <View style={{ marginBottom: verticalScale(10) }}>

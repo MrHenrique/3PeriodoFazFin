@@ -58,6 +58,21 @@ const styles = StyleSheet.create({
     color: Colors.black,
     ...Fonts.txtLargeBold,
   },
+  texto2: {
+    color: Colors.white,
+    fontWeight: "bold",
+    ...Fonts.txtMedium,
+    alignSelf: "center",
+  },
+  botaopressM: {
+    ...Buttons.btnLargeRounded,
+    backgroundColor: Colors.green,
+    maxHeight: verticalScale(40),
+    justifyContent: "center",
+    alignSelf: "center",
+    elevation: 10,
+    margin: verticalScale(5),
+  },
   fontcontainerlistitem: {
     color: Colors.white,
     ...Fonts.txtLargeBold,
@@ -237,6 +252,12 @@ const styles = StyleSheet.create({
     flexDirection: "row-reverse",
     justifyContent: "space-evenly",
   },
+  exportContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignSelf: "center",
+    margin: verticalScale(5)
+  },
   containershouldshow: {
     flex: 10,
     margin: scale(5),
@@ -249,6 +270,15 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.grey,
     elevation: 4,
     shadowColor: "black",
+    borderColor: Colors.black,
+    borderWidth: scale(0.4),
+  },
+  botaoExport: {
+    ...Buttons.btnSmallRounded,
+    width: scale(295),
+    height: "100%",
+    justifyContent: "center",
+    backgroundColor: Colors.grey,
     borderColor: Colors.black,
     borderWidth: scale(0.4),
   },

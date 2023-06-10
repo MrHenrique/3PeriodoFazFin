@@ -70,7 +70,6 @@ function RegistrosLeite() {
         realm.write(() => {
           const cleanedText = prodLV.replace(",", ".");
           const prodL = parseFloat(cleanedText);
-          console.log(prodL)
           let updateLeite = realm.objectForPrimaryKey(
             "ReceitaRebSchema",
             idDoItemSelecionado
