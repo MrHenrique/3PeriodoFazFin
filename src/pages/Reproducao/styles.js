@@ -1,17 +1,60 @@
 import { StyleSheet } from "react-native";
-import { Buttons, Colors, Fonts, TextInput } from "../../../styles";
+import { Buttons, Colors, Fonts, TextInput } from "../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
-  campoTexto: {
-    backgroundColor: Colors.white,
-  },
-  radioBView: {
+  containerScrollView: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+  },
+  botaoData: {
+    ...Buttons.btnLargeRounded,
+    backgroundColor: Colors.darkgreen,
+    marginBottom: verticalScale(5),
+    elevation: 5,
+  },
+  txtInfoCategoria: {
+    ...Fonts.txtSmall,
+    color: Colors.white,
+  },
+  containerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: verticalScale(2),
+  },
+  containerTituloCategoria: {
     flexDirection: "row",
     justifyContent: "space-evenly",
+    marginHorizontal: scale(50),
+  },
+  txtTitulo: {
+    ...Fonts.txtLargeBold,
+    color: Colors.white,
+  },
+  txtCobertura: {
+    ...Fonts.txtMediumBold,
+    color: Colors.white,
+  },
+  containerCategoria: {
+    flex: 1,
+    backgroundColor: Colors.green,
+    borderRadius: 10,
+    margin: scale(5),
+    padding: scale(10),
+    elevation: 10,
+  },
+  containervoltar: {
+    flex: 0.2,
+    flexDirection: "column",
+  },
+  container: {
+    flex: 1,
+    backgroundColor: Colors.darkgreen,
+  },
+  containergeral: {
+    flex: 1,
+    margin: scale(15),
+    backgroundColor: Colors.darkgreen,
+    borderRadius: 10,
   },
   filtroNome: {
     backgroundColor: "rgba(15, 109, 0, 0.9)",
@@ -24,14 +67,18 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   search: {
-    backgroundColor: Colors.white,
+    backgroundColor: "rgba(15, 109, 0, 0.9)",
     fontSize: verticalScale(15),
-    width: scale(300),
-    justifyContent: "center",
+    color: "white",
+    textAlign: "center",
     alignSelf: "center",
+    height: verticalScale(40),
+    width: scale(300),
+    margin: verticalScale(20),
+    borderRadius: 20,
   },
   modalContainer: {
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: "rgba(234,242,215,1)",
     position: "absolute",
     top: verticalScale(10),
     alignSelf: "center",
@@ -40,7 +87,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   cardVacas: {
-    backgroundColor: Colors.green,
+    backgroundColor: "rgba(15, 109, 0, 0.9)",
     width: scale(300),
     height: verticalScale(40),
     alignItems: "center",
@@ -49,16 +96,6 @@ const styles = StyleSheet.create({
     marginVertical: verticalScale(4),
     position: "relative",
     alignSelf: "center",
-  },
-  container: {
-    flex: 1,
-    backgroundColor: Colors.darkgreen,
-  },
-  containergeral: {
-    flex: 1,
-    margin: scale(15),
-    backgroundColor: Colors.darkgreen,
-    borderRadius: 10,
   },
   contvoltar: {
     position: "absolute",
@@ -104,16 +141,13 @@ const styles = StyleSheet.create({
   textovoltar: {
     ...Fonts.txtLargeBold,
     color: Colors.white,
-    paddingLeft: scale(15),
   },
   tituloinfo: {
     color: "white",
     fontSize: verticalScale(20),
     marginBottom: verticalScale(10),
+    textAlign: "center",
     fontWeight: "bold",
-    alignItems: "center",
-    alignContent: "center",
-    alignSelf: "center",
   },
   detalhe: {
     fontSize: verticalScale(20),
@@ -126,16 +160,16 @@ const styles = StyleSheet.create({
   },
   containerinfos: {
     flex: 1,
-    marginVertical: verticalScale(10),
-    width: scale(300),
-    padding: scale(10),
+    marginVertical: verticalScale(5),
+    padding: verticalScale(5),
+    width: scale(320),
     borderRadius: 20,
     alignSelf: "center",
   },
   botaoselecionaranimal: {
-    backgroundColor: Colors.darkgreen,
+    backgroundColor: "#004513",
     width: scale(215),
-    height: "auto",
+    height: verticalScale(40),
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
@@ -170,7 +204,7 @@ const styles = StyleSheet.create({
   },
   botaopressM: {
     borderRadius: 20,
-    backgroundColor: Colors.green,
+    backgroundColor: "rgba(15, 109, 0, 0.9)",
     width: scale(300),
     height: verticalScale(40),
     alignItems: "center",
@@ -183,7 +217,7 @@ const styles = StyleSheet.create({
   tituloBotao: {
     fontSize: verticalScale(14),
     fontWeight: "bold",
-    color: Colors.white,
+    color: "#fff",
   },
   botaopress: {
     borderRadius: 20,
@@ -196,24 +230,15 @@ const styles = StyleSheet.create({
     top: verticalScale(525),
     position: "absolute",
   },
-
-  botaopress6: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    top: verticalScale(475),
-    position: "absolute",
-  },
-  TituloM: {
-    justifyContent: "center",
-    alignSelf: "center",
-    color: Colors.white,
-    fontSize: verticalScale(30),
-    fontWeight: "bold",
+  botao: {
+    flex: 1.1,
+    paddingHorizontal: scale(80),
+    marginBottom: verticalScale(10),
+    ...Buttons.btnLargeRounded,
+    backgroundColor: Colors.green,
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
+    elevation: 10,
   },
   botaoselecionaranimal: {
     borderRadius: 20,
@@ -227,66 +252,18 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   botaopressdisabled: {
-    flex: 1.1,
-    marginBottom: verticalScale(10),
-    ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.green,
-    flexDirection: "row-reverse",
-    justifyContent: "space-between",
-    opacity: 0.2,
-    elevation: 10,
+    borderRadius: 20,
+    backgroundColor: "rgba(15, 109, 0, 0.4)",
+    width: scale(300),
+    height: verticalScale(40),
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    top: verticalScale(475),
+    position: "absolute",
   },
   dateComponente: {
     width: 350,
   },
-  btndata: {
-    backgroundColor: Colors.darkgrey,
-    borderRadius: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignContent: "center",
-    alignSelf: "center",
-  },
-  containervoltar: {
-    flex: 1,
-    flexDirection: "column",
-  },
-  botao: {
-    flex: 1.1,
-    paddingHorizontal: scale(80),
-    marginBottom: verticalScale(10),
-    ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.green,
-    flexDirection: "row-reverse",
-    justifyContent: "space-between",
-    elevation: 10,
-  },
-  botaoselecionaranimal: {
-    flex: 0.5,
-    marginBottom: verticalScale(10),
-    ...Buttons.btnLargeRounded,
-    backgroundColor: Colors.green,
-    justifyContent: "center",
-    elevation: 10,
-  },
-  containerScrollView: {
-    flex: 5,
-  },
-  RadioTextStyle: {
-    ...Fonts.txtMedium,
-    color: Colors.white,
-    justifyContent: "space-around",
-  },
 });
-// estilo tab
-export const estilo = {
-  tabarlabel: {
-    color: Colors.white,
-    ...Fonts.txtMedium,
-  },
-  tabBarIndicator: {
-    backgroundColor: Colors.white,
-  },
-};
 export default styles;

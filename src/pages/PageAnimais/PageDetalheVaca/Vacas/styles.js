@@ -3,6 +3,9 @@ import { Buttons, Colors, Fonts, TextInput } from "../../../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
+  btnEditContainer: {
+    flex: 0.5,
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.darkgreen,
@@ -14,24 +17,32 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   containervoltar: {
-    flex: 0.2,
+    flex: 0.51,
+    flexDirection: "column",
+    paddingTop: scale(10),
+  },
+  containerEdit: {
+    flex: 0.1,
     flexDirection: "column-reverse",
     paddingTop: scale(10),
   },
   botao: {
     flex: 1.1,
+    paddingHorizontal: scale(80),
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    justifyContent: "center",
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
     elevation: 10,
   },
   voltarfont: {
     color: Colors.white,
     ...Fonts.txtLargeBold,
+    paddingLeft: scale(15),
   },
   contentContainer: {
-    flex: 2,
+    flex: 2.7,
   },
   containerCard: {
     flex: 1,
@@ -41,16 +52,15 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: scale(4),
     borderRadius: scale(12),
-    justifyContent: "center",
     elevation: 10,
   },
   ContainerInfoCardOBS: {
-      backgroundColor: Colors.green,
-      flex: 2,
-      margin: scale(4),
-      borderRadius: scale(12),
-      justifyContent: "flex-start",
-      elevation: 10,
+    backgroundColor: Colors.green,
+    flex: 1.7,
+    margin: scale(4),
+    borderRadius: scale(12),
+    justifyContent: "flex-start",
+    elevation: 10,
   },
   fontTitulo: {
     ...Fonts.txtMedium,
@@ -59,6 +69,52 @@ const styles = StyleSheet.create({
   font: {
     ...Fonts.txtLarge,
     color: Colors.white,
+  },
+  textInput: {
+    backgroundColor: Colors.white,
+    width: scale(300),
+    justifyContent: "center",
+    alignSelf: "center",
+  },
+  textInput: {
+    backgroundColor: Colors.white,
+    width: scale(300),
+    justifyContent: "center",
+    alignSelf: "center",
+  },
+  textInputError: {
+    ...TextInput.TextInputLargeRounded,
+    alignSelf: "center",
+    backgroundColor: Colors.white,
+    color: Colors.red,
+    fontWeight: "bold",
+    fontSize: 15,
+    borderWidth: 2,
+    borderColor: Colors.red,
+  },
+  error: {
+    backgroundColor: Colors.red,
+    borderRadius: 20,
+    alignSelf: "center",
+    color: Colors.yellow,
+    fontWeight: "bold",
+    position: "absolute",
+    top: verticalScale(-15),
+    padding: scale(1),
+  },
+  campoTextoErro: {
+    ...Fonts.txtMediumBold,
+    ...TextInput.TextInputLargeRounded,
+    backgroundColor: Colors.white,
+    color: Colors.black,
+    borderWidth: 2,
+    borderColor: Colors.red,
+  },
+  containerInput: {
+    flex: 1,
+    justifyContent: "center",
+    position: "relative",
+    // minHeight: verticalScale(60),
   },
 });
 export default styles;

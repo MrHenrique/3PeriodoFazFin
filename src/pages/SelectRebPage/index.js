@@ -11,6 +11,9 @@ import Select from "../../components/Select";
 import { AuthContext } from "../../contexts/auth";
 import styles from "./styles";
 import { useMainContext } from "../../contexts/RealmContext";
+import { MaterialIcons } from "@expo/vector-icons";
+import { scale } from "react-native-size-matters";
+
 function SelectRebPage({ navigation }) {
   const realm = useMainContext();
   const [listaReb, setListaReb] = useState([]);
@@ -27,7 +30,11 @@ function SelectRebPage({ navigation }) {
     CanContinue();
   }, [rebID]);
   const { fazID, rebID, FazendaID, RebanhoID } = useContext(AuthContext);
-
+  function backAndClear() {
+    RebanhoID("");
+    FazendaID("");
+    navigation.navigate("SelectFazPage");
+  }
   function CanContinue() {
     if (typeof rebID == "undefined" || rebID == "") {
       const CanContinue = true;
@@ -79,20 +86,22 @@ function SelectRebPage({ navigation }) {
         <View style={styles.containerbotoes}>
           <TouchableOpacity
             style={styles.botaopress2}
-            onPress={() => {
-              FazendaID(""),
-                RebanhoID(""),
-                navigation.navigate("SelectFazPage");
-            }}
+            onPress={() => backAndClear()}
           >
-            <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+            </View>
+            <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
           </TouchableOpacity>
           <TouchableOpacity
             disabled={CanContinue(rebID)}
             style={DisabledStyle(rebID)}
             onPress={() => navigation.navigate("Home")}
           >
-            <Text style={styles.tituloBotao}>{"Continuar"}</Text>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text style={styles.tituloBotao}>{"Continuar"}</Text>
+            </View>
+            <MaterialIcons name="arrow-forward" size={scale(24)} color="white" />
           </TouchableOpacity>
         </View>
       </View>

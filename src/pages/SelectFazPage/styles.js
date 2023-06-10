@@ -37,11 +37,18 @@ const styles = StyleSheet.create({
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
     marginTop: verticalScale(10),
+    paddingHorizontal: scale(80),
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
+    elevation: 10,
   },
   botaopress2: {
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
+    paddingHorizontal: scale(80),
     flexDirection: "row-reverse",
+    justifyContent: "space-between",
+    elevation: 10,
   },
   botaopress3: {
     ...Buttons.btnLargeRounded,
@@ -52,9 +59,13 @@ const styles = StyleSheet.create({
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
     opacity: 0.4,
+    paddingHorizontal: scale(80),
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
+    elevation: 10,
   },
   tituloBotao: {
-    ...Fonts.txtMediumBold,
+    ...Fonts.txtLargeBold,
     color: Colors.white,
   },
   select: {
@@ -71,7 +82,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: verticalScale(10),
     flexDirection: "column-reverse",
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
   },
   containercadastrarfaz: {
     flex: 1.5,

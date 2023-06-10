@@ -89,9 +89,19 @@ function AuthProvider({ children }) {
   function IdVaca(idVaca) {
     setIdVaca(idVaca);
   }
+  const [machoFemea, setMachoFemea] = useState();
+  function MachoFemea(value) {
+    setMachoFemea(value);
+  }
+  const [genero, setGenero] = useState();
+  function Genero(value) {
+    setGenero(value);
+  }
   return (
     <AuthContext.Provider
       value={{
+        Genero,
+        genero,
         ListaReceitaVacas,
         listaReceitaVacas,
         ListaFiltrada,
@@ -134,6 +144,8 @@ function AuthProvider({ children }) {
         filtroSelec,
         idVaca,
         IdVaca,
+        MachoFemea,
+        machoFemea,
       }}
     >
       {children}

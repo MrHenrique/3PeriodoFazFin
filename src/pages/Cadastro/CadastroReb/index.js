@@ -16,6 +16,9 @@ import { Colors } from "../../../styles";
 import { useNavigation } from "@react-navigation/native";
 import { useMainContext } from "../../../contexts/RealmContext";
 import { Alert } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
+import { scale } from "react-native-size-matters";
+
 import styles from "./styles";
 function CadastroReb() {
   const realm = useMainContext();
@@ -37,12 +40,12 @@ function CadastroReb() {
       } else {
         proximasvacas.push({
           _id: uuid.v4(),
-          nomeVaca: "vaca" + i,
+          nomeVaca: "Vaca " + (i + 1),
           nascimentoVaca: "2022",
-          brincoVaca: " 00 " + i,
+          brincoVaca: (i + 1).toString(),
           genero: 1,
           receitas: [],
-          descVaca: "Descricao vazia",
+          descVaca: "",
           createdAt: new Date(),
         });
       }
@@ -227,7 +230,10 @@ function CadastroReb() {
               style={styles.botao}
               onPress={() => navigation.navigate("SelectRebPage")}
             >
-              <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+              </View>
+              <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.botao}
@@ -235,7 +241,10 @@ function CadastroReb() {
                 validCheck();
               }}
             >
-              <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={styles.tituloBotao}>{"Cadastrar"}</Text>
+              </View>
+              <MaterialIcons name="add" size={scale(24)} color="white" />
             </TouchableOpacity>
           </View>
         </View>

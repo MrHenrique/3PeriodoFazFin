@@ -261,7 +261,7 @@ function RegistrosLeite() {
           statusBarTranslucent
         >
           <View style={styles.modalContainer}>
-            <View style={styles.containergeral}>
+            <View style={styles.containergeralmodal}>
               <View style={styles.containerinfos}>
                 <TouchableOpacity style={styles.teste} onPress={showDatePicker}>
                   <Text style={styles.tituloinfo}>{text}</Text>

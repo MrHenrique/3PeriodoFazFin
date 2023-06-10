@@ -66,10 +66,13 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    justifyContent: "center",
+    paddingHorizontal: scale(80),
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
+    elevation: 10,
   },
   tituloBotao: {
-    ...Fonts.txtMediumBold,
+    ...Fonts.txtLargeBold,
     color: Colors.white,
   },
   error: {

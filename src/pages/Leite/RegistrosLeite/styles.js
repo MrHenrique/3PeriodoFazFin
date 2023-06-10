@@ -187,6 +187,11 @@ const styles = StyleSheet.create({
     margin: scale(15),
     backgroundColor: Colors.darkgreen,
   },
+  containergeralmodal: {
+    flex: 1,
+    padding: scale(20),
+    backgroundColor: Colors.darkgreen,
+  },
 });
 // estilo tab
 export const estilo = {

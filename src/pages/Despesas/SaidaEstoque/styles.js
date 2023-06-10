@@ -3,6 +3,16 @@ import { Buttons, Colors, Fonts, TextInput } from "../../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
+  modalContainerSearch: {
+    flex: 1,
+  },
+  modalListContainer: { flex: 6 },
+  modalVoltarContainer: {
+    flex: 0.6,
+    justifyContent: "flex-end",
+    marginBottom: verticalScale(10),
+  },
+  scroll: { flex: 1, paddingVertical: verticalScale(10) },
   cardVacas: {
     backgroundColor: Colors.green,
     width: scale(300),
@@ -15,22 +25,20 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   botaopressM: {
-    borderRadius: 20,
+    ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    top: verticalScale(580),
-    position: "absolute",
+    paddingHorizontal: scale(80),
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
+    elevation: 10,
   },
   search: {
     backgroundColor: Colors.white,
-    fontSize: verticalScale(15),
-    width: scale(300),
+    width: "90%",
+    fontSize: scale(15),
     justifyContent: "center",
     alignSelf: "center",
+    marginVertical: verticalScale(5),
   },
   filtroNome: {
     backgroundColor: Colors.green,
@@ -50,8 +58,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   tituloBotao: {
-    fontSize: verticalScale(14),
-    fontWeight: "bold",
+    ...Fonts.txtMediumBold,
     color: Colors.white,
   },
   botaoselecionaranimal: {
@@ -59,15 +66,14 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    justifyContent: "center",
+    justifyContent: "space-evenly",
+    flexDirection: "row",
     elevation: 10,
   },
   modalContainer: {
+    flex: 1,
     backgroundColor: Colors.darkgreen,
-    position: "absolute",
-    top: verticalScale(10),
     alignSelf: "center",
-    height: verticalScale(550),
     width: scale(330),
     borderRadius: 20,
   },
@@ -80,10 +86,11 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(15),
   },
   radioBView: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    flex: 1,
+    margin: scale(20),
   },
   containerkeyboard: {
     flex: 1,
@@ -187,7 +194,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   txtBotao: {
-    ...Fonts.txtMedium,
+    ...Fonts.txtLargeBold,
     color: Colors.white,
   },
   containerbutao: {
@@ -207,7 +214,10 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    justifyContent: "center",
+    justifyContent: "space-between",
+    flexDirection: "row-reverse",
+    paddingHorizontal: scale(80),
+    elevation: 10,
   },
 });
 
