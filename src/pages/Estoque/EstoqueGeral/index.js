@@ -160,12 +160,12 @@ function EstoqueGeral() {
           <th>
             ${
               item.pesoProd > 0
-                ? item.pesoProd.toFixed(2) + " KG"
-                : item.volumeProd.toFixed(2) + " L"
+                ? item.pesoProd + " KG"
+                : item.volumeProd + " L"
             }
           </th>
-          <th>${"R$ " + item.valorProd.toFixed(2).toString(2)}</th>
-          <th>
+          <th>${"R$ " + item.valorProd}</th>
+          <th></th>
             ${
               item.pesoProd > 0
                 ? "R$ " + (item.valorProd / item.pesoProd).toFixed(2)
