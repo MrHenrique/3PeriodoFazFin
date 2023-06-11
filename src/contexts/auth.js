@@ -41,6 +41,10 @@ function AuthProvider({ children }) {
   function ListaLeiteReb(dataLeite) {
     SetListaLeiteReb(dataLeite);
   }
+  const [listaDadosLeiteReb, SetListaDadosLeiteReb] = useState([]);
+  function ListaDadosLeiteReb(dataLeite) {
+    SetListaDadosLeiteReb(dataLeite);
+  }
   const [precoLeiteReb, SetPrecoLeiteReb] = useState(0);
   function PrecoLeiteReb(precoLeite) {
     SetPrecoLeiteReb(precoLeite);
@@ -134,6 +138,8 @@ function AuthProvider({ children }) {
         precoLeite,
         ListaLeiteReb,
         listaLeiteReb,
+        ListaDadosLeiteReb,
+        listaDadosLeiteReb,
         PrecoLeiteReb,
         precoLeiteReb,
         PrecoCFReb,

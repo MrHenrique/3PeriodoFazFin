@@ -206,7 +206,7 @@ function Faturamento() {
                   <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
                   {/*filtros*/}
                   <View style={{ paddingHorizontal: 20, marginBottom: 5 }}>
-                    <FiltrosData listaRecebida={listaLeite} ordenarPor={"valor"} />
+                    <FiltrosData listaAFiltrar={"receitasFaz"} ordenarPor={"valor"} />
                   </View>
 
                   <FlatList

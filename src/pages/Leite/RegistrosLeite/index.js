@@ -14,7 +14,8 @@ import { TextInput, MD3Colors, HelperText } from "react-native-paper";
 function RegistrosLeite() {
   const realm = useMainContext();
   const navigation = useNavigation();
-  const { rebID, ListaFiltrada, listaFiltrada } = useContext(AuthContext);
+  const { rebID, ListaFiltrada, listaFiltrada, ListaDadosLeiteReb } =
+    useContext(AuthContext);
   const [listaLeite, setListaLeite] = useState([]);
   const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
   const [modalEditarVisible, setModalEditarVisible] = useState(false);
@@ -36,15 +37,15 @@ function RegistrosLeite() {
   useEffect(() => {
     if (realm) {
       let dataReceitasreb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-      setListaLeite(dataReceitasreb.receitas);
-      ListaFiltrada(dataReceitasreb.receitas);
+      ListaDadosLeiteReb(dataReceitasreb.receitas);
+      //ListaFiltrada(dataReceitasreb.receitas);
 
       dataReceitasreb.receitas.addListener((values) => {
         const sortedValues = [...values].sort((a, b) => {
           return new Date(a.createdAt) - new Date(b.createdAt);
         });
 
-        setListaLeite(sortedValues);
+        ListaDadosLeiteReb(sortedValues);
 
         const lista7Dias = sortedValues.filter((item) => {
           const dataHoje = new Date();
@@ -261,8 +262,8 @@ function RegistrosLeite() {
   return (
     <View style={styles.container}>
       <View style={styles.containergeral}>
-        <View>
-          <FiltrosData listaRecebida={listaLeite} ordenarPor={"litro"} />
+        <View style={{ paddingHorizontal: 12}}>
+          <FiltrosData listaAFiltrar={"dadosLeite"} ordenarPor={"litro"} />
         </View>
         <FlatList
           style={[styles.lista]}

@@ -18,9 +18,46 @@ import { scale, verticalScale } from "react-native-size-matters";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 function FiltrosData(props) {
-  const { listaRecebida, ordenarPor } = props; // Recebe a lista que vai ser filtrada
-  const { ListaFiltrada } = useContext(AuthContext);
-  const [lista, setLista] = useState(listaRecebida);
+  const { listaAFiltrar, ordenarPor } = props; // Recebe a lista que vai ser filtrada e o tipo de ordenação
+  const {
+    ListaFiltrada,
+    listaFiltrada,
+    listaLeiteReb,
+    listaLeite,
+    listaAliReb,
+    listaAli,
+    listaDadosLeiteReb,
+  } = useContext(AuthContext);
+  const [listaRecebida, setlistaRecebida] = useState(() => {
+    if (listaAFiltrar === "receitasFaz") {
+      return listaLeite;
+    } else if (listaAFiltrar === "receitasReb") {
+      return listaLeiteReb;
+    } else if (listaAFiltrar === "despesasFaz") {
+      return listaAli;
+    } else if (listaAFiltrar === "despesasReb") {
+      return listaAliReb;
+    } else if (listaAFiltrar === "dadosLeite") {
+      return listaDadosLeiteReb;
+    } else {
+      return null;
+    }
+  });
+  const [lista, setLista] = useState(() => {
+    if (listaAFiltrar === "receitasFaz") {
+      return listaLeite;
+    } else if (listaAFiltrar === "receitasReb") {
+      return listaLeiteReb;
+    } else if (listaAFiltrar === "despesasFaz") {
+      return listaAli;
+    } else if (listaAFiltrar === "despesasReb") {
+      return listaAliReb;
+    } else if (listaAFiltrar === "dadosLeite") {
+      return listaDadosLeiteReb;
+    } else {
+      return null;
+    }
+  });
   const [startDate, setStartDate] = useState(""); //Filtro Intervalo entre datas
   const [textStartDate, setTextStartDate] = useState("Data Inicial"); //Filtro Intervalo entre datas
   const [endDate, setEndDate] = useState(""); //Filtro Intervalo entre datas
@@ -35,8 +72,23 @@ function FiltrosData(props) {
   const [modalFiltrosVisible, setModalFiltrosVisible] = useState(false);
 
   useEffect(() => {
-    ListaFiltrada(lista);
-  }, [lista]);
+    setlistaRecebida(() => {
+      if (listaAFiltrar === "receitasFaz") {
+        return listaLeite;
+      } else if (listaAFiltrar === "receitasReb") {
+        return listaLeiteReb;
+      } else if (listaAFiltrar === "despesasFaz") {
+        return listaAli;
+      } else if (listaAFiltrar === "despesasReb") {
+        return listaAliReb;
+      } else if (listaAFiltrar === "dadosLeite") {
+        return listaDadosLeiteReb;
+      } else {
+        return null;
+      }
+    });
+    setLista(listaFiltrada);
+  }, [listaFiltrada]);
 
   //Codigo do DateTimePickerModal
   //Data Inicial
@@ -94,7 +146,7 @@ function FiltrosData(props) {
         return sortedItems;
       };
       const crescente = filtrarPorValores(lista);
-      setLista(crescente);
+      ListaFiltrada(crescente);
       setTextValorChipValue("Crescente");
     } else if (valorChipValue === 2) {
       const filtrarPorValores = (lista) => {
@@ -109,7 +161,7 @@ function FiltrosData(props) {
         return sortedItems;
       };
       const decrescente = filtrarPorValores(lista);
-      setLista(decrescente);
+      ListaFiltrada(decrescente);
       setTextValorChipValue("Decrescente");
     } else {
       setTextValorChipValue("Valores");
@@ -136,7 +188,7 @@ function FiltrosData(props) {
         dataSeteDiasAtras,
         dataHoje
       );
-      setLista(listaUltimosSete);
+      ListaFiltrada(listaUltimosSete);
       setTextDataChipValue("7 dias");
     } else if (dataChipValue === 2) {
       // Ultimos mês
@@ -149,7 +201,7 @@ function FiltrosData(props) {
         dataTrintaDiasAtras,
         dataHoje
       );
-      setLista(listaUltimosTrinta);
+      ListaFiltrada(listaUltimosTrinta);
       setTextDataChipValue("Último mês");
     } else if (dataChipValue === 3) {
       //Ultimos 3 meses
@@ -162,7 +214,7 @@ function FiltrosData(props) {
         dataUltimosTresMeses,
         dataHoje
       );
-      setLista(listaUltimosTresMeses);
+      ListaFiltrada(listaUltimosTresMeses);
       setTextDataChipValue("3 meses");
     } else if (dataChipValue === 4) {
       //Ultimos 6 meses
@@ -175,17 +227,17 @@ function FiltrosData(props) {
         dataUltimosSeisMeses,
         dataHoje
       );
-      setLista(listaUltimosSeisMeses);
+      ListaFiltrada(listaUltimosSeisMeses);
       setTextDataChipValue("6 meses");
     } else if (dataChipValue === 5) {
       //todas as datas
-      setLista(listaRecebida);
+      ListaFiltrada(listaRecebida);
       setTextDataChipValue("Todas as datas");
     } else if (dataChipValue === 6) {
       setTextDataChipValue("Período customizado");
     } else {
       setTextDataChipValue("Período");
-      setLista(listaRecebida);
+      ListaFiltrada(listaRecebida);
     }
   }, [dataChipValue]);
 
@@ -201,7 +253,7 @@ function FiltrosData(props) {
         dataFim.setHours(23, 59, 59, 999); //ajusta o horario para 23:59:59 para garantir que a data final sejá no final do dia.
         return itemDataDeCriacao >= dataInicio && itemDataDeCriacao <= dataFim;
       });
-      setLista(listaFiltradaIntervalo);
+      ListaFiltrada(listaFiltradaIntervalo);
     }
   };
 
@@ -275,7 +327,7 @@ function FiltrosData(props) {
                 onPress={() => {
                   setDataChipValue(null);
                   setValorChipValue(null);
-                  setLista(listaRecebida);
+                  ListaFiltrada(listaRecebida);
                 }}
               >
                 <Text>Limpar</Text>
