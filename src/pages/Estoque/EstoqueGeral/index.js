@@ -9,10 +9,7 @@ import {
   ImageBackground,
   Alert,
 } from "react-native";
-import Animated, {
-  FadeIn,
-  FadeOut,
-} from "react-native-reanimated";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../../contexts/auth";
 import Modal from "react-native-modal";
@@ -162,15 +159,17 @@ function EstoqueGeral() {
           <th>${item.pesoProd > 0 ? "Alimentos" : "Remédios"}</th>
           <th>
             ${
-              item.pesoProd > 0 ? item.pesoProd + " KG" : item.volumeProd + " L"
+              item.pesoProd > 0
+                ? item.pesoProd.toFixed(2) + " KG"
+                : item.volumeProd.toFixed(2) + " L"
             }
           </th>
-          <th>${"R$ " + item.valorProd}</th>
+          <th>${"R$ " + item.valorProd.toFixed(2).toString(2)}</th>
           <th>
             ${
               item.pesoProd > 0
-                ? "R$ " + item.valorProd / item.pesoProd
-                : "R$ " + item.valorProd / item.volumeProd
+                ? "R$ " + (item.valorProd / item.pesoProd).toFixed(2)
+                : "R$ " + (item.valorProd / item.volumeProd).toFixed(2)
             }
           </th>
           <th>${item.obserProd}</th>
