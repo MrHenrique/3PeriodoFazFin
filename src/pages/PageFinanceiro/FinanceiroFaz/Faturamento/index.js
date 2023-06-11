@@ -54,7 +54,7 @@ function Faturamento({ navigation }) {
       formattedResult = `${result.replace(".", ",")} L`;
     } else if (tipo === "peso") {
       const result = valorRecebido.toFixed(2);
-      formattedResult = `${result.replace(".", ",")} Kg`;
+      formattedResult = `${result.replace(".", ",")} @`;
     } else if (tipo === "data") {
       let valorAFormatar = new Date(valorRecebido);
       formattedResult = `${
@@ -93,12 +93,17 @@ function Faturamento({ navigation }) {
         {shouldShowDetalhes && isItemSelected && (
           <View style={[styles.containerDetalhes]}>
             <View>
-              <Text style={styles.tituloDetalhes}>Detalhes</Text>
-            </View>
-            <View>
-              <Text style={styles.tituloDetalhes}>{checkTipo(item)}</Text>
+              <Text style={styles.tituloDetalhes}>Detalhes {checkTipo(item)}</Text>
             </View>
             <View style={styles.modalContainerText}>
+              {tipo === "Venda" ? (
+                <View style={styles.modalContent}>
+                  <Text style={styles.textContent}>Nome do animal: </Text>
+                  <Text style={styles.textContent}>
+                    {item.nomeProd}
+                  </Text>
+                </View>
+              ) : null}
               <View style={styles.modalContent}>
                 <Text style={styles.textContent}>Data: </Text>
                 <Text style={styles.textContent}>
@@ -135,7 +140,7 @@ function Faturamento({ navigation }) {
                     </Text>
                   </View>
                   <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Preço: </Text>
+                    <Text style={styles.textContent}>Preço por arroba: </Text>
                     <Text style={styles.textContent}>
                       {formatarResultado(item.precoL, "preco")}
                     </Text>
