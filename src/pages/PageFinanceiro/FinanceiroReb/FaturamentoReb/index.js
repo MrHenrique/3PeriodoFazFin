@@ -207,7 +207,7 @@ function FaturamentoReb() {
 
                   {/*filtros*/}
                   <View style={{ paddingHorizontal: 20, marginBottom: 5 }}>
-                    <FiltrosData listaRecebida={listaLeiteReb} ordenarPor={"valor"} />
+                    <FiltrosData listaAFiltrar={"receitasReb"} ordenarPor={"valor"} />
                   </View>
 
                   <FlatList
