@@ -8,7 +8,6 @@ import {
   TextInput,
   FlatList,
   Alert,
-  ViewPagerAndroidBase,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import uuid from "react-native-uuid";
@@ -18,7 +17,6 @@ import { scale, verticalScale } from "react-native-size-matters";
 import { useMainContext } from "../../../../contexts/RealmContext";
 function Venda({ navigation }) {
   const realm = useMainContext();
-  const [checked, setChecked] = React.useState("rebanho");
   const [isModalVisible, setModalVisible] = useState(false);
   const [vacaID, setVacaID] = useState("");
   function toggleModal() {
@@ -94,9 +92,8 @@ function Venda({ navigation }) {
       });
     }
   }, [realm]);
-  const { ListaLeite, PrecoLeite, rebID, fazID } = useContext(AuthContext);
+  const { rebID } = useContext(AuthContext);
   //Background
-  const imgbg1 = "../../../assets/bg10.jpg";
   //States para salvar o input
   const [description, setDescription] = useState("");
   const [precoLV, setPrecoLV] = useState("");
@@ -104,7 +101,6 @@ function Venda({ navigation }) {
   const [listaVaca, setListaVaca] = useState([]);
   const [lista, setLista] = useState(listaVaca);
   const [searchText, setSearchText] = useState("");
-  const [nomeProd, setNomeProd] = useState("");
 
   // Códido para pegar a data ....
   const [date, setDate] = useState(new Date());
@@ -139,7 +135,7 @@ function Venda({ navigation }) {
 
   //-----------------------------
   function CanContinue(vacaID) {
-    if ((typeof vacaID == "undefined" || vacaID == "") && checked === "vacas") {
+    if (typeof vacaID == "undefined" || vacaID == "") {
       const CanContinue = true;
       return CanContinue;
     } else {
@@ -148,7 +144,7 @@ function Venda({ navigation }) {
     }
   }
   function DisabledStyle(vacaID) {
-    if ((typeof vacaID == "undefined" || vacaID == "") && checked === "vacas") {
+    if (typeof vacaID == "undefined" || vacaID == "") {
       const Style = styles.botaopressdisabled;
       return Style;
     } else {

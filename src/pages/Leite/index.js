@@ -17,8 +17,8 @@ function Leite() {
           lazy: true,
         }}
       >
-        <Tab.Screen name="Cadastrar Leite" component={AdicionarLeite} />
         <Tab.Screen name="Dados Leite" component={RegistrosLeite} />
+        <Tab.Screen name="Cadastrar Leite" component={AdicionarLeite} />
       </Tab.Navigator>
     </>
   );

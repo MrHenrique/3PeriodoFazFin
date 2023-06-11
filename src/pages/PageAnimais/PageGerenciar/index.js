@@ -17,8 +17,8 @@ function PageGerenciar() {
           lazy: true,
         }}
       >
-        <Tab.Screen name="Gerar Venda " component={Venda} />
         <Tab.Screen name="Registros de Vendas" component={RegistrosVendas} />
+        <Tab.Screen name="Gerar Venda " component={Venda} />
       </Tab.Navigator>
     </>
   );
