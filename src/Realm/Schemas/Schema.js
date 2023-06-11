@@ -156,6 +156,7 @@ export const VacasSchema = {
     genero: "double",
     receitas: "ReceitaSchema[]",
     despesas: "DespesasSchema[]",
+    reproducao: "ReproducaoSchema[]",
     assignee: {
       type: "linkingObjects",
       objectType: "RebanhoSchema",
@@ -174,6 +175,24 @@ export const AlertEstoqueSchema = {
       type: "linkingObjects",
       objectType: "AtualEstoqueSchema",
       property: "alert",
+    },
+  },
+};
+export const ReproducaoSchema = {
+  name: "ReproducaoSchema",
+  primaryKey: "_id",
+  properties: {
+    _id: "string",
+    cio: "bool",
+    cobertura: "bool",
+    prenhez: "bool",
+    dataCio: "date?",
+    dataCobertura: "date?",
+    dataParto: "date?",
+    assignee: {
+      type: "linkingObjects",
+      objectType: "VacasSchema",
+      property: "reproducao",
     },
   },
 };

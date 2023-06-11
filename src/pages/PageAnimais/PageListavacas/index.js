@@ -36,14 +36,12 @@ function PageListavacas({ navigation, route }) {
   useEffect(() => {
     if (realm) {
       let dataVacas = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-      setLista(dataVacas.vacas.sorted("nomeVaca"));
-      dataVacas.vacas.sorted("nomeVaca").addListener((values) => {
+      setLista(dataVacas.vacas);
+      dataVacas.vacas.addListener((values) => {
         setLista([...values]);
-      });
-      setListaVaca(dataVacas.vacas.sorted("nomeVaca"));
-      dataVacas.vacas.sorted("nomeVaca").addListener((values) => {
         setListaVaca([...values]);
       });
+      setListaVaca(dataVacas.vacas);
     }
   }, [realm]);
   //Search Bar
@@ -172,6 +170,8 @@ function PageListavacas({ navigation, route }) {
           <FlatList
             data={lista}
             keyExtractor={(item) => item._id}
+            maxToRenderPerBatch={7}
+            initialNumToRender={7}
             renderItem={({ item, index }) => (
               <View style={styles.containerVacas}>
                 <TouchableOpacity
