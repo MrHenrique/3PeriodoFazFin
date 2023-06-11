@@ -1,30 +1,22 @@
-import React, { useState, useContext, useRef, useEffect } from "react";
-import { useFocusEffect } from "@react-navigation/native";
+import React, { useState, useContext, useRef } from "react";
 import {
   Text,
   TouchableOpacity,
-  ImageBackground,
-  StyleSheet,
   SafeAreaView,
   View,
-  Alert,
 } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
+import { scale } from "react-native-size-matters";
 import Header from "../../components/Header";
 import PreviewFinanceiro from "../../components/PreviewFinanceiro";
 import { AuthContext } from "../../contexts/auth";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
-import { useMainContext } from "../../contexts/RealmContext";
 
 function Home({ navigation }) {
-  const realm = useMainContext();
-  const [listaAlerts, setListaAlerts] = useState([]);
-  const { RebanhoID, PrecoCF, PrecoLeite, rebID, fazID } =
+  const { RebanhoID, PrecoCF, PrecoLeite } =
     useContext(AuthContext);
   const [Pos, setPos] = useState(0);
-  const [loadpage, setloadpage] = useState(0);
   const [PosText, setPosText] = useState("do Rebanho");
   const scrollRef = useRef();
   function backAndClear() {
@@ -36,31 +28,6 @@ function Home({ navigation }) {
       routes: [{ name: "SelectRebPage" }],
     });
   }
-  useEffect(() => {
-    if (realm) {
-      let dataFarm = realm.objectForPrimaryKey("Farm", fazID);
-      setListaAlerts(dataFarm.atualEstoque);
-      const savedItems = [];
-
-      dataFarm.atualEstoque.forEach((item) => {
-        if (
-          item.alert[0].alertMin > 0 &&
-          item.alert[0].alertMin <=
-            (item.pesoProd > 0 ? item.pesoProd : item.volumeProd)
-        ) {
-          savedItems.push({
-            nomeProd: item.nomeProd,
-          });
-        }
-      });
-      const nameList = savedItems.map((item) => item.nomeProd);
-      const nameString = nameList.join(", ");
-      setloadpage(2);
-      if (nameString.length > 0) {
-        Alert.alert("Itens abaixo do estoque mínimo", nameString);
-      }
-    }
-  }, [realm, loadpage]);
   const onPressTouch = () => {
     if (Pos == 0) {
       scrollRef.current?.scrollTo({

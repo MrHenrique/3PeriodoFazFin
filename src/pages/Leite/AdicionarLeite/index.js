@@ -102,10 +102,11 @@ function AdicionarLeite({ navigation }) {
             let createdLeiteReb = realm.create("ReceitaRebSchema", {
               _id: id,
               tipo: 1,
+              nomeProd: "Leite",
               precoL: parsedValue,
               prodL: parsedValueProd,
               description,
-              createdAt: new Date(date),
+              createdAt: new Date(),
             });
             reb.receitas.push(createdLeiteReb);
             let nVacas = reb.vacas.filtered("genero == 1").length;
@@ -113,11 +114,12 @@ function AdicionarLeite({ navigation }) {
               let createdLeite = realm.create("ReceitaSchema", {
                 _id: uuid.v4(),
                 idTransacao: id,
+                nomeProd: "Leite",
                 tipo: 1,
                 precoL: parsedValue,
                 prodL: parsedValueProd / nVacas,
                 description,
-                createdAt: new Date(date),
+                createdAt: new Date(),
               });
               vaca.receitas.push(createdLeite);
             });
@@ -144,21 +146,23 @@ function AdicionarLeite({ navigation }) {
             let createdLeiteReb = realm.create("ReceitaRebSchema", {
               _id: id,
               tipo: 1,
+              nomeProd: "Leite",
               precoL: parsedValue,
               prodL: parsedValueProd,
               description,
-              createdAt: new Date(date),
+              createdAt: new Date(),
             });
             reb.receitas.push(createdLeiteReb);
             let Vacas = realm.objectForPrimaryKey("VacasSchema", vacaID);
             let createdLeite = realm.create("ReceitaSchema", {
               _id: id,
               idTransacao: id,
+              nomeProd: "Leite",
               tipo: 1,
               precoL: parsedValue,
               prodL: parsedValueProd,
               description,
-              createdAt: new Date(date),
+              createdAt: new Date(),
             });
             Vacas.receitas.push(createdLeite);
             Alert.alert("Dados cadastrados com sucesso!");
@@ -184,9 +188,8 @@ function AdicionarLeite({ navigation }) {
       });
     }
   }, [realm]);
-  const { ListaLeite, PrecoLeite, rebID, fazID } = useContext(AuthContext);
+  const { rebID } = useContext(AuthContext);
   //Background
-  const imgbg1 = "../../../assets/bg10.jpg";
   //States para salvar o input
   const [description, setDescription] = useState("");
   const [precoLV, setPrecoLV] = useState("");
@@ -293,7 +296,7 @@ function AdicionarLeite({ navigation }) {
           <ScrollView styles={{ flex: 1 }}>
             {/*Data*/}
             <View style={styles.containerinfos}>
-              <Text style={styles.tituloinfo}>Selecione a data:</Text>
+              <Text style={styles.tituloinfo}>Selecione a data</Text>
               <View>
                 <TouchableOpacity
                   style={styles.btndata}
