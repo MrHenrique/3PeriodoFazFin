@@ -134,7 +134,8 @@ function RegistrosLeite() {
   const handleEditPress = (item) => () => {
     setModalEditarVisible(true);
     setIdDoItemSelecionado(item._id);
-    setProdLV(item.prodL.toString());
+    const cleanedText = item.prodL.toString().replace(".", ",");
+    setProdLV(cleanedText);
     setDescription(item.description);
     setText(
       item.createdAt.getDate().toString().padStart(2, "0") +

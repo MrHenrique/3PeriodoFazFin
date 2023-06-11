@@ -3,11 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { AuthContext } from "../../../../contexts/auth";
 import { useMainContext } from "../../../../contexts/RealmContext";
 import styles from "./styles";
-import {
-  TextInput,
-  MD3Colors,
-  HelperText,
-} from "react-native-paper";
+import { TextInput, MD3Colors, HelperText } from "react-native-paper";
 import { Colors } from "../../../../styles";
 import DropdownSexo from "../../../../components/Dropdown/DropdownSexo";
 import { Alert } from "react-native";
@@ -59,15 +55,14 @@ function Vacas({ navigation }) {
       setNascimentoVaca(dataVaca.nascimentoVaca);
       setDescVaca(dataVaca.descVaca);
       Genero(dataVaca.genero);
-      const handleDataChange = (values) => {
+      dataVaca.addListener((values) => {
         setLista(values);
         setNomeVaca(values.nomeVaca);
         setBrincoVaca(values.brincoVaca);
         setNascimentoVaca(values.nascimentoVaca);
         setDescVaca(values.descVaca);
         Genero(values.genero);
-      };
-      dataVaca.addListener(handleDataChange);
+      });
       let dataVacas = realm.objectForPrimaryKey("RebanhoSchema", rebID);
       setListaVacas(dataVacas.vacas);
     }

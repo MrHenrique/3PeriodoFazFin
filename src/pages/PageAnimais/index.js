@@ -15,11 +15,12 @@ export default function PageAnimais() {
           tabBarLabelStyle: { ...estilo.tabarlabel },
           tabBarIndicatorStyle: { ...estilo.tabBarIndicator },
           tabBarStyle: styles.tab,
+          lazy: true,
         }}
       >
         <Tab.Screen name="Lista Vacas" component={PageListaVacas} />
         <Tab.Screen name="Leite" component={Leite} />
-        <Tab.Screen name= "Vendas" component={PageGerenciar} />
+        <Tab.Screen name="Vendas" component={PageGerenciar} />
       </Tab.Navigator>
     </>
   );

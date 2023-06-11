@@ -40,7 +40,7 @@ function FiltrosData(props) {
     } else if (listaAFiltrar === "dadosLeite") {
       return listaDadosLeiteReb;
     } else {
-      return null;
+      return [];
     }
   });
   const [lista, setLista] = useState(() => {
@@ -55,7 +55,7 @@ function FiltrosData(props) {
     } else if (listaAFiltrar === "dadosLeite") {
       return listaDadosLeiteReb;
     } else {
-      return null;
+      return [];
     }
   });
   const [startDate, setStartDate] = useState(""); //Filtro Intervalo entre datas
@@ -84,7 +84,7 @@ function FiltrosData(props) {
       } else if (listaAFiltrar === "dadosLeite") {
         return listaDadosLeiteReb;
       } else {
-        return null;
+        return [];
       }
     });
     setLista(listaFiltrada);

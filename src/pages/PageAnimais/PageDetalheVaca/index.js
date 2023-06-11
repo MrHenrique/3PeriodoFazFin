@@ -15,6 +15,7 @@ export default function PageAnimais() {
           tabBarLabelStyle: { ...estilo.tabarlabel },
           tabBarIndicatorStyle: { ...estilo.tabBarIndicator },
           tabBarStyle: styles.tab,
+          lazy: true,
         }}
       >
         <Tab.Screen name="Vacas" component={Vacas} />

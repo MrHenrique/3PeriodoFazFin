@@ -27,7 +27,7 @@ import {
 import Animated, { SlideInLeft, SlideOutRight } from "react-native-reanimated";
 function AdicionarLeite() {
   const realm = useMainContext();
-  const [checked, setChecked] = React.useState("rebanho");
+  const [checked, setChecked] = useState("rebanho");
   const navigation = useNavigation();
   const [isModalVisible, setModalVisible] = useState(false);
   const [vacaID, setVacaID] = useState("");
@@ -40,17 +40,17 @@ function AdicionarLeite() {
   }
   function handlePrecoChange(text) {
     const cleanedText = text.replace(",", ".");
-    const parsedValue = parseFloat(cleanedText);
+    const parsedValue = Number(cleanedText);
     const isValid = !isNaN(parsedValue) && parsedValue > 0;
     setPrecoValido(isValid);
-    setPrecoLV(parsedValue);
+    setPrecoLV(text);
   }
   function handleProdChange(text) {
     const cleanedText = text.replace(",", ".");
-    const parsedValue = parseFloat(cleanedText);
+    const parsedValue = Number(cleanedText);
     const isValid = !isNaN(parsedValue) && parsedValue > 0;
     setProdValido(isValid);
-    setProdLV(parsedValue);
+    setProdLV(text);
   }
   function validCheck() {
     if (precoLV.length === 0 || prodLV.length === 0) {
@@ -92,16 +92,18 @@ function AdicionarLeite() {
     if (realm) {
       if (checked === "rebanho") {
         try {
-          const precoL = Number(precoLV);
-          const prodL = Number(prodLV);
+          const cleanedTextPreco = precoLV.replace(",", ".");
+          const parsedValue = Number(cleanedTextPreco);
+          const cleanedTextProd = prodLV.replace(",", ".");
+          const parsedValueProd = Number(cleanedTextProd);
           let id = uuid.v4();
           realm.write(() => {
             let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
             let createdLeiteReb = realm.create("ReceitaRebSchema", {
               _id: id,
               tipo: 1,
-              precoL,
-              prodL,
+              precoL: parsedValue,
+              prodL: parsedValueProd,
               description,
               createdAt: new Date(date),
             });
@@ -112,8 +114,8 @@ function AdicionarLeite() {
                 _id: uuid.v4(),
                 idTransacao: id,
                 tipo: 1,
-                precoL,
-                prodL: prodL / nVacas,
+                precoL: parsedValue,
+                prodL: parsedValueProd / nVacas,
                 description,
                 createdAt: new Date(date),
               });
@@ -132,16 +134,18 @@ function AdicionarLeite() {
         }
       } else {
         try {
-          const precoL = Number(precoLV);
-          const prodL = Number(prodLV);
+          const cleanedTextPreco = precoLV.replace(",", ".");
+          const parsedValue = Number(cleanedTextPreco);
+          const cleanedTextProd = prodLV.replace(",", ".");
+          const parsedValueProd = Number(cleanedTextProd);
           let id = uuid.v4();
           realm.write(() => {
             let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
             let createdLeiteReb = realm.create("ReceitaRebSchema", {
               _id: id,
               tipo: 1,
-              precoL,
-              prodL,
+              precoL: parsedValue,
+              prodL: parsedValueProd,
               description,
               createdAt: new Date(date),
             });
@@ -151,8 +155,8 @@ function AdicionarLeite() {
               _id: id,
               idTransacao: id,
               tipo: 1,
-              precoL,
-              prodL,
+              precoL: parsedValue,
+              prodL: parsedValueProd,
               description,
               createdAt: new Date(date),
             });
@@ -188,7 +192,7 @@ function AdicionarLeite() {
   const [precoLV, setPrecoLV] = useState("");
   const [prodLV, setProdLV] = useState("");
   const [listaVaca, setListaVaca] = useState([]);
-  const [lista, setLista] = useState(listaVaca);
+  const [lista, setLista] = useState([]);
   const [searchText, setSearchText] = useState("");
 
   // Códido para pegar a data ....
