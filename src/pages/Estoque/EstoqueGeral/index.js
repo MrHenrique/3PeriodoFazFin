@@ -28,10 +28,28 @@ import { shareAsync } from "expo-sharing";
 import { scale } from "react-native-size-matters";
 function EstoqueGeral({ navigation }) {
   const realm = useMainContext();
+  function checkAlert(alertCheck) {
+    const savedItems = [];
 
+    alertCheck.forEach((item) => {
+      if (
+        item.alert[0].alertMin > 0 &&
+        item.alert[0].alertMin <=
+          (item.pesoProd > 0 ? item.pesoProd : item.volumeProd)
+      ) {
+        savedItems.push({
+          nomeProd: item.nomeProd,
+        });
+      }
+    });
+    const nameList = savedItems.map((item) => item.nomeProd);
+    const nameString = nameList.join(",");
+    if (nameString.length > 0) {
+      Alert.alert("Itens abaixo do estoque mínimo", nameString);
+    }
+  }
   //flatlist
   const numcolumns = 2;
-  const windowwidth = Dimensions.get("window").width;
   //estados
   const [modalAlert, setModalAlert] = useState(false);
   const [alertMin, setAlertMin] = useState(0);
@@ -42,7 +60,6 @@ function EstoqueGeral({ navigation }) {
   const [filterEstoque, setFilterEstoque] = useState(false);
   const [listaEstoqueEntrada, setListaEstoqueEntrada] = useState([]);
   const { fazID } = useContext(AuthContext);
-  const [isModalVisible, setModalVisible] = useState(false);
   const [shouldShow, setShouldShow] = useState(false);
   const [shouldShowDetalhes, setShouldShowDetalhes] = useState(true);
   const [shouldShowDetalhesEntrada, setShouldShowDetalhesEntrada] =
@@ -157,9 +174,7 @@ function EstoqueGeral({ navigation }) {
           <th>${item.pesoProd > 0 ? "Alimentos" : "Remédios"}</th>
           <th>
             ${
-              item.pesoProd > 0
-                ? item.pesoProd + " KG"
-                : item.volumeProd + " L"
+              item.pesoProd > 0 ? item.pesoProd + " KG" : item.volumeProd + " L"
             }
           </th>
           <th>${"R$ " + item.valorProd}</th>
@@ -254,6 +269,8 @@ function EstoqueGeral({ navigation }) {
       dataEstoque.entradaEstoque.sorted("createdAt").addListener((values) => {
         setListaEstoqueEntrada([...values]);
       });
+      let alertCheck = dataEstoque.atualEstoque
+      checkAlert(alertCheck);
     }
   }, [realm]);
 

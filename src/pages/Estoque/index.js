@@ -1,5 +1,4 @@
 import * as React from "react";
-import { StyleSheet, useWindowDimensions } from "react-native";
 import Header from "../../components/Header";
 import EstoqueGeral from "./EstoqueGeral";
 import EntradaEstoque from "./EntradaEstoque";
@@ -19,8 +18,8 @@ export default function Estoque() {
           tabBarStyle: styles.tab,
         }}
       >
-        <Tab.Screen name="Compras" component={EntradaEstoque} />
         <Tab.Screen name="Estoque Geral" component={EstoqueGeral} />
+        <Tab.Screen name="Compras" component={EntradaEstoque} />
       </Tab.Navigator>
     </>
   );
