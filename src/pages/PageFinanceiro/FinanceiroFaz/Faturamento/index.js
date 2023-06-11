@@ -19,10 +19,9 @@ import styles from "../../styles";
 import { Colors } from "../../../../styles";
 
 function Faturamento({ navigation }) {
-  const { precoCF, listaAli, listaLeite, precoLeite, listaFiltrada } =
+  const { precoLeite, listaFiltrada } =
     useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [shouldShow, setShouldShow] = useState(false);
   const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
   function toggleModal() {
@@ -93,15 +92,15 @@ function Faturamento({ navigation }) {
         {shouldShowDetalhes && isItemSelected && (
           <View style={[styles.containerDetalhes]}>
             <View>
-              <Text style={styles.tituloDetalhes}>Detalhes {checkTipo(item)}</Text>
+              <Text style={styles.tituloDetalhes}>
+                Detalhes {checkTipo(item)}
+              </Text>
             </View>
             <View style={styles.modalContainerText}>
               {tipo === "Venda" ? (
                 <View style={styles.modalContent}>
                   <Text style={styles.textContent}>Nome do animal: </Text>
-                  <Text style={styles.textContent}>
-                    {item.nomeProd}
-                  </Text>
+                  <Text style={styles.textContent}>{item.nomeProd}</Text>
                 </View>
               ) : null}
               <View style={styles.modalContent}>
@@ -216,7 +215,7 @@ function Faturamento({ navigation }) {
                   </View>
 
                   <FlatList
-                    style={[styles.lista]}
+                    style={styles.lista}
                     data={listaFiltrada}
                     renderItem={renderItem}
                     keyExtractor={(item) => item._id}
