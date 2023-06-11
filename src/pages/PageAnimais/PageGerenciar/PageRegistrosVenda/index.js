@@ -149,7 +149,7 @@ function RegistrosVendas({ navigation }) {
         setIsVolumeProdValid(false);
       }
     } else if (isVolumeProdValid) {
-      UpdateinfoLeite();
+      UpdateinfoVenda();
     }
   }
 
