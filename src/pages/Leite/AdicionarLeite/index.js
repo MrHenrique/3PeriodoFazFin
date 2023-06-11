@@ -14,7 +14,6 @@ import uuid from "react-native-uuid";
 import { AuthContext } from "../../../contexts/auth";
 import Modal from "react-native-modal";
 import { scale, verticalScale } from "react-native-size-matters";
-import { useNavigation } from "@react-navigation/native";
 import { useMainContext } from "../../../contexts/RealmContext";
 import { Colors } from "../../../styles";
 import styles from "./styles";
@@ -25,10 +24,9 @@ import {
   HelperText,
 } from "react-native-paper";
 import Animated, { SlideInLeft, SlideOutRight } from "react-native-reanimated";
-function AdicionarLeite() {
+function AdicionarLeite({ navigation }) {
   const realm = useMainContext();
   const [checked, setChecked] = useState("rebanho");
-  const navigation = useNavigation();
   const [isModalVisible, setModalVisible] = useState(false);
   const [vacaID, setVacaID] = useState("");
   const [precoValido, setPrecoValido] = useState(true);

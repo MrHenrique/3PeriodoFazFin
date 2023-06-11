@@ -10,16 +10,15 @@ import {
   TouchableOpacity,
 } from "react-native";
 import styles from "./styles";
-import { useNavigation } from "@react-navigation/native";
 import { useMainContext } from "../../contexts/RealmContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { scale } from "react-native-size-matters";
+import { CommonActions } from "@react-navigation/native-stack";
 
-function SelectFazPage() {
+function SelectFazPage({ navigation }) {
   const realm = useMainContext();
-  const navigation = useNavigation();
   const [listaFaz, setListaFaz] = useState([]);
-  const { fazID } = useContext(AuthContext);
+  const { fazID, FazendaID, RebanhoID } = useContext(AuthContext);
   useEffect(() => {
     if (realm) {
       let data = realm.objects("Farm").sorted("nomefaz");
@@ -33,6 +32,14 @@ function SelectFazPage() {
   useEffect(() => {
     CanContinue();
   }, [fazID]);
+  function backAndClear() {
+    RebanhoID("");
+    FazendaID("");
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "LoginPage" }],
+    });
+  }
   function CanContinue() {
     if (typeof fazID == "undefined" || fazID == "") {
       const CanContinue = true;
@@ -79,6 +86,15 @@ function SelectFazPage() {
         </View>
         <View style={styles.containerbotoes}>
           <TouchableOpacity
+            style={styles.botaopress2}
+            onPress={() => backAndClear()}
+          >
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+            </View>
+            <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity
             disabled={CanContinue(fazID)}
             style={DisabledStyle(fazID)}
             onPress={() => navigation.navigate("SelectRebPage")}
@@ -86,7 +102,11 @@ function SelectFazPage() {
             <View style={{ flex: 1, justifyContent: "center" }}>
               <Text style={styles.tituloBotao}>{"Continuar"}</Text>
             </View>
-            <MaterialIcons name="arrow-forward" size={scale(24)} color="white" />
+            <MaterialIcons
+              name="arrow-forward"
+              size={scale(24)}
+              color="white"
+            />
           </TouchableOpacity>
         </View>
       </View>

@@ -10,7 +10,6 @@ import {
   Alert,
 } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
-import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../../contexts/auth";
 import Modal from "react-native-modal";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -27,10 +26,9 @@ import { Colors } from "../../../styles";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 import { scale } from "react-native-size-matters";
-function EstoqueGeral() {
+function EstoqueGeral({ navigation }) {
   const realm = useMainContext();
 
-  const navigation = useNavigation();
   //flatlist
   const numcolumns = 2;
   const windowwidth = Dimensions.get("window").width;

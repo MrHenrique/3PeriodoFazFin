@@ -13,14 +13,13 @@ import {
 import uuid from "react-native-uuid";
 import { TextInput, HelperText, MD3Colors } from "react-native-paper";
 import { Colors } from "../../../styles";
-import { useNavigation } from "@react-navigation/native";
 import { useMainContext } from "../../../contexts/RealmContext";
 import { Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { scale } from "react-native-size-matters";
 
 import styles from "./styles";
-function CadastroReb() {
+function CadastroReb({ navigation }) {
   const realm = useMainContext();
   const [nomeReb, setNomeReb] = useState("");
   const [qtdAni, setQtdAni] = useState("");
@@ -126,7 +125,6 @@ function CadastroReb() {
       Alert.alert("Preencha todos os campos e tente novamente.");
     }
   }
-  const navigation = useNavigation();
   // LISTENER DO TECLADO(ATIVADO OU NAO)
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {

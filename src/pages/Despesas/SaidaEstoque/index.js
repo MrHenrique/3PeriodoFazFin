@@ -28,7 +28,6 @@ import EstoqueOptions from "../../../components/Dropdown/EstoqueOptions";
 import { useState, useContext, useEffect } from "react";
 import uuid from "react-native-uuid";
 import { AuthContext } from "../../../contexts/auth";
-import { useNavigation } from "@react-navigation/native";
 import { CheckBox, Icon } from "react-native-elements";
 import { useMainContext } from "../../../contexts/RealmContext";
 import styles from "./styles";
@@ -36,9 +35,8 @@ import Modal from "react-native-modal";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { scale } from "react-native-size-matters";
 
-export default function SaidaEstoque() {
+export default function SaidaEstoque({ navigation }) {
   const realm = useMainContext();
-  const navigation = useNavigation();
   const [checked, setChecked] = React.useState("rebanho");
   const [qtdProd, setQtdProd] = useState("");
   const [obserProd, setObserProd] = useState("");

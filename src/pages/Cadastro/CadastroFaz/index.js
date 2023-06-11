@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import { TextInput, HelperText, MD3Colors } from "react-native-paper";
 import { Colors } from "../../../styles";
-import { useNavigation } from "@react-navigation/native";
 import uuid from "react-native-uuid";
 import styles from "./styles";
 import { AuthContext } from "../../../contexts/auth";
@@ -21,7 +20,7 @@ import { Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { scale } from "react-native-size-matters";
 
-function CadastroFaz() {
+function CadastroFaz({ navigation }) {
   const realm = useMainContext();
   const { FazendaID, FazendaProp, RebanhoID } = useContext(AuthContext);
   const [nomefaz, setNomefaz] = useState("");
@@ -110,7 +109,6 @@ function CadastroFaz() {
       handleAddFarm();
     }
   }
-  const navigation = useNavigation();
   // LISTENER DO TECLADO(ATIVADO OU NAO)
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {

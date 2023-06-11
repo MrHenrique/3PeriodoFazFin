@@ -45,7 +45,9 @@ const Option = (item, value, selected, objKey, onPress) => {
           styles.optionContainer,
           {
             backgroundColor:
-              selected?.[objKey] === item?.[objKey] ? Colors.darkgreen : Colors.green,
+              selected?.[objKey] === item?.[objKey]
+                ? Colors.darkgreen
+                : Colors.green,
           },
         ]}
         onPress={onPress}
@@ -86,22 +88,11 @@ const Select = ({
   const [visible, setVisible] = useState(false);
   const [selected, setSelected] = useState(null);
   useEffect(() => {
-    if (data.length === 1) {
-      setSelected(data[0]);
-      var Rebid = data[0]._id;
-      RebanhoID(Rebid);
-      setVisible(false);
+    if (rebID === "" || rebID === undefined) {
+      RebanhoID("");
+      setSelected(null);
     }
-  }, [data]);
-  useFocusEffect(
-    useCallback(() => {
-      if (rebID === "" || rebID === undefined) {
-        RebanhoID("");
-        setSelected(null);
-      }
-      return () => {};
-    }, [])
-  );
+  }, [rebID]);
   const { TouchableComponent } = touchableComponent(
     touchableText,
     () => setVisible(true),

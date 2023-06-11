@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { scale, verticalScale } from "react-native-size-matters";
-import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import {
   MaterialCommunityIcons,
@@ -16,8 +15,7 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 
-const Reproducao = () => {
-  const navigation = useNavigation();
+const Reproducao = ({ navigation }) => {
   const [coverageDate, setCoverageDate] = useState(new Date());
   const [creationDate, setCreationDate] = useState(new Date());
   const [heatDate, setHeatDate] = useState(new Date());

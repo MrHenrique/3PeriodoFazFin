@@ -10,14 +10,13 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import BezierChartDespesas from "../../../../components/Graficos/BezierChartDespesas";
 import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
 import { AuthContext } from "../../../../contexts/auth";
 import styles from "../../styles";
 import { Colors } from "../../../../styles";
-function Despesas() {
+function Despesas({ navigation }) {
   const { precoCF, listaAli } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
   const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
@@ -198,8 +197,6 @@ function Despesas() {
   }
   const despesas = getDespesas().toFixed(2);
   const formattedDespesas = `R$ ${despesas.replace(".", ",")}`;
-  const imgbg1 = "../../../../../assets/bg2.jpg";
-  const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground

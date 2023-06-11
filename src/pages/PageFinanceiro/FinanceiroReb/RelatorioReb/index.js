@@ -7,7 +7,6 @@ import {
   SafeAreaView,
   Dimensions,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import PieChartReb from "../../../../components/Graficos/PieChartReb";
 import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
@@ -17,7 +16,7 @@ import styles, { Color, setSize } from "../../styles";
 import { Colors } from "../../../../styles";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
-function RelatorioReb() {
+function RelatorioReb({ navigation }) {
   const realm = useMainContext();
   const [nomeReb, setNomeReb] = useState("");
   const [totalVacas, setTotalVacas] = useState(0);
@@ -209,7 +208,6 @@ function RelatorioReb() {
       setTotalReceitasRelatorio(`R$ ${receitas.replace(".", ",")}`);
     }
   }, [realm]);
-  const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.containergeral}>

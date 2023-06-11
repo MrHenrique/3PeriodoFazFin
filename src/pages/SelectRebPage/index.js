@@ -33,7 +33,10 @@ function SelectRebPage({ navigation }) {
   function backAndClear() {
     RebanhoID("");
     FazendaID("");
-    navigation.navigate("SelectFazPage");
+    navigation.reset({
+      index: 1,
+      routes: [{ name: "SelectFazPage" }],
+    });
   }
   function CanContinue() {
     if (typeof rebID == "undefined" || rebID == "") {
@@ -101,7 +104,11 @@ function SelectRebPage({ navigation }) {
             <View style={{ flex: 1, justifyContent: "center" }}>
               <Text style={styles.tituloBotao}>{"Continuar"}</Text>
             </View>
-            <MaterialIcons name="arrow-forward" size={scale(24)} color="white" />
+            <MaterialIcons
+              name="arrow-forward"
+              size={scale(24)}
+              color="white"
+            />
           </TouchableOpacity>
         </View>
       </View>

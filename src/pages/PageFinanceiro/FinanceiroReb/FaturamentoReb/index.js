@@ -10,7 +10,6 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import BezierChartFaturamentoReb from "../../../../components/Graficos/BezierChartFaturamentoReb";
 import FiltrosData from "../../../../components/Filtros/FiltrosData";
 import { scale, verticalScale } from "react-native-size-matters";
@@ -18,7 +17,7 @@ import { Colors } from "../../../../styles";
 import Modal from "react-native-modal";
 import { AuthContext } from "../../../../contexts/auth";
 import styles from "../../styles";
-function FaturamentoReb() {
+function FaturamentoReb({ navigation }) {
   const { precoCFReb, listaAliReb, listaLeiteReb, precoLeiteReb } =
     useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -168,7 +167,6 @@ function FaturamentoReb() {
   }
   const receitas = getReceitas().toFixed(2);
   const formattedReceitas = `R$ ${receitas.replace(".", ",")}`;
-  const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground

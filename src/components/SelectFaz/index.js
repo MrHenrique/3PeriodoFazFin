@@ -89,29 +89,13 @@ const SelectFaz = ({
   const [visible, setVisible] = useState(false);
   const [selected, setSelected] = useState(null);
   useEffect(() => {
-    if (data.length === 1) {
-      setSelected(data[0]);
-      var Fazid = data[0]._id;
-      FazendaID(Fazid);
-      var FazProp = data[0].proprietario;
-      FazendaProp(FazProp);
-      var Rebid = "";
-      RebanhoID(Rebid);
-      setVisible(false);
+    if (fazID === "" || fazID === undefined) {
+      FazendaID("");
+      RebanhoID("");
+      FazendaProp("");
+      setSelected(null);
     }
-  }, [data]);
-  useFocusEffect(
-    useCallback(() => {
-      if (fazID === "" || fazID === undefined) {
-        FazendaID("");
-        RebanhoID("");
-        FazendaProp("");
-        setSelected(null);
-      }
-      return () => {};
-    }, [])
-  );
-
+  }, [fazID]);
   const { TouchableComponent } = touchableComponent(
     touchableText,
     () => setVisible(true),
