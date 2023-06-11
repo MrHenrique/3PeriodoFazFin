@@ -54,7 +54,7 @@ function Home({ navigation }) {
         }
       });
       const nameList = savedItems.map((item) => item.nomeProd);
-      const nameString = nameList.join(",");
+      const nameString = nameList.join(", ");
       setloadpage(2);
       if (nameString.length > 0) {
         Alert.alert("Itens abaixo do estoque mínimo", nameString);

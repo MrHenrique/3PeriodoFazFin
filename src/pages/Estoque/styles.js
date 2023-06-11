@@ -3,6 +3,15 @@ import { Buttons, Colors, Fonts, TextInput } from "../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
+  txtAlertBtn: {
+    ...Fonts.txtLargeBold,
+    color: Colors.white,
+  },
+  containerinfos: {
+    backgroundColor: Colors.darkgreen,
+    borderRadius: 10,
+    padding: scale(10),
+  },
   tab: {
     maxHeight: verticalScale(40),
     backgroundColor: Colors.green,
@@ -20,6 +29,10 @@ const styles = StyleSheet.create({
     margin: scale(15),
     backgroundColor: Colors.darkgreen,
     borderRadius: 10,
+  },
+  containerGeralAlert: {
+    flex: 1,
+    justifyContent: "center",
   },
   containerkeyboard: {
     flex: 1,
@@ -73,6 +86,16 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     elevation: 10,
     margin: verticalScale(5),
+  },
+  botaopressAlert: {
+    ...Buttons.btnLargeRounded,
+    backgroundColor: Colors.green,
+    alignSelf: "center",
+    flexDirection: "row-reverse",
+    paddingHorizontal: scale(80),
+    justifyContent: "space-between",
+    elevation: 10,
+    marginTop: scale(10),
   },
   fontcontainerlistitem: {
     color: Colors.white,
@@ -197,6 +220,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: verticalScale(140),
   },
+  modalContainerAlert: {
+    flex: 1,
+  },
   listcontainerstyle: {
     flex: 1,
     width: "100%",
@@ -258,8 +284,8 @@ const styles = StyleSheet.create({
   exportContainer: {
     flex: 1,
     justifyContent: "center",
-    alignSelf: "center",
-    margin: verticalScale(5)
+    flexDirection: "row",
+    margin: verticalScale(5),
   },
   containershouldshow: {
     flex: 10,
@@ -276,10 +302,19 @@ const styles = StyleSheet.create({
     borderColor: Colors.black,
     borderWidth: scale(0.4),
   },
+  botaoAlerta: {
+    ...Buttons.btnLargeRounded,
+    width: "100%",
+    justifyContent: "center",
+    backgroundColor: Colors.grey,
+    shadowColor: "black",
+    borderColor: Colors.black,
+    borderWidth: scale(0.4),
+    elevation: 4,
+  },
   botaoExport: {
     ...Buttons.btnSmallRounded,
-    width: scale(295),
-    height: "100%",
+    flex: 0.94,
     justifyContent: "center",
     backgroundColor: Colors.grey,
     borderColor: Colors.black,

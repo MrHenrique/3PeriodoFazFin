@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
   // voltar
   botaopress: {
     ...Buttons.btnLargeRounded,
-    flexDirection: "row-reverse",
     backgroundColor: Colors.green,
+    flexDirection: "row-reverse",
     paddingHorizontal: scale(80),
     justifyContent: "space-between",
     elevation: 10,

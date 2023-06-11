@@ -19,8 +19,8 @@ const styles = StyleSheet.create({
     paddingTop: scale(10),
   },
   containerEdit: {
-    flex: 0.1,
-    flexDirection: "column-reverse",
+    flex: 0.19,
+    flexDirection: "column",
     paddingTop: scale(10),
   },
   botao: {
@@ -28,7 +28,10 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    justifyContent: "center",
+    flexDirection: "row-reverse",
+    paddingHorizontal: scale(80),
+    justifyContent: "space-between",
+    elevation: 10,
     elevation: 10,
   },
   voltarfont: {

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Keyboard } from "react-native";
 import { AuthContext } from "../../../contexts/auth";
 import { useMainContext } from "../../../contexts/RealmContext";
 import styles from "./styles";
@@ -13,6 +13,8 @@ import { Colors } from "../../../styles";
 import DropdownSexo from "../../../components/Dropdown/DropdownSexo";
 import { Alert } from "react-native";
 import uuid from "react-native-uuid";
+import { scale } from "react-native-size-matters";
+import { MaterialIcons } from "@expo/vector-icons";
 
 function CadastroVaca({ navigation }) {
   const { rebID, machoFemea } = useContext(AuthContext);
@@ -28,6 +30,7 @@ function CadastroVaca({ navigation }) {
   const [isNascimentoVacaValid, setIsNascimentoVacaValid] = useState(true);
   const [descVaca, setDescVaca] = useState();
   const [genero, setGenero] = useState(); //update bd
+  const [keyboardStatus, setkeyboardStatus] = useState(false);
   async function handleAddVaca() {
     if (realm) {
       try {
@@ -102,6 +105,26 @@ function CadastroVaca({ navigation }) {
       Alert.alert("Preencha todos os campos e tente novamente.");
     }
   }
+  // LISTENER DO TECLADO(ATIVADO OU NAO)
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setkeyboardStatus(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setkeyboardStatus(false);
+    });
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+  function voltarBtnStyle() {
+    if (!keyboardStatus === true) {
+      return styles.containerEdit;
+    } else {
+      return { display: "none" };
+    }
+  }
   return (
     <View style={styles.container}>
       <View style={styles.containergeral}>
@@ -110,8 +133,9 @@ function CadastroVaca({ navigation }) {
             <TextInput
               mode="flat"
               label={"Nome do animal"}
+              placeholder="ex: Mimosa"
               style={styles.textInput}
-              placeholderTextColor={Colors.grey}
+              placeholderTextColor={Colors.darkgrey}
               textColor={Colors.black}
               activeUnderlineColor={Colors.green}
               underlineColor={Colors.blue}
@@ -140,7 +164,7 @@ function CadastroVaca({ navigation }) {
               mode="flat"
               label={"Identificação do animal(brinco)"}
               style={styles.textInput}
-              placeholderTextColor={Colors.grey}
+              placeholderTextColor={Colors.darkgrey}
               textColor={Colors.black}
               activeUnderlineColor={Colors.green}
               underlineColor={Colors.blue}
@@ -168,8 +192,9 @@ function CadastroVaca({ navigation }) {
             <TextInput
               mode="flat"
               style={styles.textInput}
-              label={"Ano de nascimento (Ex:2019)"}
-              placeholderTextColor={Colors.grey}
+              label={"Ano de nascimento"}
+              placeholder="ex: 2009"
+              placeholderTextColor={Colors.darkgrey}
               textColor={Colors.black}
               activeUnderlineColor={Colors.green}
               underlineColor={Colors.blue}
@@ -200,7 +225,8 @@ function CadastroVaca({ navigation }) {
               mode="flat"
               style={styles.textInput}
               label={"Observações"}
-              placeholderTextColor={Colors.grey}
+              placeholder="ex: vaca esta doente... "
+              placeholderTextColor={Colors.darkgrey}
               textColor={Colors.black}
               activeUnderlineColor={Colors.green}
               underlineColor={Colors.blue}
@@ -210,17 +236,21 @@ function CadastroVaca({ navigation }) {
             />
           </View>
         </View>
-        <View style={styles.containerEdit}>
+        <View style={voltarBtnStyle()}>
           <TouchableOpacity style={styles.botao} onPress={() => validCheck()}>
-            <Text style={styles.voltarfont}>{"Cadastrar"}</Text>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text style={styles.voltarfont}>{"Cadastrar"}</Text>
+            </View>
+            <MaterialIcons name="add" size={scale(24)} color="white" />
           </TouchableOpacity>
-        </View>
-        <View style={styles.containerEdit}>
           <TouchableOpacity
             style={styles.botao}
             onPress={() => navigation.navigate("PageAnimais")}
           >
-            <Text style={styles.voltarfont}>{"Voltar"}</Text>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text style={styles.voltarfont}>{"Voltar"}</Text>
+            </View>
+            <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
           </TouchableOpacity>
         </View>
       </View>
