@@ -296,7 +296,7 @@ function AdicionarLeite({ navigation }) {
           <ScrollView styles={{ flex: 1 }}>
             {/*Data*/}
             <View style={styles.containerinfos}>
-              <Text style={styles.tituloinfo}>Selecione a data:</Text>
+              <Text style={styles.tituloinfo}>Selecione a data</Text>
               <View>
                 <TouchableOpacity
                   style={styles.btndata}

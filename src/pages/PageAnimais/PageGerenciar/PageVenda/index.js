@@ -3,28 +3,62 @@ import {
   Text,
   TouchableOpacity,
   View,
-  StyleSheet,
+  Keyboard,
   ScrollView,
-  TextInput,
   FlatList,
   Alert,
 } from "react-native";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import uuid from "react-native-uuid";
 import { AuthContext } from "../../../../contexts/auth";
 import Modal from "react-native-modal";
-import { scale, verticalScale } from "react-native-size-matters";
+import { scale } from "react-native-size-matters";
 import { useMainContext } from "../../../../contexts/RealmContext";
+import { Colors } from "../../../../styles";
+import styles from "./styles";
+import { AntDesign } from "@expo/vector-icons";
+import { TextInput, MD3Colors, HelperText } from "react-native-paper";
+import Animated, { SlideInLeft, SlideOutRight } from "react-native-reanimated";
 function Venda({ navigation }) {
   const realm = useMainContext();
   const [isModalVisible, setModalVisible] = useState(false);
   const [vacaID, setVacaID] = useState("");
+  const [precoValido, setPrecoValido] = useState(true);
+  const [prodValido, setProdValido] = useState(true);
+  const [keyboardStatus, setkeyboardStatus] = useState(false);
   function toggleModal() {
     setModalVisible(!isModalVisible);
     setSearchText("");
     setLista(listaVaca);
   }
-  const renderItem = ({ item }) => {
+  function handlePrecoChange(text) {
+    const cleanedText = text.replace(",", ".");
+    const parsedValue = Number(cleanedText);
+    const isValid = !isNaN(parsedValue) && parsedValue > 0;
+    setPrecoValido(isValid);
+    setPrecoLV(text);
+  }
+  function handleProdChange(text) {
+    const cleanedText = text.replace(",", ".");
+    const parsedValue = Number(cleanedText);
+    const isValid = !isNaN(parsedValue) && parsedValue > 0;
+    setProdValido(isValid);
+    setProdLV(text);
+  }
+  function validCheck() {
+    if (precoLV.length === 0 || prodLV.length === 0) {
+      if (precoLV.length === 0) {
+        setPrecoValido(false);
+      }
+      if (prodLV.length === 0) {
+        setProdValido(false);
+      }
+    } else if (precoValido && prodValido) {
+      handleAddVenda();
+    }
+  }
+  const renderItem = ({ item, index }) => {
     return (
       <View style={styles.modalContainer2}>
         <TouchableOpacity
@@ -36,8 +70,7 @@ function Venda({ navigation }) {
           style={[
             styles.cardVacas,
             {
-              backgroundColor:
-                item.brincoVaca % 2 === 0 ? "#0F6D00" : "#004513",
+              backgroundColor: index % 2 === 0 ? "#1B5E20" : "#154c21",
             },
           ]}
         >
@@ -49,7 +82,7 @@ function Venda({ navigation }) {
     );
   };
   //Escrever no Banco
-  async function handleAddLeite() {
+  async function handleAddVenda() {
     if (realm) {
       try {
         const precoL = Number(precoLV);
@@ -99,7 +132,7 @@ function Venda({ navigation }) {
   const [precoLV, setPrecoLV] = useState("");
   const [prodLV, setProdLV] = useState("");
   const [listaVaca, setListaVaca] = useState([]);
-  const [lista, setLista] = useState(listaVaca);
+  const [lista, setLista] = useState([]);
   const [searchText, setSearchText] = useState("");
 
   // Códido para pegar a data ....
@@ -148,7 +181,7 @@ function Venda({ navigation }) {
       const Style = styles.botaopressdisabled;
       return Style;
     } else {
-      const Style = styles.botaopress6;
+      const Style = styles.botao;
       return Style;
     }
   }
@@ -172,358 +205,230 @@ function Venda({ navigation }) {
     );
     setLista(newList);
   };
+  // LISTENER DO TECLADO(ATIVADO OU NAO)
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setkeyboardStatus(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setkeyboardStatus(false);
+    });
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+  function StyleFuncKeyboard() {
+    if (keyboardStatus) {
+      return styles.containerbutaoKeyboardOn;
+    } else {
+      return styles.containervoltar;
+    }
+  }
   return (
     <View style={styles.container}>
-      <ScrollView>
-        {/*Data*/}
-        <View style={styles.containerinfos}>
-          <Text style={styles.tituloinfo}>{text}</Text>
-          <View>
-            <TouchableOpacity
-              style={{
-                backgroundColor: "grey",
-                borderRadius: 20,
-              }}
-              onPress={showDatePicker}
+      <View style={styles.containergeral}>
+        <View style={styles.containerScrollView}>
+          <ScrollView styles={{ flex: 1 }}>
+            {/*Data*/}
+            <View style={styles.containerinfos}>
+              <Text style={styles.tituloinfo}>Selecione a data</Text>
+              <View>
+                <TouchableOpacity
+                  style={styles.btndata}
+                  onPress={showDatePicker}
+                >
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      alignContent: "center",
+                      alignSelf: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: Colors.white,
+                        fontSize: scale(24),
+                        fontWeight: "bold",
+                        padding: scale(5),
+                      }}
+                    >
+                      {text}
+                    </Text>
+                  </View>
+                  <View style={{ paddingRight: scale(20) }}>
+                    <MaterialCommunityIcons
+                      name="calendar"
+                      size={scale(30)}
+                      color="white"
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                onConfirm={handleDateConfirm}
+                onCancel={hideDatePicker}
+                maximumDate={new Date()}
+              />
+            </View>
+            {/*Preco do leite*/}
+            <View style={styles.containerinfos}>
+              <TextInput
+                mode="flat"
+                label="Preço da @ negociado"
+                style={styles.campoTexto}
+                placeholderTextColor={Colors.grey}
+                textColor={Colors.black}
+                activeUnderlineColor={Colors.green}
+                underlineColor={Colors.blue}
+                underlineStyle={{ paddingBottom: 3 }}
+                onChangeText={handlePrecoChange}
+                value={precoLV}
+                error={!precoValido}
+                keyboardType="decimal-pad"
+              />
+              <HelperText
+                type="error"
+                style={{
+                  color: MD3Colors.error60,
+                  fontSize: 14,
+                  lineHeight: 15,
+                }}
+                visible={!precoValido}
+                padding="20"
+              >
+                Digite um preço válido.
+              </HelperText>
+            </View>
+            {/*Produção diaria*/}
+            <View style={styles.containerinfos}>
+              <TextInput
+                mode="flat"
+                label="Peso em arroba(@)"
+                style={styles.campoTexto}
+                placeholderTextColor={Colors.grey}
+                textColor={Colors.black}
+                activeUnderlineColor={Colors.green}
+                underlineColor={Colors.blue}
+                underlineStyle={{ paddingBottom: 3 }}
+                onChangeText={handleProdChange}
+                value={prodLV}
+                error={!prodValido}
+                keyboardType="decimal-pad"
+              />
+              <HelperText
+                type="error"
+                style={{
+                  color: MD3Colors.error60,
+                  fontSize: 14,
+                  lineHeight: 15,
+                }}
+                visible={!prodValido}
+                padding="20"
+              >
+                Digite o peso do animal.
+              </HelperText>
+            </View>
+            <View style={styles.containerinfos}>
+              <TextInput
+                label="Observações"
+                style={styles.campoTexto}
+                placeholderTextColor={Colors.grey}
+                textColor={Colors.black}
+                activeUnderlineColor={Colors.green}
+                underlineColor={Colors.blue}
+                underlineStyle={{ paddingBottom: 3 }}
+                value={description}
+                onChangeText={setDescription}
+              />
+            </View>
+            <Animated.View
+              style={{ flex: 2 }}
+              entering={SlideInLeft}
+              exiting={SlideOutRight}
             >
-              <Text style={styles.tituloinfo}>Selecione a data:</Text>
-            </TouchableOpacity>
-          </View>
-
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handleDateConfirm}
-            onCancel={hideDatePicker}
-            maximumDate={new Date()}
-          />
+              <TouchableOpacity
+                onPress={() => {
+                  toggleModal(), setVacaID("");
+                }}
+                style={styles.botaoselecionaranimal}
+              >
+                <Text style={styles.tituloBotao}>Selecionar animal</Text>
+                <AntDesign name="right" size={scale(22)} color="white" />
+                <Modal
+                  isVisible={isModalVisible}
+                  statusBarTranslucent
+                  backdropOpacity={0.5}
+                  coverScreen={true}
+                  backdropColor={"black"}
+                  animationIn="slideInUp"
+                  animationOut="slideOutDown"
+                >
+                  <View style={styles.modalContainer}>
+                    <Text style={styles.TituloM}>Selecione um animal</Text>
+                    <TouchableOpacity
+                      style={styles.filtroNome}
+                      onPress={handleFilterNome}
+                    >
+                      <Text style={styles.tituloBotao}>Filtrar por nome</Text>
+                    </TouchableOpacity>
+                    <TextInput
+                      style={styles.search}
+                      mode="flat"
+                      placeholder="Pesquise pelo nome."
+                      placeholderTextColor={Colors.greyColor}
+                      value={searchText}
+                      onChangeText={(t) => setSearchText(t)}
+                    ></TextInput>
+                    <FlatList
+                      style={styles.scroll}
+                      data={lista}
+                      renderItem={renderItem}
+                      keyExtractor={(item) => item._id}
+                    />
+                  </View>
+                  <TouchableOpacity
+                    style={styles.botaopressM}
+                    onPress={() => {
+                      toggleModal();
+                    }}
+                  >
+                    <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+                  </TouchableOpacity>
+                </Modal>
+              </TouchableOpacity>
+            </Animated.View>
+          </ScrollView>
         </View>
-
-        {/*Descrição*/}
-        <View style={styles.containerinfos}>
-          <Text style={styles.tituloinfo}>Descrição:</Text>
-          <TextInput
-            style={styles.detalhe}
-            value={description}
-            onChangeText={setDescription}
-            placeholder="Exemplo: Venda 06/05 Vaca Araçá"
-          />
-        </View>
-
-        {/*Preco do leite*/}
-        <View style={styles.containerinfos}>
-          <Text style={styles.tituloinfo}>Preço atual do arroba(R$):</Text>
-          <TextInput
-            style={styles.detalhe}
-            value={precoLV}
-            keyboardType="number-pad"
-            onChangeText={setPrecoLV}
-            placeholder="Exemplo: 250.10"
-          />
-        </View>
-        {/*Produção diaria*/}
-        <View style={styles.containerinfos}>
-          <Text style={styles.tituloinfo}>Peso da Vaca em arroba(@):</Text>
-          <TextInput
-            style={styles.detalhe}
-            value={prodLV}
-            keyboardType="number-pad"
-            onChangeText={setProdLV}
-            placeholder="Exemplo: 30.5"
-          />
-        </View>
-      </ScrollView>
-      <TouchableOpacity
-        onPress={() => {
-          toggleModal(), setVacaID("");
-        }}
-        style={styles.botaoselecionaranimal}
-      >
-        <Text style={styles.tituloBotao}>Selecionar animal</Text>
-        <Modal
-          isVisible={isModalVisible}
-          coverScreen={true}
-          backdropColor={"rgba(234,242,215,0.8)"}
-          animationIn="slideInUp"
-          animationOut="slideOutDown"
-        >
-          <View style={styles.modalContainer}>
-            <Text style={styles.TituloM}>Selecione um animal</Text>
-            <TouchableOpacity
-              style={styles.filtroNome}
-              onPress={handleFilterNome}
-            >
-              <Text style={styles.tituloBotao}>Filtrar por nome</Text>
-            </TouchableOpacity>
-            <TextInput
-              style={styles.search}
-              placeholder="Pesquise pelo nome."
-              value={searchText}
-              onChangeText={(t) => setSearchText(t)}
-            ></TextInput>
-            <FlatList
-              style={styles.scroll}
-              data={lista}
-              renderItem={renderItem}
-              keyExtractor={(item) => item._id}
-            />
-          </View>
+        <View style={StyleFuncKeyboard()}>
           <TouchableOpacity
-            style={styles.botaopressM}
-            onPress={() => {
-              toggleModal();
-            }}
+            disabled={CanContinue(vacaID)}
+            style={DisabledStyle(vacaID)}
+            onPress={validCheck}
           >
-            <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text style={styles.textovoltar}>Cadastrar</Text>
+            </View>
+            <MaterialIcons name="add" size={scale(24)} color="white" />
           </TouchableOpacity>
-        </Modal>
-      </TouchableOpacity>
-      <TouchableOpacity
-        disabled={CanContinue(vacaID)}
-        style={DisabledStyle(vacaID)}
-        onPress={handleAddLeite}
-      >
-        <Text style={styles.textovoltar}>Gerar Venda</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.botaopress}
-        onPress={() => navigation.navigate("Home")}
-      >
-        <Text style={styles.textovoltar}>Voltar</Text>
-      </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.botao}
+            onPress={() => navigation.navigate("Home")}
+          >
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text style={styles.textovoltar}>Voltar</Text>
+            </View>
+            <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 }
-const styles = StyleSheet.create({
-  radioBView: {
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-    flex: 1,
-  },
-  filtroNome: {
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    borderRadius: 20,
-    width: scale(140),
-    height: verticalScale(30),
-    margin: verticalScale(5),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-  },
-  search: {
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    fontSize: verticalScale(15),
-    color: "white",
-    textAlign: "center",
-    alignSelf: "center",
-    height: verticalScale(40),
-    width: scale(300),
-    margin: verticalScale(20),
-    borderRadius: 20,
-  },
-  modalContainer: {
-    backgroundColor: "rgba(234,242,215,1)",
-    position: "absolute",
-    top: verticalScale(10),
-    alignSelf: "center",
-    height: verticalScale(550),
-    width: scale(330),
-    borderRadius: 20,
-  },
-  cardVacas: {
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 18,
-    marginVertical: verticalScale(4),
-    position: "relative",
-    alignSelf: "center",
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "#004513",
-  },
-  contvoltar: {
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    color: "rgba(15, 109, 0, 0.9)",
-    top: verticalScale(625),
-  },
-  botaovoltar: {
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 18,
-    marginVertical: verticalScale(5),
-    position: "relative",
-    alignSelf: "center",
-  },
-  botaovoltar2: {
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 18,
-    marginVertical: verticalScale(5),
-    position: "relative",
-    alignSelf: "center",
-  },
-  botaovoltar3: {
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 18,
-    marginVertical: verticalScale(5),
-    position: "relative",
-    alignSelf: "center",
-  },
-  textovoltar: {
-    fontSize: verticalScale(14),
-    fontWeight: "bold",
-    color: "#fff",
-  },
-  tituloinfo: {
-    color: "white",
-    fontSize: verticalScale(20),
-    marginBottom: verticalScale(10),
-    textAlign: "center",
-    fontWeight: "bold",
-  },
-  detalhe: {
-    fontSize: verticalScale(20),
-    color: "black",
-    backgroundColor: "white",
-    borderRadius: verticalScale(5),
-    marginBottom: verticalScale(20),
-    textAlign: "center",
-    width: scale(280),
-  },
-  containerinfos: {
-    marginVertical: verticalScale(5),
-    padding: verticalScale(5),
-    width: scale(320),
-    backgroundColor: "rgba(15, 109, 0, 0.7)",
-    borderRadius: 20,
-    alignSelf: "center",
-  },
-  botaoselecionaranimal: {
-    backgroundColor: "#004513",
-    width: scale(215),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    borderRadius: 18,
-    color: "white",
-  },
-  selecionaranimal: {
-    color: "white",
-    fontSize: verticalScale(20),
-  },
-  container2: {
-    flex: 1,
-    height: verticalScale(100),
-    backgroundColor: "white",
-  },
-  lista2: {
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 18,
-    alignSelf: "center",
-    marginVertical: verticalScale(5),
-    color: "white",
-    textAlign: "center",
-    fontSize: verticalScale(20),
-    fontWeight: "bold",
-  },
-  container3: {
-    height: verticalScale(300),
-  },
-  botaopressM: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    top: verticalScale(580),
-    position: "absolute",
-  },
-
-  tituloBotao: {
-    fontSize: verticalScale(14),
-    fontWeight: "bold",
-    color: "#fff",
-  },
-  botaopress: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    top: verticalScale(525),
-    position: "absolute",
-  },
-
-  botaopress6: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    top: verticalScale(475),
-    position: "absolute",
-  },
-  TituloM: {
-    justifyContent: "center",
-    alignSelf: "center",
-    color: "#004513",
-    fontSize: verticalScale(30),
-    fontWeight: "bold",
-  },
-  botaoselecionaranimal: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    top: verticalScale(425),
-    position: "absolute",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-  },
-  botaopressdisabled: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.4)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    top: verticalScale(475),
-    position: "absolute",
-  },
-  dateComponente: {
-    width: 350,
-  },
-});
 
 export default Venda;
