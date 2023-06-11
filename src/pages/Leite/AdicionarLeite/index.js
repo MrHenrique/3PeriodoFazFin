@@ -3,7 +3,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  StyleSheet,
+  Keyboard,
   ScrollView,
   FlatList,
   Alert,
@@ -18,6 +18,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useMainContext } from "../../../contexts/RealmContext";
 import { Colors } from "../../../styles";
 import styles from "./styles";
+import { AntDesign } from "@expo/vector-icons";
 import {
   RadioButton,
   TextInput,
@@ -33,6 +34,7 @@ function AdicionarLeite() {
   const [vacaID, setVacaID] = useState("");
   const [precoValido, setPrecoValido] = useState(true);
   const [prodValido, setProdValido] = useState(true);
+  const [keyboardStatus, setkeyboardStatus] = useState(false);
   function toggleModal() {
     setModalVisible(!isModalVisible);
     setSearchText("");
@@ -265,6 +267,27 @@ function AdicionarLeite() {
     );
     setLista(newList);
   };
+  // LISTENER DO TECLADO(ATIVADO OU NAO)
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setkeyboardStatus(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setkeyboardStatus(false);
+    });
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+  // RETORNA O ESTILO PARA O BOTAO, decidindo qual estilo, dependendo se o teclado esta ativo ou nao
+  function StyleFuncKeyboard() {
+    if (keyboardStatus) {
+      return styles.containerbutaoKeyboardOn;
+    } else {
+      return styles.containervoltar;
+    }
+  }
   return (
     <View style={styles.container}>
       <View style={styles.containergeral}>
@@ -408,69 +431,71 @@ function AdicionarLeite() {
               />
               <Text style={styles.RadioTextStyle}>Cadastro individual</Text>
             </View>
-          </ScrollView>
-
-          {checked === "vacas" ? (
-            <>
-              <Animated.View
-                style={{ flex: 2 }}
-                entering={SlideInLeft}
-                exiting={SlideOutRight}
-              >
-                <TouchableOpacity
-                  onPress={() => {
-                    toggleModal(), setVacaID("");
-                  }}
-                  style={styles.botaoselecionaranimal}
+            {checked === "vacas" ? (
+              <>
+                <Animated.View
+                  style={{ flex: 2 }}
+                  entering={SlideInLeft}
+                  exiting={SlideOutRight}
                 >
-                  <Text style={styles.tituloBotao}>Selecionar animal</Text>
-                  <Modal
-                    isVisible={isModalVisible}
-                    statusBarTranslucent
-                    backdropOpacity={0.5}
-                    coverScreen={true}
-                    backdropColor={"black"}
-                    animationIn="slideInUp"
-                    animationOut="slideOutDown"
+                  <TouchableOpacity
+                    onPress={() => {
+                      toggleModal(), setVacaID("");
+                    }}
+                    style={styles.botaoselecionaranimal}
                   >
-                    <View style={styles.modalContainer}>
-                      <Text style={styles.TituloM}>Selecione um animal</Text>
-                      <TouchableOpacity
-                        style={styles.filtroNome}
-                        onPress={handleFilterNome}
-                      >
-                        <Text style={styles.tituloBotao}>Filtrar por nome</Text>
-                      </TouchableOpacity>
-                      <TextInput
-                        style={styles.search}
-                        mode="flat"
-                        placeholder="Pesquise pelo nome."
-                        placeholderTextColor={Colors.greyColor}
-                        value={searchText}
-                        onChangeText={(t) => setSearchText(t)}
-                      ></TextInput>
-                      <FlatList
-                        style={styles.scroll}
-                        data={lista}
-                        renderItem={renderItem}
-                        keyExtractor={(item) => item._id}
-                      />
-                    </View>
-                    <TouchableOpacity
-                      style={styles.botaopressM}
-                      onPress={() => {
-                        toggleModal();
-                      }}
+                    <Text style={styles.tituloBotao}>Selecionar animal</Text>
+                    <AntDesign name="right" size={scale(22)} color="white" />
+                    <Modal
+                      isVisible={isModalVisible}
+                      statusBarTranslucent
+                      backdropOpacity={0.5}
+                      coverScreen={true}
+                      backdropColor={"black"}
+                      animationIn="slideInUp"
+                      animationOut="slideOutDown"
                     >
-                      <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-                    </TouchableOpacity>
-                  </Modal>
-                </TouchableOpacity>
-              </Animated.View>
-            </>
-          ) : null}
+                      <View style={styles.modalContainer}>
+                        <Text style={styles.TituloM}>Selecione um animal</Text>
+                        <TouchableOpacity
+                          style={styles.filtroNome}
+                          onPress={handleFilterNome}
+                        >
+                          <Text style={styles.tituloBotao}>
+                            Filtrar por nome
+                          </Text>
+                        </TouchableOpacity>
+                        <TextInput
+                          style={styles.search}
+                          mode="flat"
+                          placeholder="Pesquise pelo nome."
+                          placeholderTextColor={Colors.greyColor}
+                          value={searchText}
+                          onChangeText={(t) => setSearchText(t)}
+                        ></TextInput>
+                        <FlatList
+                          style={styles.scroll}
+                          data={lista}
+                          renderItem={renderItem}
+                          keyExtractor={(item) => item._id}
+                        />
+                      </View>
+                      <TouchableOpacity
+                        style={styles.botaopressM}
+                        onPress={() => {
+                          toggleModal();
+                        }}
+                      >
+                        <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+                      </TouchableOpacity>
+                    </Modal>
+                  </TouchableOpacity>
+                </Animated.View>
+              </>
+            ) : null}
+          </ScrollView>
         </View>
-        <View style={styles.containervoltar}>
+        <View style={StyleFuncKeyboard()}>
           <TouchableOpacity
             disabled={CanContinue(vacaID)}
             style={DisabledStyle(vacaID)}
