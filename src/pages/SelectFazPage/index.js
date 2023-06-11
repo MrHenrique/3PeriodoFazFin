@@ -79,15 +79,6 @@ function SelectFazPage() {
         </View>
         <View style={styles.containerbotoes}>
           <TouchableOpacity
-            style={styles.botaopress}
-            onPress={() => navigation.navigate("LoginPage")}
-          >
-            <View style={{ flex: 1, justifyContent: "center" }}>
-              <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-            </View>
-            <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
-          </TouchableOpacity>
-          <TouchableOpacity
             disabled={CanContinue(fazID)}
             style={DisabledStyle(fazID)}
             onPress={() => navigation.navigate("SelectRebPage")}

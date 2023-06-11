@@ -35,9 +35,11 @@ function PreviewFinanceiro({ Titulo, Id }) {
     }
     //receita Reb
     let dataReceitasreb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-    PrecoLeiteReb(ReceitasTotais(dataReceitasreb.receitas));
+    let receitasreb = ReceitasTotais(dataReceitasreb.receitas);
+    PrecoLeiteReb(receitas);
     dataReceitasreb.receitas.addListener((values) => {
-      PrecoLeiteReb(ReceitasTotais([...values]));
+      let newReceitasreb = ReceitasTotais([...values]);
+      PrecoLeiteReb(newReceitasreb);
     });
     //despesas Farm
     let dataDespesas = realm.objectForPrimaryKey("Farm", fazID);
@@ -55,9 +57,11 @@ function PreviewFinanceiro({ Titulo, Id }) {
     });
     //despesas Reb
     let dataDespesasReb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-    PrecoCFReb(DespesasTotais(dataDespesasReb.despesas));
+    let despesasReb = DespesasTotais(dataDespesasReb.despesas);
+    PrecoCFReb(despesasReb);
     dataDespesasReb.despesas.addListener((values) => {
-      PrecoCFReb(DespesasTotais([...values]));
+      let newdespesasreb = DespesasTotais([...values]);
+      PrecoCFReb(newdespesasreb);
     });
   }, [realm]);
 
