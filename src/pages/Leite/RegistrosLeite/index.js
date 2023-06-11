@@ -3,7 +3,6 @@ import { useState, useContext, useEffect } from "react";
 import { View, Text, TouchableOpacity, FlatList, Alert } from "react-native";
 import Modal from "react-native-modal";
 import { AntDesign } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import FiltrosData from "../../../components/Filtros/FiltrosData";
 import { AuthContext } from "../../../contexts/auth";
 import { useMainContext } from "../../../contexts/RealmContext";
@@ -11,9 +10,8 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Colors } from "../../../styles";
 import styles from "./styles";
 import { TextInput, MD3Colors, HelperText } from "react-native-paper";
-function RegistrosLeite() {
+function RegistrosLeite({ navigation }) {
   const realm = useMainContext();
-  const navigation = useNavigation();
   const { rebID, ListaFiltrada, listaFiltrada, ListaDadosLeiteReb } =
     useContext(AuthContext);
   const [listaLeite, setListaLeite] = useState([]);

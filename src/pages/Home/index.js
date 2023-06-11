@@ -31,7 +31,10 @@ function Home({ navigation }) {
     RebanhoID("");
     PrecoCF(0);
     PrecoLeite(0);
-    navigation.navigate("SelectRebPage");
+    navigation.reset({
+      index: 2,
+      routes: [{ name: "SelectRebPage" }],
+    });
   }
   useEffect(() => {
     if (realm) {

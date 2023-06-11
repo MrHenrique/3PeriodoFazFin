@@ -11,15 +11,13 @@ import {
   TextInput,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import FiltrosData from "../../../../components/Filtros/FiltrosData";
 import { scale, verticalScale } from "react-native-size-matters";
 import { AuthContext } from "../../../../contexts/auth";
 import { useMainContext } from "../../../../contexts/RealmContext";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-function RegistrosVendas() {
+function RegistrosVendas({ navigation }) {
   const realm = useMainContext();
-  const navigation = useNavigation();
   const { rebID, ListaFiltrada, listaFiltrada } = useContext(AuthContext);
   const [listaLeite, setListaLeite] = useState([]);
   const [shouldShow, setShouldShow] = useState(false);

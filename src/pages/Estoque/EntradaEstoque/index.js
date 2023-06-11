@@ -16,7 +16,6 @@ import {
   HelperText,
 } from "react-native-paper";
 import { Colors } from "../../../styles";
-import { useNavigation } from "@react-navigation/native";
 import { CheckBox, Icon } from "react-native-elements";
 import EstoqueOptionsEntrada from "../../../components/Dropdown/EstoqueOptionsEntrada";
 import uuid from "react-native-uuid";
@@ -30,9 +29,8 @@ import Animated, {
   LightSpeedOutRight,
 } from "react-native-reanimated";
 
-function EntradaEstoque() {
+function EntradaEstoque({ navigation }) {
   const realm = useMainContext();
-  const navigation = useNavigation();
   //estados
   const [listaEstoque, setListaEstoque] = useState([]);
   const [listaEstoqueFiltered, setListaEstoqueFiltered] = useState([]);

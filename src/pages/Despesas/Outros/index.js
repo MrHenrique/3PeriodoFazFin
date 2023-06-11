@@ -20,7 +20,6 @@ import {
 import { Colors } from "../../../styles";
 import uuid from "react-native-uuid";
 import { AuthContext } from "../../../contexts/auth";
-import { useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
 import { useMainContext } from "../../../contexts/RealmContext";
 import styles from "./styles";
@@ -28,9 +27,8 @@ import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import Modal from "react-native-modal";
 import { scale } from "react-native-size-matters";
 
-export default function Outros() {
+export default function Outros({ navigation }) {
   const realm = useMainContext();
-  const navigation = useNavigation();
   const [checked, setChecked] = React.useState("rebanho");
   const [valorProdString, setValorProd] = useState("");
   const [nomeProd, setNomeProd] = useState("");
@@ -39,6 +37,7 @@ export default function Outros() {
   const [nomeValid, setNomeValid] = useState(true);
   const [listaVaca, setListaVaca] = useState([]);
   const [lista, setLista] = useState(listaVaca);
+  const [obserProd, setObserProd] = useState("");
   const [searchText, setSearchText] = useState("");
   // listener teclado
   const [keyboardStatus, setkeyboardStatus] = useState(false);
@@ -144,7 +143,7 @@ export default function Outros() {
               nomeProd,
               valorProd,
               qtdProd: 1,
-              obserProd: "",
+              obserProd: obserProd,
               pesoProd: 0,
               volumeProd: 0,
             });
@@ -158,7 +157,7 @@ export default function Outros() {
                 nomeProd,
                 valorProd: valorProd / nVacas,
                 qtdProd: 1,
-                obserProd: "",
+                obserProd: obserProd,
                 pesoProd: 0,
                 volumeProd: 0,
               });
@@ -187,7 +186,7 @@ export default function Outros() {
             nomeProd,
             valorProd,
             qtdProd: 1,
-            obserProd: "",
+            obserProd: obserProd,
             pesoProd: 0,
             volumeProd: 0,
           });
@@ -200,7 +199,7 @@ export default function Outros() {
             nomeProd,
             valorProd,
             qtdProd: 1,
-            obserProd: "",
+            obserProd: obserProd,
             pesoProd: 0,
             volumeProd: 0,
           });
@@ -213,6 +212,7 @@ export default function Outros() {
         setNomeProd("");
         setValorProd("");
         setVacaID("");
+        setObserProd("");
       }
     }
   }
@@ -261,7 +261,7 @@ export default function Outros() {
               <View style={styles.containerOutrasDespesas}>
                 <TextInput
                   mode="flat"
-                  label={"Descrição"}
+                  label={"Nome da transação"}
                   style={styles.txtInput}
                   placeholderTextColor={Colors.grey}
                   textColor={Colors.black}
@@ -283,7 +283,7 @@ export default function Outros() {
                   visible={!nomeValid}
                   padding="20"
                 >
-                  Digite uma descrição.
+                  Digite um nome para a transação.
                 </HelperText>
               </View>
               <View style={styles.containerOutrasDespesas}>
@@ -316,6 +316,22 @@ export default function Outros() {
                     ? "Valor inválido."
                     : "Preencha o campo valor total."}
                 </HelperText>
+              </View>
+              <View style={styles.containerCadastroOutras}>
+                <View style={styles.containerOutrasDespesas}>
+                  <TextInput
+                    mode="flat"
+                    label={"Descrição"}
+                    style={styles.txtInput}
+                    placeholderTextColor={Colors.grey}
+                    textColor={Colors.black}
+                    activeUnderlineColor={Colors.green}
+                    underlineColor={Colors.blue}
+                    underlineStyle={{ paddingBottom: 3 }}
+                    value={obserProd}
+                    onChangeText={setObserProd}
+                  />
+                </View>
               </View>
             </View>
             <View style={styles.radioBView}>

@@ -91,6 +91,7 @@ export const ReceitaRebSchema = {
   primaryKey: "_id",
   properties: {
     _id: "string",
+    nomeProd: "string",
     tipo: "double",
     precoL: "double",
     prodL: "double",

@@ -7,7 +7,6 @@ import {
   SafeAreaView,
   Dimensions,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import PieChartFaz from "../../../../components/Graficos/PieChart";
 import styles, { Color, setSize } from "../../styles";
 import { Colors } from "../../../../styles";
@@ -17,7 +16,7 @@ import { AuthContext } from "../../../../contexts/auth";
 import { useMainContext } from "../../../../contexts/RealmContext";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
-function Relatorio() {
+function Relatorio({ navigation }) {
   const realm = useMainContext();
   const { precoCF, precoLeite, fazID } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -240,7 +239,6 @@ function Relatorio() {
       setTotalReceitasRelatorio(`R$ ${receitas.replace(".", ",")}`);
     }
   }, [realm]);
-  const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.containergeral}>
