@@ -42,7 +42,6 @@ function RegistrosLeite({ navigation }) {
         const sortedValues = [...values].sort((a, b) => {
           return new Date(a.createdAt) - new Date(b.createdAt);
         });
-
         ListaDadosLeiteReb(sortedValues);
 
         const lista7Dias = sortedValues.filter((item) => {

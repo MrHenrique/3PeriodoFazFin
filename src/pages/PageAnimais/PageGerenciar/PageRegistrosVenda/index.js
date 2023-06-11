@@ -1,26 +1,20 @@
 import * as React from "react";
 import { useState, useContext, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  Alert,
-  Modal,
-  TextInput,
-} from "react-native";
+import { View, Text, TouchableOpacity, FlatList, Alert } from "react-native";
+import Modal from "react-native-modal";
 import { AntDesign } from "@expo/vector-icons";
 import FiltrosData from "../../../../components/Filtros/FiltrosData";
-import { scale, verticalScale } from "react-native-size-matters";
 import { AuthContext } from "../../../../contexts/auth";
 import { useMainContext } from "../../../../contexts/RealmContext";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { TextInput, MD3Colors, HelperText } from "react-native-paper";
+import styles from "./styles";
+import { Colors } from "../../../../styles";
 function RegistrosVendas({ navigation }) {
   const realm = useMainContext();
-  const { rebID, ListaFiltrada, listaFiltrada } = useContext(AuthContext);
+  const { rebID, ListaFiltrada, listaFiltrada, ListaDadosLeiteReb } =
+    useContext(AuthContext);
   const [listaLeite, setListaLeite] = useState([]);
-  const [shouldShow, setShouldShow] = useState(false);
   const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
   const [modalEditarVisible, setModalEditarVisible] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
@@ -29,6 +23,7 @@ function RegistrosVendas({ navigation }) {
   const [idDoItemSelecionado, setIdDoItemSelecionado] = useState("");
   const [date, setDate] = useState(new Date());
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+  const [isVolumeProdValid, setIsVolumeProdValid] = useState(true);
   const [text, setText] = useState(
     new Date().getDate().toString().padStart(2, "0") +
       "/" +
@@ -40,21 +35,33 @@ function RegistrosVendas({ navigation }) {
   useEffect(() => {
     if (realm) {
       let dataReceitasreb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-      setListaLeite(dataReceitasreb.receitas);
-      ListaFiltrada(dataReceitasreb.receitas);
+      ListaDadosLeiteReb(dataReceitasreb.receitas);
+      //ListaFiltrada(dataReceitasreb.receitas);
 
       dataReceitasreb.receitas.addListener((values) => {
         const sortedValues = [...values].sort((a, b) => {
           return new Date(a.createdAt) - new Date(b.createdAt);
         });
+        ListaDadosLeiteReb(sortedValues);
 
-        setListaLeite(sortedValues);
-        ListaFiltrada(sortedValues);
+        const lista7Dias = sortedValues.filter((item) => {
+          const dataHoje = new Date();
+          dataHoje.setHours(0, 0, 0, 0);
+          const dataSeteDiasAtras = new Date(dataHoje);
+          dataSeteDiasAtras.setDate(dataHoje.getDate() - 7);
+          const itemDataDeCriacao = new Date(item.createdAt);
+          itemDataDeCriacao.setHours(0, 0, 0, 0);
+          return (
+            itemDataDeCriacao >= dataSeteDiasAtras &&
+            itemDataDeCriacao <= dataHoje
+          );
+        });
+        ListaFiltrada(lista7Dias); // Para a lista retornar por padrão os valores de 7 dias
       });
     }
   }, [realm]);
 
-  async function UpdateinfoLeite() {
+  async function UpdateinfoVenda() {
     if (realm) {
       try {
         realm.write(() => {
@@ -66,15 +73,6 @@ function RegistrosVendas({ navigation }) {
           updateLeite.createdAt = date;
           updateLeite.prodL = prodL;
           updateLeite.description = description;
-          let updateVacaLeite = realm
-            .objects("ReceitaSchema")
-            .filtered(`idTransacao = '${idDoItemSelecionado}'`);
-          let nVacas = updateVacaLeite.length;
-          updateVacaLeite.forEach((receita) => {
-            receita.createdAt = date;
-            receita.prodL = prodL / nVacas;
-            receita.description = description;
-          });
           Alert.alert("Dados modificados com sucesso!");
         });
       } catch (e) {
@@ -123,7 +121,8 @@ function RegistrosVendas({ navigation }) {
   const handleEditPress = (item) => () => {
     setModalEditarVisible(true);
     setIdDoItemSelecionado(item._id);
-    setProdLV(item.prodL.toString());
+    const cleanedText = item.prodL.toString().replace(".", ",");
+    setProdLV(cleanedText);
     setDescription(item.description);
     setText(
       item.createdAt.getDate().toString().padStart(2, "0") +
@@ -137,6 +136,22 @@ function RegistrosVendas({ navigation }) {
   const handleDeletePress = () => {
     console.log("Excluir pressionado");
   };
+  function handleVolumeProdChange(text) {
+    const cleanedText = text.replace(",", ".");
+    const parsedValue = parseFloat(cleanedText);
+    const isValid = !isNaN(parsedValue) && parsedValue > 0;
+    setIsVolumeProdValid(isValid);
+    setProdLV(text);
+  }
+  function validCheck() {
+    if (prodLV.length === 0) {
+      if (prodLV.length === 0) {
+        setIsVolumeProdValid(false);
+      }
+    } else if (isVolumeProdValid) {
+      UpdateinfoVenda();
+    }
+  }
 
   //Função para formatar os valores mostrado na tela pelo tipo escolhido
   const formatarResultado = (valorRecebido, tipo) => {
@@ -171,9 +186,10 @@ function RegistrosVendas({ navigation }) {
         >
           <View style={styles.itemContainer}>
             <View style={[styles.indicador, { backgroundColor: "yellow" }]} />
-            <Text style={styles.itemText}>
-              {formattedData} - {formattedResult}
-            </Text>
+            <View style={styles.containerTextList}>
+              <Text style={styles.itemText}>{formattedData}</Text>
+              <Text style={styles.itemText}>{formattedResult}</Text>
+            </View>
             <TouchableOpacity
               style={styles.editButton}
               onPress={handleEditPress(item)}
@@ -234,257 +250,110 @@ function RegistrosVendas({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <FiltrosData listaRecebida={listaLeite} />
-      <FlatList
-        style={[styles.lista]}
-        data={listaFiltrada}
-        renderItem={renderItem}
-        keyExtractor={(item) => item._id}
-      />
-      <TouchableOpacity
-        style={styles.botaopress}
-        onPress={() => navigation.navigate("Home")}
-      >
-        <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-      </TouchableOpacity>
-      <Modal
-        visible={modalEditarVisible}
-        animationType="slide"
-        transparent={true}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.containerinfos}>
-            <TouchableOpacity style={styles.teste} onPress={showDatePicker}>
-              <Text style={styles.tituloinfo}>{text}</Text>
-              <AntDesign name="calendar" size={24} color="black" />
-            </TouchableOpacity>
-
-            <DateTimePickerModal
-              isVisible={isDatePickerVisible}
-              date={date}
-              mode="date"
-              onConfirm={handleDateConfirm}
-              onCancel={hideDatePicker}
-              maximumDate={new Date()}
-            />
-          </View>
-          <View style={styles.containerinfos}>
-            <Text style={styles.tituloinfo}>
-              Produção da vaca hoje(litros):
-            </Text>
-            <TextInput
-              style={styles.detalhe}
-              value={prodLV}
-              keyboardType="number-pad"
-              onChangeText={setProdLV}
-            />
-          </View>
-          <View style={styles.containerinfos}>
-            <Text style={styles.tituloinfo}>Descrição:</Text>
-            <TextInput
-              style={styles.detalhe}
-              value={description}
-              onChangeText={setDescription}
-            />
-          </View>
-          <View style={styles.modalContainerBotoes}>
-            <TouchableOpacity
-              style={styles.botaopressM}
-              onPress={() => {
-                UpdateinfoLeite();
-                setModalEditarVisible(false);
-              }}
-            >
-              <Text style={styles.textovoltar}>Confirmar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.botaopressM}
-              onPress={() => setModalEditarVisible(false)}
-            >
-              <Text style={styles.textovoltar}>Voltar</Text>
-            </TouchableOpacity>
-          </View>
+      <View style={styles.containergeral}>
+        <View style={{ paddingHorizontal: 12 }}>
+          <FiltrosData listaAFiltrar={"dadosLeite"} ordenarPor={"litro"} />
         </View>
-      </Modal>
+        <FlatList
+          style={[styles.lista]}
+          data={listaFiltrada}
+          renderItem={renderItem}
+          keyExtractor={(item) => item._id}
+        />
+        <TouchableOpacity
+          style={styles.botaopress}
+          onPress={() => navigation.navigate("Home")}
+        >
+          <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+        </TouchableOpacity>
+        <Modal
+          coverScreen={true}
+          backdropColor="black"
+          backdropOpacity={0.5}
+          visible={modalEditarVisible}
+          animationType="slide"
+          transparent={true}
+          statusBarTranslucent
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.containergeralmodal}>
+              <View style={styles.containerinfos}>
+                <TouchableOpacity style={styles.teste} onPress={showDatePicker}>
+                  <Text style={styles.tituloinfo}>{text}</Text>
+                  <AntDesign name="calendar" size={30} color="white" />
+                </TouchableOpacity>
+
+                <DateTimePickerModal
+                  isVisible={isDatePickerVisible}
+                  date={date}
+                  mode="date"
+                  onConfirm={handleDateConfirm}
+                  onCancel={hideDatePicker}
+                  maximumDate={new Date()}
+                />
+              </View>
+              <View style={styles.containerinfos}>
+                <TextInput
+                  label="Peso do Animal"
+                  style={styles.textInput}
+                  placeholderTextColor={Colors.grey}
+                  textColor={Colors.black}
+                  activeUnderlineColor={Colors.green}
+                  underlineColor={Colors.blue}
+                  underlineStyle={{ paddingBottom: 3 }}
+                  value={prodLV}
+                  onChangeText={handleVolumeProdChange}
+                  keyboardType="decimal-pad"
+                  inputMode="decimal"
+                  error={!isVolumeProdValid}
+                />
+                <HelperText
+                  type="error"
+                  style={{
+                    color: MD3Colors.error60,
+                    fontSize: 14,
+                    lineHeight: 12,
+                  }}
+                  visible={!isVolumeProdValid}
+                  padding="20"
+                >
+                  Digite o novo peso do animal.
+                </HelperText>
+              </View>
+              <View style={styles.containerinfos}>
+                <TextInput
+                  label="Observações"
+                  style={styles.textInput}
+                  placeholderTextColor={Colors.grey}
+                  textColor={Colors.black}
+                  activeUnderlineColor={Colors.green}
+                  underlineColor={Colors.blue}
+                  underlineStyle={{ paddingBottom: 3 }}
+                  value={description}
+                  onChangeText={setDescription}
+                />
+              </View>
+              <View style={styles.modalContainerBotoes}>
+                <TouchableOpacity
+                  style={styles.botaopressM}
+                  onPress={() => {
+                    validCheck();
+                  }}
+                >
+                  <Text style={styles.textovoltar}>Confirmar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.botaopressM}
+                  onPress={() => setModalEditarVisible(false)}
+                >
+                  <Text style={styles.textovoltar}>Voltar</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
     </View>
   );
 }
-const styles = StyleSheet.create({
-  teste: {
-    paddingHorizontal: 20,
-    flexDirection: "row",
-    alignItens: "center",
-    justifyContent: "space-between",
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "#004513",
-    padding: 20,
-  },
-  filtros: {
-    alignSelf: "center",
-    width: scale(300),
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
-    borderRadius: 20,
-    padding: 10,
-    margin: 10,
-    position: "absolute",
-    top: verticalScale(65),
-  },
-  filtrosBotao: {
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    borderRadius: 10,
-    padding: 10,
-    margin: 10,
-  },
-  lista: {
-    flex: 1,
-    marginTop: 10,
-    marginBottom: 40,
-  },
-  botaopress: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    top: verticalScale(530),
-    position: "absolute",
-  },
-  tituloBotao: {
-    fontSize: verticalScale(14),
-    fontWeight: "bold",
-    color: "#fff",
-  },
-  listaDet: {
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.95)",
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    marginVertical: verticalScale(5),
-  },
-  itemContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingRight: 10,
-  },
-  editButton: {
-    //padding: 10,
-    //backgroundColor: "red",
-  },
-  deleteButton: {
-    //padding: 10,
-    //backgroundColor: "blue",
-  },
-  itemText: {
-    //backgroundColor: "gray",
-    flex: 1,
-    marginLeft: 10,
-    marginRight: 10,
-    fontSize: verticalScale(14),
-    fontWeight: "bold",
-    color: "#fff",
-  },
-  indicador: {
-    padding: 8,
-    borderTopLeftRadius: 50,
-    borderBottomLeftRadius: 50,
-    width: 10,
-    height: 40,
-  },
-
-  textovoltar: {
-    fontSize: verticalScale(14),
-    fontWeight: "bold",
-    color: "#fff",
-  },
-  tituloinfo: {
-    color: "white",
-    fontSize: verticalScale(20),
-    marginBottom: verticalScale(10),
-    textAlign: "center",
-    fontWeight: "bold",
-  },
-  tituloDetalhes: {
-    color: "black",
-    fontSize: verticalScale(20),
-    marginBottom: verticalScale(10),
-    textAlign: "center",
-    fontWeight: "bold",
-  },
-
-  detalhe: {
-    fontSize: verticalScale(20),
-    color: "black",
-    backgroundColor: "white",
-    borderRadius: verticalScale(5),
-    marginBottom: verticalScale(20),
-    textAlign: "center",
-  },
-  containerinfos: {
-    marginVertical: verticalScale(5),
-    padding: verticalScale(5),
-    width: scale(320),
-    backgroundColor: "rgba(15, 109, 0, 0.7)",
-    borderRadius: 20,
-    alignSelf: "center",
-  },
-
-  textavatar: {
-    borderWidth: 1,
-    borderColor: "red",
-    fontSize: 24,
-    paddingLeft: scale(10),
-  },
-  modalContainer: {
-    //flex: 1,
-    backgroundColor: "#004513",
-    borderRadius: 10,
-    margin: 20,
-    padding: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "18%",
-  },
-  containerDetalhes: {
-    width: scale(300),
-    backgroundColor: "white",
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    alignSelf: "center",
-  },
-  modalContainerBotoes: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  modalContent: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  textContent: {
-    fontSize: 20,
-  },
-  modalContainerText: {
-    width: "100%",
-    padding: 5,
-  },
-  botaopressM: {
-    marginTop: 10,
-    borderRadius: 20,
-    backgroundColor: "rgba(15, 109, 0, 0.9)",
-    width: "50%",
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-  },
-});
 export default RegistrosVendas;
