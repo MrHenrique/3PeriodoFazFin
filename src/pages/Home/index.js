@@ -22,7 +22,6 @@ function Home({ navigation }) {
       let vacas = rebanho.vacas;
       vacas.forEach((vaca) => {
         if (vaca.reproducao.length > 0) {
-          console.log("entrei");
           let idVaca = vaca._id;
           let cio = vaca.reproducao[0].cio;
           let cobertura = vaca.reproducao[0].cobertura;
@@ -60,7 +59,6 @@ function Home({ navigation }) {
         ) {
           if (!cio && cobertura && !prenhez) {
             if (ultimoCio.addDays(21) < new Date()) {
-              console.log("rodei prenh");
               let prenhez = true;
               let dataCio = ultimoCio;
               let dataParto = dataUltimoParto;
@@ -88,7 +86,6 @@ function Home({ navigation }) {
           dataUltimoParto
         ) {
           if (cio && ultimoCio.addDays(1) < new Date()) {
-            console.log("rodei cio");
             let cio = false;
             let dataCio = ultimoCio;
             let dataParto = dataUltimoParto;
