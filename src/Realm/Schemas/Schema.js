@@ -189,10 +189,24 @@ export const ReproducaoSchema = {
     dataCio: "date?",
     dataCobertura: "date?",
     dataParto: "date?",
+    partos: "dataParto[]",
     assignee: {
       type: "linkingObjects",
       objectType: "VacasSchema",
       property: "reproducao",
+    },
+  },
+};
+export const dataParto = {
+  name: "dataParto",
+  primaryKey: "_id",
+  properties: {
+    _id: "string",
+    dataParto: "date?",
+    assignee: {
+      type: "linkingObjects",
+      objectType: "ReproducaoSchema",
+      property: "partos",
     },
   },
 };

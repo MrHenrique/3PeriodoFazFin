@@ -1,21 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  Alert,
-} from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Alert } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { scale, verticalScale } from "react-native-size-matters";
+import { scale } from "react-native-size-matters";
 import uuid from "react-native-uuid";
 import styles from "./styles";
-import {
-  MaterialCommunityIcons,
-  MaterialIcons,
-  AntDesign,
-} from "@expo/vector-icons";
+import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { AuthContext } from "../../contexts/auth";
 import { useMainContext } from "../../contexts/RealmContext";
 const Reproducao = ({ navigation }) => {
@@ -27,11 +16,10 @@ const Reproducao = ({ navigation }) => {
   const [prenhez, setPrenhez] = useState(false);
   const [dataParto, setDataParto] = useState(new Date());
   const [dataUltimoParto, setDataUltimoParto] = useState();
-  const [dataPartoPrevisto, setDataPartoPrevisto] = useState();
   const [cio, setCio] = useState(false);
   const [dataCio, setDataCio] = useState(new Date());
   const [ultimoCio, setUltimoCio] = useState();
-  const [dataProxCio, setDataProxCio] = useState();
+  const [partos, setPartos] = useState([]);
   const [callFunction, setCallFunction] = useState(0);
   const [callFunction2, setCallFunction2] = useState(0);
   const [isDatePickerCioVisible, setIsDatePickerCioVisible] = useState(false);
@@ -39,11 +27,10 @@ const Reproducao = ({ navigation }) => {
     useState(false);
   const [isDatePickerCoberturaVisible, setIsDatePickerCoberturaVisible] =
     useState(false);
-
   useEffect(() => {
     if (realm) {
       let dataVaca = realm.objectForPrimaryKey("VacasSchema", idVaca);
-      console.log(dataVaca.reproducao[0]);
+      console.log(dataVaca.reproducao[0].partos);
       if (dataVaca.reproducao.length > 0) {
         setCio(dataVaca.reproducao[0].cio);
         setCobertura(dataVaca.reproducao[0].cobertura);
@@ -51,6 +38,7 @@ const Reproducao = ({ navigation }) => {
         setUltimoCio(dataVaca.reproducao[0].dataCio);
         setDataUltimaCobertura(dataVaca.reproducao[0].dataCobertura);
         setDataUltimoParto(dataVaca.reproducao[0].dataParto);
+        setPartos(dataVaca.reproducao[0].partos);
         setCallFunction2(callFunction2 + 1);
       }
       dataVaca.addListener((values) => {
@@ -65,37 +53,6 @@ const Reproducao = ({ navigation }) => {
       });
     }
   }, [realm]);
-  useEffect(() => {
-    console.log("rodei");
-    possivelPrenhez();
-    endCio();
-    setCallFunction2(0);
-  }, [callFunction2]);
-  function possivelPrenhez() {
-    console.log(ultimoCio);
-    if (!cio && cobertura && !prenhez) {
-      console.log("entrei");
-      if (ultimoCio.addDays(21) < new Date()) {
-        console.log("rodei prenh");
-        setPrenhez(true);
-        setDataCio(ultimoCio);
-        setDataParto(dataUltimoParto);
-        setDataCobertura(ultimaCobertura);
-        setCallFunction(callFunction + 1);
-      }
-    }
-  }
-  function endCio() {
-    console.log("rodei cio?");
-    if (cio && ultimoCio.addDays(1) < new Date()) {
-      console.log("rodei cio");
-      setCio(false);
-      setDataCio(ultimoCio);
-      setDataParto(dataUltimoParto);
-      setDataCobertura(ultimaCobertura);
-      setCallFunction(callFunction + 1);
-    }
-  }
   function dateOrHifen(date) {
     if (date) {
       return dateToText(date);
@@ -187,6 +144,8 @@ const Reproducao = ({ navigation }) => {
   async function UpdateInfoVaca() {
     if (realm) {
       try {
+        let newParto = { _id: uuid.v4(), dataParto: dataParto };
+        let finalParto = [...partos, newParto];
         realm.write(() => {
           let updateVaca = realm.objectForPrimaryKey("VacasSchema", idVaca);
           updateVaca.reproducao = [
@@ -198,6 +157,7 @@ const Reproducao = ({ navigation }) => {
               dataCio: dataCio,
               dataCobertura: dataCobertura,
               dataParto: dataParto,
+              partos: finalParto,
             },
           ];
           setDataCio(new Date());

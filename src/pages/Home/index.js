@@ -1,24 +1,147 @@
-import React, { useState, useContext, useRef } from "react";
-import {
-  Text,
-  TouchableOpacity,
-  SafeAreaView,
-  View,
-} from "react-native";
+import React, { useState, useContext, useRef, useEffect } from "react";
+import { Text, TouchableOpacity, SafeAreaView, View } from "react-native";
 import { scale } from "react-native-size-matters";
 import Header from "../../components/Header";
 import PreviewFinanceiro from "../../components/PreviewFinanceiro";
 import { AuthContext } from "../../contexts/auth";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import styles from "./styles";
+import uuid from "react-native-uuid";
 import { ScrollView } from "react-native-gesture-handler";
+import { useMainContext } from "../../contexts/RealmContext";
 
 function Home({ navigation }) {
-  const { RebanhoID, PrecoCF, PrecoLeite } =
-    useContext(AuthContext);
+  const realm = useMainContext();
+  const { RebanhoID, PrecoCF, PrecoLeite, rebID } = useContext(AuthContext);
   const [Pos, setPos] = useState(0);
   const [PosText, setPosText] = useState("do Rebanho");
   const scrollRef = useRef();
+  useEffect(() => {
+    if (realm) {
+      let rebanho = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+      let vacas = rebanho.vacas;
+      vacas.forEach((vaca) => {
+        if (vaca.reproducao.length > 0) {
+          console.log("entrei");
+          let idVaca = vaca._id;
+          let cio = vaca.reproducao[0].cio;
+          let cobertura = vaca.reproducao[0].cobertura;
+          let prenhez = vaca.reproducao[0].prenhez;
+          let ultimoCio = vaca.reproducao[0].dataCio;
+          let ultimaCobertura = vaca.reproducao[0].dataCobertura;
+          let dataUltimoParto = vaca.reproducao[0].dataParto;
+          endCio(
+            idVaca,
+            cio,
+            cobertura,
+            prenhez,
+            ultimoCio,
+            ultimaCobertura,
+            dataUltimoParto
+          );
+          possivelPrenhez(
+            idVaca,
+            cio,
+            cobertura,
+            prenhez,
+            ultimoCio,
+            ultimaCobertura,
+            dataUltimoParto
+          );
+        }
+        function possivelPrenhez(
+          idVaca,
+          cio,
+          cobertura,
+          prenhez,
+          ultimoCio,
+          ultimaCobertura,
+          dataUltimoParto
+        ) {
+          if (!cio && cobertura && !prenhez) {
+            if (ultimoCio.addDays(21) < new Date()) {
+              console.log("rodei prenh");
+              let prenhez = true;
+              let dataCio = ultimoCio;
+              let dataParto = dataUltimoParto;
+              let dataCobertura = ultimaCobertura;
+              UpdateInfoVaca(
+                idVaca,
+                cio,
+                cobertura,
+                prenhez,
+                dataCio,
+                dataParto,
+                dataCobertura
+              );
+            }
+          }
+        }
+
+        function endCio(
+          idVaca,
+          cio,
+          cobertura,
+          prenhez,
+          ultimoCio,
+          ultimaCobertura,
+          dataUltimoParto
+        ) {
+          if (cio && ultimoCio.addDays(1) < new Date()) {
+            console.log("rodei cio");
+            let cio = false;
+            let dataCio = ultimoCio;
+            let dataParto = dataUltimoParto;
+            let dataCobertura = ultimaCobertura;
+            UpdateInfoVaca(
+              idVaca,
+              cio,
+              cobertura,
+              prenhez,
+              dataCio,
+              dataParto,
+              dataCobertura
+            );possivelPrenhez(
+              idVaca,
+              cio,
+              cobertura,
+              prenhez,
+              ultimoCio,
+              ultimaCobertura,
+              dataUltimoParto
+            );
+          }
+        }
+
+        async function UpdateInfoVaca(
+          idVaca,
+          cio,
+          cobertura,
+          prenhez,
+          dataCio,
+          dataParto,
+          dataCobertura
+        ) {
+          if (realm) {
+            realm.write(() => {
+              let updateVaca = realm.objectForPrimaryKey("VacasSchema", idVaca);
+              updateVaca.reproducao = [
+                {
+                  _id: uuid.v4(),
+                  cio: cio,
+                  cobertura: cobertura,
+                  prenhez: prenhez,
+                  dataCio: dataCio,
+                  dataCobertura: dataCobertura,
+                  dataParto: dataParto,
+                },
+              ];
+            });
+          }
+        }
+      });
+    }
+  }, [realm]);
   function backAndClear() {
     RebanhoID("");
     PrecoCF(0);
