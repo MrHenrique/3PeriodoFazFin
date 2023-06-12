@@ -1,8 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import {
-  Dimensions,
   View,
-  SafeAreaView,
+  Alert,
   Keyboard,
   Text,
   ImageBackground,
@@ -13,25 +12,184 @@ import { scale } from "react-native-size-matters";
 import { TextInput } from "react-native-paper";
 import styles from "./styles";
 import { AuthContext } from "../../../contexts/auth";
-import { Feather } from "@expo/vector-icons";
 import { useMainContext } from "../../../contexts/RealmContext";
-import { Colors, Buttons } from "../../../styles";
+import { Colors } from "../../../styles";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
 const imgbg1 = "../../../../assets/fazfinwhiteletter.png";
 
-function PageListavacas({ navigation, route }) {
+function PageListavacas({ navigation }) {
   const [searchText, setSearchText] = useState("");
   const { rebID, IdVaca } = useContext(AuthContext);
-  const { precoCFReb, GrafVaca, ListaReceitaVacas } = useContext(AuthContext);
-  const [gastoReb, setGastoReb] = useState(0);
-  const [resultL, setResultL] = useState(0);
   const [listaVaca, setListaVaca] = useState([]);
   const [lista, setLista] = useState(listaVaca);
   const [keyboardStatus, setkeyboardStatus] = useState(false);
   const realm = useMainContext();
+  useEffect(() => {
+    Date.prototype.addDays = function (days) {
+      var date = new Date(this.valueOf());
+      date.setDate(date.getDate() + days);
+      return date;
+    };
+    if (realm) {
+      let rebanho = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+      let vacas = rebanho.vacas;
+      let notificacaoArray = [];
+      vacas.forEach((vaca) => {
+        if (vaca.reproducao.length > 0) {
+          let notificacao = vaca.reproducao[0].notificacao;
+          let idVaca = vaca._id;
+          let cio = vaca.reproducao[0].cio;
+          let cobertura = vaca.reproducao[0].cobertura;
+          let prenhez = vaca.reproducao[0].prenhez;
+          let ultimoCio = vaca.reproducao[0].dataCio;
+          let ultimaCobertura = vaca.reproducao[0].dataCobertura;
+          let dataUltimoParto = vaca.reproducao[0].dataParto;
 
+          if (!cio && !prenhez && notificacao === true) {
+            if (ultimoCio) {
+              if (
+                ultimoCio.addDays(21) > new Date().addDays(-1) &&
+                ultimoCio.addDays(21) < new Date().addDays(+1)
+              ) {
+                notificacaoArray.push({
+                  CioPartoHoje: vaca.nomeVaca,
+                });
+              }
+            }
+          }
+          if (prenhez && notificacao === true) {
+            if (
+              ultimaCobertura.addDays(285) > new Date().addDays(-1) &&
+              ultimaCobertura.addDays(285) < new Date().addDays(+1)
+            ) {
+              notificacaoArray.push({
+                CioPartoHoje: vaca.nomeVaca,
+              });
+            }
+          }
+          endCio(
+            idVaca,
+            cio,
+            cobertura,
+            prenhez,
+            ultimoCio,
+            ultimaCobertura,
+            dataUltimoParto
+          );
+          possivelPrenhez(
+            idVaca,
+            cio,
+            cobertura,
+            prenhez,
+            ultimoCio,
+            ultimaCobertura,
+            dataUltimoParto
+          );
+        }
+        function possivelPrenhez(
+          idVaca,
+          cio,
+          cobertura,
+          prenhez,
+          ultimoCio,
+          ultimaCobertura,
+          dataUltimoParto
+        ) {
+          if (!cio && cobertura && !prenhez) {
+            if (ultimoCio.addDays(21) < new Date()) {
+              let prenhez = true;
+              let dataCio = ultimoCio;
+              let dataParto = dataUltimoParto;
+              let dataCobertura = ultimaCobertura;
+              UpdateInfoVaca(
+                idVaca,
+                cio,
+                cobertura,
+                prenhez,
+                dataCio,
+                dataParto,
+                dataCobertura
+              );
+            }
+          }
+        }
+
+        function endCio(
+          idVaca,
+          cio,
+          cobertura,
+          prenhez,
+          ultimoCio,
+          ultimaCobertura,
+          dataUltimoParto
+        ) {
+          if (cio && ultimoCio.addDays(1) < new Date()) {
+            let cio = false;
+            let dataCio = ultimoCio;
+            let dataParto = dataUltimoParto;
+            let dataCobertura = ultimaCobertura;
+            UpdateInfoVaca(
+              idVaca,
+              cio,
+              cobertura,
+              prenhez,
+              dataCio,
+              dataParto,
+              dataCobertura
+            );
+            possivelPrenhez(
+              idVaca,
+              cio,
+              cobertura,
+              prenhez,
+              ultimoCio,
+              ultimaCobertura,
+              dataUltimoParto
+            );
+          }
+        }
+
+        async function UpdateInfoVaca(
+          idVaca,
+          cio,
+          cobertura,
+          prenhez,
+          dataCio,
+          dataParto,
+          dataCobertura
+        ) {
+          if (realm) {
+            realm.write(() => {
+              let updateVaca = realm.objectForPrimaryKey("VacasSchema", idVaca);
+              updateVaca.reproducao = [
+                {
+                  _id: uuid.v4(),
+                  cio: cio,
+                  cobertura: cobertura,
+                  prenhez: prenhez,
+                  dataCio: dataCio,
+                  dataCobertura: dataCobertura,
+                  dataParto: dataParto,
+                },
+              ];
+            });
+          }
+        }
+      });
+      const nameListCioParto = notificacaoArray.map(
+        (item) => item.CioPartoHoje
+      );
+      const nameStringCioParto = nameListCioParto.join(",");
+      if (nameStringCioParto.length > 0) {
+        Alert.alert(
+          "Reprodução",
+          `Vacas com provável cio ou parto hoje:\n${nameStringCioParto}`
+        );
+      }
+    }
+  }, [realm]);
   //buscar banco
   useEffect(() => {
     if (realm) {

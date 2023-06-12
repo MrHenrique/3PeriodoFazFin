@@ -25,6 +25,7 @@ function Vacas({ navigation }) {
   const [nascimentoVaca, setNascimentoVaca] = useState();
   const [isNascimentoVacaValid, setIsNascimentoVacaValid] = useState(true);
   const [descVaca, setDescVaca] = useState();
+
   // update bd
   async function UpdateInfoVaca() {
     if (realm) {

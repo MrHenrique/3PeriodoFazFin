@@ -190,6 +190,7 @@ export const ReproducaoSchema = {
     dataCobertura: "date?",
     dataParto: "date?",
     partos: "dataParto[]",
+    notificacao: "bool?",
     assignee: {
       type: "linkingObjects",
       objectType: "VacasSchema",

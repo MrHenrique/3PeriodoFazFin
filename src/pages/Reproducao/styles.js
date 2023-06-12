@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   botaoData: {
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.darkgreen,
-    marginBottom: verticalScale(5),
+    margin: verticalScale(5),
     elevation: 5,
   },
   txtInfoCategoria: {
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   containervoltar: {
-    flex: 0.2,
+    flex: 0.1   ,
     flexDirection: "column",
   },
   container: {
