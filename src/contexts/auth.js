@@ -69,9 +69,13 @@ function AuthProvider({ children }) {
   function ListaFiltrada(listaFiltrada) {
     setListaFiltrada(listaFiltrada);
   }
-  const [listaReceitaVacas, setListaReceitaVacas] = useState([]);
-  function ListaReceitaVacas(receitaVacas) {
-    setListaReceitaVacas(receitaVacas);
+  const [listaReceitasVaca, setListaReceitasVaca] = useState([]);
+  function ListaReceitasVaca(receitasVaca) {
+    setListaReceitasVaca(receitasVaca);
+  }
+  const [listaDespesasVaca, setListaDespesasVaca] = useState([]);
+  function ListaDespesasVaca(despesasVaca) {
+    setListaDespesasVaca(despesasVaca);
   }
   const [idEstoqueSaida, SetIdEstoqueSaida] = useState();
   function IdEstoqueSaida(dataID) {
@@ -112,8 +116,10 @@ function AuthProvider({ children }) {
         NomeEstoqueEntrada,
         Genero,
         genero,
-        ListaReceitaVacas,
-        listaReceitaVacas,
+        ListaReceitasVaca,
+        listaReceitasVaca,
+        ListaDespesasVaca,
+        listaDespesasVaca,
         ListaFiltrada,
         listaFiltrada,
         FiltroMes,

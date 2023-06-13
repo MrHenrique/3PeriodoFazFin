@@ -6,7 +6,8 @@ import { Modal, Text, TouchableOpacity, View, FlatList } from "react-native";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 function Graficodetalhesvacas() {
-  const { grafVaca, listaReceitaVacas } = useContext(AuthContext);
+  const { grafVaca, listaReceitasVaca, listaDespesasVaca } =
+    useContext(AuthContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible1, setModalVisible1] = useState(false);
   const [mesSelecionado, setMesSelecionado] = useState(0);
@@ -14,6 +15,20 @@ function Graficodetalhesvacas() {
 
   const resultado = Number(grafVaca);
   const receitasPorVaca = {
+    0: 0, //Janeiro
+    1: 0, //Fevereiro
+    2: 0, //Marco
+    3: 0, //Abril
+    4: 0, //Maio
+    5: 0, //Junho
+    6: 0, //Julho
+    7: 0, //Agosto
+    8: 0, //Setembro
+    9: 0, //Outubro
+    10: 0, //Novembro
+    11: 0, //Dezembro
+  };
+  const despesasPorVaca = {
     0: 0, //Janeiro
     1: 0, //Fevereiro
     2: 0, //Marco
@@ -45,22 +60,37 @@ function Graficodetalhesvacas() {
     return meses[mes];
   }
 
-  //Percorre todos as produçoes de leite
-  listaReceitaVacas.forEach((item) => {
-    const valor = item.prodL * item.precoL; //Pega a produção e multiplica pelo valor
+  //Percorre todos as preceitas
+  listaReceitasVaca.forEach((item) => {
+    const valor = item.prodL * item.precoL;
     const mes = item.createdAt.getMonth(); // cria uma variavel que se iguala ao mes de criação do item
 
     receitasPorVaca[mes] += valor; //Soma todos os valores do mês
   });
+  //Percorre todos as despesas
+  listaDespesasVaca.forEach((item) => {
+    const valor = item.qtdProd * item.valorProd;
+    const mes = item.createdAt.getMonth(); // cria uma variavel que se iguala ao mes de criação do item
 
-  //Pega todos os os valores por mês e joga no array (valores)
-  const valores = [];
+    despesasPorVaca[mes] += valor; //Soma todos os valores do mês
+  });
+
+  /*
+  //Pega todos os os valores por mês e joga no array (receitas)
+  const receitas = [];
   for (let i = 0; i < 12; i++) {
-    valores.push(receitasPorVaca[i]);
+    receitas.push(receitasPorVaca[i]);
   }
 
+  //Pega todos os os valores por mês e joga no array (despesas)
+  const despesas = [];
+  for (let i = 0; i < 12; i++) {
+    despesas.push(despesasPorVaca[i]);
+  }
+  */
+
   //Cria um novo array com as receitas do mes selecionado quando clicado em um ponto do grafico.
-  const receitasDoMesSelecionado = listaReceitaVacas.filter((item) => {
+  const receitasDoMesSelecionado = listaReceitasVaca.filter((item) => {
     const dataCriacao = new Date(item.createdAt);
     return dataCriacao.getMonth() === mesSelecionado;
   });
@@ -95,11 +125,17 @@ function Graficodetalhesvacas() {
       .map((mes) => getNomeDoMes(parseInt(mes))), //retorna o nome do mês referente a chave do (receitasPorVaca),
     datasets: [
       {
-        data: valores,
+        data: Object.values(receitasPorVaca),
+        color: (opacity = 1) => `rgba(0, 255, 255, ${opacity})`, // cor da primeira linha 
+        strokeWidth: 3,
+      },
+      {
+        data: Object.values(despesasPorVaca),
+        color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`, // cor da segunda linha 
         strokeWidth: 3,
       },
     ],
-    legend: ["LUCRO DO ANIMAL"],
+    legend: ["Receitas", "Despesas"],
   };
   const chartConfig = {
     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
