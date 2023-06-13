@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
   //STYLES COMUM
   lista: {
-    flex: 1,
+    flex: 4,
     // backgroundColor: "red",
   },
   containerfiltro: {
@@ -320,9 +320,9 @@ const styles = StyleSheet.create({
     marginHorizontal: scale(5),
   },
   textoFiltro: {
+    ...Fonts.txtMedium,
     color: Colors.black,
     textAlign: "center",
-    fontSize: scale(14),
   },
   containerChip: {
     flexDirection: "row",
@@ -360,6 +360,16 @@ const styles = StyleSheet.create({
     marginRight: scale(5),
     marginBottom: scale(5),
     padding: scale(1),
+  },
+  chipFiltroReceitaFiltro: {
+    backgroundColor: Colors.green,
+    // paddingHorizontal: scale(15),
+    // paddingVertical: scale(3),
+    // height: verticalScale(40),
+    // width: scale(100),
+    marginHorizontal: scale(90),
+    flex: 1,
+    justifyContent: "center",
   },
 });
 export default styles;
