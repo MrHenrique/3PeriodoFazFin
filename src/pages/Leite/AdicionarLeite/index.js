@@ -121,7 +121,7 @@ function AdicionarLeite({ navigation }) {
                   precoL: parsedValue,
                   prodL: parsedValueProd / nVacas,
                   description,
-                  createdAt: new Date(),
+                  createdAt: new Date(date),
                 });
                 vaca.receitas.push(createdLeite);
               });
