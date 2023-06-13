@@ -465,6 +465,7 @@ export default function SaidaEstoque({ navigation }) {
           style={styles.containergeral}
         >
           <ScrollView
+            keyboardShouldPersistTaps="always"
             style={styles.scrollcontainer}
             contentContainerStyle={StyleScrollViewContainer()}
           >

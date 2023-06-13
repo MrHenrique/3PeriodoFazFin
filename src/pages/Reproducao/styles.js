@@ -7,13 +7,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   botaoData: {
+    marginTop: verticalScale(5),
     ...Buttons.btnLargeRounded,
+    width: scale(240),
     backgroundColor: Colors.darkgreen,
-    margin: verticalScale(5),
     elevation: 5,
   },
   txtInfoCategoria: {
-    ...Fonts.txtSmall,
+    ...Fonts.txtMedium,
     color: Colors.white,
   },
   containerRow: {
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   txtCobertura: {
-    ...Fonts.txtMediumBold,
+    ...Fonts.txtLargeBold,
     color: Colors.white,
   },
   containerCategoria: {
@@ -43,8 +44,9 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   containervoltar: {
-    flex: 0.1   ,
+    flex: 0.1,
     flexDirection: "column",
+    marginTop: verticalScale(15),
   },
   container: {
     flex: 1,
@@ -143,11 +145,8 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   tituloinfo: {
+    ...Fonts.txtLargeBold,
     color: "white",
-    fontSize: verticalScale(20),
-    marginBottom: verticalScale(10),
-    textAlign: "center",
-    fontWeight: "bold",
   },
   detalhe: {
     fontSize: verticalScale(20),

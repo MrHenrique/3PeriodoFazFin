@@ -9,7 +9,14 @@ import {
   ImageBackground,
   Alert,
 } from "react-native";
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import Animated, {
+  BounceInUp,
+  FadeIn,
+  FadeOut,
+  FlipInEasyX,
+  PinwheelIn,
+  PinwheelOut,
+} from "react-native-reanimated";
 import { AuthContext } from "../../../contexts/auth";
 import Modal from "react-native-modal";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -21,6 +28,7 @@ import {
   MD3Colors,
   IconButton,
   HelperText,
+  Button,
 } from "react-native-paper";
 import { Colors } from "../../../styles";
 import { printToFileAsync } from "expo-print";
@@ -269,7 +277,7 @@ function EstoqueGeral({ navigation }) {
       dataEstoque.entradaEstoque.sorted("createdAt").addListener((values) => {
         setListaEstoqueEntrada([...values]);
       });
-      let alertCheck = dataEstoque.atualEstoque
+      let alertCheck = dataEstoque.atualEstoque;
       checkAlert(alertCheck);
     }
   }, [realm]);
@@ -497,6 +505,14 @@ function EstoqueGeral({ navigation }) {
         );
       }
     }
+    function alertButtonAction(item) {
+      if (!item.alert[0].alertOn === true) {
+        setModalAlert(true);
+        setAlertID(item._id);
+      } else {
+        turnOffAlert(item._id);
+      }
+    }
     return (
       <View style={styles.containerlist}>
         <TouchableOpacity
@@ -524,10 +540,38 @@ function EstoqueGeral({ navigation }) {
                 style={shouldShow ? styles.iconArrowvirado : styles.iconArrow}
               />
             </View>
+            {shouldShow ? (
+              <Animated.View
+                entering={FlipInEasyX.delay(100)}
+                style={{ position: "absolute", zindex: 10, margin: scale(5) }}
+              >
+                <Button
+                  mode="elevated"
+                  textColor="black"
+                  labelStyle={{ fontSize: scale(13) }}
+                  buttonColor={
+                    !item.alert[0].alertOn === true
+                      ? Colors.neongreen
+                      : MD3Colors.error60
+                  }
+                  icon={
+                    !item.alert[0].alertOn === true
+                      ? "bell-check-outline"
+                      : "bell-cancel-outline"
+                  }
+                  style={{ position: "absolute", zindex: 10, margin: scale(5) }}
+                  onPress={() => alertButtonAction(item)}
+                >
+                  {!item.alert[0].alertOn === true
+                    ? "Criar Alerta"
+                    : "Desligar Alerta"}
+                </Button>
+              </Animated.View>
+            ) : null}
           </ImageBackground>
         </TouchableOpacity>
         {shouldShow ? (
-          <ScrollView style={styles.containerItems}>
+          <ScrollView style={styles.containerItems} fadingEdgeLength={60}>
             <View style={styles.containerlist}>
               <View style={[styles.ListItem]}>
                 <Text style={styles.fontsubtitulo}>Categoria do item:</Text>
@@ -572,20 +616,22 @@ function EstoqueGeral({ navigation }) {
             )}
             <Modal
               coverScreen={true}
-              backdropColor="black"
-              backdropOpacity={0.5}
-              visible={modalAlert}
+              hasBackdrop={true}
+              isVisible={modalAlert}
               animationType="slide"
               transparent={true}
-              statusBarTranslucent
+              backdropColor="black"
+              backdropOpacity={0.5}
+              // statusBarTranslucent
             >
-              <View style={styles.modalContainer}>
-                <View style={styles.containergeral}>
+              <View style={styles.modalContainerAlert}>
+                <View style={styles.containerGeralAlert}>
                   <View style={styles.containerinfos}>
                     <TextInput
                       label="Quantidade mínima para alerta"
+                      placeholder="ex: 200"
                       style={styles.textInput}
-                      placeholderTextColor={Colors.grey}
+                      placeholderTextColor={Colors.darkgrey}
                       textColor={Colors.black}
                       activeUnderlineColor={Colors.green}
                       underlineColor={Colors.blue}
@@ -608,22 +654,37 @@ function EstoqueGeral({ navigation }) {
                     >
                       Digite um valor.
                     </HelperText>
-                  </View>
-                  <View style={styles.modalContainerBotoes}>
-                    <TouchableOpacity
-                      style={styles.botaopressM}
-                      onPress={() => {
-                        validCheck();
-                      }}
-                    >
-                      <Text style={styles.textovoltar}>Confirmar</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.botaopressM}
-                      onPress={() => setModalAlert(false)}
-                    >
-                      <Text style={styles.textovoltar}>Voltar</Text>
-                    </TouchableOpacity>
+
+                    <View style={styles.modalContainerBotoes}>
+                      <TouchableOpacity
+                        style={styles.botaopressAlert}
+                        onPress={() => {
+                          validCheck();
+                        }}
+                      >
+                        <View style={{ flex: 1, justifyContent: "center" }}>
+                          <Text style={styles.txtAlertBtn}>Confirmar</Text>
+                        </View>
+                        <MaterialIcons
+                          name="check"
+                          size={scale(24)}
+                          color="white"
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.botaopressAlert}
+                        onPress={() => setModalAlert(false)}
+                      >
+                        <View style={{ flex: 1, justifyContent: "center" }}>
+                          <Text style={styles.txtAlertBtn}>Voltar</Text>
+                        </View>
+                        <MaterialIcons
+                          name="arrow-back"
+                          size={scale(24)}
+                          color="white"
+                        />
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
               </View>
@@ -646,30 +707,6 @@ function EstoqueGeral({ navigation }) {
                 <Text style={styles.fontcontainerlistitem}>
                   {item.alert[0].alertOn === true ? "Ligado" : "Desligado"}
                 </Text>
-              </View>
-            </View>
-            <View style={styles.containerlist}>
-              <View style={[styles.ListItem]}>
-                {item.alert[0].alertOn === true ? (
-                  <TouchableOpacity
-                    style={styles.botaorelatorioproduto}
-                    onPress={() => {
-                      turnOffAlert(item._id);
-                    }}
-                  >
-                    <Text>Desligar Alerta</Text>
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    style={styles.botaorelatorioproduto}
-                    onPress={() => {
-                      setModalAlert(true);
-                      setAlertID(item._id);
-                    }}
-                  >
-                    <Text>Criar Alerta</Text>
-                  </TouchableOpacity>
-                )}
               </View>
             </View>
             <View style={styles.containerlist}>
@@ -762,6 +799,7 @@ function EstoqueGeral({ navigation }) {
             {shouldShowDetalhes ? (
               <Animated.View entering={FadeIn} exiting={FadeOut}>
                 <FlatList
+                  fadingEdgeLength={70}
                   data={listaEstoque}
                   renderItem={renderItemEstoque}
                   keyExtractor={(item) => item._id}
@@ -777,6 +815,7 @@ function EstoqueGeral({ navigation }) {
                 style={styles.containergeral}
               >
                 <FlatList
+                  fadingEdgeLength={70}
                   data={listaEstoqueEntrada}
                   renderItem={renderItemEntrada}
                   keyExtractor={(item) => item._id}

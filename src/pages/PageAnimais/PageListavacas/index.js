@@ -363,6 +363,7 @@ function PageListavacas({ navigation }) {
       >
         <View style={styles.containerLista}>
           <FlatList
+            fadingEdgeLength={70}
             data={lista}
             keyExtractor={(item) => item._id}
             maxToRenderPerBatch={7}

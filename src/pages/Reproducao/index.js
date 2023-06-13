@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View, Text, TouchableOpacity, ScrollView, Alert } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { scale } from "react-native-size-matters";
+import { scale, verticalScale } from "react-native-size-matters";
 import uuid from "react-native-uuid";
 import styles from "./styles";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { AuthContext } from "../../contexts/auth";
 import { useMainContext } from "../../contexts/RealmContext";
+import { Button, Divider, IconButton, MD3Colors } from "react-native-paper";
+import { Colors } from "../../styles";
 const Reproducao = ({ navigation }) => {
   const { idVaca } = useContext(AuthContext);
   const realm = useMainContext();
@@ -215,43 +217,51 @@ const Reproducao = ({ navigation }) => {
       setRefresh(true);
     }
   }
+  function alertButtonAction() {
+    if (notificacao === false) {
+      let notificacao = true;
+      createAlert(notificacao);
+    } else if (notificacao === true) {
+      let notificacao = false;
+      createAlert(notificacao);
+    }
+  }
   return (
     <View style={styles.container}>
       <View style={styles.containergeral}>
-        <Text style={styles.txtTitulo}>
-          Alertas
-          {notificacao ? (
-            <TouchableOpacity
-              style={styles.botaorelatorioproduto}
-              onPress={() => {
-                let notificacao = false;
-                createAlert(notificacao);
-              }}
-            >
-              <Text> Desativar Alertas</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={styles.botaorelatorioproduto}
-              onPress={() => {
-                let notificacao = true;
-                createAlert(notificacao);
-              }}
-            >
-              <Text> Ativar Alertas</Text>
-            </TouchableOpacity>
-          )}
-        </Text>
+        <Button
+          mode="elevated"
+          textColor="black"
+          labelStyle={{ fontSize: scale(13) }}
+          buttonColor={
+            !notificacao === true ? Colors.neongreen : MD3Colors.error60
+          }
+          icon={
+            !notificacao === true ? "bell-check-outline" : "bell-cancel-outline"
+          }
+          style={{ zindex: 10, margin: scale(5), marginHorizontal: scale(25) }}
+          onPress={() => alertButtonAction()}
+        >
+          {!notificacao === true ? "Criar Alerta" : "Desligar Alerta"}
+        </Button>
         {/* CATEGORIA DE REPRODUÇÃO */}
         {/* CIO */}
-        <ScrollView style={styles.containerScrollView}>
+        <ScrollView style={styles.containerScrollView} fadingEdgeLength={100}>
           <View style={styles.containerCategoria}>
             <View style={styles.containerTituloCategoria}>
               <Text style={styles.txtCobertura}>Cio</Text>
               {cio ? (
-                <AntDesign name="check" size={scale(25)} color="white" />
+                <AntDesign
+                  name="check"
+                  size={scale(25)}
+                  color={Colors.neongreen}
+                />
               ) : (
-                <AntDesign name="close" size={scale(25)} color="white" />
+                <AntDesign
+                  name="close"
+                  size={scale(25)}
+                  color={MD3Colors.error60}
+                />
               )}
             </View>
             <View>
@@ -266,19 +276,28 @@ const Reproducao = ({ navigation }) => {
                 <Text style={styles.txtInfoCategoria}>{nextCio()}</Text>
               </View>
               <View>
+                <Divider bold="true" style={{ marginVertical: scale(4) }} />
                 <Text style={styles.txtInfoCategoria}>Data selecionada</Text>
                 <View
                   style={{
                     flexDirection: "row",
                     justifyContent: "space-evenly",
+                    backgroundColor: Colors.darkgreen,
+                    marginHorizontal: scale(60),
+                    borderRadius: 15,
+                    padding: verticalScale(3),
                   }}
                 >
                   <Text style={styles.txtInfoCategoria}>
                     {dateOrHifen(dataCio)}
                   </Text>
-                  <TouchableOpacity onPress={() => datePickerCio()}>
-                    <AntDesign name="calendar" size={scale(16)} color="white" />
-                  </TouchableOpacity>
+                  <IconButton
+                    onPress={() => datePickerCio()}
+                    icon="calendar"
+                    iconColor="white"
+                    containerColor={Colors.green}
+                    size={scale(16)}
+                  />
                 </View>
                 <TouchableOpacity
                   style={styles.botaoData}
@@ -301,9 +320,17 @@ const Reproducao = ({ navigation }) => {
             <View style={styles.containerTituloCategoria}>
               <Text style={styles.txtCobertura}>Cobertura</Text>
               {cobertura ? (
-                <AntDesign name="check" size={scale(25)} color="white" />
+                <AntDesign
+                  name="check"
+                  size={scale(25)}
+                  color={Colors.neongreen}
+                />
               ) : (
-                <AntDesign name="close" size={scale(25)} color="white" />
+                <AntDesign
+                  name="close"
+                  size={scale(25)}
+                  color={MD3Colors.error60}
+                />
               )}
             </View>
             <View>
@@ -314,19 +341,28 @@ const Reproducao = ({ navigation }) => {
                 </Text>
               </View>
               <View>
+                <Divider bold="true" style={{ marginVertical: scale(4) }} />
                 <Text style={styles.txtInfoCategoria}>Data selecionada</Text>
                 <View
                   style={{
                     flexDirection: "row",
                     justifyContent: "space-evenly",
+                    backgroundColor: Colors.darkgreen,
+                    marginHorizontal: scale(60),
+                    borderRadius: 15,
+                    padding: verticalScale(3),
                   }}
                 >
                   <Text style={styles.txtInfoCategoria}>
                     {dateOrHifen(dataCobertura)}
                   </Text>
-                  <TouchableOpacity onPress={() => datePickerCobertura()}>
-                    <AntDesign name="calendar" size={scale(16)} color="white" />
-                  </TouchableOpacity>
+                  <IconButton
+                    onPress={() => datePickerCobertura()}
+                    icon="calendar"
+                    iconColor="white"
+                    containerColor={Colors.green}
+                    size={scale(16)}
+                  />
                 </View>
                 <TouchableOpacity
                   style={styles.botaoData}
@@ -348,15 +384,27 @@ const Reproducao = ({ navigation }) => {
             <View style={styles.containerTituloCategoria}>
               <Text style={styles.txtCobertura}>Possível Prenhez</Text>
               {prenhez ? (
-                <AntDesign name="check" size={scale(25)} color="white" />
+                <AntDesign
+                  name="check"
+                  size={scale(25)}
+                  color={Colors.neongreen}
+                />
               ) : (
-                <AntDesign name="close" size={scale(25)} color="white" />
+                <AntDesign
+                  name="close"
+                  size={scale(25)}
+                  color={MD3Colors.error60}
+                />
               )}
             </View>
             <View>
               <View style={styles.containerRow}>
+                <Text style={styles.txtInfoCategoria}>Número de crias:</Text>
+                <Text style={styles.txtInfoCategoria}>{nCrias}</Text>
+              </View>
+              <View style={styles.containerRow}>
                 <Text style={styles.txtInfoCategoria}>
-                  Número de crias: {nCrias} Último parto:
+                  Último parto:
                 </Text>
                 <Text style={styles.txtInfoCategoria}>
                   {dateOrHifen(dataUltimoParto)}
@@ -369,19 +417,28 @@ const Reproducao = ({ navigation }) => {
                 <Text style={styles.txtInfoCategoria}>{nextParto()}</Text>
               </View>
               <View>
+                <Divider bold="true" style={{ marginVertical: scale(4) }} />
                 <Text style={styles.txtInfoCategoria}>Data selecionada</Text>
                 <View
                   style={{
                     flexDirection: "row",
                     justifyContent: "space-evenly",
+                    backgroundColor: Colors.darkgreen,
+                    marginHorizontal: scale(60),
+                    borderRadius: 15,
+                    padding: verticalScale(3),
                   }}
                 >
                   <Text style={styles.txtInfoCategoria}>
                     {dateOrHifen(dataParto)}
                   </Text>
-                  <TouchableOpacity onPress={() => datePickerParto()}>
-                    <AntDesign name="calendar" size={scale(16)} color="white" />
-                  </TouchableOpacity>
+                  <IconButton
+                    onPress={() => datePickerParto()}
+                    icon="calendar"
+                    iconColor="white"
+                    containerColor={Colors.green}
+                    size={scale(16)}
+                  />
                 </View>
                 <TouchableOpacity
                   style={styles.botaoData}

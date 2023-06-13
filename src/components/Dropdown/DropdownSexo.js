@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect,useCallback  } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { AuthContext } from "../../contexts/auth";
@@ -16,16 +16,6 @@ const DropdownSexo = () => {
     { label: "Macho", value: 0 },
   ];
 
-  const renderLabel = () => {
-    if (value || isFocus) {
-      return (
-        <Text style={[styles.label, isFocus && { color: Colors.white }]}>
-          Gênero
-        </Text>
-      );
-    }
-    return null;
-  };
   useEffect(() => {
     MachoFemea(value);
   }, [value]);
@@ -34,7 +24,6 @@ const DropdownSexo = () => {
   }, [genero]);
   return (
     <View style={styles.container}>
-      {renderLabel()}
       <Dropdown
         style={[styles.dropdown, isFocus && { borderColor: "black" }]}
         placeholderStyle={styles.placeholderStyle}
@@ -54,7 +43,7 @@ const DropdownSexo = () => {
         labelField="label"
         statusBarIsTranslucent={true}
         valueField="value"
-        placeholder={"Clique aqui"}
+        placeholder={"Gênero do Animal"}
         value={value}
         onFocus={() => setIsFocus(true)}
         onChange={(item) => {
