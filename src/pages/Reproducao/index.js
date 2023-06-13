@@ -33,6 +33,7 @@ const Reproducao = ({ navigation }) => {
   const [nCrias, setNcrias] = useState(0);
   const [idRepr, setIdRepr] = useState("");
   const [refresh, setRefresh] = useState(false);
+  const [click, setClick] = useState(false);
   const [isDatePickerCioVisible, setIsDatePickerCioVisible] = useState(false);
   const [isDatePickerPartoVisible, setIsDatePickerPartoVisible] =
     useState(false);
@@ -167,12 +168,21 @@ const Reproducao = ({ navigation }) => {
     setCallFunction(callFunction + 1);
   }
   function handleParto() {
-    setCio(false);
-    setCobertura(false);
-    setPrenhez(false);
-    setDataCio(null);
-    setDataCobertura(null);
-    setCallFunction(callFunction + 1);
+    if ((cio || !cobertura || !prenhez) && !click) {
+      Alert.alert(
+        "Tem certeza que deseja confirmar parto?",
+        "Se sim, clique novamente em vaca pariu."
+      );
+      setClick(true);
+    } else {
+      setCio(false);
+      setCobertura(false);
+      setPrenhez(false);
+      setDataCio(null);
+      setDataCobertura(null);
+      setClick(false);
+      setCallFunction(callFunction + 1);
+    }
   }
   useEffect(() => {
     if (callFunction > 0) {
