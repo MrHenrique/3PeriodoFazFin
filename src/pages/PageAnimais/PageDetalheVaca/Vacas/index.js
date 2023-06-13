@@ -11,7 +11,7 @@ import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { scale } from "react-native-size-matters";
 
 function Vacas({ navigation }) {
-  const { idVaca, rebID, machoFemea, Genero } = useContext(AuthContext);
+  const { idVaca, rebID, machoFemea, Genero, ListaReceitasVaca, ListaDespesasVaca } = useContext(AuthContext);
   const realm = useMainContext();
   const [lista, setLista] = useState([]);
   const [listaVacas, setListaVacas] = useState([]);
@@ -57,6 +57,8 @@ function Vacas({ navigation }) {
       setDescVaca(dataVaca.descVaca);
       Genero(dataVaca.genero);
       dataVaca.addListener((values) => {
+        ListaReceitasVaca(values.receitas);
+        ListaDespesasVaca(values.despesas);
         setLista(values);
         setNomeVaca(values.nomeVaca);
         setBrincoVaca(values.brincoVaca);
