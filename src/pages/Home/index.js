@@ -1,10 +1,5 @@
-import React, { useState, useContext, useRef } from "react";
-import {
-  Text,
-  TouchableOpacity,
-  SafeAreaView,
-  View,
-} from "react-native";
+import React, { useState, useContext, useRef, useEffect } from "react";
+import { Text, TouchableOpacity, SafeAreaView, View } from "react-native";
 import { scale } from "react-native-size-matters";
 import Header from "../../components/Header";
 import PreviewFinanceiro from "../../components/PreviewFinanceiro";
@@ -14,8 +9,7 @@ import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
 
 function Home({ navigation }) {
-  const { RebanhoID, PrecoCF, PrecoLeite } =
-    useContext(AuthContext);
+  const { RebanhoID, PrecoCF, PrecoLeite } = useContext(AuthContext);
   const [Pos, setPos] = useState(0);
   const [PosText, setPosText] = useState("do Rebanho");
   const scrollRef = useRef();

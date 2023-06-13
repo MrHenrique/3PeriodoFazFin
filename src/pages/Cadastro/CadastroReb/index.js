@@ -44,6 +44,17 @@ function CadastroReb({ navigation }) {
           brincoVaca: (i + 1).toString(),
           genero: 1,
           receitas: [],
+          reproducao: [
+            {
+              _id: uuid.v4(),
+              cio: false,
+              cobertura: false,
+              prenhez: false,
+              dataCio: null,
+              dataCobertura: null,
+              dataParto: null,
+            },
+          ],
           descVaca: "",
           createdAt: new Date(),
         });

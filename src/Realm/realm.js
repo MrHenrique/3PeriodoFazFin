@@ -9,6 +9,8 @@ import {
   DespesaRebSchema,
   ReceitaRebSchema,
   AlertEstoqueSchema,
+  ReproducaoSchema,
+  dataParto,
 } from "../../src/Realm/Schemas/Schema";
 import Realm from "realm";
 
@@ -26,6 +28,8 @@ export const getRealm = async () =>
       DespesaRebSchema,
       ReceitaRebSchema,
       AlertEstoqueSchema,
+      ReproducaoSchema,
+      dataParto,
     ],
     schemaVersion: 1,
     deleteRealmIfMigrationNeeded: true,

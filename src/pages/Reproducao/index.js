@@ -1,149 +1,269 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { View, Text, TouchableOpacity, ScrollView, Alert } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { scale, verticalScale } from "react-native-size-matters";
+import { scale } from "react-native-size-matters";
+import uuid from "react-native-uuid";
 import styles from "./styles";
-import {
-  MaterialCommunityIcons,
-  MaterialIcons,
-  AntDesign,
-} from "@expo/vector-icons";
-
+import { MaterialIcons, AntDesign } from "@expo/vector-icons";
+import { AuthContext } from "../../contexts/auth";
+import { useMainContext } from "../../contexts/RealmContext";
 const Reproducao = ({ navigation }) => {
-  const [coverageDate, setCoverageDate] = useState(new Date());
-  const [creationDate, setCreationDate] = useState(new Date());
-  const [heatDate, setHeatDate] = useState(new Date());
-  const [date, setDate] = useState(new Date());
-  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
-  const [text, setText] = useState(
-    new Date().getDate().toString().padStart(2, "0") +
-      "/" +
-      (new Date().getMonth() + 1).toString().padStart(2, "0") +
-      "/" +
-      new Date().getFullYear().toString().padStart(2, "0")
-  );
-  const [newsDate, setNewsDate] = useState(new Date());
-  const [isNewsDatePickerVisible, setIsNewsDatePickerVisible] = useState(false);
-  const [newsText, setNewsText] = useState(
-    new Date().getDate().toString().padStart(2, "0") +
-      "/" +
-      (new Date().getMonth() + 1).toString().padStart(2, "0") +
-      "/" +
-      new Date().getFullYear().toString().padStart(2, "0")
-  );
-  const [newDate, setNewDate] = useState(new Date());
-  const [isNewDatePickerVisible, setIsNewDatePickerVisible] = useState(false);
-  const [newText, setNewText] = useState(
-    new Date().getDate().toString().padStart(2, "0") +
-      "/" +
-      (new Date().getMonth() + 1).toString().padStart(2, "0") +
-      "/" +
-      new Date().getFullYear().toString().padStart(2, "0")
-  );
-
-  const newShowDatePicker = () => {
-    setIsNewDatePickerVisible(true);
+  const { idVaca } = useContext(AuthContext);
+  const realm = useMainContext();
+  const [cobertura, setCobertura] = useState(false);
+  const [dataCobertura, setDataCobertura] = useState(new Date());
+  const [ultimaCobertura, setDataUltimaCobertura] = useState();
+  const [prenhez, setPrenhez] = useState(false);
+  const [dataParto, setDataParto] = useState(new Date());
+  const [dataUltimoParto, setDataUltimoParto] = useState();
+  const [cio, setCio] = useState(false);
+  const [dataCio, setDataCio] = useState(new Date());
+  const [ultimoCio, setUltimoCio] = useState();
+  const [partos, setPartos] = useState([]);
+  const [callFunction, setCallFunction] = useState(0);
+  const [notificacao, setNotificacao] = useState(false);
+  const [nCrias, setNcrias] = useState(0);
+  const [idRepr, setIdRepr] = useState("");
+  const [refresh, setRefresh] = useState(false);
+  const [isDatePickerCioVisible, setIsDatePickerCioVisible] = useState(false);
+  const [isDatePickerPartoVisible, setIsDatePickerPartoVisible] =
+    useState(false);
+  const [isDatePickerCoberturaVisible, setIsDatePickerCoberturaVisible] =
+    useState(false);
+  useEffect(() => {
+    if (realm) {
+      let dataVaca = realm.objectForPrimaryKey("VacasSchema", idVaca);
+      if (dataVaca.reproducao.length > 0) {
+        setIdRepr(dataVaca.reproducao[0]._id);
+        setCio(dataVaca.reproducao[0].cio);
+        setCobertura(dataVaca.reproducao[0].cobertura);
+        setPrenhez(dataVaca.reproducao[0].prenhez);
+        setUltimoCio(dataVaca.reproducao[0].dataCio);
+        setDataUltimaCobertura(dataVaca.reproducao[0].dataCobertura);
+        setDataUltimoParto(dataVaca.reproducao[0].dataParto);
+        setPartos(dataVaca.reproducao[0].partos);
+        if (dataVaca.reproducao[0].partos.length > 0) {
+          setNcrias(dataVaca.reproducao[0].partos.length);
+        }
+        if (
+          dataVaca.reproducao[0].notificacao === true ||
+          dataVaca.reproducao[0].notificacao === false
+        ) {
+          setNotificacao(dataVaca.reproducao[0].notificacao);
+        }
+      }
+      dataVaca.addListener((values) => {
+        if (values.reproducao.length > 0) {
+          setIdRepr(dataVaca.reproducao[0]._id);
+          setCio(values.reproducao[0].cio);
+          setCobertura(values.reproducao[0].cobertura);
+          setPrenhez(values.reproducao[0].prenhez);
+          setUltimoCio(values.reproducao[0].dataCio);
+          setDataUltimaCobertura(values.reproducao[0].dataCobertura);
+          setDataUltimoParto(values.reproducao[0].dataParto);
+          setPartos(dataVaca.reproducao[0].partos);
+          if (dataVaca.reproducao[0].partos.length > 0) {
+            setNcrias(dataVaca.reproducao[0].partos.length);
+          }
+          if (
+            dataVaca.reproducao[0].notificacao === true ||
+            dataVaca.reproducao[0].notificacao === false
+          ) {
+            setNotificacao(dataVaca.reproducao[0].notificacao);
+          }
+        }
+      });
+      if (refresh === true) {
+        setRefresh(false);
+      }
+    }
+  }, [realm, refresh]);
+  function dateOrHifen(date) {
+    if (date) {
+      return dateToText(date);
+    } else {
+      return "-";
+    }
+  }
+  Date.prototype.addDays = function (days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
   };
-  const newHideDatePicker = () => {
-    setIsNewDatePickerVisible(false);
-  };
-  const handleNewDateConfirm = (selectedDate) => {
-    let tempDate = new Date(selectedDate);
+  function nextCio() {
+    if (ultimoCio) {
+      return dateOrHifen(ultimoCio.addDays(21));
+    } else if (dataUltimoParto) {
+      return dateOrHifen(dataUltimoParto.addDays(65));
+    } else {
+      return "-";
+    }
+  }
+  function nextParto() {
+    if (prenhez) {
+      return dateOrHifen(ultimaCobertura.addDays(285));
+    } else {
+      return "-";
+    }
+  }
+  function dateToText(date) {
+    let tempDate = new Date(date);
     let fDate =
       tempDate.getDate().toString().padStart(2, "0") +
       "/" +
       (tempDate.getMonth() + 1).toString().padStart(2, "0") +
       "/" +
       tempDate.getFullYear().toString().padStart(2, "0");
-    setNewText(fDate);
-    setNewDate(selectedDate);
-    newHideDatePicker();
+    return fDate;
+  }
+  const datePickerCio = () => {
+    setIsDatePickerCioVisible(true);
   };
-
-  const showDatePicker = () => {
-    setIsDatePickerVisible(true);
+  const handleDateCio = (selectedDate) => {
+    setDataCio(selectedDate);
+    setIsDatePickerCioVisible(false);
   };
-  const hideDatePicker = () => {
-    setIsDatePickerVisible(false);
+  const datePickerCobertura = () => {
+    setIsDatePickerCoberturaVisible(true);
   };
-  const handleDateConfirm = (selectedDate) => {
-    let tempDate = new Date(selectedDate);
-    let fDate =
-      tempDate.getDate().toString().padStart(2, "0") +
-      "/" +
-      (tempDate.getMonth() + 1).toString().padStart(2, "0") +
-      "/" +
-      tempDate.getFullYear().toString().padStart(2, "0");
-    setText(fDate);
-    setDate(selectedDate);
-    hideDatePicker();
+  const handleDateCobertura = (selectedDate) => {
+    setDataCobertura(selectedDate);
+    setIsDatePickerCoberturaVisible(false);
   };
-  //Fim do código da data .....
-
-  const newsShowDatePicker = () => {
-    setIsNewsDatePickerVisibley(true);
+  const datePickerParto = () => {
+    setIsDatePickerPartoVisible(true);
   };
-  const newsHideDatePicker = () => {
-    setIsNewsDatePickerVisibley(false);
+  const handleDateParto = (selectedDate) => {
+    setDataParto(selectedDate);
+    setIsDatePickerPartoVisible(false);
   };
-  const newsHandleDateConfirm = (selectedDate) => {
-    let tempDate = new Date(selectedDate);
-    let fDate =
-      tempDate.getDate().toString().padStart(2, "0") +
-      "/" +
-      (tempDate.getMonth() + 1).toString().padStart(2, "0") +
-      "/" +
-      tempDate.getFullYear().toString().padStart(2, "0");
-    setNewsText(fDate);
-    setNewsDate(selectedDate);
-    newsHideDatePicker();
-  };
-  const handleCoverageDateChange = (selectedDate) => {
-    setCoverageDate(selectedDate);
-  };
-
-  const handleCreationDateChange = (selectedDate) => {
-    setCreationDate(selectedDate);
-  };
-
-  const handleHeatDateChange = (selectedDate) => {
-    setHeatDate(selectedDate);
-  };
-
-  const registerEvents = () => {
-    // Implementar a lógica para registrar os eventos aqui
-    console.log("Evento de Cobertura:", date);
-    console.log("Evento de Criação:", creationDate);
-    console.log("Evento de Cio:", heatDate);
-  };
-
+  function handleCio() {
+    setCio(true);
+    setCobertura(false);
+    setPrenhez(false);
+    setDataCobertura(ultimaCobertura);
+    setDataParto(dataUltimoParto);
+    setCallFunction(callFunction + 1);
+  }
+  function handleCobertura() {
+    setCio(true);
+    setCobertura(true);
+    setPrenhez(false);
+    setDataCio(dataCobertura);
+    setDataParto(dataUltimoParto);
+    setCallFunction(callFunction + 1);
+  }
+  function handleParto() {
+    setCio(false);
+    setCobertura(false);
+    setPrenhez(false);
+    setDataCio(null);
+    setDataCobertura(null);
+    setCallFunction(callFunction + 1);
+  }
+  useEffect(() => {
+    if (callFunction > 0) {
+      UpdateInfoVaca();
+    }
+  }, [callFunction]);
+  async function UpdateInfoVaca() {
+    if (realm) {
+      try {
+        let newParto = { _id: uuid.v4(), dataParto: dataParto };
+        let finalParto = [...partos, newParto];
+        realm.write(() => {
+          let updateVaca = realm.objectForPrimaryKey("VacasSchema", idVaca);
+          updateVaca.reproducao = [
+            {
+              _id: idRepr,
+              cio: cio,
+              cobertura: cobertura,
+              prenhez: prenhez,
+              dataCio: dataCio,
+              dataCobertura: dataCobertura,
+              dataParto: dataParto,
+              partos: finalParto,
+              notificacao: notificacao,
+            },
+          ];
+          setDataCio(new Date());
+          setDataCobertura(new Date());
+          setDataParto(new Date());
+          setCallFunction(0);
+        });
+      } catch (e) {
+        Alert.alert("Não foi possível modificar!", e.message);
+      }
+    }
+  }
+  function createAlert(notificacao) {
+    if (realm) {
+      try {
+        realm.write(() => {
+          let updateVaca = realm.create(
+            "ReproducaoSchema",
+            {
+              _id: idRepr,
+              notificacao: notificacao,
+            },
+            "modified"
+          );
+        });
+      } catch (e) {
+        Alert.alert("Não foi possível modificar!", e.message);
+      }
+      setRefresh(true);
+    }
+  }
   return (
     <View style={styles.container}>
       <View style={styles.containergeral}>
-        <Text style={styles.txtTitulo}>Registro de Eventos</Text>
+        <Text style={styles.txtTitulo}>
+          Alertas
+          {notificacao ? (
+            <TouchableOpacity
+              style={styles.botaorelatorioproduto}
+              onPress={() => {
+                let notificacao = false;
+                createAlert(notificacao);
+              }}
+            >
+              <Text> Desativar Alertas</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.botaorelatorioproduto}
+              onPress={() => {
+                let notificacao = true;
+                createAlert(notificacao);
+              }}
+            >
+              <Text> Ativar Alertas</Text>
+            </TouchableOpacity>
+          )}
+        </Text>
         {/* CATEGORIA DE REPRODUÇÃO */}
         {/* CIO */}
         <ScrollView style={styles.containerScrollView}>
           <View style={styles.containerCategoria}>
             <View style={styles.containerTituloCategoria}>
               <Text style={styles.txtCobertura}>Cio</Text>
-              <AntDesign name="check" size={scale(25)} color="white" />
-              {/* <AntDesign name="close" size={scale(25)} color="white" /> */}
+              {cio ? (
+                <AntDesign name="check" size={scale(25)} color="white" />
+              ) : (
+                <AntDesign name="close" size={scale(25)} color="white" />
+              )}
             </View>
             <View>
               <View style={styles.containerRow}>
                 <Text style={styles.txtInfoCategoria}>Último cio:</Text>
-                <Text style={styles.txtInfoCategoria}>02/02/2000</Text>
+                <Text style={styles.txtInfoCategoria}>
+                  {dateOrHifen(ultimoCio)}
+                </Text>
               </View>
               <View style={styles.containerRow}>
                 <Text style={styles.txtInfoCategoria}>Próximo cio:</Text>
-                <Text style={styles.txtInfoCategoria}>10/02/2000</Text>
+                <Text style={styles.txtInfoCategoria}>{nextCio()}</Text>
               </View>
               <View>
                 <Text style={styles.txtInfoCategoria}>Data selecionada</Text>
@@ -154,21 +274,24 @@ const Reproducao = ({ navigation }) => {
                   }}
                 >
                   <Text style={styles.txtInfoCategoria}>
-                    {date.toLocaleDateString("pt-BR")}
+                    {dateOrHifen(dataCio)}
                   </Text>
-                  <TouchableOpacity onPress={showDatePicker}>
+                  <TouchableOpacity onPress={() => datePickerCio()}>
                     <AntDesign name="calendar" size={scale(16)} color="white" />
                   </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.botaoData}>
-                  <Text style={styles.tituloinfo}>Marcar Cio:</Text>
+                <TouchableOpacity
+                  style={styles.botaoData}
+                  onPress={() => handleCio()}
+                >
+                  <Text style={styles.tituloinfo}>Vaca no cio</Text>
                 </TouchableOpacity>
               </View>
               <DateTimePickerModal
-                isVisible={isDatePickerVisible}
+                isVisible={isDatePickerCioVisible}
                 mode="date"
-                onConfirm={handleDateConfirm}
-                onCancel={hideDatePicker}
+                onConfirm={handleDateCio}
+                onCancel={() => setIsDatePickerCioVisible(false)}
                 maximumDate={new Date()}
               />
             </View>
@@ -177,69 +300,108 @@ const Reproducao = ({ navigation }) => {
           <View style={styles.containerCategoria}>
             <View style={styles.containerTituloCategoria}>
               <Text style={styles.txtCobertura}>Cobertura</Text>
-              <AntDesign name="check" size={scale(25)} color="white" />
-              {/* <AntDesign name="close" size={scale(25)} color="white" /> */}
+              {cobertura ? (
+                <AntDesign name="check" size={scale(25)} color="white" />
+              ) : (
+                <AntDesign name="close" size={scale(25)} color="white" />
+              )}
             </View>
             <View>
               <View style={styles.containerRow}>
                 <Text style={styles.txtInfoCategoria}>Data de Cobertura:</Text>
-                <Text style={styles.txtInfoCategoria}>02/02/2000</Text>
+                <Text style={styles.txtInfoCategoria}>
+                  {dateOrHifen(ultimaCobertura)}
+                </Text>
               </View>
-              <TouchableOpacity
-                style={styles.botaoData}
-                onPress={showDatePicker}
-              >
-                <Text style={styles.tituloinfo}>Marcar Cobertura:</Text>
-              </TouchableOpacity>
-
+              <View>
+                <Text style={styles.txtInfoCategoria}>Data selecionada</Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  <Text style={styles.txtInfoCategoria}>
+                    {dateOrHifen(dataCobertura)}
+                  </Text>
+                  <TouchableOpacity onPress={() => datePickerCobertura()}>
+                    <AntDesign name="calendar" size={scale(16)} color="white" />
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity
+                  style={styles.botaoData}
+                  onPress={() => handleCobertura()}
+                >
+                  <Text style={styles.tituloinfo}>Vaca foi coberta</Text>
+                </TouchableOpacity>
+              </View>
               <DateTimePickerModal
-                isVisible={isDatePickerVisible}
+                isVisible={isDatePickerCoberturaVisible}
                 mode="date"
-                onConfirm={handleDateConfirm}
-                onCancel={hideDatePicker}
+                onConfirm={handleDateCobertura}
+                onCancel={() => setIsDatePickerCoberturaVisible(false)}
                 maximumDate={new Date()}
               />
             </View>
           </View>
           <View style={styles.containerCategoria}>
             <View style={styles.containerTituloCategoria}>
-              <Text style={styles.txtCobertura}>Prenhez</Text>
-              {/* <AntDesign name="check" size={scale(25)} color="white" /> */}
-              <AntDesign name="close" size={scale(25)} color="white" />
+              <Text style={styles.txtCobertura}>Possível Prenhez</Text>
+              {prenhez ? (
+                <AntDesign name="check" size={scale(25)} color="white" />
+              ) : (
+                <AntDesign name="close" size={scale(25)} color="white" />
+              )}
             </View>
             <View>
               <View style={styles.containerRow}>
-                <Text style={styles.txtInfoCategoria}>Último parto:</Text>
-                <Text style={styles.txtInfoCategoria}>02/01/2000</Text>
+                <Text style={styles.txtInfoCategoria}>
+                  Número de crias: {nCrias} Último parto:
+                </Text>
+                <Text style={styles.txtInfoCategoria}>
+                  {dateOrHifen(dataUltimoParto)}
+                </Text>
               </View>
               <View style={styles.containerRow}>
-                <Text style={styles.txtInfoCategoria}>Possível de parto:</Text>
-                <Text style={styles.txtInfoCategoria}>02/02/2000</Text>
+                <Text style={styles.txtInfoCategoria}>
+                  Data de possível parto:
+                </Text>
+                <Text style={styles.txtInfoCategoria}>{nextParto()}</Text>
               </View>
-              <TouchableOpacity
-                style={styles.botaoData}
-                onPress={showDatePicker}
-              >
-                <Text style={styles.tituloinfo}>Marcar Parto:</Text>
-              </TouchableOpacity>
+              <View>
+                <Text style={styles.txtInfoCategoria}>Data selecionada</Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  <Text style={styles.txtInfoCategoria}>
+                    {dateOrHifen(dataParto)}
+                  </Text>
+                  <TouchableOpacity onPress={() => datePickerParto()}>
+                    <AntDesign name="calendar" size={scale(16)} color="white" />
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity
+                  style={styles.botaoData}
+                  onPress={() => handleParto()}
+                >
+                  <Text style={styles.tituloinfo}>Vaca pariu</Text>
+                </TouchableOpacity>
+              </View>
 
               <DateTimePickerModal
-                isVisible={isDatePickerVisible}
+                isVisible={isDatePickerPartoVisible}
                 mode="date"
-                onConfirm={handleDateConfirm}
-                onCancel={hideDatePicker}
+                onConfirm={handleDateParto}
+                onCancel={() => setIsDatePickerPartoVisible(false)}
                 maximumDate={new Date()}
               />
             </View>
           </View>
         </ScrollView>
         <View style={styles.containervoltar}>
-          <TouchableOpacity style={styles.botao} onPress={registerEvents}>
-            <View style={{ flex: 1, justifyContent: "center" }}>
-              <Text style={styles.textovoltar}>Cadastrar</Text>
-            </View>
-            <MaterialIcons name="add" size={scale(24)} color="white" />
-          </TouchableOpacity>
           <TouchableOpacity
             style={styles.botao}
             onPress={() => navigation.navigate("Home")}
