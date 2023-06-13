@@ -654,7 +654,7 @@ function RegistrosVendas({ navigation }) {
                     <TouchableOpacity
                       style={styles.botoes}
                       onPress={() => {
-                        filtrarIntervalo;
+                        filtrarIntervalo();
                         setValorChipValue(null); 
                       }}
                     >
@@ -667,6 +667,7 @@ function RegistrosVendas({ navigation }) {
                         setEndDate("");
                         setTextStartDate("Data Inicial");
                         setTextEndDate("Data Final");
+                        setLista1(lista);
                         setListaFiltrada(lista);
                       }}
                     >

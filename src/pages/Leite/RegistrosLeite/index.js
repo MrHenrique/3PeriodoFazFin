@@ -661,7 +661,10 @@ function RegistrosLeite({ navigation }) {
                   <View style={styles.containerBotoesFiltro}>
                     <TouchableOpacity
                       style={styles.botoes}
-                      onPress={filtrarIntervalo}
+                      onPress={() => {
+                        filtrarIntervalo();
+                        setValorChipValue(null);
+                      }}
                     >
                       <Text style={styles.textoFitro}>Filtrar</Text>
                     </TouchableOpacity>
@@ -672,6 +675,7 @@ function RegistrosLeite({ navigation }) {
                         setEndDate("");
                         setTextStartDate("Data Inicial");
                         setTextEndDate("Data Final");
+                        setLista1(lista);
                         setListaFiltrada(lista);
                       }}
                     >

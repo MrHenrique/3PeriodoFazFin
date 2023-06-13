@@ -13,6 +13,7 @@ import {
 import styles from "../../styles";
 import Modal from "react-native-modal";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import BezierChartDespesas from "../../../../components/Graficos/BezierChartDespesas";
 import { Colors } from "../../../../styles";
 import { TextInput, Chip } from "react-native-paper";
@@ -759,7 +760,10 @@ function Despesas({ navigation }) {
                             <View style={styles.containerBotoes}>
                               <TouchableOpacity
                                 style={styles.botoes}
-                                onPress={filtrarIntervalo}
+                                onPress={() => {
+                                  filtrarIntervalo();
+                                  setValorChipValue(null);
+                                }}
                               >
                                 <Text style={styles.textoFiltro}>Filtrar</Text>
                               </TouchableOpacity>
@@ -770,6 +774,7 @@ function Despesas({ navigation }) {
                                   setEndDate("");
                                   setTextStartDate("Data Inicial");
                                   setTextEndDate("Data Final");
+                                  setLista1(lista);
                                   setListaFiltrada(lista);
                                 }}
                               >

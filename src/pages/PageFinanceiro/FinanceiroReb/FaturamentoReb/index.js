@@ -686,7 +686,10 @@ function FaturamentoReb({ navigation }) {
                             <View style={styles.containerBotoes}>
                               <TouchableOpacity
                                 style={styles.botoes}
-                                onPress={filtrarIntervalo}
+                                onPress={() => {
+                                  filtrarIntervalo();
+                                  setValorChipValue(null);
+                                }}
                               >
                                 <Text style={styles.textoFiltro}>Filtrar</Text>
                               </TouchableOpacity>
@@ -697,6 +700,7 @@ function FaturamentoReb({ navigation }) {
                                   setEndDate("");
                                   setTextStartDate("Data Inicial");
                                   setTextEndDate("Data Final");
+                                  setLista1(lista);
                                   setListaFiltrada(lista);
                                 }}
                               >

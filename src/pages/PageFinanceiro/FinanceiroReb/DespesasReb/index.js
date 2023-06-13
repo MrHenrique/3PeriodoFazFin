@@ -14,6 +14,7 @@ import Modal from "react-native-modal";
 import BezierChartDespesasReb from "../../../../components/Graficos/BezierChartDespesasReb";
 import styles, { Color, setSize } from "../../styles";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Colors } from "../../../../styles";
 import { TextInput, Chip } from "react-native-paper";
 import { AuthContext } from "../../../../contexts/auth";
@@ -760,7 +761,10 @@ function DespesasReb({ navigation }) {
                             <View style={styles.containerBotoes}>
                               <TouchableOpacity
                                 style={styles.botoes}
-                                onPress={filtrarIntervalo}
+                                onPress={() => {
+                                  filtrarIntervalo();
+                                  setValorChipValue(null);
+                                }}
                               >
                                 <Text style={styles.textoFiltro}>Filtrar</Text>
                               </TouchableOpacity>
@@ -771,6 +775,7 @@ function DespesasReb({ navigation }) {
                                   setEndDate("");
                                   setTextStartDate("Data Inicial");
                                   setTextEndDate("Data Final");
+                                  setLista1(lista);
                                   setListaFiltrada(lista);
                                 }}
                               >
