@@ -24,7 +24,6 @@ import { scale, verticalScale } from "react-native-size-matters";
 function Faturamento({ navigation }) {
   const { precoLeite } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [shouldShow, setShouldShow] = useState(false);
   const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
