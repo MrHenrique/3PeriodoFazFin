@@ -9,7 +9,14 @@ import {
   ImageBackground,
   Alert,
 } from "react-native";
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import Animated, {
+  BounceInUp,
+  FadeIn,
+  FadeOut,
+  FlipInEasyX,
+  PinwheelIn,
+  PinwheelOut,
+} from "react-native-reanimated";
 import { AuthContext } from "../../../contexts/auth";
 import Modal from "react-native-modal";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -270,7 +277,7 @@ function EstoqueGeral({ navigation }) {
       dataEstoque.entradaEstoque.sorted("createdAt").addListener((values) => {
         setListaEstoqueEntrada([...values]);
       });
-      let alertCheck = dataEstoque.atualEstoque
+      let alertCheck = dataEstoque.atualEstoque;
       checkAlert(alertCheck);
     }
   }, [realm]);
@@ -534,32 +541,37 @@ function EstoqueGeral({ navigation }) {
               />
             </View>
             {shouldShow ? (
-              <Button
-                mode="elevated"
-                textColor="black"
-                labelStyle={{ fontSize: scale(13) }}
-                buttonColor={
-                  !item.alert[0].alertOn === true
-                    ? Colors.neongreen
-                    : MD3Colors.error60
-                }
-                icon={
-                  !item.alert[0].alertOn === true
-                    ? "bell-check-outline"
-                    : "bell-cancel-outline"
-                }
+              <Animated.View
+                entering={FlipInEasyX.delay(100)}
                 style={{ position: "absolute", zindex: 10, margin: scale(5) }}
-                onPress={() => alertButtonAction(item)}
               >
-                {!item.alert[0].alertOn === true
-                  ? "Criar Alerta"
-                  : "Desligar Alerta"}
-              </Button>
+                <Button
+                  mode="elevated"
+                  textColor="black"
+                  labelStyle={{ fontSize: scale(13) }}
+                  buttonColor={
+                    !item.alert[0].alertOn === true
+                      ? Colors.neongreen
+                      : MD3Colors.error60
+                  }
+                  icon={
+                    !item.alert[0].alertOn === true
+                      ? "bell-check-outline"
+                      : "bell-cancel-outline"
+                  }
+                  style={{ position: "absolute", zindex: 10, margin: scale(5) }}
+                  onPress={() => alertButtonAction(item)}
+                >
+                  {!item.alert[0].alertOn === true
+                    ? "Criar Alerta"
+                    : "Desligar Alerta"}
+                </Button>
+              </Animated.View>
             ) : null}
           </ImageBackground>
         </TouchableOpacity>
         {shouldShow ? (
-          <ScrollView style={styles.containerItems}>
+          <ScrollView style={styles.containerItems} fadingEdgeLength={60}>
             <View style={styles.containerlist}>
               <View style={[styles.ListItem]}>
                 <Text style={styles.fontsubtitulo}>Categoria do item:</Text>
@@ -787,6 +799,7 @@ function EstoqueGeral({ navigation }) {
             {shouldShowDetalhes ? (
               <Animated.View entering={FadeIn} exiting={FadeOut}>
                 <FlatList
+                  fadingEdgeLength={70}
                   data={listaEstoque}
                   renderItem={renderItemEstoque}
                   keyExtractor={(item) => item._id}
@@ -802,6 +815,7 @@ function EstoqueGeral({ navigation }) {
                 style={styles.containergeral}
               >
                 <FlatList
+                  fadingEdgeLength={70}
                   data={listaEstoqueEntrada}
                   renderItem={renderItemEntrada}
                   keyExtractor={(item) => item._id}

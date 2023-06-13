@@ -16,6 +16,7 @@ import { useMainContext } from "../../../contexts/RealmContext";
 import { Colors } from "../../../styles";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import uuid from "react-native-uuid";
 
 const imgbg1 = "../../../../assets/fazfinwhiteletter.png";
 
@@ -326,6 +327,7 @@ function PageListavacas({ navigation }) {
       >
         <View style={styles.containerLista}>
           <FlatList
+            fadingEdgeLength={70}
             data={lista}
             keyExtractor={(item) => item._id}
             maxToRenderPerBatch={7}
