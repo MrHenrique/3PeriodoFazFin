@@ -3,9 +3,26 @@ import { Buttons, Colors, Fonts } from "../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
+  chipModalFiltro: {
+    ...Fonts.txtSmall,
+  },
+  containerTituloModalFiltro: {
+    flex: 1,
+    textAlign: "center",
+  },
+  BotaoLimparFiltro: {
+    zIndex: 10,
+    top: verticalScale(5),
+    left: scale(8),
+    position: "absolute",
+  },
+  txtLimparFiltro: {
+    ...Fonts.txtMedium,
+    color: Colors.white,
+  },
   //STYLES COMUM
   lista: {
-    flex: 1,
+    flex: 4,
     // backgroundColor: "red",
   },
   containerfiltro: {
@@ -166,7 +183,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.darkgreen,
     alignSelf: "center",
-    width: scale(330),
     borderRadius: 20,
     position: "relative",
   },
@@ -254,17 +270,15 @@ const styles = StyleSheet.create({
   },
   search: {
     backgroundColor: Colors.white,
-    width: "70%",
-    fontSize: scale(15),
-    justifyContent: "center",
-    alignSelf: "center",
-    marginVertical: verticalScale(5),
-    marginHorizontal: verticalScale(5),
+    flex: 1,
+    borderBottomRightRadius: 0,
+    borderTopRightRadius: 0,
   },
   chipSelected: {
     backgroundColor: "green",
   },
   topFiltros: {
+    position: "relative",
     margin: 10,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -272,10 +286,12 @@ const styles = StyleSheet.create({
   chipsFiltro: {
     marginRight: 10,
     marginBottom: 10,
+    backgroundColor: Colors.grey,
   },
   teste: {
     flexDirection: "row",
     flexWrap: "wrap",
+    marginHorizontal: scale(5),
   },
   containerFiltro: {
     flex: 1,
@@ -283,43 +299,52 @@ const styles = StyleSheet.create({
   },
   modalContainerFiltro: {
     //flex: 0.6,
-    backgroundColor: Colors.Cyan,
+    backgroundColor: Colors.darkgreen,
   },
   containerBotoes: {
+    justifyContent: "center",
+    backgroundColor: Colors.green,
     flexDirection: "row",
-    padding: 3,
+    padding: 10,
   },
   botoes: {
-    flex: 1,
-    backgroundColor: Colors.green,
-    borderRadius: 30,
-    width: "50%",
-    height: verticalScale(30),
+    flexDirection: "row",
+    backgroundColor: Colors.white,
+    borderRadius: 20,
+    width: "42%",
+    height: scale(30),
     borderWidth: scale(1),
-    justifyContent: "center",
-    marginHorizontal: 3,
+    justifyContent: "space-around",
+    alignItems: "center",
+    padding: scale(2),
+    marginHorizontal: scale(5),
   },
   textoFiltro: {
-    color: Colors.white,
+    ...Fonts.txtMedium,
+    color: Colors.black,
     textAlign: "center",
-    fontSize: scale(14),
   },
   containerChip: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  chipFiltro: {
+    backgroundColor: Colors.green,
+    borderTopRightRadius: 5,
+    borderBottomLeftRadius: 0,
+    borderTopLeftRadius: 0,
+    borderBottomRightRadius: 0,
+  },
   chip: {
     backgroundColor: Colors.green,
-    height: scale(30),
-    marginRight: scale(5),
-    marginBottom: scale(5),
-    //padding: scale(1),
+    marginHorizontal: scale(2),
   },
   tituloinfo: {
     color: "white",
     fontSize: verticalScale(20),
     marginBottom: verticalScale(10),
     textAlign: "center",
+    alignContent: "center",
     fontWeight: "bold",
   },
   tituloinfo1: {
@@ -335,6 +360,16 @@ const styles = StyleSheet.create({
     marginRight: scale(5),
     marginBottom: scale(5),
     padding: scale(1),
+  },
+  chipFiltroReceitaFiltro: {
+    backgroundColor: Colors.green,
+    // paddingHorizontal: scale(15),
+    // paddingVertical: scale(3),
+    // height: verticalScale(40),
+    // width: scale(100),
+    marginHorizontal: scale(90),
+    flex: 1,
+    justifyContent: "center",
   },
 });
 export default styles;

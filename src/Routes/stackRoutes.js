@@ -24,6 +24,7 @@ function StackRoutes() {
         component={Login}
         options={{
           headerShown: false,
+          orientation: "portrait",
         }}
       />
       <Stack.Screen
@@ -31,6 +32,7 @@ function StackRoutes() {
         component={SelectFazPage}
         options={{
           headerShown: false,
+          orientation: "portrait",
         }}
       />
       <Stack.Screen
@@ -38,6 +40,7 @@ function StackRoutes() {
         component={Despesas}
         options={{
           headerShown: false,
+          orientation: "portrait",
         }}
       />
       <Stack.Screen
@@ -45,6 +48,7 @@ function StackRoutes() {
         component={Estoque}
         options={{
           headerShown: false,
+          orientation: "portrait",
         }}
       />
       <Stack.Screen
@@ -52,6 +56,7 @@ function StackRoutes() {
         component={CadastroFaz}
         options={{
           headerShown: false,
+          orientation: "portrait",
         }}
       />
       <Stack.Screen
@@ -59,6 +64,7 @@ function StackRoutes() {
         component={SelectRebPage}
         options={{
           headerShown: false,
+          orientation: "portrait",
         }}
       />
       <Stack.Screen
@@ -66,6 +72,7 @@ function StackRoutes() {
         component={CadastroReb}
         options={{
           headerShown: false,
+          orientation: "portrait",
         }}
       />
       <Stack.Screen
@@ -73,6 +80,7 @@ function StackRoutes() {
         component={Leite}
         options={{
           headerShown: false,
+          orientation: "portrait",
         }}
       />
       <Stack.Screen
@@ -80,6 +88,7 @@ function StackRoutes() {
         component={PageFinanceiro}
         options={{
           headerShown: false,
+          orientation: "portrait",
         }}
       />
       <Stack.Screen
@@ -87,6 +96,7 @@ function StackRoutes() {
         component={Home}
         options={{
           headerShown: false,
+          orientation: "portrait",
         }}
       />
       <Stack.Screen
@@ -94,6 +104,7 @@ function StackRoutes() {
         component={PageAnimais}
         options={{
           headerShown: false,
+          orientation: "portrait",
         }}
       />
       <Stack.Screen
@@ -101,6 +112,7 @@ function StackRoutes() {
         component={CadastroVaca}
         options={{
           headerShown: false,
+          orientation: "portrait",
         }}
       />
       <Stack.Screen
@@ -108,6 +120,7 @@ function StackRoutes() {
         component={SignUp}
         options={{
           headerShown: false,
+          orientation: "portrait",
         }}
       />
       <Stack.Screen
@@ -115,6 +128,7 @@ function StackRoutes() {
         component={PageDetalheVaca}
         options={{
           headerShown: false,
+          orientation: "portrait",
         }}
       />
       <Stack.Screen
@@ -122,6 +136,7 @@ function StackRoutes() {
         component={Reproducao}
         options={{
           headerShown: false,
+          orientation: "portrait",
         }}
       />
     </Stack.Navigator>

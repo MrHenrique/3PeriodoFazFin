@@ -158,7 +158,7 @@ function AdicionarLeite({ navigation }) {
               precoL: parsedValue,
               prodL: parsedValueProd,
               description,
-              createdAt: new Date(),
+              createdAt: new Date(date),
             });
             reb.receitas.push(createdLeiteReb);
             let Vacas = realm.objectForPrimaryKey("VacasSchema", vacaID);
@@ -170,7 +170,7 @@ function AdicionarLeite({ navigation }) {
               precoL: parsedValue,
               prodL: parsedValueProd,
               description,
-              createdAt: new Date(),
+              createdAt: new Date(date),
             });
             Vacas.receitas.push(createdLeite);
             Alert.alert("Dados cadastrados com sucesso!");
@@ -342,7 +342,7 @@ function AdicionarLeite({ navigation }) {
 
               <DateTimePickerModal
                 isVisible={isDatePickerVisible}
-                mode="date"
+                mode="datetime"
                 onConfirm={handleDateConfirm}
                 onCancel={hideDatePicker}
                 maximumDate={new Date()}

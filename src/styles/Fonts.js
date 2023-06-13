@@ -1,14 +1,14 @@
 import { scale, verticalScale } from "react-native-size-matters";
 
 export const Title = {
-  fontSize: verticalScale(35),
+  fontSize: scale(35),
   textAlign: "center",
   fontWeight: "bold",
   alignSelf: "center",
 };
 
 export const txtSmall = {
-  fontSize: verticalScale(12),
+  fontSize: scale(12),
   alignSelf: "center",
 };
 export const txtSmallBold = {
