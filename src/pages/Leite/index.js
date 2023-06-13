@@ -14,7 +14,6 @@ function Leite() {
           tabBarLabelStyle: { ...estilo.tabarlabel },
           tabBarIndicatorStyle: { ...estilo.tabBarIndicator },
           tabBarStyle: styles.tab,
-          lazy: true,
         }}
       >
         <Tab.Screen name="Dados Leite" component={RegistrosLeite} />

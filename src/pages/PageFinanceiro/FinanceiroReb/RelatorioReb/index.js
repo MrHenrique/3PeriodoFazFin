@@ -189,10 +189,9 @@ function RelatorioReb({ navigation }) {
       setNomeReb(Rebanho.nomeReb);
       let totalVacas = Rebanho.vacas.length;
       setTotalVacas(totalVacas);
-      let totalLeite = Rebanho.receitas.reduce(
-        (somaReceitas, receita) => somaReceitas + receita.prodL,
-        0
-      );
+      let totalLeite = Rebanho.receitas
+        .filter((item) => item.tipo === 1)
+        .reduce((somaReceitas, receita) => somaReceitas + receita.prodL, 0);
 
       let totalLeiteString = totalLeite.toString();
       setTotalLeite(totalLeiteString + " Litros");
