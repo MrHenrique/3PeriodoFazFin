@@ -435,10 +435,7 @@ function Despesas({ navigation }) {
                   <View style={styles.modalContent}>
                     <Text style={styles.textContent}>Valor Total: </Text>
                     <Text style={styles.textContent}>
-                      {formatarResultado(
-                        item.valorProd,
-                        "preco"
-                      )}
+                      {formatarResultado(item.valorProd, "preco")}
                     </Text>
                   </View>
                   <Text style={styles.textContent}>
@@ -465,10 +462,7 @@ function Despesas({ navigation }) {
                   <View style={styles.modalContent}>
                     <Text style={styles.textContent}>Valor Total: </Text>
                     <Text style={styles.textContent}>
-                      {formatarResultado(
-                        item.valorProd,
-                        "preco"
-                      )}
+                      {formatarResultado(item.valorProd, "preco")}
                     </Text>
                   </View>
                   <Text style={styles.textContent}>
@@ -480,10 +474,7 @@ function Despesas({ navigation }) {
                   <View style={styles.modalContent}>
                     <Text style={styles.textContent}>Valor Total: </Text>
                     <Text style={styles.textContent}>
-                      {formatarResultado(
-                        item.valorProd,
-                        "preco"
-                      )}
+                      {formatarResultado(item.valorProd, "preco")}
                     </Text>
                   </View>
                   <Text style={styles.textContent}>
@@ -679,8 +670,8 @@ function Despesas({ navigation }) {
                               styles.chipsFiltro,
                               tipoChipValue === 1 && styles.chipSelected,
                             ]}
-                            textStyle={styles.chipModalFiltro}
                             onPress={() => handleTipoChipPress(1)}
+                            textStyle={styles.chipModalFiltro}
                           >
                             <Text>Remédios</Text>
                           </Chip>
