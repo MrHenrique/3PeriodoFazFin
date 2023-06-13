@@ -1,21 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  Alert,
-} from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Alert } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { scale, verticalScale } from "react-native-size-matters";
+import { scale } from "react-native-size-matters";
 import uuid from "react-native-uuid";
 import styles from "./styles";
-import {
-  MaterialCommunityIcons,
-  MaterialIcons,
-  AntDesign,
-} from "@expo/vector-icons";
+import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { AuthContext } from "../../contexts/auth";
 import { useMainContext } from "../../contexts/RealmContext";
 const Reproducao = ({ navigation }) => {
@@ -27,75 +16,68 @@ const Reproducao = ({ navigation }) => {
   const [prenhez, setPrenhez] = useState(false);
   const [dataParto, setDataParto] = useState(new Date());
   const [dataUltimoParto, setDataUltimoParto] = useState();
-  const [dataPartoPrevisto, setDataPartoPrevisto] = useState();
   const [cio, setCio] = useState(false);
   const [dataCio, setDataCio] = useState(new Date());
   const [ultimoCio, setUltimoCio] = useState();
-  const [dataProxCio, setDataProxCio] = useState();
+  const [partos, setPartos] = useState([]);
   const [callFunction, setCallFunction] = useState(0);
-  const [callFunction2, setCallFunction2] = useState(0);
+  const [notificacao, setNotificacao] = useState(false);
+  const [nCrias, setNcrias] = useState(0);
+  const [idRepr, setIdRepr] = useState("");
+  const [refresh, setRefresh] = useState(false);
   const [isDatePickerCioVisible, setIsDatePickerCioVisible] = useState(false);
   const [isDatePickerPartoVisible, setIsDatePickerPartoVisible] =
     useState(false);
   const [isDatePickerCoberturaVisible, setIsDatePickerCoberturaVisible] =
     useState(false);
-
   useEffect(() => {
     if (realm) {
       let dataVaca = realm.objectForPrimaryKey("VacasSchema", idVaca);
-      console.log(dataVaca.reproducao[0]);
       if (dataVaca.reproducao.length > 0) {
+        setIdRepr(dataVaca.reproducao[0]._id);
         setCio(dataVaca.reproducao[0].cio);
         setCobertura(dataVaca.reproducao[0].cobertura);
         setPrenhez(dataVaca.reproducao[0].prenhez);
         setUltimoCio(dataVaca.reproducao[0].dataCio);
         setDataUltimaCobertura(dataVaca.reproducao[0].dataCobertura);
         setDataUltimoParto(dataVaca.reproducao[0].dataParto);
-        setCallFunction2(callFunction2 + 1);
+        setPartos(dataVaca.reproducao[0].partos);
+        if (dataVaca.reproducao[0].partos.length > 0) {
+          setNcrias(dataVaca.reproducao[0].partos.length);
+        }
+        if (
+          dataVaca.reproducao[0].notificacao === true ||
+          dataVaca.reproducao[0].notificacao === false
+        ) {
+          setNotificacao(dataVaca.reproducao[0].notificacao);
+        }
       }
       dataVaca.addListener((values) => {
         if (values.reproducao.length > 0) {
+          setIdRepr(dataVaca.reproducao[0]._id);
           setCio(values.reproducao[0].cio);
           setCobertura(values.reproducao[0].cobertura);
           setPrenhez(values.reproducao[0].prenhez);
           setUltimoCio(values.reproducao[0].dataCio);
           setDataUltimaCobertura(values.reproducao[0].dataCobertura);
           setDataUltimoParto(values.reproducao[0].dataParto);
+          setPartos(dataVaca.reproducao[0].partos);
+          if (dataVaca.reproducao[0].partos.length > 0) {
+            setNcrias(dataVaca.reproducao[0].partos.length);
+          }
+          if (
+            dataVaca.reproducao[0].notificacao === true ||
+            dataVaca.reproducao[0].notificacao === false
+          ) {
+            setNotificacao(dataVaca.reproducao[0].notificacao);
+          }
         }
       });
-    }
-  }, [realm]);
-  useEffect(() => {
-    console.log("rodei");
-    possivelPrenhez();
-    endCio();
-    setCallFunction2(0);
-  }, [callFunction2]);
-  function possivelPrenhez() {
-    console.log(ultimoCio);
-    if (!cio && cobertura && !prenhez) {
-      console.log("entrei");
-      if (ultimoCio.addDays(21) < new Date()) {
-        console.log("rodei prenh");
-        setPrenhez(true);
-        setDataCio(ultimoCio);
-        setDataParto(dataUltimoParto);
-        setDataCobertura(ultimaCobertura);
-        setCallFunction(callFunction + 1);
+      if (refresh === true) {
+        setRefresh(false);
       }
     }
-  }
-  function endCio() {
-    console.log("rodei cio?");
-    if (cio && ultimoCio.addDays(1) < new Date()) {
-      console.log("rodei cio");
-      setCio(false);
-      setDataCio(ultimoCio);
-      setDataParto(dataUltimoParto);
-      setDataCobertura(ultimaCobertura);
-      setCallFunction(callFunction + 1);
-    }
-  }
+  }, [realm, refresh]);
   function dateOrHifen(date) {
     if (date) {
       return dateToText(date);
@@ -187,17 +169,21 @@ const Reproducao = ({ navigation }) => {
   async function UpdateInfoVaca() {
     if (realm) {
       try {
+        let newParto = { _id: uuid.v4(), dataParto: dataParto };
+        let finalParto = [...partos, newParto];
         realm.write(() => {
           let updateVaca = realm.objectForPrimaryKey("VacasSchema", idVaca);
           updateVaca.reproducao = [
             {
-              _id: uuid.v4(),
+              _id: idRepr,
               cio: cio,
               cobertura: cobertura,
               prenhez: prenhez,
               dataCio: dataCio,
               dataCobertura: dataCobertura,
               dataParto: dataParto,
+              partos: finalParto,
+              notificacao: notificacao,
             },
           ];
           setDataCio(new Date());
@@ -210,10 +196,52 @@ const Reproducao = ({ navigation }) => {
       }
     }
   }
+  function createAlert(notificacao) {
+    if (realm) {
+      try {
+        realm.write(() => {
+          let updateVaca = realm.create(
+            "ReproducaoSchema",
+            {
+              _id: idRepr,
+              notificacao: notificacao,
+            },
+            "modified"
+          );
+        });
+      } catch (e) {
+        Alert.alert("Não foi possível modificar!", e.message);
+      }
+      setRefresh(true);
+    }
+  }
   return (
     <View style={styles.container}>
       <View style={styles.containergeral}>
-        <Text style={styles.txtTitulo}>Registro de Eventos</Text>
+        <Text style={styles.txtTitulo}>
+          Alertas
+          {notificacao ? (
+            <TouchableOpacity
+              style={styles.botaorelatorioproduto}
+              onPress={() => {
+                let notificacao = false;
+                createAlert(notificacao);
+              }}
+            >
+              <Text> Desativar Alertas</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.botaorelatorioproduto}
+              onPress={() => {
+                let notificacao = true;
+                createAlert(notificacao);
+              }}
+            >
+              <Text> Ativar Alertas</Text>
+            </TouchableOpacity>
+          )}
+        </Text>
         {/* CATEGORIA DE REPRODUÇÃO */}
         {/* CIO */}
         <ScrollView style={styles.containerScrollView}>
@@ -318,7 +346,7 @@ const Reproducao = ({ navigation }) => {
           </View>
           <View style={styles.containerCategoria}>
             <View style={styles.containerTituloCategoria}>
-              <Text style={styles.txtCobertura}>Prenhez</Text>
+              <Text style={styles.txtCobertura}>Possível Prenhez</Text>
               {prenhez ? (
                 <AntDesign name="check" size={scale(25)} color="white" />
               ) : (
@@ -327,13 +355,17 @@ const Reproducao = ({ navigation }) => {
             </View>
             <View>
               <View style={styles.containerRow}>
-                <Text style={styles.txtInfoCategoria}>Último parto:</Text>
+                <Text style={styles.txtInfoCategoria}>
+                  Número de crias: {nCrias} Último parto:
+                </Text>
                 <Text style={styles.txtInfoCategoria}>
                   {dateOrHifen(dataUltimoParto)}
                 </Text>
               </View>
               <View style={styles.containerRow}>
-                <Text style={styles.txtInfoCategoria}>Possível de parto:</Text>
+                <Text style={styles.txtInfoCategoria}>
+                  Data de possível parto:
+                </Text>
                 <Text style={styles.txtInfoCategoria}>{nextParto()}</Text>
               </View>
               <View>

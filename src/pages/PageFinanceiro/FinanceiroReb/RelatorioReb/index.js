@@ -196,7 +196,6 @@ function RelatorioReb({ navigation }) {
 
       let totalLeiteString = totalLeite.toString();
       setTotalLeite(totalLeiteString + " Litros");
-      console.log(totalLeiteString + " Litros");
       let media = (totalLeite / totalVacas).toString();
       setMediaLeite(media + " Litros");
       let total = getTotal(getDespesas(), getReceitas()).toFixed(2);
