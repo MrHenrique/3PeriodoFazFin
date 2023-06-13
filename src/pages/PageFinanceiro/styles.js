@@ -249,6 +249,92 @@ const styles = StyleSheet.create({
     zIndex: 1,
     top: scale(75),
   },
+  modalContainerSearch: {
+    flex: 1,
+  },
+  search: {
+    backgroundColor: Colors.white,
+    width: "70%",
+    fontSize: scale(15),
+    justifyContent: "center",
+    alignSelf: "center",
+    marginVertical: verticalScale(5),
+    marginHorizontal: verticalScale(5),
+  },
+  chipSelected: {
+    backgroundColor: "green",
+  },
+  topFiltros: {
+    margin: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  chipsFiltro: {
+    marginRight: 10,
+    marginBottom: 10,
+  },
+  teste: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  containerFiltro: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  modalContainerFiltro: {
+    //flex: 0.6,
+    backgroundColor: Colors.Cyan,
+  },
+  containerBotoes: {
+    flexDirection: "row",
+    padding: 3,
+  },
+  botoes: {
+    flex: 1,
+    backgroundColor: Colors.green,
+    borderRadius: 30,
+    width: "50%",
+    height: verticalScale(30),
+    borderWidth: scale(1),
+    justifyContent: "center",
+    marginHorizontal: 3,
+  },
+  textoFiltro: {
+    color: Colors.white,
+    textAlign: "center",
+    fontSize: scale(14),
+  },
+  containerChip: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  chip: {
+    backgroundColor: Colors.green,
+    marginRight: scale(5),
+    marginBottom: scale(5),
+    padding: scale(1),
+  },
+  tituloinfo: {
+    color: "white",
+    fontSize: verticalScale(20),
+    marginBottom: verticalScale(10),
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  tituloinfo1: {
+    paddingHorizontal: verticalScale(10),
+    color: "white",
+    fontSize: verticalScale(20),
+    marginBottom: verticalScale(10),
+    textAlign: "left",
+    fontWeight: "bold",
+  },
+  chipFiltroReceita: {
+    backgroundColor: Colors.green,
+    marginRight: scale(5),
+    marginBottom: scale(5),
+    padding: scale(1),
+  },
 });
 export default styles;
 

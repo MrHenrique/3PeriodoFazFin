@@ -1,8 +1,7 @@
 import * as React from "react";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   View,
-  StyleSheet,
   Text,
   TouchableOpacity,
   ImageBackground,
@@ -10,20 +9,234 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
-import BezierChartFaturamento from "../../../../components/Graficos/BezierChartFaturamento";
-import { scale, verticalScale } from "react-native-size-matters";
-import Modal from "react-native-modal";
-import { AuthContext } from "../../../../contexts/auth";
-import FiltrosData from "../../../../components/Filtros/FiltrosData";
 import styles from "../../styles";
+import Modal from "react-native-modal";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import BezierChartFaturamento from "../../../../components/Graficos/BezierChartFaturamento";
+import { Chip } from "react-native-paper";
 import { Colors } from "../../../../styles";
+import { AuthContext } from "../../../../contexts/auth";
+import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
+import { scale, verticalScale } from "react-native-size-matters";
 
 function Faturamento({ navigation }) {
-  const { precoLeite, listaFiltrada } =
-    useContext(AuthContext);
+  const { precoLeite } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
   const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
+
+  //STATES FILTROS
+  const { listaLeite } = useContext(AuthContext);
+  const [lista, setLista] = useState(listaLeite);
+  const [lista1, setLista1] = useState([]);
+  const [listaFiltrada, setListaFiltrada] = useState([]);
+  const [startDate, setStartDate] = useState(""); //Filtro Intervalo entre datas
+  const [textStartDate, setTextStartDate] = useState("Data Inicial"); //Filtro Intervalo entre datas
+  const [endDate, setEndDate] = useState(""); //Filtro Intervalo entre datas
+  const [textEndDate, setTextEndDate] = useState("Data Final"); //Filtro Intervalo entre datas
+  const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
+    useState(false);
+  const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
+  const [dataChipValue, setDataChipValue] = React.useState(1);
+  const [textDataChipValue, setTextDataChipValue] = useState("Período");
+  const [valorChipValue, setValorChipValue] = React.useState(null);
+  const [textValorChipValue, setTextValorChipValue] = useState("Valores");
+  const [modalFiltrosVisible, setModalFiltrosVisible] = useState(false);
+  //FIM STATES FILTROS
+
+  //INICIO FILTROS
+  useEffect(() => {
+    setListaFiltrada(lista);
+    setLista1(lista);
+  }, [lista]);
+
+  //Codigo do DateTimePickerModal
+  //Data Inicial
+  const showStartDatePicker = () => {
+    setIsStartDatePickerVisible(true);
+  };
+  const hideStartDatePicker = () => {
+    setIsStartDatePickerVisible(false);
+  };
+  const handleStartDateConfirm = (dateStart) => {
+    let tempDateStart = new Date(dateStart);
+    let fDateStart =
+      tempDateStart.getDate().toString().padStart(2, "0") +
+      "/" +
+      (tempDateStart.getMonth() + 1).toString().padStart(2, "0") +
+      "/" +
+      tempDateStart.getFullYear();
+    setTextStartDate(fDateStart);
+    setStartDate(dateStart);
+    hideStartDatePicker();
+  };
+
+  //Data Final
+  const showEndDatePicker = () => {
+    setIsEndDatePickerVisible(true);
+  };
+  const hideEndDatePicker = () => {
+    setIsEndDatePickerVisible(false);
+  };
+  const handleEndDateConfirm = (dateEnd) => {
+    let tempDateEnd = new Date(dateEnd);
+    let fDateEnd =
+      tempDateEnd.getDate().toString().padStart(2, "0") +
+      "/" +
+      (tempDateEnd.getMonth() + 1).toString().padStart(2, "0") +
+      "/" +
+      tempDateEnd.getFullYear();
+    setTextEndDate(fDateEnd);
+    setEndDate(dateEnd);
+    hideEndDatePicker();
+  };
+
+  // Filtro por Valores
+  useEffect(() => {
+    if (valorChipValue === 1) {
+      const filtrarPorValores = (lista) => {
+        const sortedItems = [...lista].sort((a, b) => {
+          return a.precoL * a.prodL - b.precoL * b.prodL;
+        });
+        return sortedItems;
+      };
+      const crescente = filtrarPorValores(listaFiltrada);
+      setListaFiltrada(crescente);
+      setTextValorChipValue("Crescente");
+    } else if (valorChipValue === 2) {
+      const filtrarPorValores = (lista) => {
+        const sortedItems = [...lista].sort((a, b) => {
+          return b.precoL * b.prodL - a.precoL * a.prodL;
+        });
+        return sortedItems;
+      };
+      const decrescente = filtrarPorValores(listaFiltrada);
+      setListaFiltrada(decrescente);
+      setTextValorChipValue("Decrescente");
+    } else {
+      setTextValorChipValue("Valores");
+      setListaFiltrada(lista1);
+    }
+  }, [valorChipValue]);
+
+  // Filtro por Datas
+  useEffect(() => {
+    const filtrarPorData = (lista, dataInicio, dataFim) => {
+      return lista.filter((item) => {
+        const itemDataDeCriacao = new Date(item.createdAt);
+        itemDataDeCriacao.setHours(0, 0, 0, 0);
+        return itemDataDeCriacao >= dataInicio && itemDataDeCriacao <= dataFim;
+      });
+    };
+    if (dataChipValue === 1) {
+      // Ultimos 7 dias
+      const dataHoje = new Date();
+      dataHoje.setHours(0, 0, 0, 0);
+      const dataSeteDiasAtras = new Date(dataHoje);
+      dataSeteDiasAtras.setDate(dataHoje.getDate() - 7);
+      const listaUltimosSete = filtrarPorData(
+        listaLeite,
+        dataSeteDiasAtras,
+        dataHoje
+      );
+      setListaFiltrada(listaUltimosSete);
+      setLista1(listaUltimosSete);
+      setTextDataChipValue("7 dias");
+    } else if (dataChipValue === 2) {
+      // Ultimos mês
+      const dataHoje = new Date();
+      dataHoje.setHours(0, 0, 0, 0);
+      const dataTrintaDiasAtras = new Date(dataHoje);
+      dataTrintaDiasAtras.setDate(dataHoje.getDate() - 30);
+      const listaUltimosTrinta = filtrarPorData(
+        listaLeite,
+        dataTrintaDiasAtras,
+        dataHoje
+      );
+      setListaFiltrada(listaUltimosTrinta);
+      setLista1(listaUltimosTrinta);
+      setTextDataChipValue("Último mês");
+    } else if (dataChipValue === 3) {
+      //Ultimos 3 meses
+      const dataHoje = new Date();
+      dataHoje.setHours(0, 0, 0, 0);
+      const dataUltimosTresMeses = new Date(dataHoje);
+      dataUltimosTresMeses.setDate(dataHoje.getDate() - 90);
+      const listaUltimosTresMeses = filtrarPorData(
+        listaLeite,
+        dataUltimosTresMeses,
+        dataHoje
+      );
+      setListaFiltrada(listaUltimosTresMeses);
+      setLista1(listaUltimosTresMeses);
+      setTextDataChipValue("3 meses");
+    } else if (dataChipValue === 4) {
+      //Ultimos 6 meses
+      const dataHoje = new Date();
+      dataHoje.setHours(0, 0, 0, 0);
+      const dataUltimosSeisMeses = new Date(dataHoje);
+      dataUltimosSeisMeses.setDate(dataHoje.getDate() - 180);
+      const listaUltimosSeisMeses = filtrarPorData(
+        listaLeite,
+        dataUltimosSeisMeses,
+        dataHoje
+      );
+      setListaFiltrada(listaUltimosSeisMeses);
+      setLista1(listaUltimosSeisMeses);
+      setTextDataChipValue("6 meses");
+    } else if (dataChipValue === 5) {
+      //todas as datas
+      setListaFiltrada(listaLeite);
+      setLista1(listaLeite);
+      setTextDataChipValue("Todas as datas");
+    } else if (dataChipValue === 6) {
+      setTextDataChipValue("Customizado");
+    } else {
+      setTextDataChipValue("Período");
+      setListaFiltrada(listaLeite);
+      setLista1(listaLeite);
+    }
+  }, [dataChipValue]);
+
+  //Código para retornar uma listaLeite do intevalo selecionado pelo usuário (FILTRO INTERVALO ENTRE DATAS)
+  const filtrarIntervalo = () => {
+    if (startDate != "" && endDate != "") {
+      const listaFiltradaIntervalo = listaLeite.filter((item) => {
+        //pega todos os itens da listaLeite que foi puxada da (listaLeite)
+        const itemDataDeCriacao = new Date(item.createdAt); //cria uma nova data com a data do (createdAt do item) e atribui a variavel itemDataDeCriacao
+        const dataInicio = new Date(startDate); //pega a data de inicio escolhida pelo usuario
+        dataInicio.setHours(0, 0, 0, 0); //ajusta o horario para 00:00:00 para garantir que a data de inicio seja no começo do dia.
+        const dataFim = new Date(endDate); //pega a data final escolhida pelo usuario
+        dataFim.setHours(23, 59, 59, 999); //ajusta o horario para 23:59:59 para garantir que a data final sejá no final do dia.
+        return itemDataDeCriacao >= dataInicio && itemDataDeCriacao <= dataFim;
+      });
+      setListaFiltrada(listaFiltradaIntervalo);
+    }
+  };
+
+  const handleDataChipPress = (value) => {
+    setDataChipValue(value === dataChipValue ? null : value);
+    setValorChipValue(null);
+  };
+
+  const handleValorChipPress = (value) => {
+    setValorChipValue(value === valorChipValue ? null : value);
+  };
+
+  const handleChipPress = (tipo) => {
+    let teste = false;
+    if (tipo === "data") {
+      const dataValoresValidos = [1, 2, 3, 4, 5, 6];
+      teste = dataValoresValidos.includes(dataChipValue);
+    } else if (tipo === "valor") {
+      const valorValoresValidos = [1, 2];
+      teste = valorValoresValidos.includes(valorChipValue);
+    }
+    return teste;
+  };
+  //FIM FILTROS----------------------------------------------------------------
+
   function toggleModal() {
     setModalVisible(!isModalVisible);
   }
@@ -207,13 +420,235 @@ function Faturamento({ navigation }) {
                 <View style={styles.modalContainer}>
                   <Text style={styles.tituloModal}>Detalhes de receitas:</Text>
                   {/*filtros*/}
-                  <View style={{ paddingHorizontal: 20, marginBottom: 5 }}>
-                    <FiltrosData
-                      listaAFiltrar={"receitasFaz"}
-                      ordenarPor={"valor"}
-                    />
+                  <View style={styles.containerChip}>
+                    <View style={styles.teste}>
+                      <Chip
+                        style={[
+                          styles.chipFiltroReceita,
+                          (dataChipValue || valorChipValue) &&
+                            styles.chipSelected,
+                        ]}
+                        textStyle={{
+                          fontSize: scale(14),
+                          color: Colors.white,
+                        }}
+                        icon={() => (
+                          <Icon name="filter" size={20} color="white" />
+                        )}
+                        onPress={() => {
+                          setModalFiltrosVisible(true);
+                        }}
+                      >
+                        <Text>Filtros</Text>
+                      </Chip>
+                      <Chip
+                        style={[
+                          styles.chipFiltroReceita,
+                          handleChipPress("data") && styles.chipSelected,
+                        ]}
+                        textStyle={{
+                          fontSize: scale(14),
+                          color: Colors.white,
+                        }}
+                        icon={() => (
+                          <Icon name="calendar" size={20} color="white" />
+                        )}
+                      >
+                        <Text>{textDataChipValue}</Text>
+                      </Chip>
+                      <Chip
+                        style={[
+                          styles.chipFiltroReceita,
+                          handleChipPress("valor") && styles.chipSelected,
+                        ]}
+                        textStyle={{
+                          fontSize: scale(14),
+                          color: Colors.white,
+                        }}
+                        icon={() => (
+                          <FontAwesome5
+                            name="dollar-sign"
+                            size={20}
+                            color="white"
+                          />
+                        )}
+                      >
+                        {textValorChipValue}
+                      </Chip>
+                    </View>
                   </View>
 
+                  <Modal
+                    coverScreen={true}
+                    backdropColor={"#000"}
+                    onBackButtonPress={() => setModalFiltrosVisible(false)}
+                    onBackdropPress={() => setModalFiltrosVisible(false)}
+                    isVisible={modalFiltrosVisible}
+                    animationType="slide"
+                    statusBarTranslucent
+                  >
+                    <SafeAreaView style={styles.containerFiltro}>
+                      <View style={styles.modalContainerFiltro}>
+                        <View style={styles.topFiltros}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              setDataChipValue(null);
+                              setValorChipValue(null);
+                              setListaFiltrada(lista);
+                            }}
+                          >
+                            <Text>Limpar</Text>
+                          </TouchableOpacity>
+                          <Text style={styles.tituloinfo}>Filtros</Text>
+                          <TouchableOpacity
+                            onPress={() => setModalFiltrosVisible(false)}
+                          >
+                            <AntDesign
+                              name="close"
+                              size={20}
+                              color={Colors.white}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                        <Text style={styles.tituloinfo1}>Período</Text>
+                        <View style={styles.teste}>
+                          <Chip
+                            style={[
+                              styles.chipsFiltro,
+                              dataChipValue === 1 && styles.chipSelected,
+                            ]}
+                            onPress={() => handleDataChipPress(1)}
+                          >
+                            <Text>7 dias</Text>
+                          </Chip>
+                          <Chip
+                            style={[
+                              styles.chipsFiltro,
+                              dataChipValue === 2 && styles.chipSelected,
+                            ]}
+                            onPress={() => handleDataChipPress(2)}
+                          >
+                            <Text>Último mês</Text>
+                          </Chip>
+                          <Chip
+                            style={[
+                              styles.chipsFiltro,
+                              dataChipValue === 3 && styles.chipSelected,
+                            ]}
+                            onPress={() => handleDataChipPress(3)}
+                          >
+                            <Text>3 meses</Text>
+                          </Chip>
+                          <Chip
+                            style={[
+                              styles.chipsFiltro,
+                              dataChipValue === 4 && styles.chipSelected,
+                            ]}
+                            onPress={() => handleDataChipPress(4)}
+                          >
+                            <Text>6 meses</Text>
+                          </Chip>
+                          <Chip
+                            style={[
+                              styles.chipsFiltro,
+                              dataChipValue === 5 && styles.chipSelected,
+                            ]}
+                            onPress={() => handleDataChipPress(5)}
+                          >
+                            <Text>Todas as datas</Text>
+                          </Chip>
+                          <Chip
+                            style={[
+                              styles.chipsFiltro,
+                              dataChipValue === 6 && styles.chipSelected,
+                            ]}
+                            onPress={() => handleDataChipPress(6)}
+                          >
+                            <Text>Customizado</Text>
+                          </Chip>
+                        </View>
+                        {dataChipValue === 6 && (
+                          <>
+                            <View style={styles.containerBotoes}>
+                              <TouchableOpacity
+                                style={styles.botoes}
+                                onPress={showStartDatePicker}
+                              >
+                                <Text style={styles.textoFiltro}>
+                                  {textStartDate}
+                                </Text>
+                              </TouchableOpacity>
+                              <DateTimePickerModal
+                                isVisible={isStartDatePickerVisible}
+                                mode="date"
+                                onConfirm={handleStartDateConfirm}
+                                onCancel={hideStartDatePicker}
+                                maximumDate={new Date()}
+                              />
+
+                              <TouchableOpacity
+                                style={styles.botoes}
+                                onPress={showEndDatePicker}
+                              >
+                                <Text style={styles.textoFiltro}>
+                                  {textEndDate}
+                                </Text>
+                              </TouchableOpacity>
+                              <DateTimePickerModal
+                                isVisible={isEndDatePickerVisible}
+                                mode="date"
+                                onConfirm={handleEndDateConfirm}
+                                onCancel={hideEndDatePicker}
+                                maximumDate={new Date()}
+                              />
+                            </View>
+                            <View style={styles.containerBotoes}>
+                              <TouchableOpacity
+                                style={styles.botoes}
+                                onPress={filtrarIntervalo}
+                              >
+                                <Text style={styles.textoFiltro}>Filtrar</Text>
+                              </TouchableOpacity>
+                              <TouchableOpacity
+                                style={styles.botoes}
+                                onPress={() => {
+                                  setStartDate("");
+                                  setEndDate("");
+                                  setTextStartDate("Data Inicial");
+                                  setTextEndDate("Data Final");
+                                }}
+                              >
+                                <Text style={styles.textoFiltro}>Limpar</Text>
+                              </TouchableOpacity>
+                            </View>
+                          </>
+                        )}
+
+                        <Text style={styles.tituloinfo1}>Valores</Text>
+                        <View style={styles.teste}>
+                          <Chip
+                            style={[
+                              styles.chipsFiltro,
+                              valorChipValue === 1 && styles.chipSelected,
+                            ]}
+                            onPress={() => handleValorChipPress(1)}
+                          >
+                            <Text>Crescente</Text>
+                          </Chip>
+                          <Chip
+                            style={[
+                              styles.chipsFiltro,
+                              valorChipValue === 2 && styles.chipSelected,
+                            ]}
+                            onPress={() => handleValorChipPress(2)}
+                          >
+                            <Text>Decrescente</Text>
+                          </Chip>
+                        </View>
+                      </View>
+                    </SafeAreaView>
+                  </Modal>
+                  {/*FIM FILTROS*/}
                   <FlatList
                     style={styles.lista}
                     data={listaFiltrada}
