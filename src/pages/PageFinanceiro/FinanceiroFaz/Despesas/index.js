@@ -16,7 +16,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import BezierChartDespesas from "../../../../components/Graficos/BezierChartDespesas";
 import { Colors } from "../../../../styles";
-import { TextInput, Chip } from "react-native-paper";
+import { TextInput, Chip, IconButton, Divider } from "react-native-paper";
 import { AuthContext } from "../../../../contexts/auth";
 import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import { scale, verticalScale } from "react-native-size-matters";
@@ -41,7 +41,9 @@ function Despesas({ navigation }) {
   const [tipoChipValue, setTipoChipValue] = useState(null);
   const [valorChipValue, setValorChipValue] = useState(null);
   const [dataChipValue, setDataChipValue] = useState(1);
-  const [textTipoChipValue, setTextTipoChipValue] = useState("Tipo de Despesa");
+  const [textTipoChipValue, setTextTipoChipValue] = useState(
+    "Categoria de gastos"
+  );
   const [textDataChipValue, setTextDataChipValue] = useState("Período");
   const [textValorChipValue, setTextValorChipValue] = useState("Valores");
   const [modalFiltrosVisible, setModalFiltrosVisible] = useState(false);
@@ -112,7 +114,7 @@ function Despesas({ navigation }) {
     hideEndDatePicker();
   };
 
-  //Filtro por tipo de despesas
+  //Filtro por Categoria de gastos
   useEffect(() => {
     if (tipoChipValue === 1) {
       const listaRemedios = listaAli.filter((item) => {
@@ -136,7 +138,7 @@ function Despesas({ navigation }) {
       setLista(listaOutrasDespesas);
       setTextTipoChipValue("Outras Despesas");
     } else {
-      setTextTipoChipValue("Tipo de Despesa");
+      setTextTipoChipValue("Categoria de gastos");
       setListaFiltrada(listaAli);
       setLista(listaAli);
     }
@@ -532,16 +534,26 @@ function Despesas({ navigation }) {
                 <View style={styles.modalContainer}>
                   <Text style={styles.tituloModal}>Detalhes de Despesas:</Text>
                   {/*FILTROS*/}
-                  <View style={{ flexDirection: "row" }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      margin: scale(10),
+                    }}
+                  >
                     <TextInput
+                      mode="flat"
                       style={styles.search}
-                      placeholder="Buscar por nome"
+                      textColor={Colors.black}
+                      activeUnderlineColor={Colors.green}
+                      underlineColor={Colors.blue}
+                      underlineStyle={{ paddingBottom: 3 }}
+                      label="Buscar por Nome"
                       value={searchText}
                       onChangeText={(t) => setSearchText(t)}
                     />
                     <Chip
                       style={[
-                        styles.chip,
+                        styles.chipFiltro,
                         (tipoChipValue || dataChipValue || dataChipValue) &&
                           styles.chipSelected,
                       ]}
@@ -557,8 +569,10 @@ function Despesas({ navigation }) {
                     </Chip>
                   </View>
                   <ScrollView
+                    style={{ minHeight: verticalScale(34) }}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
+                    fadingEdgeLength={100}
                   >
                     <Chip
                       style={[
@@ -570,7 +584,7 @@ function Despesas({ navigation }) {
                         <Icon name="square" size={20} color="white" />
                       )}
                     >
-                      <Text>{textTipoChipValue}</Text>
+                      {textTipoChipValue}
                     </Chip>
                     <Chip
                       style={[
@@ -582,7 +596,7 @@ function Despesas({ navigation }) {
                         <Icon name="calendar" size={20} color="white" />
                       )}
                     >
-                      <Text>{textDataChipValue}</Text>
+                      {textDataChipValue}
                     </Chip>
                     <Chip
                       style={[
@@ -603,28 +617,36 @@ function Despesas({ navigation }) {
                   </ScrollView>
 
                   <Modal
-                    coverScreen={true}
-                    backdropColor={"#000"}
                     onBackButtonPress={() => setModalFiltrosVisible(false)}
                     onBackdropPress={() => setModalFiltrosVisible(false)}
                     isVisible={modalFiltrosVisible}
-                    animationType="slide"
+                    coverScreen={true}
+                    animationIn="fadeInLeftBig"
+                    animationInTiming={600}
+                    animationOut={"fadeOutRightBig"}
+                    animationOutTiming={600}
+                    backdropTransitionInTiming={1000}
+                    backdropTransitionOutTiming={1000}
+                    backdropColor={"#000"}
                     statusBarTranslucent
                   >
                     <SafeAreaView style={styles.containerFiltro}>
                       <View style={styles.modalContainerFiltro}>
+                        <TouchableOpacity
+                          style={styles.BotaoLimparFiltro}
+                          onPress={() => {
+                            setTipoChipValue(null);
+                            setDataChipValue(null);
+                            setValorChipValue(null);
+                            setListaFiltrada(listaAli);
+                          }}
+                        >
+                          <Text style={styles.txtLimparFiltro}>Limpar</Text>
+                        </TouchableOpacity>
                         <View style={styles.topFiltros}>
-                          <TouchableOpacity
-                            onPress={() => {
-                              setTipoChipValue(null);
-                              setDataChipValue(null);
-                              setValorChipValue(null);
-                              setListaFiltrada(listaAli);
-                            }}
-                          >
-                            <Text>Limpar</Text>
-                          </TouchableOpacity>
-                          <Text style={styles.tituloinfo}>Filtros</Text>
+                          <View style={styles.containerTituloModalFiltro}>
+                            <Text style={styles.tituloinfo}>Filtros</Text>
+                          </View>
                           <TouchableOpacity
                             onPress={() => setModalFiltrosVisible(false)}
                           >
@@ -635,13 +657,20 @@ function Despesas({ navigation }) {
                             />
                           </TouchableOpacity>
                         </View>
-                        <Text style={styles.tituloinfo1}>Tipo de Despesa</Text>
+                        <Divider
+                          bold="true"
+                          style={{ marginVertical: scale(4) }}
+                        />
+                        <Text style={styles.tituloinfo1}>
+                          Categoria de gastos
+                        </Text>
                         <View style={styles.teste}>
                           <Chip
                             style={[
                               styles.chipsFiltro,
                               tipoChipValue === 1 && styles.chipSelected,
                             ]}
+                            textStyle={styles.chipModalFiltro}
                             onPress={() => handleTipoChipPress(1)}
                           >
                             <Text>Remédios</Text>
@@ -652,6 +681,7 @@ function Despesas({ navigation }) {
                               tipoChipValue === 2 && styles.chipSelected,
                             ]}
                             onPress={() => handleTipoChipPress(2)}
+                            textStyle={styles.chipModalFiltro}
                           >
                             <Text>Alimento</Text>
                           </Chip>
@@ -661,10 +691,15 @@ function Despesas({ navigation }) {
                               tipoChipValue === 3 && styles.chipSelected,
                             ]}
                             onPress={() => handleTipoChipPress(3)}
+                            textStyle={styles.chipModalFiltro}
                           >
                             <Text>Outras Despesas</Text>
                           </Chip>
                         </View>
+                        <Divider
+                          bold="true"
+                          style={{ marginVertical: scale(4) }}
+                        />
                         <Text style={styles.tituloinfo1}>Período</Text>
                         <View style={styles.teste}>
                           <Chip
@@ -673,6 +708,7 @@ function Despesas({ navigation }) {
                               dataChipValue === 1 && styles.chipSelected,
                             ]}
                             onPress={() => handleDataChipPress(1)}
+                            textStyle={styles.chipModalFiltro}
                           >
                             <Text>7 dias</Text>
                           </Chip>
@@ -682,6 +718,7 @@ function Despesas({ navigation }) {
                               dataChipValue === 2 && styles.chipSelected,
                             ]}
                             onPress={() => handleDataChipPress(2)}
+                            textStyle={styles.chipModalFiltro}
                           >
                             <Text>Último mês</Text>
                           </Chip>
@@ -691,6 +728,7 @@ function Despesas({ navigation }) {
                               dataChipValue === 3 && styles.chipSelected,
                             ]}
                             onPress={() => handleDataChipPress(3)}
+                            textStyle={styles.chipModalFiltro}
                           >
                             <Text>3 meses</Text>
                           </Chip>
@@ -700,6 +738,7 @@ function Despesas({ navigation }) {
                               dataChipValue === 4 && styles.chipSelected,
                             ]}
                             onPress={() => handleDataChipPress(4)}
+                            textStyle={styles.chipModalFiltro}
                           >
                             <Text>6 meses</Text>
                           </Chip>
@@ -709,6 +748,7 @@ function Despesas({ navigation }) {
                               dataChipValue === 5 && styles.chipSelected,
                             ]}
                             onPress={() => handleDataChipPress(5)}
+                            textStyle={styles.chipModalFiltro}
                           >
                             <Text>Todas as datas</Text>
                           </Chip>
@@ -718,6 +758,7 @@ function Despesas({ navigation }) {
                               dataChipValue === 6 && styles.chipSelected,
                             ]}
                             onPress={() => handleDataChipPress(6)}
+                            textStyle={styles.chipModalFiltro}
                           >
                             <Text>Customizado</Text>
                           </Chip>
@@ -729,9 +770,20 @@ function Despesas({ navigation }) {
                                 style={styles.botoes}
                                 onPress={showStartDatePicker}
                               >
-                                <Text style={styles.textoFiltro}>
-                                  {textStartDate}
-                                </Text>
+                                <View
+                                  style={{
+                                    flex: 1,
+                                  }}
+                                >
+                                  <Text style={styles.textoFiltro}>
+                                    {textStartDate}
+                                  </Text>
+                                </View>
+                                <IconButton
+                                  icon={"calendar"}
+                                  size={20}
+                                  color={Colors.black}
+                                />
                               </TouchableOpacity>
                               <DateTimePickerModal
                                 isVisible={isStartDatePickerVisible}
@@ -745,9 +797,18 @@ function Despesas({ navigation }) {
                                 style={styles.botoes}
                                 onPress={showEndDatePicker}
                               >
-                                <Text style={styles.textoFiltro}>
-                                  {textEndDate}
-                                </Text>
+                                <View
+                                  style={{ flex: 1, justifyContent: "center" }}
+                                >
+                                  <Text style={styles.textoFiltro}>
+                                    {textEndDate}
+                                  </Text>
+                                </View>
+                                <IconButton
+                                  icon={"calendar"}
+                                  size={20}
+                                  color={Colors.black}
+                                />
                               </TouchableOpacity>
                               <DateTimePickerModal
                                 isVisible={isEndDatePickerVisible}
@@ -765,7 +826,13 @@ function Despesas({ navigation }) {
                                   setValorChipValue(null);
                                 }}
                               >
-                                <Text style={styles.textoFiltro}>Filtrar</Text>
+                                <View
+                                  style={{ flex: 1, justifyContent: "center" }}
+                                >
+                                  <Text style={styles.textoFiltro}>
+                                    Filtrar
+                                  </Text>
+                                </View>
                               </TouchableOpacity>
                               <TouchableOpacity
                                 style={styles.botoes}
@@ -778,12 +845,19 @@ function Despesas({ navigation }) {
                                   setListaFiltrada(lista);
                                 }}
                               >
-                                <Text style={styles.textoFiltro}>Limpar</Text>
+                                <View
+                                  style={{ flex: 1, justifyContent: "center" }}
+                                >
+                                  <Text style={styles.textoFiltro}>Limpar</Text>
+                                </View>
                               </TouchableOpacity>
                             </View>
                           </>
                         )}
-
+                        <Divider
+                          bold="true"
+                          style={{ marginVertical: scale(4) }}
+                        />
                         <Text style={styles.tituloinfo1}>Valores</Text>
                         <View style={styles.teste}>
                           <Chip
@@ -792,6 +866,7 @@ function Despesas({ navigation }) {
                               valorChipValue === 1 && styles.chipSelected,
                             ]}
                             onPress={() => handleValorChipPress(1)}
+                            textStyle={styles.chipModalFiltro}
                           >
                             <Text>Crescente</Text>
                           </Chip>
@@ -801,6 +876,7 @@ function Despesas({ navigation }) {
                               valorChipValue === 2 && styles.chipSelected,
                             ]}
                             onPress={() => handleValorChipPress(2)}
+                            textStyle={styles.chipModalFiltro}
                           >
                             <Text>Decrescente</Text>
                           </Chip>
