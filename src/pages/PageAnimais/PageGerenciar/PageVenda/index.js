@@ -281,7 +281,7 @@ function Venda({ navigation }) {
 
               <DateTimePickerModal
                 isVisible={isDatePickerVisible}
-                mode="date"
+                mode="datetime"
                 onConfirm={handleDateConfirm}
                 onCancel={hideDatePicker}
                 maximumDate={new Date()}
