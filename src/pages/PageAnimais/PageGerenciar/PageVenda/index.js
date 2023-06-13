@@ -101,9 +101,12 @@ function Venda({ navigation }) {
             createdAt: new Date(date),
           });
           reb.receitas.push(createdVendaReb);
-          realm.delete(vaca);
+          let newVacas = copyAndDeleteVaca(reb, vacaID);
+          reb.vacas = [];
+          newVacas.forEach((vaca) => {
+            reb.vacas.push(vaca);
+          });
           Alert.alert("Dados cadastrados com sucesso!");
-          navigation.navigate("Home");
         });
       } catch (e) {
         Alert.alert("Não foi possível cadastrar!", e.message);
@@ -114,6 +117,14 @@ function Venda({ navigation }) {
         setVacaID("");
       }
     }
+  }
+  function copyAndDeleteVaca(reb, vacaID) {
+    const copiedVacas = [...reb.vacas];
+    const index = copiedVacas.findIndex((vaca) => vaca._id === vacaID);
+    if (index !== -1) {
+      copiedVacas.splice(index, 1);
+    }
+    return copiedVacas;
   }
   //Buscar no banco
   useEffect(() => {

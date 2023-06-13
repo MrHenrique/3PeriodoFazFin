@@ -191,14 +191,14 @@ function Relatorio({ navigation }) {
   };
   function getDespesas() {
     if (typeof precoCF !== "undefined") {
-      return Number(precoCF);
+      return Number(precoCF).toFixed(2);
     } else {
       return 0;
     }
   }
   function getReceitas() {
     if (typeof precoLeite !== "undefined") {
-      return Number(precoLeite);
+      return Number(precoLeite).toFixed(2);
     } else {
       return 0;
     }
@@ -237,16 +237,16 @@ function Relatorio({ navigation }) {
           .reduce((somaReceita, receita) => somaReceita + receita.prodL, 0);
         return somaRebanho + sumProdL;
       }, 0);
-      let totalLeiteString = totalLeite.toString();
+      let totalLeiteString = totalLeite.toFixed(2).toString();
       setTotalLeite(totalLeiteString + " Litros");
-      let media = (totalLeite / totalVacas).toString();
+      let media = (totalLeite / totalVacas).toFixed(2).toString();
       setMediaLeite(media + " Litros");
       let total = getTotal(getDespesas(), getReceitas()).toFixed(2);
       setTotal(total);
       setTotalRelatorio(`R$ ${total.replace(".", ",")}`);
-      let despesas = getDespesas().toFixed(2);
+      let despesas = getDespesas();
       setTotalDespesasRelatorio(`R$ ${despesas.replace(".", ",")}`);
-      let receitas = getReceitas().toFixed(2);
+      let receitas = getReceitas();
       setTotalReceitasRelatorio(`R$ ${receitas.replace(".", ",")}`);
     }
   }, [realm]);

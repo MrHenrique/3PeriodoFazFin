@@ -290,7 +290,7 @@ export default function Outros({ navigation }) {
               <View style={styles.containerOutrasDespesas}>
                 <TextInput
                   mode="flat"
-                  label={"Valor total."}
+                  label={"Valor total"}
                   style={styles.txtInput}
                   placeholderTextColor={Colors.grey}
                   textColor={Colors.black}
@@ -318,7 +318,6 @@ export default function Outros({ navigation }) {
                     : "Preencha o campo valor total."}
                 </HelperText>
               </View>
-              <View style={styles.containerCadastroOutras}>
                 <View style={styles.containerOutrasDespesas}>
                   <TextInput
                     mode="flat"
@@ -334,7 +333,6 @@ export default function Outros({ navigation }) {
                   />
                 </View>
               </View>
-            </View>
             <View style={styles.radioBView}>
               <RadioButton
                 uncheckedColor={Colors.white}

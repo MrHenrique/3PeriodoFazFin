@@ -207,9 +207,9 @@ function RelatorioReb({ navigation }) {
         .filter((item) => item.tipo === 1)
         .reduce((somaReceitas, receita) => somaReceitas + receita.prodL, 0);
 
-      let totalLeiteString = totalLeite.toString();
+      let totalLeiteString = totalLeite.toFixed(2).toString();
       setTotalLeite(totalLeiteString + " Litros");
-      let media = (totalLeite / totalVacas).toString();
+      let media = (totalLeite / totalVacas).toFixed(2).toString();
       setMediaLeite(media + " Litros");
       let total = getTotal(getDespesas(), getReceitas()).toFixed(2);
       setTotal(total);
