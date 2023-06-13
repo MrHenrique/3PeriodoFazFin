@@ -44,6 +44,21 @@ function CadastroVaca({ navigation }) {
             descVaca: descVaca,
             createdAt: new Date(),
             genero: machoFemea,
+            receitas:[],
+            despesas:[],
+            reproducao: [
+              {
+                _id: uuid.v4(),
+                cio: false,
+                cobertura: false,
+                prenhez: false,
+                dataCio: null,
+                dataCobertura: null,
+                dataParto: null,
+                partos: [],
+                notificacao: false,
+              },
+            ],
           });
           dataReb.vacas.push(createdVaca);
           navigation.navigate("PageAnimais");
