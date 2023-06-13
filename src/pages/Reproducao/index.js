@@ -43,7 +43,6 @@ const Reproducao = ({ navigation }) => {
     if (realm) {
       let dataVaca = realm.objectForPrimaryKey("VacasSchema", idVaca);
       if (dataVaca.reproducao.length > 0) {
-        console.log(dataVaca.reproducao[0].partos);
         setIdRepr(dataVaca.reproducao[0]._id);
         setCio(dataVaca.reproducao[0].cio);
         setCobertura(dataVaca.reproducao[0].cobertura);
