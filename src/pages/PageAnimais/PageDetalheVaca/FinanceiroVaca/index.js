@@ -8,7 +8,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { scale } from "react-native-size-matters";
 
 function FinanceiroVaca({ route, navigation }) {
-  const { idVaca } = useContext(AuthContext);
+  const { idVaca, GrafVaca } = useContext(AuthContext);
   const realm = useMainContext();
   const [lista, setLista] = useState([]);
   //buscar banco
@@ -16,6 +16,11 @@ function FinanceiroVaca({ route, navigation }) {
     if (realm) {
       let dataVaca = realm.objectForPrimaryKey("VacasSchema", idVaca);
       setLista(dataVaca);
+      GrafVaca(dataVaca);
+      dataVaca.addListener((values) => {
+        setLista(dataVaca);
+        GrafVaca(dataVaca);
+      });
     }
   }, [realm]);
   function getResultL() {

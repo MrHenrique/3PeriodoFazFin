@@ -11,13 +11,13 @@ const Reproducao = ({ navigation }) => {
   const { idVaca } = useContext(AuthContext);
   const realm = useMainContext();
   const [cobertura, setCobertura] = useState(false);
-  const [dataCobertura, setDataCobertura] = useState(new Date());
+  const [dataCobertura, setDataCobertura] = useState(new Date().toISOString().substring(0,10));
   const [ultimaCobertura, setDataUltimaCobertura] = useState();
   const [prenhez, setPrenhez] = useState(false);
-  const [dataParto, setDataParto] = useState(new Date());
+  const [dataParto, setDataParto] = useState(new Date().toISOString().substring(0,10));
   const [dataUltimoParto, setDataUltimoParto] = useState();
   const [cio, setCio] = useState(false);
-  const [dataCio, setDataCio] = useState(new Date());
+  const [dataCio, setDataCio] = useState(new Date().toISOString().substring(0,10));
   const [ultimoCio, setUltimoCio] = useState();
   const [partos, setPartos] = useState([]);
   const [callFunction, setCallFunction] = useState(0);
@@ -92,16 +92,16 @@ const Reproducao = ({ navigation }) => {
   };
   function nextCio() {
     if (ultimoCio) {
-      return dateOrHifen(ultimoCio.addDays(21));
+      return dateOrHifen(ultimoCio.addDays(21).toISOString().substring(0,10));
     } else if (dataUltimoParto) {
-      return dateOrHifen(dataUltimoParto.addDays(65));
+      return dateOrHifen(dataUltimoParto.addDays(50).toISOString().substring(0,10));
     } else {
       return "-";
     }
   }
   function nextParto() {
     if (prenhez) {
-      return dateOrHifen(ultimaCobertura.addDays(285));
+      return dateOrHifen(ultimaCobertura.addDays(285).toISOString().substring(0,10));
     } else {
       return "-";
     }
@@ -186,9 +186,9 @@ const Reproducao = ({ navigation }) => {
               notificacao: notificacao,
             },
           ];
-          setDataCio(new Date());
-          setDataCobertura(new Date());
-          setDataParto(new Date());
+          setDataCio(new Date().toISOString().substring(0,10));
+          setDataCobertura(new Date().toISOString().substring(0,10));
+          setDataParto(new Date().toISOString().substring(0,10));
           setCallFunction(0);
         });
       } catch (e) {

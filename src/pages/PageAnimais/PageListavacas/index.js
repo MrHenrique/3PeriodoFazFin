@@ -16,6 +16,7 @@ import { useMainContext } from "../../../contexts/RealmContext";
 import { Colors } from "../../../styles";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import uuid from "react-native-uuid";
 
 const imgbg1 = "../../../../assets/fazfinwhiteletter.png";
 
@@ -38,7 +39,6 @@ function PageListavacas({ navigation }) {
       let notificacaoArray = [];
       vacas.forEach((vaca) => {
         if (vaca.reproducao.length > 0) {
-          let notificacao = vaca.reproducao[0].notificacao;
           let idVaca = vaca._id;
           let cio = vaca.reproducao[0].cio;
           let cobertura = vaca.reproducao[0].cobertura;
@@ -46,12 +46,24 @@ function PageListavacas({ navigation }) {
           let ultimoCio = vaca.reproducao[0].dataCio;
           let ultimaCobertura = vaca.reproducao[0].dataCobertura;
           let dataUltimoParto = vaca.reproducao[0].dataParto;
+          let partos = vaca.reproducao[0].partos;
+          let notificacao = vaca.reproducao[0].notificacao;
 
           if (!cio && !prenhez && notificacao === true) {
             if (ultimoCio) {
               if (
-                ultimoCio.addDays(21) > new Date().addDays(-1) &&
-                ultimoCio.addDays(21) < new Date().addDays(+1)
+                ultimoCio.addDays(21).toISOString().substring(0, 10) ===
+                new Date().toISOString().substring(0, 10)
+              ) {
+                notificacaoArray.push({
+                  CioPartoHoje: vaca.nomeVaca,
+                });
+              }
+            }
+            if (dataUltimoParto) {
+              if (
+                dataUltimoParto.addDays(50).toISOString().substring(0, 10) ===
+                new Date().toISOString().substring(0, 10)
               ) {
                 notificacaoArray.push({
                   CioPartoHoje: vaca.nomeVaca,
@@ -61,8 +73,8 @@ function PageListavacas({ navigation }) {
           }
           if (prenhez && notificacao === true) {
             if (
-              ultimaCobertura.addDays(285) > new Date().addDays(-1) &&
-              ultimaCobertura.addDays(285) < new Date().addDays(+1)
+              ultimaCobertura.addDays(285).toISOString().substring(0, 10) ===
+              new Date().toISOString().substring(0, 10)
             ) {
               notificacaoArray.push({
                 CioPartoHoje: vaca.nomeVaca,
@@ -76,7 +88,9 @@ function PageListavacas({ navigation }) {
             prenhez,
             ultimoCio,
             ultimaCobertura,
-            dataUltimoParto
+            dataUltimoParto,
+            partos,
+            notificacao
           );
           possivelPrenhez(
             idVaca,
@@ -85,7 +99,9 @@ function PageListavacas({ navigation }) {
             prenhez,
             ultimoCio,
             ultimaCobertura,
-            dataUltimoParto
+            dataUltimoParto,
+            partos,
+            notificacao
           );
         }
         function possivelPrenhez(
@@ -95,10 +111,15 @@ function PageListavacas({ navigation }) {
           prenhez,
           ultimoCio,
           ultimaCobertura,
-          dataUltimoParto
+          dataUltimoParto,
+          partos,
+          notificacao
         ) {
           if (!cio && cobertura && !prenhez) {
-            if (ultimoCio.addDays(21) < new Date()) {
+            if (
+              ultimoCio.addDays(21).toISOString().substring(0, 10) <
+              new Date().toISOString().substring(0, 10)
+            ) {
               let prenhez = true;
               let dataCio = ultimoCio;
               let dataParto = dataUltimoParto;
@@ -110,7 +131,9 @@ function PageListavacas({ navigation }) {
                 prenhez,
                 dataCio,
                 dataParto,
-                dataCobertura
+                dataCobertura,
+                partos,
+                notificacao
               );
             }
           }
@@ -123,9 +146,15 @@ function PageListavacas({ navigation }) {
           prenhez,
           ultimoCio,
           ultimaCobertura,
-          dataUltimoParto
+          dataUltimoParto,
+          partos,
+          notificacao
         ) {
-          if (cio && ultimoCio.addDays(1) < new Date()) {
+          if (
+            cio &&
+            ultimoCio.addDays(1).toISOString().substring(0, 10) <=
+              new Date().toISOString().substring(0, 10)
+          ) {
             let cio = false;
             let dataCio = ultimoCio;
             let dataParto = dataUltimoParto;
@@ -137,7 +166,9 @@ function PageListavacas({ navigation }) {
               prenhez,
               dataCio,
               dataParto,
-              dataCobertura
+              dataCobertura,
+              partos,
+              notificacao
             );
             possivelPrenhez(
               idVaca,
@@ -146,7 +177,9 @@ function PageListavacas({ navigation }) {
               prenhez,
               ultimoCio,
               ultimaCobertura,
-              dataUltimoParto
+              dataUltimoParto,
+              partos,
+              notificacao
             );
           }
         }
@@ -158,7 +191,9 @@ function PageListavacas({ navigation }) {
           prenhez,
           dataCio,
           dataParto,
-          dataCobertura
+          dataCobertura,
+          partos,
+          notificacao
         ) {
           if (realm) {
             realm.write(() => {
@@ -172,6 +207,8 @@ function PageListavacas({ navigation }) {
                   dataCio: dataCio,
                   dataCobertura: dataCobertura,
                   dataParto: dataParto,
+                  partos: partos,
+                  notificacao: notificacao,
                 },
               ];
             });
