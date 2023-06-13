@@ -14,7 +14,6 @@ function PageGerenciar() {
           tabBarLabelStyle: { ...estilo.tabarlabel },
           tabBarIndicatorStyle: { ...estilo.tabBarIndicator },
           tabBarStyle: styles.tab,
-          lazy: true,
         }}
       >
         <Tab.Screen name="Registros de Vendas" component={RegistrosVendas} />

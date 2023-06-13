@@ -220,7 +220,7 @@ function Relatorio({ navigation }) {
       );
       setTotalVacas(totalVacas);
       let totalLeite = Fazenda.rebanhos.reduce((somaRebanho, rebanho) => {
-        let sumProdL = rebanho.receitas.reduce(
+        let sumProdL = rebanho.receitas.filter((item) => item.tipo === 1).reduce(
           (somaReceita, receita) => somaReceita + receita.prodL,
           0
         );
