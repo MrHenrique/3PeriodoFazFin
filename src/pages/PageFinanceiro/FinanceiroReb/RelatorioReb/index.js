@@ -209,8 +209,13 @@ function RelatorioReb({ navigation }) {
 
       let totalLeiteString = totalLeite.toFixed(2).toString();
       setTotalLeite(totalLeiteString + " Litros");
-      let media = (totalLeite / totalVacas).toFixed(2).toString();
-      setMediaLeite(media + " Litros");
+      if (totalVacas > 0) {
+        let media = (totalLeite / totalVacas).toFixed(2).toString();
+        setMediaLeite(media + " Litros");
+      }
+      if (totalVacas === 0) {
+        setMediaLeite(0 + " Litros");
+      }
       let total = getTotal(getDespesas(), getReceitas()).toFixed(2);
       setTotal(total);
       setTotalRelatorio(`R$ ${total.replace(".", ",")}`);

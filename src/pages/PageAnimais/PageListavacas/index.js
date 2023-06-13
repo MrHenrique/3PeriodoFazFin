@@ -366,7 +366,7 @@ function PageListavacas({ navigation }) {
             fadingEdgeLength={70}
             data={lista}
             keyExtractor={(item) => item._id}
-            maxToRenderPerBatch={7}
+            maxToRenderPerBatch={14}
             initialNumToRender={7}
             renderItem={({ item, index }) => (
               <View style={styles.containerVacas}>

@@ -132,6 +132,57 @@ export default function Outros({ navigation }) {
   async function handleAddGastos() {
     if (realm) {
       if (checked === "rebanho") {
+        let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+        let nVacas = reb.vacas.filtered("genero == 1").length;
+        if (nVacas > 0) {
+          try {
+            let id = uuid.v4();
+            realm.write(() => {
+              let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+              const valorProd = Number(valorProdString);
+              let createdGastosReb = realm.create("DespesaRebSchema", {
+                _id: id,
+                createdAt: new Date(),
+                nomeProd,
+                valorProd,
+                qtdProd: 1,
+                obserProd: obserProd,
+                pesoProd: 0,
+                volumeProd: 0,
+              });
+              reb.despesas.push(createdGastosReb);
+              let nVacas = reb.vacas.length;
+              reb.vacas.forEach((vaca) => {
+                let createdGastos = realm.create("DespesasSchema", {
+                  _id: uuid.v4(),
+                  idTransacao: id,
+                  createdAt: new Date(),
+                  nomeProd,
+                  valorProd: valorProd / nVacas,
+                  qtdProd: 1,
+                  obserProd: obserProd,
+                  pesoProd: 0,
+                  volumeProd: 0,
+                });
+                vaca.despesas.push(createdGastos);
+              });
+              Alert.alert("Dados cadastrados com sucesso!");
+            });
+          } catch (e) {
+            Alert.alert("Não foi possível cadastrar!", e.message);
+          } finally {
+            setNomeProd("");
+            setValorProd("");
+            setVacaID("");
+          }
+        } else {
+          Alert.alert(
+            "Não foi possível cadastrar!",
+            "Rebanho não possui animais!"
+          );
+        }
+      }
+      if (checked === "vacas") {
         try {
           let id = uuid.v4();
           realm.write(() => {
@@ -148,21 +199,19 @@ export default function Outros({ navigation }) {
               volumeProd: 0,
             });
             reb.despesas.push(createdGastosReb);
-            let nVacas = reb.vacas.length;
-            reb.vacas.forEach((vaca) => {
-              let createdGastos = realm.create("DespesasSchema", {
-                _id: uuid.v4(),
-                idTransacao: id,
-                createdAt: new Date(),
-                nomeProd,
-                valorProd: valorProd / nVacas,
-                qtdProd: 1,
-                obserProd: obserProd,
-                pesoProd: 0,
-                volumeProd: 0,
-              });
-              vaca.despesas.push(createdGastos);
+            let Vacas = realm.objectForPrimaryKey("VacasSchema", vacaID);
+            let createdGastos = realm.create("DespesasSchema", {
+              _id: uuid.v4(),
+              idTransacao: id,
+              createdAt: new Date(),
+              nomeProd,
+              valorProd,
+              qtdProd: 1,
+              obserProd: obserProd,
+              pesoProd: 0,
+              volumeProd: 0,
             });
+            Vacas.despesas.push(createdGastos);
             Alert.alert("Dados cadastrados com sucesso!");
           });
         } catch (e) {
@@ -171,48 +220,8 @@ export default function Outros({ navigation }) {
           setNomeProd("");
           setValorProd("");
           setVacaID("");
+          setObserProd("");
         }
-      }
-    }
-    if (checked === "vacas") {
-      try {
-        let id = uuid.v4();
-        realm.write(() => {
-          let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-          const valorProd = Number(valorProdString);
-          let createdGastosReb = realm.create("DespesaRebSchema", {
-            _id: id,
-            createdAt: new Date(),
-            nomeProd,
-            valorProd,
-            qtdProd: 1,
-            obserProd: obserProd,
-            pesoProd: 0,
-            volumeProd: 0,
-          });
-          reb.despesas.push(createdGastosReb);
-          let Vacas = realm.objectForPrimaryKey("VacasSchema", vacaID);
-          let createdGastos = realm.create("DespesasSchema", {
-            _id: uuid.v4(),
-            idTransacao: id,
-            createdAt: new Date(),
-            nomeProd,
-            valorProd,
-            qtdProd: 1,
-            obserProd: obserProd,
-            pesoProd: 0,
-            volumeProd: 0,
-          });
-          Vacas.despesas.push(createdGastos);
-          Alert.alert("Dados cadastrados com sucesso!");
-        });
-      } catch (e) {
-        Alert.alert("Não foi possível cadastrar!", e.message);
-      } finally {
-        setNomeProd("");
-        setValorProd("");
-        setVacaID("");
-        setObserProd("");
       }
     }
   }
@@ -318,21 +327,21 @@ export default function Outros({ navigation }) {
                     : "Preencha o campo valor total."}
                 </HelperText>
               </View>
-                <View style={styles.containerOutrasDespesas}>
-                  <TextInput
-                    mode="flat"
-                    label={"Descrição"}
-                    style={styles.txtInput}
-                    placeholderTextColor={Colors.grey}
-                    textColor={Colors.black}
-                    activeUnderlineColor={Colors.green}
-                    underlineColor={Colors.blue}
-                    underlineStyle={{ paddingBottom: 3 }}
-                    value={obserProd}
-                    onChangeText={setObserProd}
-                  />
-                </View>
+              <View style={styles.containerOutrasDespesas}>
+                <TextInput
+                  mode="flat"
+                  label={"Descrição"}
+                  style={styles.txtInput}
+                  placeholderTextColor={Colors.grey}
+                  textColor={Colors.black}
+                  activeUnderlineColor={Colors.green}
+                  underlineColor={Colors.blue}
+                  underlineStyle={{ paddingBottom: 3 }}
+                  value={obserProd}
+                  onChangeText={setObserProd}
+                />
               </View>
+            </View>
             <View style={styles.radioBView}>
               <RadioButton
                 uncheckedColor={Colors.white}

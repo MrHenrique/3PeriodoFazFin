@@ -185,116 +185,123 @@ export default function SaidaEstoque({ navigation }) {
   async function handleAddGastos() {
     if (realm) {
       if (checked === "rebanho") {
-        let id = uuid.v4();
-        if (tipo === 1) {
-          const volumeProdFinal =
-            newListaEstoque[0].volumeProd - Number(qtdProd);
-          const valorProdFinal =
-            (newListaEstoque[0].valorProd / newListaEstoque[0].volumeProd) *
-            volumeProdFinal;
-          const valorMedioTransacao =
-            (newListaEstoque[0].valorProd / newListaEstoque[0].volumeProd) *
-            Number(qtdProd);
-          try {
-            realm.write(() => {
-              let updateEstoque = realm
-                .objects("AtualEstoqueSchema")
-                .filtered(`_id= '${idEstoqueSaida}'`)[0];
-              updateEstoque.obserProd = obserProd;
-              updateEstoque.createdAt = new Date();
-              updateEstoque.valorProd = valorProdFinal;
-              updateEstoque.volumeProd = volumeProdFinal;
-
-              let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-              let createdGastosReb = realm.create("DespesaRebSchema", {
-                _id: id,
-                createdAt: new Date(),
-                nomeProd: newListaEstoque[0].nomeProd,
-                valorProd: valorMedioTransacao,
-                qtdProd: 1,
-                obserProd: obserProd,
-                pesoProd: 0,
-                volumeProd: Number(qtdProd),
-              });
-              reb.despesas.push(createdGastosReb);
-              let nVacas = reb.vacas.length;
-              reb.vacas.forEach((vaca) => {
-                let createdGastos = realm.create("DespesasSchema", {
-                  _id: uuid.v4(),
-                  idTransacao: id,
+        let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+        let nVacas = reb.vacas.filtered("genero == 1").length;
+        if (nVacas > 0) {
+          let id = uuid.v4();
+          if (tipo === 1) {
+            const volumeProdFinal =
+              newListaEstoque[0].volumeProd - Number(qtdProd);
+            const valorProdFinal =
+              (newListaEstoque[0].valorProd / newListaEstoque[0].volumeProd) *
+              volumeProdFinal;
+            const valorMedioTransacao =
+              (newListaEstoque[0].valorProd / newListaEstoque[0].volumeProd) *
+              Number(qtdProd);
+            try {
+              realm.write(() => {
+                let updateEstoque = realm
+                  .objects("AtualEstoqueSchema")
+                  .filtered(`_id= '${idEstoqueSaida}'`)[0];
+                updateEstoque.obserProd = obserProd;
+                updateEstoque.createdAt = new Date();
+                updateEstoque.valorProd = valorProdFinal;
+                updateEstoque.volumeProd = volumeProdFinal;
+                let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+                let createdGastosReb = realm.create("DespesaRebSchema", {
+                  _id: id,
                   createdAt: new Date(),
                   nomeProd: newListaEstoque[0].nomeProd,
-                  valorProd: valorMedioTransacao / nVacas,
+                  valorProd: valorMedioTransacao,
                   qtdProd: 1,
                   obserProd: obserProd,
                   pesoProd: 0,
                   volumeProd: Number(qtdProd),
                 });
-                vaca.despesas.push(createdGastos);
+                reb.despesas.push(createdGastosReb);
+                reb.vacas.forEach((vaca) => {
+                  let createdGastos = realm.create("DespesasSchema", {
+                    _id: uuid.v4(),
+                    idTransacao: id,
+                    createdAt: new Date(),
+                    nomeProd: newListaEstoque[0].nomeProd,
+                    valorProd: valorMedioTransacao / nVacas,
+                    qtdProd: 1,
+                    obserProd: obserProd,
+                    pesoProd: 0,
+                    volumeProd: Number(qtdProd),
+                  });
+                  vaca.despesas.push(createdGastos);
+                });
+                Alert.alert("Dados cadastrados com sucesso!");
               });
-              Alert.alert("Dados cadastrados com sucesso!");
-            });
-          } catch (e) {
-            Alert.alert("Não foi possível cadastrar.");
-          } finally {
-            setObserProd("");
-            setQtdProd("");
-            IdEstoqueSaida("");
+            } catch (e) {
+              Alert.alert("Não foi possível cadastrar.");
+            } finally {
+              setObserProd("");
+              setQtdProd("");
+              IdEstoqueSaida("");
+            }
           }
-        }
-        if (tipo === 2) {
-          const pesoProdFinal = newListaEstoque[0].pesoProd - Number(qtdProd);
-          const valorProdFinal =
-            (newListaEstoque[0].valorProd / newListaEstoque[0].pesoProd) *
-            pesoProdFinal;
-          const valorMedioTransacao =
-            (newListaEstoque[0].valorProd / newListaEstoque[0].pesoProd) *
-            Number(qtdProd);
-          try {
-            realm.write(() => {
-              let updateEstoque = realm
-                .objects("AtualEstoqueSchema")
-                .filtered(`_id= '${idEstoqueSaida}'`)[0];
-              updateEstoque.obserProd = obserProd;
-              updateEstoque.createdAt = new Date();
-              updateEstoque.valorProd = valorProdFinal;
-              updateEstoque.pesoProd = pesoProdFinal;
-              let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-              let createdGastos = realm.create("DespesaRebSchema", {
-                _id: id,
-                createdAt: new Date(),
-                nomeProd: newListaEstoque[0].nomeProd,
-                valorProd: valorMedioTransacao,
-                qtdProd: 1,
-                obserProd: obserProd,
-                pesoProd: Number(qtdProd),
-                volumeProd: 0,
-              });
-              reb.despesas.push(createdGastos);
-              let nVacas = reb.vacas.length;
-              reb.vacas.forEach((vaca) => {
-                let createdGastos = realm.create("DespesasSchema", {
-                  _id: uuid.v4(),
-                  idTransacao: id,
+          if (tipo === 2) {
+            const pesoProdFinal = newListaEstoque[0].pesoProd - Number(qtdProd);
+            const valorProdFinal =
+              (newListaEstoque[0].valorProd / newListaEstoque[0].pesoProd) *
+              pesoProdFinal;
+            const valorMedioTransacao =
+              (newListaEstoque[0].valorProd / newListaEstoque[0].pesoProd) *
+              Number(qtdProd);
+            try {
+              realm.write(() => {
+                let updateEstoque = realm
+                  .objects("AtualEstoqueSchema")
+                  .filtered(`_id= '${idEstoqueSaida}'`)[0];
+                updateEstoque.obserProd = obserProd;
+                updateEstoque.createdAt = new Date();
+                updateEstoque.valorProd = valorProdFinal;
+                updateEstoque.pesoProd = pesoProdFinal;
+                let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+                let createdGastos = realm.create("DespesaRebSchema", {
+                  _id: id,
                   createdAt: new Date(),
                   nomeProd: newListaEstoque[0].nomeProd,
-                  valorProd: valorMedioTransacao / nVacas,
+                  valorProd: valorMedioTransacao,
                   qtdProd: 1,
                   obserProd: obserProd,
                   pesoProd: Number(qtdProd),
                   volumeProd: 0,
                 });
-                vaca.despesas.push(createdGastos);
+                reb.despesas.push(createdGastos);
+                let nVacas = reb.vacas.length;
+                reb.vacas.forEach((vaca) => {
+                  let createdGastos = realm.create("DespesasSchema", {
+                    _id: uuid.v4(),
+                    idTransacao: id,
+                    createdAt: new Date(),
+                    nomeProd: newListaEstoque[0].nomeProd,
+                    valorProd: valorMedioTransacao / nVacas,
+                    qtdProd: 1,
+                    obserProd: obserProd,
+                    pesoProd: Number(qtdProd),
+                    volumeProd: 0,
+                  });
+                  vaca.despesas.push(createdGastos);
+                });
+                Alert.alert("Dados cadastrados com sucesso!");
               });
-              Alert.alert("Dados cadastrados com sucesso!");
-            });
-          } catch (e) {
-            Alert.alert("Não foi possível cadastrar.");
-          } finally {
-            setObserProd("");
-            setQtdProd("");
-            IdEstoqueSaida("");
+            } catch (e) {
+              Alert.alert("Não foi possível cadastrar.");
+            } finally {
+              setObserProd("");
+              setQtdProd("");
+              IdEstoqueSaida("");
+            }
           }
+        } else {
+          Alert.alert(
+            "Não foi possível cadastrar!",
+            "Rebanho não possui animais!"
+          );
         }
       }
       if (checked === "vacas") {
