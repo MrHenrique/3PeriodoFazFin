@@ -151,7 +151,6 @@ function Despesas({ navigation }) {
       });
     };
     if (dataChipValue === 1) {
-      console.log("rodei");
       // Ultimos 7 dias
       const dataHoje = new Date();
       dataHoje.setHours(0, 0, 0, 0);
@@ -209,8 +208,8 @@ function Despesas({ navigation }) {
       setTextDataChipValue("6 meses");
     } else if (dataChipValue === 5) {
       //todas as datas
-      setLista1(listaAli);
-      setListaFiltrada(listaAli);
+      setLista1(lista);
+      setListaFiltrada(lista);
       setTextDataChipValue("Todas as datas");
     } else if (dataChipValue === 6) {
       setTextDataChipValue("Customizado");
@@ -260,6 +259,7 @@ function Despesas({ navigation }) {
         dataFim.setHours(23, 59, 59, 999); //ajusta o horario para 23:59:59 para garantir que a data final sejá no final do dia.
         return itemDataDeCriacao >= dataInicio && itemDataDeCriacao <= dataFim;
       });
+      setLista1(listaFiltradaIntervalo);
       setListaFiltrada(listaFiltradaIntervalo);
     }
   };
@@ -597,7 +597,7 @@ function Despesas({ navigation }) {
                         />
                       )}
                     >
-                      {textValorChipValue}
+                      <Text>{textValorChipValue}</Text>
                     </Chip>
                   </ScrollView>
 
@@ -616,6 +616,8 @@ function Despesas({ navigation }) {
                           <TouchableOpacity
                             onPress={() => {
                               setTipoChipValue(null);
+                              setDataChipValue(null);
+                              setValorChipValue(null);
                               setListaFiltrada(listaAli);
                             }}
                           >
@@ -768,6 +770,7 @@ function Despesas({ navigation }) {
                                   setEndDate("");
                                   setTextStartDate("Data Inicial");
                                   setTextEndDate("Data Final");
+                                  setListaFiltrada(lista);
                                 }}
                               >
                                 <Text style={styles.textoFiltro}>Limpar</Text>

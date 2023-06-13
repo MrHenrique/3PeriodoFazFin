@@ -37,6 +37,8 @@ function FaturamentoReb({ navigation }) {
   const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
     useState(false);
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
+  const [tipoChipValue, setTipoChipValue] = useState(null);
+  const [textTipoChipValue, setTextTipoChipValue] = useState("Tipo de receita");
   const [dataChipValue, setDataChipValue] = React.useState(1);
   const [textDataChipValue, setTextDataChipValue] = useState("Período");
   const [valorChipValue, setValorChipValue] = React.useState(null);
@@ -49,6 +51,10 @@ function FaturamentoReb({ navigation }) {
     setListaFiltrada(lista);
     setLista1(lista);
   }, [lista]);
+
+  useEffect(() => {
+    setLista(listaLeiteReb);
+  }, [listaLeiteReb]);
 
   //Codigo do DateTimePickerModal
   //Data Inicial
@@ -91,6 +97,108 @@ function FaturamentoReb({ navigation }) {
     hideEndDatePicker();
   };
 
+  //Filtro por tipo de despesas
+  useEffect(() => {
+    if (tipoChipValue === 1) {
+      const listaTipoRemedio = listaLeiteReb.filter((item) => {
+        return item.tipo === 1;
+      });
+      setListaFiltrada(listaTipoRemedio);
+      setLista(listaTipoRemedio);
+      setTextTipoChipValue("Leite");
+    } else if (tipoChipValue === 2) {
+      const listaTipoVenda = listaLeiteReb.filter((item) => {
+        return item.tipo === 2;
+      });
+      setListaFiltrada(listaTipoVenda);
+      setLista(listaTipoVenda);
+      setTextTipoChipValue("Vendas");
+    } else {
+      setTextTipoChipValue("Tipo de receita");
+      setListaFiltrada(listaLeiteReb);
+      setLista(listaLeiteReb);
+    }
+  }, [tipoChipValue]);
+
+  // Filtro por Datas
+  useEffect(() => {
+    const filtrarPorData = (lista, dataInicio, dataFim) => {
+      return lista.filter((item) => {
+        const itemDataDeCriacao = new Date(item.createdAt);
+        itemDataDeCriacao.setHours(0, 0, 0, 0);
+        return itemDataDeCriacao >= dataInicio && itemDataDeCriacao <= dataFim;
+      });
+    };
+    if (dataChipValue === 1) {
+      // Ultimos 7 dias
+      const dataHoje = new Date();
+      dataHoje.setHours(0, 0, 0, 0);
+      const dataSeteDiasAtras = new Date(dataHoje);
+      dataSeteDiasAtras.setDate(dataHoje.getDate() - 7);
+      const listaUltimosSete = filtrarPorData(
+        lista,
+        dataSeteDiasAtras,
+        dataHoje
+      );
+      setLista1(listaUltimosSete);
+      setListaFiltrada(listaUltimosSete);
+      setTextDataChipValue("7 dias");
+    } else if (dataChipValue === 2) {
+      // Ultimos mês
+      const dataHoje = new Date();
+      dataHoje.setHours(0, 0, 0, 0);
+      const dataTrintaDiasAtras = new Date(dataHoje);
+      dataTrintaDiasAtras.setDate(dataHoje.getDate() - 30);
+      const listaUltimosTrinta = filtrarPorData(
+        lista,
+        dataTrintaDiasAtras,
+        dataHoje
+      );
+      setLista1(listaUltimosTrinta);
+      setListaFiltrada(listaUltimosTrinta);
+      setTextDataChipValue("Último mês");
+    } else if (dataChipValue === 3) {
+      //Ultimos 3 meses
+      const dataHoje = new Date();
+      dataHoje.setHours(0, 0, 0, 0);
+      const dataUltimosTresMeses = new Date(dataHoje);
+      dataUltimosTresMeses.setDate(dataHoje.getDate() - 90);
+      const listaUltimosTresMeses = filtrarPorData(
+        lista,
+        dataUltimosTresMeses,
+        dataHoje
+      );
+      setLista1(listaUltimosTresMeses);
+      setListaFiltrada(listaUltimosTresMeses);
+      setTextDataChipValue("3 meses");
+    } else if (dataChipValue === 4) {
+      //Ultimos 6 meses
+      const dataHoje = new Date();
+      dataHoje.setHours(0, 0, 0, 0);
+      const dataUltimosSeisMeses = new Date(dataHoje);
+      dataUltimosSeisMeses.setDate(dataHoje.getDate() - 180);
+      const listaUltimosSeisMeses = filtrarPorData(
+        lista,
+        dataUltimosSeisMeses,
+        dataHoje
+      );
+      setLista1(listaUltimosSeisMeses);
+      setListaFiltrada(listaUltimosSeisMeses);
+      setTextDataChipValue("6 meses");
+    } else if (dataChipValue === 5) {
+      //todas as datas
+      setLista1(lista);
+      setListaFiltrada(lista);
+      setTextDataChipValue("Todas as datas");
+    } else if (dataChipValue === 6) {
+      setTextDataChipValue("Customizado");
+    } else {
+      setTextDataChipValue("Período");
+      setLista1(lista);
+      setListaFiltrada(lista);
+    }
+  }, [dataChipValue]);
+
   // Filtro por Valores
   useEffect(() => {
     if (valorChipValue === 1) {
@@ -115,94 +223,14 @@ function FaturamentoReb({ navigation }) {
       setTextValorChipValue("Decrescente");
     } else {
       setTextValorChipValue("Valores");
-      setListaFiltrada(lista1);
     }
   }, [valorChipValue]);
 
-  // Filtro por Datas
-  useEffect(() => {
-    const filtrarPorData = (lista, dataInicio, dataFim) => {
-      return lista.filter((item) => {
-        const itemDataDeCriacao = new Date(item.createdAt);
-        itemDataDeCriacao.setHours(0, 0, 0, 0);
-        return itemDataDeCriacao >= dataInicio && itemDataDeCriacao <= dataFim;
-      });
-    };
-    if (dataChipValue === 1) {
-      // Ultimos 7 dias
-      const dataHoje = new Date();
-      dataHoje.setHours(0, 0, 0, 0);
-      const dataSeteDiasAtras = new Date(dataHoje);
-      dataSeteDiasAtras.setDate(dataHoje.getDate() - 7);
-      const listaUltimosSete = filtrarPorData(
-        listaLeiteReb,
-        dataSeteDiasAtras,
-        dataHoje
-      );
-      setListaFiltrada(listaUltimosSete);
-      setLista1(listaUltimosSete);
-      setTextDataChipValue("7 dias");
-    } else if (dataChipValue === 2) {
-      // Ultimos mês
-      const dataHoje = new Date();
-      dataHoje.setHours(0, 0, 0, 0);
-      const dataTrintaDiasAtras = new Date(dataHoje);
-      dataTrintaDiasAtras.setDate(dataHoje.getDate() - 30);
-      const listaUltimosTrinta = filtrarPorData(
-        listaLeiteReb,
-        dataTrintaDiasAtras,
-        dataHoje
-      );
-      setListaFiltrada(listaUltimosTrinta);
-      setLista1(listaUltimosTrinta);
-      setTextDataChipValue("Último mês");
-    } else if (dataChipValue === 3) {
-      //Ultimos 3 meses
-      const dataHoje = new Date();
-      dataHoje.setHours(0, 0, 0, 0);
-      const dataUltimosTresMeses = new Date(dataHoje);
-      dataUltimosTresMeses.setDate(dataHoje.getDate() - 90);
-      const listaUltimosTresMeses = filtrarPorData(
-        listaLeiteReb,
-        dataUltimosTresMeses,
-        dataHoje
-      );
-      setListaFiltrada(listaUltimosTresMeses);
-      setLista1(listaUltimosTresMeses);
-      setTextDataChipValue("3 meses");
-    } else if (dataChipValue === 4) {
-      //Ultimos 6 meses
-      const dataHoje = new Date();
-      dataHoje.setHours(0, 0, 0, 0);
-      const dataUltimosSeisMeses = new Date(dataHoje);
-      dataUltimosSeisMeses.setDate(dataHoje.getDate() - 180);
-      const listaUltimosSeisMeses = filtrarPorData(
-        listaLeiteReb,
-        dataUltimosSeisMeses,
-        dataHoje
-      );
-      setListaFiltrada(listaUltimosSeisMeses);
-      setLista1(listaUltimosSeisMeses);
-      setTextDataChipValue("6 meses");
-    } else if (dataChipValue === 5) {
-      //todas as datas
-      setListaFiltrada(listaLeiteReb);
-      setLista1(listaLeiteReb);
-      setTextDataChipValue("Todas as datas");
-    } else if (dataChipValue === 6) {
-      setTextDataChipValue("Customizado");
-    } else {
-      setTextDataChipValue("Período");
-      setListaFiltrada(listaLeiteReb);
-      setLista1(listaLeiteReb);
-    }
-  }, [dataChipValue]);
-
-  //Código para retornar uma listaLeiteReb do intevalo selecionado pelo usuário (FILTRO INTERVALO ENTRE DATAS)
+  //Código para retornar uma lista do intevalo selecionado pelo usuário (FILTRO INTERVALO ENTRE DATAS)
   const filtrarIntervalo = () => {
     if (startDate != "" && endDate != "") {
-      const listaFiltradaIntervalo = listaLeiteReb.filter((item) => {
-        //pega todos os itens da listaLeiteReb que foi puxada da (listaLeiteReb)
+      const listaFiltradaIntervalo = lista.filter((item) => {
+        //pega todos os itens da lista que foi puxada da (lista)
         const itemDataDeCriacao = new Date(item.createdAt); //cria uma nova data com a data do (createdAt do item) e atribui a variavel itemDataDeCriacao
         const dataInicio = new Date(startDate); //pega a data de inicio escolhida pelo usuario
         dataInicio.setHours(0, 0, 0, 0); //ajusta o horario para 00:00:00 para garantir que a data de inicio seja no começo do dia.
@@ -210,8 +238,15 @@ function FaturamentoReb({ navigation }) {
         dataFim.setHours(23, 59, 59, 999); //ajusta o horario para 23:59:59 para garantir que a data final sejá no final do dia.
         return itemDataDeCriacao >= dataInicio && itemDataDeCriacao <= dataFim;
       });
+      setLista1(listaFiltradaIntervalo);
       setListaFiltrada(listaFiltradaIntervalo);
     }
+  };
+
+  const handleTipoChipPress = (value) => {
+    setTipoChipValue(value === tipoChipValue ? null : value);
+    setDataChipValue(null);
+    setValorChipValue(null);
   };
 
   const handleDataChipPress = (value) => {
@@ -220,12 +255,22 @@ function FaturamentoReb({ navigation }) {
   };
 
   const handleValorChipPress = (value) => {
-    setValorChipValue(value === valorChipValue ? null : value);
+    setValorChipValue(
+      value === valorChipValue
+        ? () => {
+            setListaFiltrada(lista1); // se clicar no botao do cres/decres e ele ja tiver ativo volta para a lista antiga
+            return null;
+          }
+        : value
+    );
   };
 
   const handleChipPress = (tipo) => {
     let teste = false;
-    if (tipo === "data") {
+    if (tipo === "tipo") {
+      const valorValoresValidos = [1, 2];
+      teste = valorValoresValidos.includes(tipoChipValue);
+    } else if (tipo === "data") {
       const dataValoresValidos = [1, 2, 3, 4, 5, 6];
       teste = dataValoresValidos.includes(dataChipValue);
     } else if (tipo === "valor") {
@@ -424,7 +469,7 @@ function FaturamentoReb({ navigation }) {
                       <Chip
                         style={[
                           styles.chipFiltroReceita,
-                          (dataChipValue || valorChipValue) &&
+                          (tipoChipValue || dataChipValue || dataChipValue) &&
                             styles.chipSelected,
                         ]}
                         textStyle={{
@@ -439,6 +484,21 @@ function FaturamentoReb({ navigation }) {
                         }}
                       >
                         <Text>Filtros</Text>
+                      </Chip>
+                      <Chip
+                        style={[
+                          styles.chipFiltroReceita,
+                          handleChipPress("tipo") && styles.chipSelected,
+                        ]}
+                        textStyle={{
+                          fontSize: scale(14),
+                          color: Colors.white,
+                        }}
+                        icon={() => (
+                          <Icon name="calendar" size={20} color="white" />
+                        )}
+                      >
+                        <Text>{textTipoChipValue}</Text>
                       </Chip>
                       <Chip
                         style={[
@@ -491,6 +551,7 @@ function FaturamentoReb({ navigation }) {
                         <View style={styles.topFiltros}>
                           <TouchableOpacity
                             onPress={() => {
+                              setTipoChipValue(null);
                               setDataChipValue(null);
                               setValorChipValue(null);
                               setListaFiltrada(listaLeiteReb);
@@ -508,6 +569,27 @@ function FaturamentoReb({ navigation }) {
                               color={Colors.white}
                             />
                           </TouchableOpacity>
+                        </View>
+                        <Text style={styles.tituloinfo1}>Tipo de receita</Text>
+                        <View style={styles.teste}>
+                          <Chip
+                            style={[
+                              styles.chipsFiltro,
+                              tipoChipValue === 1 && styles.chipSelected,
+                            ]}
+                            onPress={() => handleTipoChipPress(1)}
+                          >
+                            <Text>Leite</Text>
+                          </Chip>
+                          <Chip
+                            style={[
+                              styles.chipsFiltro,
+                              tipoChipValue === 2 && styles.chipSelected,
+                            ]}
+                            onPress={() => handleTipoChipPress(2)}
+                          >
+                            <Text>Vendas</Text>
+                          </Chip>
                         </View>
                         <Text style={styles.tituloinfo1}>Período</Text>
                         <View style={styles.teste}>
@@ -615,6 +697,7 @@ function FaturamentoReb({ navigation }) {
                                   setEndDate("");
                                   setTextStartDate("Data Inicial");
                                   setTextEndDate("Data Final");
+                                  setListaFiltrada(lista);
                                 }}
                               >
                                 <Text style={styles.textoFiltro}>Limpar</Text>

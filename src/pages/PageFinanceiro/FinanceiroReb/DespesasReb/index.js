@@ -151,7 +151,6 @@ function DespesasReb({ navigation }) {
       });
     };
     if (dataChipValue === 1) {
-      console.log("rodei");
       // Ultimos 7 dias
       const dataHoje = new Date();
       dataHoje.setHours(0, 0, 0, 0);
@@ -209,8 +208,8 @@ function DespesasReb({ navigation }) {
       setTextDataChipValue("6 meses");
     } else if (dataChipValue === 5) {
       //todas as datas
-      setLista1(listaAliReb);
-      setListaFiltrada(listaAliReb);
+      setLista1(lista);
+      setListaFiltrada(lista);
       setTextDataChipValue("Todas as datas");
     } else if (dataChipValue === 6) {
       setTextDataChipValue("Customizado");
@@ -260,6 +259,7 @@ function DespesasReb({ navigation }) {
         dataFim.setHours(23, 59, 59, 999); //ajusta o horario para 23:59:59 para garantir que a data final sejá no final do dia.
         return itemDataDeCriacao >= dataInicio && itemDataDeCriacao <= dataFim;
       });
+      setLista1(listaFiltradaIntervalo);
       setListaFiltrada(listaFiltradaIntervalo);
     }
   };
@@ -598,7 +598,7 @@ function DespesasReb({ navigation }) {
                         />
                       )}
                     >
-                      {textValorChipValue}
+                      <Text>{textValorChipValue}</Text>
                     </Chip>
                   </ScrollView>
 
@@ -617,6 +617,8 @@ function DespesasReb({ navigation }) {
                           <TouchableOpacity
                             onPress={() => {
                               setTipoChipValue(null);
+                              setDataChipValue(null);
+                              setValorChipValue(null);
                               setListaFiltrada(listaAliReb);
                             }}
                           >
@@ -769,6 +771,7 @@ function DespesasReb({ navigation }) {
                                   setEndDate("");
                                   setTextStartDate("Data Inicial");
                                   setTextEndDate("Data Final");
+                                  setListaFiltrada(lista);
                                 }}
                               >
                                 <Text style={styles.textoFiltro}>Limpar</Text>

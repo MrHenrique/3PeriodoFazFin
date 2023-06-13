@@ -109,34 +109,6 @@ function RegistrosVendas({ navigation }) {
     hideEndDatePicker();
   };
 
-  // Filtro por Valores
-  useEffect(() => {
-    if (valorChipValue === 1) {
-      const filtrarPorValores = (lista) => {
-        const sortedItems = [...lista].sort((a, b) => {
-          return a.precoL * a.prodL - b.precoL * b.prodL;
-        });
-        return sortedItems;
-      };
-      const crescente = filtrarPorValores(listaFiltrada);
-      setListaFiltrada(crescente);
-      setTextValorChipValue("Crescente");
-    } else if (valorChipValue === 2) {
-      const filtrarPorValores = (lista) => {
-        const sortedItems = [...lista].sort((a, b) => {
-          return b.precoL * b.prodL - a.precoL * a.prodL;
-        });
-        return sortedItems;
-      };
-      const decrescente = filtrarPorValores(listaFiltrada);
-      setListaFiltrada(decrescente);
-      setTextValorChipValue("Decrescente");
-    } else {
-      setTextValorChipValue("Valores");
-      setListaFiltrada(lista1);
-    }
-  }, [valorChipValue]);
-
   // Filtro por Datas
   useEffect(() => {
     const filtrarPorData = (lista, dataInicio, dataFim) => {
@@ -157,8 +129,8 @@ function RegistrosVendas({ navigation }) {
         dataSeteDiasAtras,
         dataHoje
       );
-      setListaFiltrada(listaUltimosSete);
       setLista1(listaUltimosSete);
+      setListaFiltrada(listaUltimosSete);
       setTextDataChipValue("7 dias");
     } else if (dataChipValue === 2) {
       // Ultimos mês
@@ -171,8 +143,8 @@ function RegistrosVendas({ navigation }) {
         dataTrintaDiasAtras,
         dataHoje
       );
-      setListaFiltrada(listaUltimosTrinta);
       setLista1(listaUltimosTrinta);
+      setListaFiltrada(listaUltimosTrinta);
       setTextDataChipValue("Último mês");
     } else if (dataChipValue === 3) {
       //Ultimos 3 meses
@@ -185,8 +157,8 @@ function RegistrosVendas({ navigation }) {
         dataUltimosTresMeses,
         dataHoje
       );
-      setListaFiltrada(listaUltimosTresMeses);
       setLista1(listaUltimosTresMeses);
+      setListaFiltrada(listaUltimosTresMeses);
       setTextDataChipValue("3 meses");
     } else if (dataChipValue === 4) {
       //Ultimos 6 meses
@@ -199,22 +171,49 @@ function RegistrosVendas({ navigation }) {
         dataUltimosSeisMeses,
         dataHoje
       );
-      setListaFiltrada(listaUltimosSeisMeses);
       setLista1(listaUltimosSeisMeses);
+      setListaFiltrada(listaUltimosSeisMeses);
       setTextDataChipValue("6 meses");
     } else if (dataChipValue === 5) {
       //todas as datas
-      setListaFiltrada(lista);
       setLista1(lista);
+      setListaFiltrada(lista);
       setTextDataChipValue("Todas as datas");
     } else if (dataChipValue === 6) {
       setTextDataChipValue("Customizado");
     } else {
       setTextDataChipValue("Período");
-      setListaFiltrada(lista);
       setLista1(lista);
+      setListaFiltrada(lista);
     }
   }, [dataChipValue]);
+
+  // Filtro por Valores
+  useEffect(() => {
+    if (valorChipValue === 1) {
+      const filtrarPorValores = (lista) => {
+        const sortedItems = [...lista].sort((a, b) => {
+          return a.prodL - b.prodL;
+        });
+        return sortedItems;
+      };
+      const crescente = filtrarPorValores(listaFiltrada);
+      setListaFiltrada(crescente);
+      setTextValorChipValue("Crescente");
+    } else if (valorChipValue === 2) {
+      const filtrarPorValores = (lista) => {
+        const sortedItems = [...lista].sort((a, b) => {
+          return b.prodL - a.prodL;
+        });
+        return sortedItems;
+      };
+      const decrescente = filtrarPorValores(listaFiltrada);
+      setListaFiltrada(decrescente);
+      setTextValorChipValue("Decrescente");
+    } else {
+      setTextValorChipValue("Valores");
+    }
+  }, [valorChipValue]);
 
   //Código para retornar uma lista do intevalo selecionado pelo usuário (FILTRO INTERVALO ENTRE DATAS)
   const filtrarIntervalo = () => {
@@ -228,6 +227,7 @@ function RegistrosVendas({ navigation }) {
         dataFim.setHours(23, 59, 59, 999); //ajusta o horario para 23:59:59 para garantir que a data final sejá no final do dia.
         return itemDataDeCriacao >= dataInicio && itemDataDeCriacao <= dataFim;
       });
+      setLista1(listaFiltradaIntervalo);
       setListaFiltrada(listaFiltradaIntervalo);
     }
   };
@@ -238,7 +238,14 @@ function RegistrosVendas({ navigation }) {
   };
 
   const handleValorChipPress = (value) => {
-    setValorChipValue(value === valorChipValue ? null : value);
+    setValorChipValue(
+      value === valorChipValue
+        ? () => {
+            setListaFiltrada(lista1); // se clicar no botao do cres/decres e ele ja tiver ativo volta para a lista antiga
+            return null;
+          }
+        : value
+    );
   };
 
   const handleChipPress = (tipo) => {
@@ -525,7 +532,7 @@ function RegistrosVendas({ navigation }) {
                 <FontAwesome5 name="dollar-sign" size={20} color="white" />
               )}
             >
-              {textValorChipValue}
+              <Text>{textValorChipValue}</Text>
             </Chip>
           </View>
         </View>
@@ -545,12 +552,12 @@ function RegistrosVendas({ navigation }) {
                   onPress={() => {
                     setDataChipValue(null);
                     setValorChipValue(null);
-                    setListaFiltrada(listaLeite);
+                    setListaFiltrada(listaBuscada);
                   }}
                 >
                   <Text>Limpar</Text>
                 </TouchableOpacity>
-                <Text style={styles.tituloinfoFiltros}>Filtros</Text>
+                <Text style={styles.tituloinfo}>Filtros</Text>
                 <TouchableOpacity onPress={() => setModalFiltrosVisible(false)}>
                   <AntDesign name="close" size={20} color={Colors.white} />
                 </TouchableOpacity>
@@ -646,7 +653,10 @@ function RegistrosVendas({ navigation }) {
                   <View style={styles.containerBotoesFiltro}>
                     <TouchableOpacity
                       style={styles.botoes}
-                      onPress={filtrarIntervalo}
+                      onPress={() => {
+                        filtrarIntervalo;
+                        setValorChipValue(null); 
+                      }}
                     >
                       <Text style={styles.textoFitro}>Filtrar</Text>
                     </TouchableOpacity>
@@ -657,6 +667,7 @@ function RegistrosVendas({ navigation }) {
                         setEndDate("");
                         setTextStartDate("Data Inicial");
                         setTextEndDate("Data Final");
+                        setListaFiltrada(lista);
                       }}
                     >
                       <Text style={styles.textoFitro}>Limpar</Text>
