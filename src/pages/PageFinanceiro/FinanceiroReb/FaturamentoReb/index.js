@@ -555,6 +555,7 @@ function FaturamentoReb({ navigation }) {
                   <Modal
                     coverScreen={true}
                     backdropColor={"#000"}
+                    backdropOpacity={0.5}
                     onBackButtonPress={() => setModalFiltrosVisible(false)}
                     onBackdropPress={() => setModalFiltrosVisible(false)}
                     isVisible={modalFiltrosVisible}

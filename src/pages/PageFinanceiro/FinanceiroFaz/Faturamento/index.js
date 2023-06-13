@@ -574,6 +574,7 @@ function Faturamento({ navigation }) {
                     backdropTransitionInTiming={1000}
                     backdropTransitionOutTiming={1000}
                     backdropColor={"#000"}
+                    backdropOpacity={0.5}
                     statusBarTranslucent
                     style={{ flexWrap: "wrap" }}
                   >
