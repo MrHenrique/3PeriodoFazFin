@@ -192,6 +192,74 @@ const styles = StyleSheet.create({
     padding: scale(20),
     backgroundColor: Colors.darkgreen,
   },
+  chipSelected: {
+    backgroundColor: "green",
+  },
+  topFiltros: {
+    margin: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  chipsFiltro: {
+    marginRight: 10,
+    marginBottom: 10,
+  },
+  testeFiltro: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  containerFiltro: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  modalContainerFiltro: {
+    //flex: 0.6,
+    backgroundColor: Colors.Cyan,
+  },
+  containerBotoesFiltro: {
+    flexDirection: "row",
+    padding: 3,
+  },
+  botoes: {
+    flex: 1,
+    backgroundColor: Colors.green,
+    borderRadius: 30,
+    width: "50%",
+    height: verticalScale(30),
+    borderWidth: scale(1),
+    justifyContent: "center",
+    marginHorizontal: 3,
+  },
+  textoFitro: {
+    color: Colors.white,
+    textAlign: "center",
+    fontSize: scale(14),
+  },
+  containerChip: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  chipFiltroReceita: {
+    backgroundColor: Colors.green,
+    marginRight: scale(5),
+    padding: scale(1),
+    marginBottom: scale(5),
+  },
+  tituloinfoFiltro: {
+    color: "white",
+    fontSize: verticalScale(20),
+    marginBottom: verticalScale(10),
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  tituloinfo1: {
+    paddingHorizontal: verticalScale(10),
+    color: "white",
+    fontSize: verticalScale(20),
+    marginBottom: verticalScale(10),
+    textAlign: "left",
+    fontWeight: "bold",
+  },
 });
 // estilo tab
 export const estilo = {
