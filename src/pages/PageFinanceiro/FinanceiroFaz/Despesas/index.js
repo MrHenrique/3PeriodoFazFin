@@ -433,7 +433,10 @@ function Despesas({ navigation }) {
                   <View style={styles.modalContent}>
                     <Text style={styles.textContent}>Valor Total: </Text>
                     <Text style={styles.textContent}>
-                      {formatarResultado(item.valorProd, "preco")}
+                      {formatarResultado(
+                        item.valorProd,
+                        "preco"
+                      )}
                     </Text>
                   </View>
                   <Text style={styles.textContent}>
@@ -460,7 +463,10 @@ function Despesas({ navigation }) {
                   <View style={styles.modalContent}>
                     <Text style={styles.textContent}>Valor Total: </Text>
                     <Text style={styles.textContent}>
-                      {formatarResultado(item.valorProd, "preco")}
+                      {formatarResultado(
+                        item.valorProd,
+                        "preco"
+                      )}
                     </Text>
                   </View>
                   <Text style={styles.textContent}>
@@ -472,7 +478,10 @@ function Despesas({ navigation }) {
                   <View style={styles.modalContent}>
                     <Text style={styles.textContent}>Valor Total: </Text>
                     <Text style={styles.textContent}>
-                      {formatarResultado(item.valorProd, "preco")}
+                      {formatarResultado(
+                        item.valorProd,
+                        "preco"
+                      )}
                     </Text>
                   </View>
                   <Text style={styles.textContent}>
@@ -811,7 +820,7 @@ function Despesas({ navigation }) {
                   {/*FIM FILTROS*/}
                   <FlatList
                     style={styles.scroll}
-                    data={listaFiltrada}
+                    data={listaAli}
                     renderItem={renderItem}
                     keyExtractor={(item) => item._id}
                   />

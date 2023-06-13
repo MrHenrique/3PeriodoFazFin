@@ -44,6 +44,7 @@ function CadastroReb({ navigation }) {
           brincoVaca: (i + 1).toString(),
           genero: 1,
           receitas: [],
+          despesas: [],
           reproducao: [
             {
               _id: uuid.v4(),
@@ -53,6 +54,8 @@ function CadastroReb({ navigation }) {
               dataCio: null,
               dataCobertura: null,
               dataParto: null,
+              partos: [],
+              notificacao: false,
             },
           ],
           descVaca: "",

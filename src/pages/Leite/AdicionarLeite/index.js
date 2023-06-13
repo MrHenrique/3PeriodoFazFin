@@ -91,48 +91,56 @@ function AdicionarLeite({ navigation }) {
   async function handleAddLeite() {
     if (realm) {
       if (checked === "rebanho") {
-        try {
-          const cleanedTextPreco = precoLV.replace(",", ".");
-          const parsedValue = Number(cleanedTextPreco);
-          const cleanedTextProd = prodLV.replace(",", ".");
-          const parsedValueProd = Number(cleanedTextProd);
-          let id = uuid.v4();
-          realm.write(() => {
-            let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-            let createdLeiteReb = realm.create("ReceitaRebSchema", {
-              _id: id,
-              tipo: 1,
-              nomeProd: "Leite",
-              precoL: parsedValue,
-              prodL: parsedValueProd,
-              description,
-              createdAt: new Date(),
-            });
-            reb.receitas.push(createdLeiteReb);
-            let nVacas = reb.vacas.filtered("genero == 1").length;
-            reb.vacas.filtered("genero == 1").forEach((vaca) => {
-              let createdLeite = realm.create("ReceitaSchema", {
-                _id: uuid.v4(),
-                idTransacao: id,
-                nomeProd: "Leite",
+        let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
+        let nVacas = reb.vacas.filtered("genero == 1").length;
+        if (nVacas > 0) {
+          try {
+            const cleanedTextPreco = precoLV.replace(",", ".");
+            const parsedValue = Number(cleanedTextPreco);
+            const cleanedTextProd = prodLV.replace(",", ".");
+            const parsedValueProd = Number(cleanedTextProd);
+            let id = uuid.v4();
+            realm.write(() => {
+              let createdLeiteReb = realm.create("ReceitaRebSchema", {
+                _id: id,
                 tipo: 1,
+                nomeProd: "Leite",
                 precoL: parsedValue,
-                prodL: parsedValueProd / nVacas,
+                prodL: parsedValueProd,
                 description,
                 createdAt: new Date(),
               });
-              vaca.receitas.push(createdLeite);
-            });
+              reb.receitas.push(createdLeiteReb);
 
-            Alert.alert("Dados cadastrados com sucesso no rebanho!");
-          });
-        } catch (e) {
-          Alert.alert("Não foi possível cadastrar!", e.message);
-        } finally {
-          setPrecoLV("");
-          setProdLV("");
-          setDescription("");
-          setVacaID("");
+              reb.vacas.filtered("genero == 1").forEach((vaca) => {
+                let createdLeite = realm.create("ReceitaSchema", {
+                  _id: uuid.v4(),
+                  idTransacao: id,
+                  nomeProd: "Leite",
+                  tipo: 1,
+                  precoL: parsedValue,
+                  prodL: parsedValueProd / nVacas,
+                  description,
+                  createdAt: new Date(),
+                });
+                vaca.receitas.push(createdLeite);
+              });
+
+              Alert.alert("Dados cadastrados com sucesso no rebanho!");
+            });
+          } catch (e) {
+            Alert.alert("Não foi possível cadastrar!", e.message);
+          } finally {
+            setPrecoLV("");
+            setProdLV("");
+            setDescription("");
+            setVacaID("");
+          }
+        } else {
+          Alert.alert(
+            "Não foi possível cadastrar!",
+            "Rebanho não possui animais!"
+          );
         }
       } else {
         try {

@@ -13,13 +13,19 @@ const Reproducao = ({ navigation }) => {
   const { idVaca } = useContext(AuthContext);
   const realm = useMainContext();
   const [cobertura, setCobertura] = useState(false);
-  const [dataCobertura, setDataCobertura] = useState(new Date());
+  const [dataCobertura, setDataCobertura] = useState(
+    new Date().toISOString().substring(0, 10)
+  );
   const [ultimaCobertura, setDataUltimaCobertura] = useState();
   const [prenhez, setPrenhez] = useState(false);
-  const [dataParto, setDataParto] = useState(new Date());
+  const [dataParto, setDataParto] = useState(
+    new Date().toISOString().substring(0, 10)
+  );
   const [dataUltimoParto, setDataUltimoParto] = useState();
   const [cio, setCio] = useState(false);
-  const [dataCio, setDataCio] = useState(new Date());
+  const [dataCio, setDataCio] = useState(
+    new Date().toISOString().substring(0, 10)
+  );
   const [ultimoCio, setUltimoCio] = useState();
   const [partos, setPartos] = useState([]);
   const [callFunction, setCallFunction] = useState(0);
@@ -27,6 +33,7 @@ const Reproducao = ({ navigation }) => {
   const [nCrias, setNcrias] = useState(0);
   const [idRepr, setIdRepr] = useState("");
   const [refresh, setRefresh] = useState(false);
+  const [click, setClick] = useState(false);
   const [isDatePickerCioVisible, setIsDatePickerCioVisible] = useState(false);
   const [isDatePickerPartoVisible, setIsDatePickerPartoVisible] =
     useState(false);
@@ -94,16 +101,20 @@ const Reproducao = ({ navigation }) => {
   };
   function nextCio() {
     if (ultimoCio) {
-      return dateOrHifen(ultimoCio.addDays(21));
+      return dateOrHifen(ultimoCio.addDays(21).toISOString().substring(0, 10));
     } else if (dataUltimoParto) {
-      return dateOrHifen(dataUltimoParto.addDays(65));
+      return dateOrHifen(
+        dataUltimoParto.addDays(50).toISOString().substring(0, 10)
+      );
     } else {
       return "-";
     }
   }
   function nextParto() {
     if (prenhez) {
-      return dateOrHifen(ultimaCobertura.addDays(285));
+      return dateOrHifen(
+        ultimaCobertura.addDays(285).toISOString().substring(0, 10)
+      );
     } else {
       return "-";
     }
@@ -156,23 +167,43 @@ const Reproducao = ({ navigation }) => {
     setCallFunction(callFunction + 1);
   }
   function handleParto() {
-    setCio(false);
-    setCobertura(false);
-    setPrenhez(false);
-    setDataCio(null);
-    setDataCobertura(null);
-    setCallFunction(callFunction + 1);
+    if ((cio || !cobertura || !prenhez) && !click) {
+      Alert.alert(
+        "Tem certeza que deseja confirmar parto?",
+        "Se sim, clique novamente em vaca pariu."
+      );
+      setClick(true);
+    } else {
+      setCio(false);
+      setCobertura(false);
+      setPrenhez(false);
+      setDataCio(null);
+      setDataCobertura(null);
+      setClick(false);
+      setCallFunction(callFunction + 1);
+    }
   }
   useEffect(() => {
     if (callFunction > 0) {
       UpdateInfoVaca();
     }
   }, [callFunction]);
+  function partoNull() {
+    if (dataParto != null) {
+      let newParto = { _id: uuid.v4(), dataParto: dataParto };
+      let finalParto = [...partos, newParto];
+      return finalParto;
+    } else {
+      return partos;
+    }
+  }
   async function UpdateInfoVaca() {
     if (realm) {
       try {
-        let newParto = { _id: uuid.v4(), dataParto: dataParto };
-        let finalParto = [...partos, newParto];
+        if (dataParto != null) {
+          let newParto = { _id: uuid.v4(), dataParto: dataParto };
+          let finalParto = [...partos, newParto];
+        }
         realm.write(() => {
           let updateVaca = realm.objectForPrimaryKey("VacasSchema", idVaca);
           updateVaca.reproducao = [
@@ -184,13 +215,13 @@ const Reproducao = ({ navigation }) => {
               dataCio: dataCio,
               dataCobertura: dataCobertura,
               dataParto: dataParto,
-              partos: finalParto,
+              partos: partoNull(),
               notificacao: notificacao,
             },
           ];
-          setDataCio(new Date());
-          setDataCobertura(new Date());
-          setDataParto(new Date());
+          setDataCio(new Date().toISOString().substring(0, 10));
+          setDataCobertura(new Date().toISOString().substring(0, 10));
+          setDataParto(new Date().toISOString().substring(0, 10));
           setCallFunction(0);
         });
       } catch (e) {
@@ -403,9 +434,7 @@ const Reproducao = ({ navigation }) => {
                 <Text style={styles.txtInfoCategoria}>{nCrias}</Text>
               </View>
               <View style={styles.containerRow}>
-                <Text style={styles.txtInfoCategoria}>
-                  Último parto:
-                </Text>
+                <Text style={styles.txtInfoCategoria}>Último parto:</Text>
                 <Text style={styles.txtInfoCategoria}>
                   {dateOrHifen(dataUltimoParto)}
                 </Text>
