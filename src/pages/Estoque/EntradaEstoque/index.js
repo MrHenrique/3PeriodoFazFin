@@ -459,7 +459,9 @@ function EntradaEstoque({ navigation }) {
           // source={require("../../../../assets/fazfinwhiteletter.png")}
           style={styles.containergeral}
         >
-          <ScrollView style={styles.scrollcontainer}>
+          <ScrollView 
+          keyboardShouldPersistTaps="always"
+          style={styles.scrollcontainer}>
             {/* CheckBox */}
             <View style={styles.checkbox}>
               <CheckBox

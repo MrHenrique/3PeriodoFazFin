@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
   botaopress2: {
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
+    marginTop: verticalScale(10),
     paddingHorizontal: scale(80),
     flexDirection: "row-reverse",
     justifyContent: "space-between",

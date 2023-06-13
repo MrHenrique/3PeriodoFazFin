@@ -105,7 +105,7 @@ function SelectRebPage({ navigation }) {
               <Text style={styles.tituloBotao}>{"Continuar"}</Text>
             </View>
             <MaterialIcons
-              name="arrow-forward"
+              name="check"
               size={scale(24)}
               color="white"
             />
