@@ -557,15 +557,15 @@ function Despesas({ navigation }) {
                         (tipoChipValue || dataChipValue || dataChipValue) &&
                           styles.chipSelected,
                       ]}
-                      textStyle={{ fontSize: scale(14), color: Colors.white }}
+                      textStyle={{ fontSize: scale(13.5), color: Colors.white }}
                       icon={() => (
-                        <Icon name="filter" size={20} color="white" />
+                        <Icon name="filter" size={22} color="white" />
                       )}
                       onPress={() => {
                         setModalFiltrosVisible(true);
                       }}
                     >
-                      <Text>Filtros</Text>
+                      Filtros
                     </Chip>
                   </View>
                   <ScrollView
