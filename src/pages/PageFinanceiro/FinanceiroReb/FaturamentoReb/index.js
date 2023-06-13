@@ -342,10 +342,14 @@ function FaturamentoReb({ navigation }) {
           style={styles.listaDet}
           onPress={() => handleItemPress(item._id)}
         >
-          <Text style={styles.tituloBotao}>
-            {formatarResultado(item.createdAt, "data")} -{" "}
-            {formatarResultado(item.prodL * item.precoL, "preco")}
-          </Text>
+          <View style={styles.containerTituloBotao}>
+            <Text style={[styles.tituloBotao, { flex: 1 }]}>
+              {formatarResultado(item.createdAt, "data")}
+            </Text>
+            <Text style={[styles.tituloBotao, { flex: 1 }]}>
+              {formatarResultado(item.prodL * item.precoL, "preco")}
+            </Text>
+          </View>
         </TouchableOpacity>
         {shouldShowDetalhes && isItemSelected && (
           <View style={[styles.containerDetalhes]}>
