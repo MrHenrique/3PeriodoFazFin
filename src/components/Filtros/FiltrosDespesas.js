@@ -16,38 +16,24 @@ import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import { Colors } from "../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { TextInput } from "react-native-paper";
 
-function FiltrosData(props) {
-  const { listaAFiltrar, ordenarPor } = props; // Recebe a lista que vai ser filtrada e o tipo de ordenação
-  const {
-    ListaFiltrada,
-    listaFiltrada,
-    listaLeiteReb,
-    listaLeite,
-    listaDadosLeiteReb,
-  } = useContext(AuthContext);
+function FiltrosDespesas(props) {
+  const { listaAFiltrar } = props; // Recebe a lista que vai ser filtrada e o tipo de ordenação
+  const { ListaFiltrada, listaAliReb, listaAli } =
+    useContext(AuthContext);
   const [listaRecebida, setlistaRecebida] = useState(() => {
-    if (listaAFiltrar === "receitasFaz") {
-      return listaLeite;
-    } else if (listaAFiltrar === "receitasReb") {
-      return listaLeiteReb;
-    } else if (listaAFiltrar === "dadosLeite") {
-      return listaDadosLeiteReb;
+    if (listaAFiltrar === "despesasFaz") {
+      return listaAli;
+    } else if (listaAFiltrar === "despesasReb") {
+      return listaAliReb;
     } else {
       return [];
     }
   });
-  const [lista, setLista] = useState(() => {
-    if (listaAFiltrar === "receitasFaz") {
-      return listaLeite;
-    } else if (listaAFiltrar === "receitasReb") {
-      return listaLeiteReb;
-    } else if (listaAFiltrar === "dadosLeite") {
-      return listaDadosLeiteReb;
-    } else {
-      return [];
-    }
-  });
+  const [lista, setLista] = useState(listaRecebida);
+  const [lista1, setLista1] = useState([]);
+  const [lista2, setLista2] = useState([]);
   const [startDate, setStartDate] = useState(""); //Filtro Intervalo entre datas
   const [textStartDate, setTextStartDate] = useState("Data Inicial"); //Filtro Intervalo entre datas
   const [endDate, setEndDate] = useState(""); //Filtro Intervalo entre datas
@@ -55,26 +41,39 @@ function FiltrosData(props) {
   const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
     useState(false);
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
-  const [dataChipValue, setDataChipValue] = React.useState(1);
+  const [tipoChipValue, setTipoChipValue] = useState(null);
+  const [valorChipValue, setValorChipValue] = useState(null);
+  const [dataChipValue, setDataChipValue] = useState(1);
+  const [textTipoChipValue, setTextTipoChipValue] = useState("Tipo de Despesa");
   const [textDataChipValue, setTextDataChipValue] = useState("Período");
-  const [valorChipValue, setValorChipValue] = React.useState(null);
   const [textValorChipValue, setTextValorChipValue] = useState("Valores");
   const [modalFiltrosVisible, setModalFiltrosVisible] = useState(false);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
-    setlistaRecebida(() => {
-      if (listaAFiltrar === "receitasFaz") {
-        return listaLeite;
-      } else if (listaAFiltrar === "receitasReb") {
-        return listaLeiteReb;
-      } else if (listaAFiltrar === "dadosLeite") {
-        return listaDadosLeiteReb;
-      } else {
-        return [];
-      }
-    });
-    setLista(listaFiltrada);
-  }, [listaFiltrada]);
+    if (searchText === "") {
+      ListaFiltrada(listaRecebida);
+    } else {
+      ListaFiltrada(
+        lista.filter(
+          (item) =>
+            item.nomeProd.toLowerCase().indexOf(searchText.toLowerCase()) > -1
+        )
+      );
+    }
+  }, [searchText]);
+
+  useEffect(() => {
+    ListaFiltrada(lista);
+  }, [lista]);
+
+  useEffect(() => {
+    ListaFiltrada(lista1);
+  }, [lista1]);
+
+  useEffect(() => {
+    ListaFiltrada(lista2);
+  }, [lista2]);
 
   //Codigo do DateTimePickerModal
   //Data Inicial
@@ -117,42 +116,35 @@ function FiltrosData(props) {
     hideEndDatePicker();
   };
 
-  // Filtro por Valores
+  //Filtro por tipo de despesas
   useEffect(() => {
-    if (valorChipValue === 1) {
-      const filtrarPorValores = (lista) => {
-        const sortedItems = [...lista].sort((a, b) => {
-          if (ordenarPor === "litro") {
-            return a.prodL - b.prodL;
-          } else if (ordenarPor === "valor") {
-            return a.precoL * a.prodL - b.precoL * b.prodL;
-          }
-          return 0;
-        });
-        return sortedItems;
-      };
-      const crescente = filtrarPorValores(lista);
-      ListaFiltrada(crescente);
-      setTextValorChipValue("Crescente");
-    } else if (valorChipValue === 2) {
-      const filtrarPorValores = (lista) => {
-        const sortedItems = [...lista].sort((a, b) => {
-          if (ordenarPor === "litro") {
-            return b.prodL - a.prodL;
-          } else if (ordenarPor === "valor") {
-            return b.precoL * b.prodL - a.precoL * a.prodL;
-          }
-          return 0;
-        });
-        return sortedItems;
-      };
-      const decrescente = filtrarPorValores(lista);
-      ListaFiltrada(decrescente);
-      setTextValorChipValue("Decrescente");
+    if (tipoChipValue === 1) {
+      const listaRemedios = listaRecebida.filter((item) => {
+        return item.volumeProd > 0;
+      });
+      //ListaFiltrada(listaRemedios);
+      setLista(listaRemedios);
+      setTextTipoChipValue("Remédios");
+    } else if (tipoChipValue === 2) {
+      const listaAlimento = listaRecebida.filter((item) => {
+        return item.pesoProd > 0;
+      });
+      //ListaFiltrada(listaAlimento);
+      setLista(listaAlimento);
+      setTextTipoChipValue("Alimento");
+    } else if (tipoChipValue === 3) {
+      const listaOutrasDespesas = listaRecebida.filter((item) => {
+        return item.pesoProd === 0 && item.volumeProd === 0;
+      });
+      //ListaFiltrada(listaOutrasDespesas);
+      setLista(listaOutrasDespesas);
+      setTextTipoChipValue("Outras Despesas");
     } else {
-      setTextValorChipValue("Valores");
+      setTextTipoChipValue("Tipo de Despesa");
+      //ListaFiltrada(listaRecebida);
+      setLista(listaRecebida);
     }
-  }, [valorChipValue]);
+  }, [tipoChipValue]);
 
   // Filtro por Datas
   useEffect(() => {
@@ -170,11 +162,12 @@ function FiltrosData(props) {
       const dataSeteDiasAtras = new Date(dataHoje);
       dataSeteDiasAtras.setDate(dataHoje.getDate() - 7);
       const listaUltimosSete = filtrarPorData(
-        listaRecebida,
+        lista,
         dataSeteDiasAtras,
         dataHoje
       );
-      ListaFiltrada(listaUltimosSete);
+      setLista1(listaUltimosSete);
+      //ListaFiltrada(listaUltimosSete);
       setTextDataChipValue("7 dias");
     } else if (dataChipValue === 2) {
       // Ultimos mês
@@ -183,11 +176,12 @@ function FiltrosData(props) {
       const dataTrintaDiasAtras = new Date(dataHoje);
       dataTrintaDiasAtras.setDate(dataHoje.getDate() - 30);
       const listaUltimosTrinta = filtrarPorData(
-        listaRecebida,
+        lista,
         dataTrintaDiasAtras,
         dataHoje
       );
-      ListaFiltrada(listaUltimosTrinta);
+      setLista1(listaUltimosTrinta);
+      //ListaFiltrada(listaUltimosTrinta);
       setTextDataChipValue("Último mês");
     } else if (dataChipValue === 3) {
       //Ultimos 3 meses
@@ -196,11 +190,12 @@ function FiltrosData(props) {
       const dataUltimosTresMeses = new Date(dataHoje);
       dataUltimosTresMeses.setDate(dataHoje.getDate() - 90);
       const listaUltimosTresMeses = filtrarPorData(
-        listaRecebida,
+        lista,
         dataUltimosTresMeses,
         dataHoje
       );
-      ListaFiltrada(listaUltimosTresMeses);
+      setLista1(listaUltimosTresMeses);
+      //ListaFiltrada(listaUltimosTresMeses);
       setTextDataChipValue("3 meses");
     } else if (dataChipValue === 4) {
       //Ultimos 6 meses
@@ -209,29 +204,64 @@ function FiltrosData(props) {
       const dataUltimosSeisMeses = new Date(dataHoje);
       dataUltimosSeisMeses.setDate(dataHoje.getDate() - 180);
       const listaUltimosSeisMeses = filtrarPorData(
-        listaRecebida,
+        lista,
         dataUltimosSeisMeses,
         dataHoje
       );
-      ListaFiltrada(listaUltimosSeisMeses);
+      setLista1(listaUltimosSeisMeses);
+      //ListaFiltrada(listaUltimosSeisMeses);
       setTextDataChipValue("6 meses");
     } else if (dataChipValue === 5) {
       //todas as datas
-      ListaFiltrada(listaRecebida);
+      setLista1(lista);
+      //ListaFiltrada(lista);
       setTextDataChipValue("Todas as datas");
     } else if (dataChipValue === 6) {
       setTextDataChipValue("Customizado");
     } else {
       setTextDataChipValue("Período");
-      ListaFiltrada(listaRecebida);
+      setLista1(lista1);
+      //ListaFiltrada(lista);
     }
   }, [dataChipValue]);
+
+  // Filtro por Valores
+  useEffect(() => {
+    if (valorChipValue === 1) {
+      const filtrarPorValores = (lista) => {
+        const sortedItems = [...lista].sort((a, b) => {
+          return a.valorProd - b.valorProd;
+        });
+        return sortedItems;
+      };
+      const crescente = filtrarPorValores(lista1);
+      setLista2(crescente);
+      //ListaFiltrada(crescente);
+      setTextValorChipValue("Crescente");
+    } else if (valorChipValue === 2) {
+      const filtrarPorValores = (lista) => {
+        const sortedItems = [...lista].sort((a, b) => {
+          return b.valorProd - a.valorProd;
+        });
+        return sortedItems;
+      };
+      const decrescente = filtrarPorValores(lista1);
+      setLista2(decrescente);
+      //ListaFiltrada(decrescente);
+      setTextValorChipValue("Decrescente");
+    } else if (lista1.length > 0) { // tive que fazer para dar certo (gambiarra).
+      setLista2(lista1);
+      //ListaFiltrada(lista);
+    } else {
+      setTextValorChipValue("Valores");
+    }
+  }, [valorChipValue]);
 
   //Código para retornar uma lista do intevalo selecionado pelo usuário (FILTRO INTERVALO ENTRE DATAS)
   const filtrarIntervalo = () => {
     if (startDate != "" && endDate != "") {
-      const listaFiltradaIntervalo = listaRecebida.filter((item) => {
-        //pega todos os itens da lista que foi puxada da (listaRecebida)
+      const listaFiltradaIntervalo = lista.filter((item) => {
+        //pega todos os itens da lista que foi puxada da (lista)
         const itemDataDeCriacao = new Date(item.createdAt); //cria uma nova data com a data do (createdAt do item) e atribui a variavel itemDataDeCriacao
         const dataInicio = new Date(startDate); //pega a data de inicio escolhida pelo usuario
         dataInicio.setHours(0, 0, 0, 0); //ajusta o horario para 00:00:00 para garantir que a data de inicio seja no começo do dia.
@@ -241,6 +271,12 @@ function FiltrosData(props) {
       });
       ListaFiltrada(listaFiltradaIntervalo);
     }
+  };
+
+  const handleTipoChipPress = (value) => {
+    setTipoChipValue(value === tipoChipValue ? null : value);
+    setDataChipValue(null);
+    setValorChipValue(null);
   };
 
   const handleDataChipPress = (value) => {
@@ -254,7 +290,10 @@ function FiltrosData(props) {
 
   const handleChipPress = (tipo) => {
     let teste = false;
-    if (tipo === "data") {
+    if (tipo === "tipo") {
+      const valorValoresValidos = [1, 2, 3];
+      teste = valorValoresValidos.includes(tipoChipValue);
+    } else if (tipo === "data") {
       const dataValoresValidos = [1, 2, 3, 4, 5, 6];
       teste = dataValoresValidos.includes(dataChipValue);
     } else if (tipo === "valor") {
@@ -266,45 +305,53 @@ function FiltrosData(props) {
 
   return (
     <>
-      <View style={styles.containerChip}>
-        <View style={styles.teste}>
-          <Chip
-            style={[
-              styles.chip,
-              (dataChipValue || valorChipValue) && styles.chipSelected,
-            ]}
-            textStyle={{ fontSize: scale(14), color: Colors.white }}
-            icon={() => <Icon name="filter" size={20} color="white" />}
-            onPress={() => {
-              setModalFiltrosVisible(true);
-            }}
-          >
-            <Text>Filtros</Text>
-          </Chip>
-          <Chip
-            style={[
-              styles.chip,
-              handleChipPress("data") && styles.chipSelected,
-            ]}
-            textStyle={{ fontSize: scale(14), color: Colors.white }}
-            icon={() => <Icon name="calendar" size={20} color="white" />}
-          >
-            <Text>{textDataChipValue}</Text>
-          </Chip>
-          <Chip
-            style={[
-              styles.chip,
-              handleChipPress("valor") && styles.chipSelected,
-            ]}
-            textStyle={{ fontSize: scale(14), color: Colors.white }}
-            icon={() => (
-              <FontAwesome5 name="dollar-sign" size={20} color="white" />
-            )}
-          >
-            {textValorChipValue}
-          </Chip>
-        </View>
+      <View style={{ flexDirection: "row" }}>
+        <TextInput
+          style={styles.search}
+          placeholder="Buscar por nome"
+          value={searchText}
+          onChangeText={(t) => setSearchText(t)}
+        />
+        <Chip
+          style={[
+            styles.chip,
+            (tipoChipValue || dataChipValue || dataChipValue) &&
+              styles.chipSelected,
+          ]}
+          textStyle={{ fontSize: scale(14), color: Colors.white }}
+          icon={() => <Icon name="filter" size={20} color="white" />}
+          onPress={() => {
+            setModalFiltrosVisible(true);
+          }}
+        >
+          <Text>Filtros</Text>
+        </Chip>
       </View>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <Chip
+          style={[styles.chip, handleChipPress("tipo") && styles.chipSelected]}
+          textStyle={{ fontSize: scale(14), color: Colors.white }}
+          icon={() => <Icon name="square" size={20} color="white" />}
+        >
+          <Text>{textTipoChipValue}</Text>
+        </Chip>
+        <Chip
+          style={[styles.chip, handleChipPress("data") && styles.chipSelected]}
+          textStyle={{ fontSize: scale(14), color: Colors.white }}
+          icon={() => <Icon name="calendar" size={20} color="white" />}
+        >
+          <Text>{textDataChipValue}</Text>
+        </Chip>
+        <Chip
+          style={[styles.chip, handleChipPress("valor") && styles.chipSelected]}
+          textStyle={{ fontSize: scale(14), color: Colors.white }}
+          icon={() => (
+            <FontAwesome5 name="dollar-sign" size={20} color="white" />
+          )}
+        >
+          {textValorChipValue}
+        </Chip>
+      </ScrollView>
 
       <Modal
         coverScreen={true}
@@ -320,8 +367,7 @@ function FiltrosData(props) {
             <View style={styles.topFiltros}>
               <TouchableOpacity
                 onPress={() => {
-                  setDataChipValue(null);
-                  setValorChipValue(null);
+                  setTipoChipValue(null);
                   ListaFiltrada(listaRecebida);
                 }}
               >
@@ -331,6 +377,36 @@ function FiltrosData(props) {
               <TouchableOpacity onPress={() => setModalFiltrosVisible(false)}>
                 <AntDesign name="close" size={20} color={Colors.white} />
               </TouchableOpacity>
+            </View>
+            <Text style={styles.tituloinfo1}>Tipo de Despesa</Text>
+            <View style={styles.teste}>
+              <Chip
+                style={[
+                  styles.chipsFiltro,
+                  tipoChipValue === 1 && styles.chipSelected,
+                ]}
+                onPress={() => handleTipoChipPress(1)}
+              >
+                <Text>Remédios</Text>
+              </Chip>
+              <Chip
+                style={[
+                  styles.chipsFiltro,
+                  tipoChipValue === 2 && styles.chipSelected,
+                ]}
+                onPress={() => handleTipoChipPress(2)}
+              >
+                <Text>Alimento</Text>
+              </Chip>
+              <Chip
+                style={[
+                  styles.chipsFiltro,
+                  tipoChipValue === 3 && styles.chipSelected,
+                ]}
+                onPress={() => handleTipoChipPress(3)}
+              >
+                <Text>Outras Despesas</Text>
+              </Chip>
             </View>
             <Text style={styles.tituloinfo1}>Período</Text>
             <View style={styles.teste}>
@@ -470,6 +546,18 @@ function FiltrosData(props) {
   );
 }
 const styles = StyleSheet.create({
+  modalContainerSearch: {
+    flex: 1,
+  },
+  search: {
+    backgroundColor: Colors.white,
+    width: "70%",
+    fontSize: scale(15),
+    justifyContent: "center",
+    alignSelf: "center",
+    marginVertical: verticalScale(5),
+    marginHorizontal: verticalScale(5),
+  },
   chipSelected: {
     backgroundColor: "green",
   },
@@ -520,8 +608,8 @@ const styles = StyleSheet.create({
   chip: {
     backgroundColor: Colors.green,
     marginRight: scale(5),
-    padding: scale(5),
     marginBottom: scale(5),
+    padding: scale(1),
   },
   tituloinfo: {
     color: "white",
@@ -540,4 +628,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FiltrosData;
+export default FiltrosDespesas;
