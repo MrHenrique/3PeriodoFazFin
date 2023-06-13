@@ -310,9 +310,10 @@ const styles = StyleSheet.create({
   },
   chip: {
     backgroundColor: Colors.green,
+    height: scale(30),
     marginRight: scale(5),
     marginBottom: scale(5),
-    padding: scale(1),
+    //padding: scale(1),
   },
   tituloinfo: {
     color: "white",
