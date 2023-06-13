@@ -313,7 +313,7 @@ function PageListavacas({ navigation }) {
             justifyContent: "space-evenly",
           }}
         >
-          <View
+          {/* <View
             style={{
               flex: 1,
               alignItems: "center",
@@ -332,7 +332,7 @@ function PageListavacas({ navigation }) {
                 color="white"
               />
             </TouchableOpacity>
-          </View>
+          </View> */}
           <View
             style={{
               flex: 1,
