@@ -24,6 +24,8 @@ function FiltrosData(props) {
     listaFiltrada,
     listaLeiteReb,
     listaLeite,
+    listaAliReb,
+    listaAli,
     listaDadosLeiteReb,
   } = useContext(AuthContext);
   const [listaRecebida, setlistaRecebida] = useState(() => {
@@ -31,6 +33,10 @@ function FiltrosData(props) {
       return listaLeite;
     } else if (listaAFiltrar === "receitasReb") {
       return listaLeiteReb;
+    } else if (listaAFiltrar === "despesasFaz") {
+      return listaAli;
+    } else if (listaAFiltrar === "despesasReb") {
+      return listaAliReb;
     } else if (listaAFiltrar === "dadosLeite") {
       return listaDadosLeiteReb;
     } else {
@@ -42,6 +48,10 @@ function FiltrosData(props) {
       return listaLeite;
     } else if (listaAFiltrar === "receitasReb") {
       return listaLeiteReb;
+    } else if (listaAFiltrar === "despesasFaz") {
+      return listaAli;
+    } else if (listaAFiltrar === "despesasReb") {
+      return listaAliReb;
     } else if (listaAFiltrar === "dadosLeite") {
       return listaDadosLeiteReb;
     } else {
@@ -67,6 +77,10 @@ function FiltrosData(props) {
         return listaLeite;
       } else if (listaAFiltrar === "receitasReb") {
         return listaLeiteReb;
+      } else if (listaAFiltrar === "despesasFaz") {
+        return listaAli;
+      } else if (listaAFiltrar === "despesasReb") {
+        return listaAliReb;
       } else if (listaAFiltrar === "dadosLeite") {
         return listaDadosLeiteReb;
       } else {
@@ -220,7 +234,7 @@ function FiltrosData(props) {
       ListaFiltrada(listaRecebida);
       setTextDataChipValue("Todas as datas");
     } else if (dataChipValue === 6) {
-      setTextDataChipValue("Customizado");
+      setTextDataChipValue("Período customizado");
     } else {
       setTextDataChipValue("Período");
       ListaFiltrada(listaRecebida);
@@ -267,20 +281,7 @@ function FiltrosData(props) {
   return (
     <>
       <View style={styles.containerChip}>
-        <View style={styles.teste}>
-          <Chip
-            style={[
-              styles.chip,
-              (dataChipValue || valorChipValue) && styles.chipSelected,
-            ]}
-            textStyle={{ fontSize: scale(14), color: Colors.white }}
-            icon={() => <Icon name="filter" size={20} color="white" />}
-            onPress={() => {
-              setModalFiltrosVisible(true);
-            }}
-          >
-            <Text>Filtros</Text>
-          </Chip>
+        <ScrollView horizontal>
           <Chip
             style={[
               styles.chip,
@@ -288,6 +289,9 @@ function FiltrosData(props) {
             ]}
             textStyle={{ fontSize: scale(14), color: Colors.white }}
             icon={() => <Icon name="calendar" size={20} color="white" />}
+            onPress={() => {
+              setModalFiltrosVisible(true);
+            }}
           >
             <Text>{textDataChipValue}</Text>
           </Chip>
@@ -300,10 +304,11 @@ function FiltrosData(props) {
             icon={() => (
               <FontAwesome5 name="dollar-sign" size={20} color="white" />
             )}
+            onPress={() => setModalFiltrosVisible(true)}
           >
             {textValorChipValue}
           </Chip>
-        </View>
+        </ScrollView>
       </View>
 
       <Modal
@@ -311,7 +316,7 @@ function FiltrosData(props) {
         backdropColor={"#000"}
         onBackButtonPress={() => setModalFiltrosVisible(false)}
         onBackdropPress={() => setModalFiltrosVisible(false)}
-        isVisible={modalFiltrosVisible}
+        visible={modalFiltrosVisible}
         animationType="slide"
         statusBarTranslucent
       >
@@ -386,7 +391,7 @@ function FiltrosData(props) {
                 ]}
                 onPress={() => handleDataChipPress(6)}
               >
-                <Text>Customizado</Text>
+                <Text>Período customizado</Text>
               </Chip>
             </View>
             {dataChipValue === 6 && (
@@ -519,9 +524,8 @@ const styles = StyleSheet.create({
   },
   chip: {
     backgroundColor: Colors.green,
-    marginRight: scale(5),
+    marginRight: scale(10),
     padding: scale(5),
-    marginBottom: scale(5),
   },
   tituloinfo: {
     color: "white",

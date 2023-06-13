@@ -11,14 +11,13 @@ import {
   Dimensions,
 } from "react-native";
 import BezierChartDespesas from "../../../../components/Graficos/BezierChartDespesas";
-import FiltrosDespesas from "../../../../components/Filtros/FiltrosDespesas";
 import { scale, verticalScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
 import { AuthContext } from "../../../../contexts/auth";
 import styles from "../../styles";
 import { Colors } from "../../../../styles";
 function Despesas({ navigation }) {
-  const { precoCF, listaFiltrada} = useContext(AuthContext);
+  const { precoCF, listaAli } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
   const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
@@ -152,7 +151,10 @@ function Despesas({ navigation }) {
                   <View style={styles.modalContent}>
                     <Text style={styles.textContent}>Valor Total: </Text>
                     <Text style={styles.textContent}>
-                      {formatarResultado(item.valorProd, "preco")}
+                      {formatarResultado(
+                        item.valorProd,
+                        "preco"
+                      )}
                     </Text>
                   </View>
                   <Text style={styles.textContent}>
@@ -179,7 +181,10 @@ function Despesas({ navigation }) {
                   <View style={styles.modalContent}>
                     <Text style={styles.textContent}>Valor Total: </Text>
                     <Text style={styles.textContent}>
-                      {formatarResultado(item.valorProd, "preco")}
+                      {formatarResultado(
+                        item.valorProd,
+                        "preco"
+                      )}
                     </Text>
                   </View>
                   <Text style={styles.textContent}>
@@ -191,7 +196,10 @@ function Despesas({ navigation }) {
                   <View style={styles.modalContent}>
                     <Text style={styles.textContent}>Valor Total: </Text>
                     <Text style={styles.textContent}>
-                      {formatarResultado(item.valorProd, "preco")}
+                      {formatarResultado(
+                        item.valorProd,
+                        "preco"
+                      )}
                     </Text>
                   </View>
                   <Text style={styles.textContent}>
@@ -250,12 +258,10 @@ function Despesas({ navigation }) {
               >
                 <View style={styles.modalContainer}>
                   <Text style={styles.tituloModal}>Detalhes de Despesas:</Text>
-                  <View style={{ paddingHorizontal: 20, marginBottom: 5 }}>
-                    <FiltrosDespesas listaAFiltrar={"despesasFaz"} />
-                  </View>
+
                   <FlatList
                     style={styles.scroll}
-                    data={listaFiltrada}
+                    data={listaAli}
                     renderItem={renderItem}
                     keyExtractor={(item) => item._id}
                   />

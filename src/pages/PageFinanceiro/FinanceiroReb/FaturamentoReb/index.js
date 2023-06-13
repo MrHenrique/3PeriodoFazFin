@@ -18,10 +18,11 @@ import Modal from "react-native-modal";
 import { AuthContext } from "../../../../contexts/auth";
 import styles from "../../styles";
 function FaturamentoReb({ navigation }) {
-  const { precoLeiteReb } =
+  const { precoCFReb, listaAliReb, listaLeiteReb, precoLeiteReb } =
     useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
   const { listaFiltrada } = useContext(AuthContext);
+  const [shouldShow, setShouldShow] = useState(false);
   const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
@@ -93,17 +94,12 @@ function FaturamentoReb({ navigation }) {
         {shouldShowDetalhes && isItemSelected && (
           <View style={[styles.containerDetalhes]}>
             <View>
-              <Text style={styles.tituloDetalhes}>
-                Detalhes {checkTipo(item)}
-              </Text>
+              <Text style={styles.tituloDetalhes}>Detalhes</Text>
+            </View>
+            <View>
+              <Text style={styles.tituloDetalhes}>{checkTipo(item)}</Text>
             </View>
             <View style={styles.modalContainerText}>
-              {tipo === "Venda" ? (
-                <View style={styles.modalContent}>
-                  <Text style={styles.textContent}>Nome do animal: </Text>
-                  <Text style={styles.textContent}>{item.nomeProd}</Text>
-                </View>
-              ) : null}
               <View style={styles.modalContent}>
                 <Text style={styles.textContent}>Data: </Text>
                 <Text style={styles.textContent}>
@@ -111,7 +107,7 @@ function FaturamentoReb({ navigation }) {
                 </Text>
               </View>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Horário: </Text>
+                <Text style={styles.textContent}>Horario: </Text>
                 <Text style={styles.textContent}>
                   {item.createdAt.toLocaleTimeString()}
                 </Text>
@@ -140,7 +136,7 @@ function FaturamentoReb({ navigation }) {
                     </Text>
                   </View>
                   <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Preço por arroba: </Text>
+                    <Text style={styles.textContent}>Preço: </Text>
                     <Text style={styles.textContent}>
                       {formatarResultado(item.precoL, "preco")}
                     </Text>
@@ -209,14 +205,14 @@ function FaturamentoReb({ navigation }) {
 
                   {/*filtros*/}
                   <View style={{ paddingHorizontal: 20, marginBottom: 5 }}>
-                    <FiltrosData
-                      listaAFiltrar={"receitasReb"}
-                      ordenarPor={"valor"}
-                    />
+                    <FiltrosData listaAFiltrar={"receitasReb"} ordenarPor={"valor"} />
                   </View>
 
                   <FlatList
-                    style={styles.lista}
+                    style={[
+                      styles.lista,
+                      { marginTop: shouldShow ? verticalScale(140) : 0 },
+                    ]}
                     data={listaFiltrada}
                     renderItem={renderItem}
                     keyExtractor={(item) => item._id}

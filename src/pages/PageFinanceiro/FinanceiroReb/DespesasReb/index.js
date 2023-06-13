@@ -10,14 +10,13 @@ import {
   FlatList,
 } from "react-native";
 import BezierChartDespesasReb from "../../../../components/Graficos/BezierChartDespesasReb";
-import FiltrosDespesas from "../../../../components/Filtros/FiltrosDespesas";
 import { scale, verticalScale } from "react-native-size-matters";
 import { Colors } from "../../../../styles";
 import Modal from "react-native-modal";
 import { AuthContext } from "../../../../contexts/auth";
 import styles, { Color, setSize } from "../../styles";
 function DespesasReb({ navigation }) {
-  const { precoCFReb, listaFiltrada } = useContext(AuthContext);
+  const { precoCFReb, listaAliReb } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(false);
   const [shouldShowDetalhes, setShouldShowDetalhes] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
@@ -69,10 +68,7 @@ function DespesasReb({ navigation }) {
       const categoriaProd = "Remédios";
       return categoriaProd;
     } else if (item.pesoProd > 0) {
-      const categoriaProd = "Alimento";
-      return categoriaProd;
-    } else {
-      const categoriaProd = "Outras Despesas";
+      const categoriaProd = "Alimentos";
       return categoriaProd;
     }
   };
@@ -107,9 +103,6 @@ function DespesasReb({ navigation }) {
             <View>
               <Text style={styles.tituloDetalhes}>Detalhes</Text>
             </View>
-            <View>
-              <Text style={styles.tituloDetalhes}>{TipoAfter(item)}</Text>
-            </View>
             <View style={styles.modalContainerText}>
               <View style={styles.modalContent}>
                 <Text style={styles.textContent}>Nome: </Text>
@@ -131,73 +124,63 @@ function DespesasReb({ navigation }) {
                   {item.createdAt.toLocaleTimeString()}
                 </Text>
               </View>
-              {categoriaProd === "Alimento" ? (
+              <View style={styles.modalContent}>
+                <Text style={styles.textContent}>Preço Unitário: </Text>
+                <Text style={styles.textContent}>
+                  {formatarResultado(item.valorProd, "preco")}
+                </Text>
+              </View>
+              {categoriaProd === "Alimentos" ? (
                 <>
                   <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Preço Unitário: </Text>
-                    <Text style={styles.textContent}>
-                      {formatarResultado(
-                        item.valorProd / item.pesoProd,
-                        "preco"
-                      )}
-                    </Text>
-                  </View>
-                  <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Peso Utilizado: </Text>
+                    <Text style={styles.textContent}>Peso Unitário: </Text>
                     <Text style={styles.textContent}>
                       {formatarResultado(item.pesoProd, "peso")}
                     </Text>
                   </View>
                   <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Valor Total: </Text>
+                    <Text style={styles.textContent}>Quantidade: </Text>
+                    <Text style={styles.textContent}>{item.qtdProd}</Text>
+                  </View>
+                  <View style={styles.modalContent}>
+                    <Text style={styles.textContent}>Peso Total: </Text>
                     <Text style={styles.textContent}>
-                      {formatarResultado(item.valorProd, "preco")}
+                      {formatarResultado(item.pesoProd * item.qtdProd, "peso")}
                     </Text>
                   </View>
-                  <Text style={styles.textContent}>
-                    Descrição: {item.obserProd}
-                  </Text>
                 </>
-              ) : categoriaProd === "Remédios" ? (
+              ) : (
                 <>
                   <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Preço Unitário: </Text>
-                    <Text style={styles.textContent}>
-                      {formatarResultado(
-                        item.valorProd / item.volumeProd,
-                        "preco"
-                      )}
-                    </Text>
-                  </View>
-                  <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Volume Usado: </Text>
+                    <Text style={styles.textContent}>Volume Unitário: </Text>
                     <Text style={styles.textContent}>
                       {formatarResultado(item.volumeProd, "litro")}
                     </Text>
                   </View>
                   <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Valor Total: </Text>
-                    <Text style={styles.textContent}>
-                      {formatarResultado(item.valorProd, "preco")}
-                    </Text>
+                    <Text style={styles.textContent}>Quantidade: </Text>
+                    <Text style={styles.textContent}>{item.qtdProd}</Text>
                   </View>
-                  <Text style={styles.textContent}>
-                    Descrição: {item.obserProd}
-                  </Text>
-                </>
-              ) : categoriaProd === "Outras Despesas" ? (
-                <>
                   <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Valor Total: </Text>
+                    <Text style={styles.textContent}>Volume Total: </Text>
                     <Text style={styles.textContent}>
-                      {formatarResultado(item.valorProd, "preco")}
+                      {formatarResultado(
+                        item.volumeProd * item.qtdProd,
+                        "litro"
+                      )}
                     </Text>
                   </View>
-                  <Text style={styles.textContent}>
-                    Descrição: {item.obserProd}
-                  </Text>
                 </>
-              ) : null}
+              )}
+              <View style={styles.modalContent}>
+                <Text style={styles.textContent}>Valor Total: </Text>
+                <Text style={styles.textContent}>
+                  {formatarResultado(item.valorProd * item.qtdProd, "preco")}
+                </Text>
+              </View>
+              <Text style={styles.textContent}>
+                Descrição: {item.obserProd}
+              </Text>
             </View>
           </View>
         )}
@@ -250,12 +233,10 @@ function DespesasReb({ navigation }) {
               >
                 <View style={styles.modalContainer}>
                   <Text style={styles.tituloModal}>Detalhes de Despesas:</Text>
-                  <View style={{ paddingHorizontal: 20, marginBottom: 5 }}>
-                    <FiltrosDespesas listaAFiltrar={"despesasReb"} />
-                  </View>
+
                   <FlatList
                     style={styles.scroll}
-                    data={listaFiltrada}
+                    data={listaAliReb}
                     renderItem={renderItem}
                     keyExtractor={(item) => item._id}
                   />
