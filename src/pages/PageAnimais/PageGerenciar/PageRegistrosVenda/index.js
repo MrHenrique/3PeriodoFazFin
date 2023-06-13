@@ -65,7 +65,11 @@ function RegistrosVendas({ navigation }) {
   }, [lista]);
 
   useEffect(() => {
-    setLista(listaBuscada);
+    setLista(
+      listaBuscada.sort((a, b) => {
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      })
+    );
   }, [listaBuscada]);
 
   //Codigo do DateTimePickerModal
@@ -274,11 +278,7 @@ function RegistrosVendas({ navigation }) {
     };
 
     const sortReceitas = (values) => {
-      const sortedValues = [...values]
-        .filter((item) => item.tipo === 2)
-        .sort((a, b) => {
-          return new Date(a.createdAt) - new Date(b.createdAt);
-        });
+      const sortedValues = [...values].filter((item) => item.tipo === 2);
       setListaBuscada(sortedValues);
     };
 
@@ -655,7 +655,7 @@ function RegistrosVendas({ navigation }) {
                       style={styles.botoes}
                       onPress={() => {
                         filtrarIntervalo();
-                        setValorChipValue(null); 
+                        setValorChipValue(null);
                       }}
                     >
                       <Text style={styles.textoFitro}>Filtrar</Text>

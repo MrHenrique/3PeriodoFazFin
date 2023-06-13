@@ -65,7 +65,11 @@ function RegistrosLeite({ navigation }) {
   }, [lista]);
 
   useEffect(() => {
-    setLista(listaBuscada);
+    setLista(
+      listaBuscada.sort((a, b) => {
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      })
+    );
   }, [listaBuscada]);
 
   //Codigo do DateTimePickerModal
@@ -273,11 +277,7 @@ function RegistrosLeite({ navigation }) {
     };
 
     const sortReceitas = (values) => {
-      const sortedValues = [...values]
-        .filter((item) => item.tipo === 1)
-        .sort((a, b) => {
-          return new Date(a.createdAt) - new Date(b.createdAt);
-        });
+      const sortedValues = [...values].filter((item) => item.tipo === 1);
       setListaBuscada(sortedValues);
     };
 
