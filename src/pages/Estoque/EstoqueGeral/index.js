@@ -42,7 +42,7 @@ function EstoqueGeral({ navigation }) {
     alertCheck.forEach((item) => {
       if (
         item.alert[0].alertMin > 0 &&
-        item.alert[0].alertMin <=
+        item.alert[0].alertMin >=
           (item.pesoProd > 0 ? item.pesoProd : item.volumeProd)
       ) {
         savedItems.push({
@@ -100,7 +100,9 @@ function EstoqueGeral({ navigation }) {
               padding: 3vh;
               background-color: #f1f1f1;
             }
-      
+            tr:nth-child(odd) {
+              background-color: #f5f5f5;
+          }
             .containerResumo {
               background-color: #ffffff;
               padding: 20px;
@@ -120,7 +122,7 @@ function EstoqueGeral({ navigation }) {
             table {
               width: 100%;
               border-collapse: collapse;
-              border-top: 1px solid #ddd;
+              border-top: 1px solid #ddd
               color: #035921;
             }
       
