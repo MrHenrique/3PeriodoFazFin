@@ -353,7 +353,10 @@ function DespesasReb({ navigation }) {
       const categoriaProd = "Remédios";
       return categoriaProd;
     } else if (item.pesoProd > 0) {
-      const categoriaProd = "Alimentos";
+      const categoriaProd = "Alimento";
+      return categoriaProd;
+    } else {
+      const categoriaProd = "Outras Despesas";
       return categoriaProd;
     }
   };
@@ -415,57 +418,73 @@ function DespesasReb({ navigation }) {
                   {formatarResultado(item.valorProd, "preco")}
                 </Text>
               </View>
-              {categoriaProd === "Alimentos" ? (
+              {categoriaProd === "Alimento" ? (
                 <>
                   <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Peso Unitário: </Text>
+                    <Text style={styles.textContent}>Preço Unitário: </Text>
+                    <Text style={styles.textContent}>
+                      {formatarResultado(
+                        item.valorProd / item.pesoProd,
+                        "preco"
+                      )}
+                    </Text>
+                  </View>
+                  <View style={styles.modalContent}>
+                    <Text style={styles.textContent}>Peso Utilizado: </Text>
                     <Text style={styles.textContent}>
                       {formatarResultado(item.pesoProd, "peso")}
                     </Text>
                   </View>
                   <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Quantidade: </Text>
-                    <Text style={styles.textContent}>{item.qtdProd}</Text>
-                  </View>
-                  <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Peso Total: </Text>
+                    <Text style={styles.textContent}>Valor Total: </Text>
                     <Text style={styles.textContent}>
-                      {formatarResultado(item.pesoProd * item.qtdProd, "peso")}
+                      {formatarResultado(item.valorProd, "preco")}
                     </Text>
                   </View>
+                  <Text style={styles.textContent}>
+                    Descrição: {item.obserProd}
+                  </Text>
                 </>
-              ) : (
+              ) : categoriaProd === "Remédios" ? (
                 <>
                   <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Volume Unitário: </Text>
+                    <Text style={styles.textContent}>Preço Unitário: </Text>
+                    <Text style={styles.textContent}>
+                      {formatarResultado(
+                        item.valorProd / item.volumeProd,
+                        "preco"
+                      )}
+                    </Text>
+                  </View>
+                  <View style={styles.modalContent}>
+                    <Text style={styles.textContent}>Volume Usado: </Text>
                     <Text style={styles.textContent}>
                       {formatarResultado(item.volumeProd, "litro")}
                     </Text>
                   </View>
                   <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Quantidade: </Text>
-                    <Text style={styles.textContent}>{item.qtdProd}</Text>
-                  </View>
-                  <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Volume Total: </Text>
+                    <Text style={styles.textContent}>Valor Total: </Text>
                     <Text style={styles.textContent}>
-                      {formatarResultado(
-                        item.volumeProd * item.qtdProd,
-                        "litro"
-                      )}
+                      {formatarResultado(item.valorProd, "preco")}
                     </Text>
                   </View>
+                  <Text style={styles.textContent}>
+                    Descrição: {item.obserProd}
+                  </Text>
                 </>
-              )}
-              <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Valor Total: </Text>
-                <Text style={styles.textContent}>
-                  {formatarResultado(item.valorProd * item.qtdProd, "preco")}
-                </Text>
-              </View>
-              <Text style={styles.textContent}>
-                Descrição: {item.obserProd}
-              </Text>
+              ) : categoriaProd === "Outras Despesas" ? (
+                <>
+                  <View style={styles.modalContent}>
+                    <Text style={styles.textContent}>Valor Total: </Text>
+                    <Text style={styles.textContent}>
+                      {formatarResultado(item.valorProd, "preco")}
+                    </Text>
+                  </View>
+                  <Text style={styles.textContent}>
+                    Descrição: {item.obserProd}
+                  </Text>
+                </>
+              ) : null}
             </View>
           </View>
         )}
@@ -858,7 +877,7 @@ function DespesasReb({ navigation }) {
                   {/*FIM FILTROS*/}
                   <FlatList
                     style={styles.scroll}
-                    data={listaAliReb}
+                    data={listaFiltrada}
                     renderItem={renderItem}
                     keyExtractor={(item) => item._id}
                   />

@@ -887,7 +887,7 @@ function Despesas({ navigation }) {
                   {/*FIM FILTROS*/}
                   <FlatList
                     style={styles.scroll}
-                    data={listaAli}
+                    data={listaFiltrada}
                     renderItem={renderItem}
                     keyExtractor={(item) => item._id}
                   />

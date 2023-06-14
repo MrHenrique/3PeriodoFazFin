@@ -15,6 +15,7 @@ function Graficodetalhesvacas() {
   const [modalDetDespesasVisible, setModalDetDespesasVisible] = useState(false);
   const [mesSelecionado, setMesSelecionado] = useState(0);
   const [itemSelecionado, setItemSelecionado] = useState(null);
+  const [selectedItemId, setSelectedItemId] = useState(null);
 
   const resultado = Number(grafVaca);
   const meses = [
@@ -106,10 +107,15 @@ function Graficodetalhesvacas() {
 
   const handleDataPointClick = ({ value, index, dataset }) => {
     setMesSelecionado(index); //passa o indice do ponto clicado para a variavel mesSelecionado
-    console.log(value, index, dataset);
-    if (dataset.datasetsID === "receitas") {
+    const podeAbrirReceita = listaReceitasVaca.some(
+      (item) => item.createdAt.getMonth() === index
+    );
+    const podeAbrirDespesa = listaDespesasVaca.some(
+      (item) => item.createdAt.getMonth() === index
+    );
+    if (dataset.datasetsID === "receitas" && podeAbrirReceita) {
       setModalReceitasVisible(true);
-    } else if (dataset.datasetsID === "despesas") {
+    } else if (dataset.datasetsID === "despesas" && podeAbrirDespesa) {
       setModalDespesasVisible(true);
     }
   };
@@ -189,11 +195,15 @@ function Graficodetalhesvacas() {
   //Cria um texto com a Data e o Valor daquela produção, usado na flatList
   const renderItemReceitas = ({ item }) => {
     const tipo = checkTipo(item);
+    const isItemSelected = item._id === selectedItemId;
     return (
       <>
         <TouchableOpacity
           style={styles.listaDet}
-          onPress={() => setModalDetReceitasVisible(true)}
+          onPress={() => {
+            setModalDetReceitasVisible(true);
+            setSelectedItemId(item._id);
+          }}
         >
           <View style={styles.containerTituloBotao}>
             <Text style={[styles.tituloBotao, { flex: 1 }]}>
@@ -205,17 +215,17 @@ function Graficodetalhesvacas() {
           </View>
         </TouchableOpacity>
 
-        <Modal
-          visible={modalDetReceitasVisible}
-          animationType="slide"
-          transparent={true}
-        >
-          <SafeAreaView
-            style={{ flex: 1 }}
-            onTouchStart={() => setModalDetReceitasVisible(false)}
+        {isItemSelected && (
+          <Modal
+            visible={modalDetReceitasVisible}
+            animationType="slide"
+            transparent={true}
           >
-            <View style={styles.modalContainer1}>
-              {itemSelecionado && (
+            <SafeAreaView
+              style={{ flex: 1 }}
+              onTouchStart={() => setModalDetReceitasVisible(false)}
+            >
+              <View style={styles.modalContainer1}>
                 <>
                   <View style={[styles.containerDetalhes]}>
                     <View style={styles.modalHeader1}>
@@ -296,10 +306,10 @@ function Graficodetalhesvacas() {
                     </View>
                   </View>
                 </>
-              )}
-            </View>
-          </SafeAreaView>
-        </Modal>
+              </View>
+            </SafeAreaView>
+          </Modal>
+        )}
       </>
     );
   };
@@ -307,13 +317,14 @@ function Graficodetalhesvacas() {
   //Cria um texto com a Data e o Valor daquela produção, usado na flatList
   const renderItemDespesas = ({ item }) => {
     const categoriaProd = TipoAfter(item);
+    const isItemSelected = item._id === selectedItemId;
     return (
       <>
         <TouchableOpacity
           style={styles.listaDet}
           onPress={() => {
             setModalDetDespesasVisible(true);
-            setItemSelecionado(item);
+            setSelectedItemId(item._id);
           }}
         >
           <View style={styles.containerTituloBotao}>
@@ -333,17 +344,17 @@ function Graficodetalhesvacas() {
           </View>
         </TouchableOpacity>
 
-        <Modal
-          visible={modalDetDespesasVisible}
-          animationType="slide"
-          transparent={true}
-        >
-          <SafeAreaView
-            style={{ flex: 1 }}
-            onTouchStart={() => setModalDetDespesasVisible(false)}
+        {isItemSelected && (
+          <Modal
+            visible={modalDetDespesasVisible}
+            animationType="slide"
+            transparent={true}
           >
-            <View style={styles.modalContainer1}>
-              {itemSelecionado && (
+            <SafeAreaView
+              style={{ flex: 1 }}
+              onTouchStart={() => setModalDetDespesasVisible(false)}
+            >
+              <View style={styles.modalContainer1}>
                 <>
                   <View style={[styles.containerDetalhes]}>
                     <View style={styles.modalHeader1}>
@@ -467,10 +478,10 @@ function Graficodetalhesvacas() {
                     </View>
                   </View>
                 </>
-              )}
-            </View>
-          </SafeAreaView>
-        </Modal>
+              </View>
+            </SafeAreaView>
+          </Modal>
+        )}
       </>
     );
   };
