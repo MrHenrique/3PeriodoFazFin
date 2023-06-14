@@ -324,7 +324,6 @@ export default function SaidaEstoque({ navigation }) {
               updateEstoque.createdAt = new Date();
               updateEstoque.valorProd = valorProdFinal;
               updateEstoque.volumeProd = volumeProdFinal;
-
               let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
               let createdGastosReb = realm.create("DespesaRebSchema", {
                 _id: id,
@@ -369,6 +368,7 @@ export default function SaidaEstoque({ navigation }) {
             (newListaEstoque[0].valorProd / newListaEstoque[0].pesoProd) *
             Number(qtdProd);
           try {
+            let id = uuid.v4();
             realm.write(() => {
               let updateEstoque = realm
                 .objects("AtualEstoqueSchema")
@@ -379,7 +379,7 @@ export default function SaidaEstoque({ navigation }) {
               updateEstoque.pesoProd = pesoProdFinal;
               let reb = realm.objectForPrimaryKey("RebanhoSchema", rebID);
               let createdGastosReb = realm.create("DespesaRebSchema", {
-                _id: uuid.v4(),
+                _id: id,
                 createdAt: new Date(),
                 nomeProd: newListaEstoque[0].nomeProd,
                 valorProd: valorMedioTransacao,

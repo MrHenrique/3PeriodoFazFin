@@ -52,9 +52,10 @@ function RelatorioReb({ navigation }) {
         padding: 3vh;
         background-color: #f1f1f1;
       }
-
+      tr:nth-child(odd) {
+        background-color: #00472F;
+    }
       .containerResumo {
-        background-color: #ffffff;
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
