@@ -53,10 +53,11 @@ function Despesas({ navigation }) {
   //INICIO FILTROS
   useEffect(() => {
     if (searchText === "") {
-      setListaFiltrada(listaAli);
+      setListaFiltrada(lista);
     } else {
+      setValorChipValue(null);
       setListaFiltrada(
-        lista.filter(
+        listaFiltrada.filter(
           (item) =>
             item.nomeProd.toLowerCase().indexOf(searchText.toLowerCase()) > -1
         )
@@ -581,7 +582,7 @@ function Despesas({ navigation }) {
                       ]}
                       textStyle={{ fontSize: scale(14), color: Colors.white }}
                       icon={() => (
-                        <Icon name="square" size={20} color="white" />
+                        <AntDesign name="tag" size={20} color="white" />
                       )}
                     >
                       {textTipoChipValue}

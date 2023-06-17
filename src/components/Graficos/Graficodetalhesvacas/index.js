@@ -7,17 +7,14 @@ import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Colors, Fonts } from "../../../styles";
 function Graficodetalhesvacas() {
-  const { grafVaca, listaReceitasVaca, listaDespesasVaca } =
-    useContext(AuthContext);
+  const { listaReceitasVaca, listaDespesasVaca } = useContext(AuthContext);
   const [modalReceitasVisible, setModalReceitasVisible] = useState(false);
   const [modalDespesasVisible, setModalDespesasVisible] = useState(false);
   const [modalDetReceitasVisible, setModalDetReceitasVisible] = useState(false);
   const [modalDetDespesasVisible, setModalDetDespesasVisible] = useState(false);
   const [mesSelecionado, setMesSelecionado] = useState(0);
-  const [itemSelecionado, setItemSelecionado] = useState(null);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
-  const resultado = Number(grafVaca);
   const meses = [
     "Janeiro",
     "Fevereiro",
@@ -539,8 +536,7 @@ function Graficodetalhesvacas() {
             </TouchableOpacity>
           </View>
           <Text style={styles.modalContent}>
-            Despesas em {meses[mesSelecionado]}: R${" "}
-            {data.datasets[0].data[mesSelecionado].toFixed(2)}
+            Despesas: R$ {data.datasets[1].data[mesSelecionado].toFixed(2)}
           </Text>
           <FlatList
             style={styles.flatListContainer}

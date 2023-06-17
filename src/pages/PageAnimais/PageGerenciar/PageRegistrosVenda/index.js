@@ -396,7 +396,7 @@ function RegistrosVendas({ navigation }) {
     if (tipo == "preco") {
       const result = valorRecebido.toFixed(2);
       formattedResult = `R$ ${result.replace(".", ",")}`;
-    } else if (tipo == "prod") {
+    } else if (tipo == "peso") {
       const result = valorRecebido.toFixed(2);
       formattedResult = `${result.replace(".", ",")} @`;
     }
@@ -448,6 +448,10 @@ function RegistrosVendas({ navigation }) {
             </View>
             <View style={styles.modalContainerText}>
               <View style={styles.modalContent}>
+                <Text style={styles.textContent}>Nome do animal: </Text>
+                <Text style={styles.textContent}>{item.nomeProd}</Text>
+              </View>
+              <View style={styles.modalContent}>
                 <Text style={styles.textContent}>Data: </Text>
                 <Text style={styles.textContent}>{formattedData}</Text>
               </View>
@@ -460,11 +464,11 @@ function RegistrosVendas({ navigation }) {
               <View style={styles.modalContent}>
                 <Text style={styles.textContent}>Peso: </Text>
                 <Text style={styles.textContent}>
-                  {formatarResultado(item.prodL, "prod")}
+                  {formatarResultado(item.prodL, "peso")}
                 </Text>
               </View>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Preço por @: </Text>
+                <Text style={styles.textContent}>Preço por arroba: </Text>
                 <Text style={styles.textContent}>
                   {formatarResultado(item.precoL, "preco")}
                 </Text>

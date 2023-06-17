@@ -518,7 +518,7 @@ function Faturamento({ navigation }) {
                         color: Colors.white,
                       }}
                       icon={() => (
-                        <Icon name="calendar" size={20} color="white" />
+                        <AntDesign name="tag" size={20} color="white" />
                       )}
                     >
                       <Text>{textTipoChipValue}</Text>
