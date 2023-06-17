@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import Modal from "react-native-modal";
-import { Chip } from "react-native-paper";
+import { Button, Chip, Divider, IconButton } from "react-native-paper";
 import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import { AuthContext } from "../../../../contexts/auth";
 import { useMainContext } from "../../../../contexts/RealmContext";
@@ -19,6 +19,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { scale } from "react-native-size-matters";
 import styles from "./styles";
 import { Colors } from "../../../../styles";
+import { ScrollView } from "react-native";
 
 function RegistrosVendas({ navigation }) {
   const realm = useMainContext();
@@ -488,80 +489,111 @@ function RegistrosVendas({ navigation }) {
     <View style={styles.container}>
       <View style={styles.containergeral}>
         {/*filtros*/}
-        <View style={styles.containerChip}>
-          <View style={styles.testeFiltro}>
-            <Chip
-              style={[
-                styles.chipFiltroReceita,
-                (dataChipValue || valorChipValue) && styles.chipSelected,
-              ]}
-              textStyle={{
-                fontSize: scale(14),
-                color: Colors.white,
-              }}
-              icon={() => <Icon name="filter" size={20} color="white" />}
-              onPress={() => {
-                setModalFiltrosVisible(true);
-              }}
-            >
-              <Text>Filtros</Text>
-            </Chip>
-            <Chip
-              style={[
-                styles.chipFiltroReceita,
-                handleChipPress("data") && styles.chipSelected,
-              ]}
-              textStyle={{
-                fontSize: scale(14),
-                color: Colors.white,
-              }}
-              icon={() => <Icon name="calendar" size={20} color="white" />}
-            >
-              <Text>{textDataChipValue}</Text>
-            </Chip>
-            <Chip
-              style={[
-                styles.chipFiltroReceita,
-                handleChipPress("valor") && styles.chipSelected,
-              ]}
-              textStyle={{
-                fontSize: scale(14),
-                color: Colors.white,
-              }}
-              icon={() => (
-                <FontAwesome5 name="dollar-sign" size={20} color="white" />
-              )}
-            >
-              <Text>{textValorChipValue}</Text>
-            </Chip>
-          </View>
+        <View
+          style={{
+            flexDirection: "row",
+            margin: scale(10),
+          }}
+        >
+          <Button
+            contentStyle={{ marginVertical: scale(10) }}
+            style={[
+              styles.chipFiltroReceitaFiltro,
+              (dataChipValue || valorChipValue) && styles.chipSelected,
+            ]}
+            textColor={Colors.white}
+            labelStyle={{
+              fontSize: scale(14),
+              color: Colors.white,
+            }}
+            icon={() => <Icon name="filter" size={26} color="white" />}
+            onPress={() => {
+              setModalFiltrosVisible(true);
+            }}
+          >
+            Filtros
+          </Button>
         </View>
+        <ScrollView
+          style={{
+            maxHeight: scale(40),
+            marginHorizontal: scale(10),
+          }}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          fadingEdgeLength={100}
+        >
+          <Chip
+            elevated="true"
+            style={[
+              styles.chipFiltroReceita,
+              handleChipPress("data") && styles.chipSelected,
+            ]}
+            textStyle={{
+              fontSize: scale(14),
+              color: Colors.white,
+            }}
+            icon={() => <Icon name="calendar" size={20} color="white" />}
+          >
+            <Text>{textDataChipValue}</Text>
+          </Chip>
+          <Chip
+            elevated="true"
+            style={[
+              styles.chipFiltroReceita,
+              handleChipPress("valor") && styles.chipSelected,
+            ]}
+            textStyle={{
+              fontSize: scale(14),
+              color: Colors.white,
+            }}
+            icon={() => (
+              <FontAwesome5 name="dollar-sign" size={20} color="white" />
+            )}
+          >
+            <Text>{textValorChipValue}</Text>
+          </Chip>
+        </ScrollView>
+
         <Modal
+          statusBarTranslucent
           coverScreen={true}
           backdropColor={"#000"}
+          backdropOpacity={0.5}
           onBackButtonPress={() => setModalFiltrosVisible(false)}
           onBackdropPress={() => setModalFiltrosVisible(false)}
           isVisible={modalFiltrosVisible}
-          animationType="slide"
-          statusBarTranslucent
+          animationIn="fadeInLeftBig"
+          animationInTiming={600}
+          animationOut={"fadeOutRightBig"}
+          animationOutTiming={600}
+          backdropTransitionInTiming={1000}
+          backdropTransitionOutTiming={1000}
         >
           <SafeAreaView style={styles.containerFiltro}>
             <View style={styles.modalContainerFiltro}>
               <View style={styles.topFiltros}>
                 <TouchableOpacity
+                  style={styles.BotaoLimparFiltro}
                   onPress={() => {
                     setDataChipValue(null);
                     setValorChipValue(null);
                     setListaFiltrada(listaBuscada);
                   }}
                 >
-                  <Text>Limpar</Text>
+                  <Text style={styles.txtLimparFiltro}>Limpar</Text>
                 </TouchableOpacity>
-                <Text style={styles.tituloinfo}>Filtros</Text>
+                <View style={styles.containerTituloModalFiltro}>
+                  <Text style={styles.tituloinfo}>Filtros</Text>
+                </View>
                 <TouchableOpacity onPress={() => setModalFiltrosVisible(false)}>
                   <AntDesign name="close" size={20} color={Colors.white} />
                 </TouchableOpacity>
               </View>
+              <Divider
+                bold="true"
+                style={{ backgroundColor: "white", marginVertical: scale(4) }}
+              />
               <Text style={styles.tituloinfo1}>Período</Text>
               <View style={styles.testeFiltro}>
                 <Chip
@@ -570,6 +602,10 @@ function RegistrosVendas({ navigation }) {
                     dataChipValue === 1 && styles.chipSelected,
                   ]}
                   onPress={() => handleDataChipPress(1)}
+                  textStyle={[
+                    styles.chipModalFiltro,
+                    dataChipValue === 1 && { color: "white" },
+                  ]}
                 >
                   <Text>7 dias</Text>
                 </Chip>
@@ -579,6 +615,10 @@ function RegistrosVendas({ navigation }) {
                     dataChipValue === 2 && styles.chipSelected,
                   ]}
                   onPress={() => handleDataChipPress(2)}
+                  textStyle={[
+                    styles.chipModalFiltro,
+                    dataChipValue === 2 && { color: "white" },
+                  ]}
                 >
                   <Text>Último mês</Text>
                 </Chip>
@@ -588,6 +628,10 @@ function RegistrosVendas({ navigation }) {
                     dataChipValue === 3 && styles.chipSelected,
                   ]}
                   onPress={() => handleDataChipPress(3)}
+                  textStyle={[
+                    styles.chipModalFiltro,
+                    dataChipValue === 3 && { color: "white" },
+                  ]}
                 >
                   <Text>3 meses</Text>
                 </Chip>
@@ -597,6 +641,10 @@ function RegistrosVendas({ navigation }) {
                     dataChipValue === 4 && styles.chipSelected,
                   ]}
                   onPress={() => handleDataChipPress(4)}
+                  textStyle={[
+                    styles.chipModalFiltro,
+                    dataChipValue === 4 && { color: "white" },
+                  ]}
                 >
                   <Text>6 meses</Text>
                 </Chip>
@@ -606,6 +654,10 @@ function RegistrosVendas({ navigation }) {
                     dataChipValue === 5 && styles.chipSelected,
                   ]}
                   onPress={() => handleDataChipPress(5)}
+                  textStyle={[
+                    styles.chipModalFiltro,
+                    dataChipValue === 5 && { color: "white" },
+                  ]}
                 >
                   <Text>Todas as datas</Text>
                 </Chip>
@@ -615,6 +667,10 @@ function RegistrosVendas({ navigation }) {
                     dataChipValue === 6 && styles.chipSelected,
                   ]}
                   onPress={() => handleDataChipPress(6)}
+                  textStyle={[
+                    styles.chipModalFiltro,
+                    dataChipValue === 6 && { color: "white" },
+                  ]}
                 >
                   <Text>Customizado</Text>
                 </Chip>
@@ -626,7 +682,18 @@ function RegistrosVendas({ navigation }) {
                       style={styles.botoes}
                       onPress={showStartDatePicker}
                     >
-                      <Text style={styles.textoFitro}>{textStartDate}</Text>
+                      <View
+                        style={{
+                          flex: 1,
+                        }}
+                      >
+                        <Text style={styles.textoFiltro}>{textStartDate}</Text>
+                      </View>
+                      <IconButton
+                        icon={"calendar"}
+                        size={20}
+                        color={Colors.black}
+                      />
                     </TouchableOpacity>
                     <DateTimePickerModal
                       isVisible={isStartDatePickerVisible}
@@ -640,7 +707,18 @@ function RegistrosVendas({ navigation }) {
                       style={styles.botoes}
                       onPress={showEndDatePicker}
                     >
-                      <Text style={styles.textoFitro}>{textEndDate}</Text>
+                      <View
+                        style={{
+                          flex: 1,
+                        }}
+                      >
+                        <Text style={styles.textoFiltro}>{textEndDate}</Text>
+                      </View>
+                      <IconButton
+                        icon={"calendar"}
+                        size={20}
+                        color={Colors.black}
+                      />
                     </TouchableOpacity>
                     <DateTimePickerModal
                       isVisible={isEndDatePickerVisible}
@@ -658,7 +736,7 @@ function RegistrosVendas({ navigation }) {
                         setValorChipValue(null);
                       }}
                     >
-                      <Text style={styles.textoFitro}>Filtrar</Text>
+                      <Text style={styles.textoFiltro}>Filtrar</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={styles.botoes}
@@ -671,11 +749,15 @@ function RegistrosVendas({ navigation }) {
                         setListaFiltrada(lista);
                       }}
                     >
-                      <Text style={styles.textoFitro}>Limpar</Text>
+                      <Text style={styles.textoFiltro}>Limpar</Text>
                     </TouchableOpacity>
                   </View>
                 </>
               )}
+              <Divider
+                bold="true"
+                style={{ backgroundColor: "white", marginVertical: scale(4) }}
+              />
               <Text style={styles.tituloinfo1}>Valores</Text>
               <View style={styles.testeFiltro}>
                 <Chip
@@ -684,6 +766,10 @@ function RegistrosVendas({ navigation }) {
                     valorChipValue === 1 && styles.chipSelected,
                   ]}
                   onPress={() => handleValorChipPress(1)}
+                  textStyle={[
+                    styles.chipModalFiltro,
+                    valorChipValue === 1 && { color: "white" },
+                  ]}
                 >
                   <Text>Crescente</Text>
                 </Chip>
@@ -693,6 +779,10 @@ function RegistrosVendas({ navigation }) {
                     valorChipValue === 2 && styles.chipSelected,
                   ]}
                   onPress={() => handleValorChipPress(2)}
+                  textStyle={[
+                    styles.chipModalFiltro,
+                    valorChipValue === 2 && { color: "white" },
+                  ]}
                 >
                   <Text>Decrescente</Text>
                 </Chip>

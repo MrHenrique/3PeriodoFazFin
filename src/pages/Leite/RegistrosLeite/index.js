@@ -498,7 +498,6 @@ function RegistrosLeite({ navigation }) {
       <View style={styles.containergeral}>
         {/*filtros*/}
         <View style={styles.modalContainer}>
-          {/*filtros*/}
           <View
             style={{
               flexDirection: "row",
