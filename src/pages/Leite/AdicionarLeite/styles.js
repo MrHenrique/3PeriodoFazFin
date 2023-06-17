@@ -217,13 +217,14 @@ const styles = StyleSheet.create({
   },
   botaopressdisabled: {
     flex: 1.1,
+    paddingHorizontal: scale(80),
     marginBottom: verticalScale(10),
     ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
     flexDirection: "row-reverse",
     justifyContent: "space-between",
-    opacity: 0.2,
     elevation: 10,
+    opacity: 0.2,
   },
   dateComponente: {
     width: 350,
