@@ -600,7 +600,10 @@ function FaturamentoReb({ navigation }) {
                         </View>
                         <Divider
                           bold="true"
-                          style={{ marginVertical: scale(4) }}
+                          style={{
+                            backgroundColor: "white",
+                            marginVertical: scale(4),
+                          }}
                         />
                         <Text style={styles.tituloinfo1}>Tipo de receita</Text>
                         <View style={styles.teste}>
@@ -610,7 +613,10 @@ function FaturamentoReb({ navigation }) {
                               tipoChipValue === 1 && styles.chipSelected,
                             ]}
                             onPress={() => handleTipoChipPress(1)}
-                            textStyle={styles.chipModalFiltro}
+                            textStyle={[
+                              styles.chipModalFiltro,
+                              tipoChipValue === 1 && { color: "white" },
+                            ]}
                           >
                             <Text> Leite </Text>
                           </Chip>
@@ -620,14 +626,20 @@ function FaturamentoReb({ navigation }) {
                               tipoChipValue === 2 && styles.chipSelected,
                             ]}
                             onPress={() => handleTipoChipPress(2)}
-                            textStyle={styles.chipModalFiltro}
+                            textStyle={[
+                              styles.chipModalFiltro,
+                              tipoChipValue === 2 && { color: "white" },
+                            ]}
                           >
                             <Text>Vendas</Text>
                           </Chip>
                         </View>
                         <Divider
                           bold="true"
-                          style={{ marginVertical: scale(4) }}
+                          style={{
+                            backgroundColor: "white",
+                            marginVertical: scale(4),
+                          }}
                         />
                         <Text style={styles.tituloinfo1}>Período</Text>
                         <View style={styles.teste}>
@@ -637,7 +649,10 @@ function FaturamentoReb({ navigation }) {
                               dataChipValue === 1 && styles.chipSelected,
                             ]}
                             onPress={() => handleDataChipPress(1)}
-                            textStyle={styles.chipModalFiltro}
+                            textStyle={[
+                              styles.chipModalFiltro,
+                              dataChipValue === 1 && { color: "white" },
+                            ]}
                           >
                             <Text>7 dias</Text>
                           </Chip>
@@ -647,7 +662,10 @@ function FaturamentoReb({ navigation }) {
                               dataChipValue === 2 && styles.chipSelected,
                             ]}
                             onPress={() => handleDataChipPress(2)}
-                            textStyle={styles.chipModalFiltro}
+                            textStyle={[
+                              styles.chipModalFiltro,
+                              dataChipValue === 2 && { color: "white" },
+                            ]}
                           >
                             <Text>Último mês</Text>
                           </Chip>
@@ -657,7 +675,10 @@ function FaturamentoReb({ navigation }) {
                               dataChipValue === 3 && styles.chipSelected,
                             ]}
                             onPress={() => handleDataChipPress(3)}
-                            textStyle={styles.chipModalFiltro}
+                            textStyle={[
+                              styles.chipModalFiltro,
+                              dataChipValue === 3 && { color: "white" },
+                            ]}
                           >
                             <Text>3 meses</Text>
                           </Chip>
@@ -667,7 +688,10 @@ function FaturamentoReb({ navigation }) {
                               dataChipValue === 4 && styles.chipSelected,
                             ]}
                             onPress={() => handleDataChipPress(4)}
-                            textStyle={styles.chipModalFiltro}
+                            textStyle={[
+                              styles.chipModalFiltro,
+                              dataChipValue === 4 && { color: "white" },
+                            ]}
                           >
                             <Text>6 meses</Text>
                           </Chip>
@@ -677,7 +701,10 @@ function FaturamentoReb({ navigation }) {
                               dataChipValue === 5 && styles.chipSelected,
                             ]}
                             onPress={() => handleDataChipPress(5)}
-                            textStyle={styles.chipModalFiltro}
+                            textStyle={[
+                              styles.chipModalFiltro,
+                              dataChipValue === 5 && { color: "white" },
+                            ]}
                           >
                             <Text>Todas as datas</Text>
                           </Chip>
@@ -687,7 +714,10 @@ function FaturamentoReb({ navigation }) {
                               dataChipValue === 6 && styles.chipSelected,
                             ]}
                             onPress={() => handleDataChipPress(6)}
-                            textStyle={styles.chipModalFiltro}
+                            textStyle={[
+                              styles.chipModalFiltro,
+                              dataChipValue === 6 && { color: "white" },
+                            ]}
                           >
                             <Text>Customizado</Text>
                           </Chip>
@@ -777,7 +807,10 @@ function FaturamentoReb({ navigation }) {
                         )}
                         <Divider
                           bold="true"
-                          style={{ marginVertical: scale(4) }}
+                          style={{
+                            backgroundColor: "white",
+                            marginVertical: scale(4),
+                          }}
                         />
                         <Text style={styles.tituloinfo1}>Valores</Text>
                         <View style={styles.teste}>
@@ -787,7 +820,10 @@ function FaturamentoReb({ navigation }) {
                               valorChipValue === 1 && styles.chipSelected,
                             ]}
                             onPress={() => handleValorChipPress(1)}
-                            textStyle={styles.chipModalFiltro}
+                            textStyle={[
+                              styles.chipModalFiltro,
+                              valorChipValue === 1 && { color: "white" },
+                            ]}
                           >
                             <Text>Crescente</Text>
                           </Chip>
@@ -797,7 +833,10 @@ function FaturamentoReb({ navigation }) {
                               valorChipValue === 2 && styles.chipSelected,
                             ]}
                             onPress={() => handleValorChipPress(2)}
-                            textStyle={styles.chipModalFiltro}
+                            textStyle={[
+                              styles.chipModalFiltro,
+                              valorChipValue === 2 && { color: "white" },
+                            ]}
                           >
                             <Text>Decrescente</Text>
                           </Chip>
