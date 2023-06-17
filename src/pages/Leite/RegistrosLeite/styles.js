@@ -3,6 +3,12 @@ import { Buttons, Colors, Fonts, TextInput } from "../../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
+  containerBotoesFiltro: {
+    justifyContent: "center",
+    backgroundColor: Colors.green,
+    flexDirection: "row",
+    padding: 10,
+  },
   testeFiltro: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -255,24 +261,28 @@ const styles = StyleSheet.create({
     //flex: 0.6,
     backgroundColor: Colors.darkgreen,
   },
-  containerBotoesFiltro: {
+  containerBotoes: {
+    justifyContent: "center",
+    backgroundColor: Colors.green,
     flexDirection: "row",
-    padding: 3,
+    padding: 10,
   },
   botoes: {
-    flex: 1,
-    backgroundColor: Colors.green,
-    borderRadius: 30,
-    width: "50%",
-    height: verticalScale(30),
+    flexDirection: "row",
+    backgroundColor: Colors.white,
+    borderRadius: 20,
+    width: "42%",
+    height: scale(30),
     borderWidth: scale(1),
-    justifyContent: "center",
-    marginHorizontal: 3,
+    justifyContent: "space-around",
+    alignItems: "center",
+    padding: scale(2),
+    marginHorizontal: scale(5),
   },
-  textoFitro: {
-    color: Colors.white,
+  textoFiltro: {
+    ...Fonts.txtMedium,
+    color: Colors.black,
     textAlign: "center",
-    fontSize: scale(14),
   },
   containerChip: {
     flexDirection: "row",

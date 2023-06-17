@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import Modal from "react-native-modal";
-import { Button, Chip, Divider } from "react-native-paper";
+import { Button, Chip, Divider, IconButton } from "react-native-paper";
 import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import { AuthContext } from "../../../contexts/auth";
 import { useMainContext } from "../../../contexts/RealmContext";
@@ -693,7 +693,20 @@ function RegistrosLeite({ navigation }) {
                         style={styles.botoes}
                         onPress={showStartDatePicker}
                       >
-                        <Text style={styles.textoFitro}>{textStartDate}</Text>
+                        <View
+                          style={{
+                            flex: 1,
+                          }}
+                        >
+                          <Text style={styles.textoFiltro}>
+                            {textStartDate}
+                          </Text>
+                        </View>
+                        <IconButton
+                          icon={"calendar"}
+                          size={20}
+                          color={Colors.black}
+                        />
                       </TouchableOpacity>
                       <DateTimePickerModal
                         isVisible={isStartDatePickerVisible}
@@ -707,7 +720,18 @@ function RegistrosLeite({ navigation }) {
                         style={styles.botoes}
                         onPress={showEndDatePicker}
                       >
-                        <Text style={styles.textoFitro}>{textEndDate}</Text>
+                        <View
+                          style={{
+                            flex: 1,
+                          }}
+                        >
+                          <Text style={styles.textoFiltro}>{textEndDate}</Text>
+                        </View>
+                        <IconButton
+                          icon={"calendar"}
+                          size={20}
+                          color={Colors.black}
+                        />
                       </TouchableOpacity>
                       <DateTimePickerModal
                         isVisible={isEndDatePickerVisible}
@@ -725,7 +749,7 @@ function RegistrosLeite({ navigation }) {
                           setValorChipValue(null);
                         }}
                       >
-                        <Text style={styles.textoFitro}>Filtrar</Text>
+                        <Text style={styles.textoFiltro}>Filtrar</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={styles.botoes}
@@ -738,7 +762,7 @@ function RegistrosLeite({ navigation }) {
                           setListaFiltrada(lista);
                         }}
                       >
-                        <Text style={styles.textoFitro}>Limpar</Text>
+                        <Text style={styles.textoFiltro}>Limpar</Text>
                       </TouchableOpacity>
                     </View>
                   </>

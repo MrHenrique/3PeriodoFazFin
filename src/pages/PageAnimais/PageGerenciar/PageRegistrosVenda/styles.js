@@ -251,8 +251,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.darkgreen,
   },
   containerBotoesFiltro: {
+    justifyContent: "center",
+    backgroundColor: Colors.green,
     flexDirection: "row",
-    padding: 3,
+    padding: 10,
   },
   botoes: {
     flexDirection: "row",
