@@ -3,6 +3,40 @@ import { Buttons, Colors, Fonts, TextInput } from "../../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
+  testeFiltro: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginHorizontal: scale(5),
+  },
+  chipModalFiltro: {
+    ...Fonts.txtSmall,
+    color: Colors.black,
+  },
+  containerTituloModalFiltro: {
+    flex: 1,
+    textAlign: "center",
+  },
+  txtLimparFiltro: {
+    ...Fonts.txtMedium,
+    color: Colors.white,
+  },
+  chipFiltroReceitaFiltro: {
+    backgroundColor: Colors.green,
+    // paddingHorizontal: scale(15),
+    // paddingVertical: scale(3),
+    // height: verticalScale(40),
+    // width: scale(100),
+    marginHorizontal: scale(90),
+    flex: 1,
+    justifyContent: "center",
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: Colors.darkgreen,
+    alignSelf: "center",
+    borderRadius: 20,
+    position: "relative",
+  },
   teste: {
     paddingHorizontal: scale(20),
     flexDirection: "row",
@@ -68,6 +102,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   itemContainer: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -91,11 +126,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   indicador: {
-    padding: scale(8),
-    borderTopLeftRadius: 50,
-    borderBottomLeftRadius: 50,
+    padding: verticalScale(8),
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20,
     width: scale(10),
-    height: scale(34),
+    height: "100%",
   },
 
   textovoltar: {
@@ -105,7 +140,10 @@ const styles = StyleSheet.create({
   },
   tituloinfo: {
     color: "white",
-    fontSize: scale(20),
+    fontSize: verticalScale(20),
+    marginBottom: verticalScale(10),
+    textAlign: "center",
+    alignContent: "center",
     fontWeight: "bold",
   },
   tituloDetalhes: {
@@ -130,7 +168,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.green,
     borderRadius: 20,
     alignSelf: "center",
-    width: scale(280)
+    width: scale(280),
   },
 
   textavatar: {
@@ -138,15 +176,6 @@ const styles = StyleSheet.create({
     borderColor: "red",
     fontSize: 24,
     paddingLeft: scale(10),
-  },
-  modalContainer: {
-    flex: 1,
-    borderRadius: 10,
-    margin: 20,
-    padding: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "18%",
   },
   containerDetalhes: {
     width: scale(300),
@@ -194,19 +223,29 @@ const styles = StyleSheet.create({
   },
   chipSelected: {
     backgroundColor: "green",
+    color: Colors.white,
   },
   topFiltros: {
+    position: "relative",
     margin: 10,
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  BotaoLimparFiltro: {
+    zIndex: 10,
+    top: verticalScale(5),
+    left: scale(8),
+    position: "absolute",
+  },
   chipsFiltro: {
     marginRight: 10,
     marginBottom: 10,
+    backgroundColor: Colors.grey,
   },
-  testeFiltro: {
+  teste: {
     flexDirection: "row",
     flexWrap: "wrap",
+    marginHorizontal: scale(5),
   },
   containerFiltro: {
     flex: 1,
@@ -214,7 +253,7 @@ const styles = StyleSheet.create({
   },
   modalContainerFiltro: {
     //flex: 0.6,
-    backgroundColor: Colors.Cyan,
+    backgroundColor: Colors.darkgreen,
   },
   containerBotoesFiltro: {
     flexDirection: "row",
