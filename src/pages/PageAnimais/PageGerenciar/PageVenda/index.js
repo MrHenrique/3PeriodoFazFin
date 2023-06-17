@@ -56,6 +56,7 @@ function Venda({ navigation }) {
       }
     } else if (precoValido && prodValido) {
       handleAddVenda();
+      setDate(new Date());
     }
   }
   const renderItem = ({ item, index }) => {
@@ -280,8 +281,9 @@ function Venda({ navigation }) {
               </View>
 
               <DateTimePickerModal
+                date={new Date()}
                 isVisible={isDatePickerVisible}
-                mode="datetime"
+                mode="date"
                 onConfirm={handleDateConfirm}
                 onCancel={hideDatePicker}
                 maximumDate={new Date()}

@@ -62,6 +62,7 @@ function AdicionarLeite({ navigation }) {
       }
     } else if (precoValido && prodValido) {
       handleAddLeite();
+      setDate(new Date());
     }
   }
   const renderItem = ({ item, index }) => {
@@ -341,8 +342,9 @@ function AdicionarLeite({ navigation }) {
               </View>
 
               <DateTimePickerModal
+                date={new Date()}
                 isVisible={isDatePickerVisible}
-                mode="datetime"
+                mode="date"
                 onConfirm={handleDateConfirm}
                 onCancel={hideDatePicker}
                 maximumDate={new Date()}
