@@ -57,6 +57,14 @@ function Venda({ navigation }) {
     } else if (precoValido && prodValido) {
       handleAddVenda();
       setDate(new Date());
+      let tempDate = new Date();
+      let fDate =
+        tempDate.getDate().toString().padStart(2, "0") +
+        "/" +
+        (tempDate.getMonth() + 1).toString().padStart(2, "0") +
+        "/" +
+        tempDate.getFullYear().toString().padStart(2, "0");
+      setText(fDate);
     }
   }
   const renderItem = ({ item, index }) => {

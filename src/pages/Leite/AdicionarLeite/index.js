@@ -63,6 +63,14 @@ function AdicionarLeite({ navigation }) {
     } else if (precoValido && prodValido) {
       handleAddLeite();
       setDate(new Date());
+      let tempDate = new Date();
+      let fDate =
+        tempDate.getDate().toString().padStart(2, "0") +
+        "/" +
+        (tempDate.getMonth() + 1).toString().padStart(2, "0") +
+        "/" +
+        tempDate.getFullYear().toString().padStart(2, "0");
+      setText(fDate);
     }
   }
   const renderItem = ({ item, index }) => {
