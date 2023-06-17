@@ -3,6 +3,37 @@ import { Buttons, Colors, Fonts, TextInput } from "../../../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
+  font: {
+    color: Colors.white,
+    ...Fonts.txtLargeBold,
+  },
+  botao: {
+    flex: 1,
+    marginBottom: verticalScale(10),
+    ...Buttons.btnLargeRounded,
+    backgroundColor: Colors.green,
+    paddingHorizontal: scale(80),
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
+    elevation: 10,
+  },
+  containerButaoVendasgeral: {
+    flex: 0.101,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    minHeight: scale(10),
+    marginTop: verticalScale(20),
+  },
+  TxtModalEditDate: {
+    ...Fonts.txtLargeBold,
+    color: Colors.white,
+  },
+  btnModalEditDate: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: scale(60),
+  },
+  textInput: { backgroundColor: Colors.white },
   chipModalFiltro: {
     ...Fonts.txtSmall,
     color: Colors.black,
@@ -96,6 +127,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   itemContainer: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -119,11 +151,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   indicador: {
-    padding: scale(8),
-    borderTopLeftRadius: 50,
-    borderBottomLeftRadius: 50,
+    padding: verticalScale(8),
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20,
     width: scale(10),
-    height: scale(34),
+    height: "100%",
   },
 
   textovoltar: {
@@ -172,12 +204,9 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    borderRadius: 10,
-    margin: 20,
-    padding: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "18%",
+    alignSelf: "center",
+    borderRadius: 20,
+    position: "relative",
   },
   containerDetalhes: {
     width: scale(300),
@@ -219,9 +248,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.darkgreen,
   },
   containergeralmodal: {
-    flex: 1,
-    padding: scale(20),
     backgroundColor: Colors.darkgreen,
+    borderRadius: 10,
+    padding: scale(10),
   },
   chipSelected: {
     backgroundColor: "green",

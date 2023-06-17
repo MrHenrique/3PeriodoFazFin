@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 import { Button, Chip, Divider, IconButton } from "react-native-paper";
-import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
+import { AntDesign, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import { AuthContext } from "../../../contexts/auth";
 import { useMainContext } from "../../../contexts/RealmContext";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -439,13 +439,13 @@ function RegistrosLeite({ navigation }) {
               style={styles.editButton}
               onPress={handleEditPress(item)}
             >
-              <AntDesign name="edit" size={24} color="white" />
+              <AntDesign name="edit" size={scale(20)} color="white" />
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.deleteButton}
               onPress={handleDeletePress}
             >
-              <AntDesign name="delete" size={24} color="white" />
+              <AntDesign name="delete" size={scale(20)} color="white" />
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -810,98 +810,117 @@ function RegistrosLeite({ navigation }) {
             renderItem={renderItem}
             keyExtractor={(item) => item._id}
           />
-          <TouchableOpacity
-            style={styles.botaopress}
-            onPress={() => navigation.navigate("Home")}
-          >
-            <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-          </TouchableOpacity>
 
+          <View style={styles.containerButaoleitegeral}>
+            <TouchableOpacity
+              style={styles.botao}
+              onPress={() => navigation.navigate("Home")}
+            >
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={styles.font}>{"Voltar"}</Text>
+              </View>
+              <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
+            </TouchableOpacity>
+          </View>
           <Modal
+            statusBarTranslucent
             coverScreen={true}
             backdropColor="black"
             backdropOpacity={0.5}
-            visible={modalEditarVisible}
+            isVisible={modalEditarVisible}
             animationType="slide"
             transparent={true}
-            statusBarTranslucent
+            onBackButtonPress={() => setModalEditarVisible(!modalEditarVisible)}
+            onBackdropPress={() => setModalEditarVisible(!modalEditarVisible)}
+            animationIn="fadeInLeftBig"
+            animationInTiming={600}
+            animationOut="fadeOutRightBig"
+            animationOutTiming={600}
+            backdropTransitionInTiming={1000}
+            backdropTransitionOutTiming={1000}
           >
             <View style={styles.modalContainer}>
-              <View style={styles.containergeralmodal}>
-                <View style={styles.containerinfos}>
-                  <TouchableOpacity
-                    style={styles.teste}
-                    onPress={showDatePicker}
-                  >
-                    <Text style={styles.tituloinfo}>{text}</Text>
-                    <AntDesign name="calendar" size={30} color="white" />
-                  </TouchableOpacity>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <View style={styles.containergeralmodal}>
+                  <View style={styles.containerinfos}>
+                    <TouchableOpacity
+                      style={styles.btnModalEditDate}
+                      onPress={showDatePicker}
+                    >
+                      <Text style={styles.TxtModalEditDate}>{text}</Text>
+                      <AntDesign
+                        name="calendar"
+                        size={scale(26)}
+                        color="white"
+                      />
+                    </TouchableOpacity>
 
-                  <DateTimePickerModal
-                    isVisible={isDatePickerVisible}
-                    date={date}
-                    mode="date"
-                    onConfirm={handleDateConfirm}
-                    onCancel={hideDatePicker}
-                    maximumDate={new Date()}
-                  />
-                </View>
-                <View style={styles.containerinfos}>
-                  <TextInput
-                    label="Litros de Leite"
-                    style={styles.textInput}
-                    placeholderTextColor={Colors.grey}
-                    textColor={Colors.black}
-                    activeUnderlineColor={Colors.green}
-                    underlineColor={Colors.blue}
-                    underlineStyle={{ paddingBottom: 3 }}
-                    value={prodLV}
-                    onChangeText={handleVolumeProdChange}
-                    keyboardType="decimal-pad"
-                    inputMode="decimal"
-                    error={!isVolumeProdValid}
-                  />
-                  <HelperText
-                    type="error"
-                    style={{
-                      color: MD3Colors.error60,
-                      fontSize: 14,
-                      lineHeight: 12,
-                    }}
-                    visible={!isVolumeProdValid}
-                    padding="20"
-                  >
-                    Digite o volume da unidade do produto.
-                  </HelperText>
-                </View>
-                <View style={styles.containerinfos}>
-                  <TextInput
-                    label="Observações"
-                    style={styles.textInput}
-                    placeholderTextColor={Colors.grey}
-                    textColor={Colors.black}
-                    activeUnderlineColor={Colors.green}
-                    underlineColor={Colors.blue}
-                    underlineStyle={{ paddingBottom: 3 }}
-                    value={description}
-                    onChangeText={setDescription}
-                  />
-                </View>
-                <View style={styles.modalContainerBotoes}>
-                  <TouchableOpacity
-                    style={styles.botaopressM}
-                    onPress={() => {
-                      validCheck();
-                    }}
-                  >
-                    <Text style={styles.textovoltar}>Confirmar</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.botaopressM}
-                    onPress={() => setModalEditarVisible(false)}
-                  >
-                    <Text style={styles.textovoltar}>Voltar</Text>
-                  </TouchableOpacity>
+                    <DateTimePickerModal
+                      isVisible={isDatePickerVisible}
+                      date={date}
+                      mode="date"
+                      onConfirm={handleDateConfirm}
+                      onCancel={hideDatePicker}
+                      maximumDate={new Date()}
+                    />
+                  </View>
+                  <View style={styles.containerinfos}>
+                    <TextInput
+                      label="Litros de Leite"
+                      style={styles.textInput}
+                      placeholderTextColor={Colors.darkgrey}
+                      textColor={Colors.black}
+                      activeUnderlineColor={Colors.green}
+                      underlineColor={Colors.blue}
+                      underlineStyle={{ paddingBottom: 3 }}
+                      value={prodLV}
+                      onChangeText={handleVolumeProdChange}
+                      keyboardType="decimal-pad"
+                      inputMode="decimal"
+                      error={!isVolumeProdValid}
+                    />
+                    <HelperText
+                      type="error"
+                      style={{
+                        color: MD3Colors.error60,
+                        fontSize: 14,
+                        lineHeight: 12,
+                      }}
+                      visible={!isVolumeProdValid}
+                      padding="20"
+                    >
+                      Digite o volume da unidade do produto.
+                    </HelperText>
+                  </View>
+                  <View style={styles.containerinfos}>
+                    <TextInput
+                      label="Observações"
+                      style={styles.textInput}
+                      placeholderTextColor={Colors.darkgrey}
+                      textColor={Colors.black}
+                      activeUnderlineColor={Colors.green}
+                      underlineColor={Colors.blue}
+                      underlineStyle={{ paddingBottom: 3 }}
+                      value={description}
+                      onChangeText={setDescription}
+                    />
+                  </View>
+                  <View style={styles.modalContainerBotoes}>
+                    <TouchableOpacity
+                      style={styles.botaopressM}
+                      onPress={() => {
+                        validCheck();
+                      }}
+                    >
+                      <Text style={styles.textovoltar}>Confirmar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.botaopressM}
+                      onPress={() => setModalEditarVisible(false)}
+                    >
+                      <Text style={styles.textovoltar}>Voltar</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </View>

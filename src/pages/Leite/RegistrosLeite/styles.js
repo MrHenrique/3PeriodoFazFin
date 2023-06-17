@@ -3,6 +3,37 @@ import { Buttons, Colors, Fonts, TextInput } from "../../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
+  font: {
+    color: Colors.white,
+    ...Fonts.txtLargeBold,
+  },
+  botao: {
+    flex: 1,
+    marginBottom: verticalScale(10),
+    ...Buttons.btnLargeRounded,
+    backgroundColor: Colors.green,
+    paddingHorizontal: scale(80),
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
+    elevation: 10,
+  },
+  containerButaoleitegeral: {
+    flex: 0.101,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    minHeight: scale(10),
+    marginTop: verticalScale(20),
+  },
+  TxtModalEditDate: {
+    ...Fonts.txtLargeBold,
+    color: Colors.white,
+  },
+  btnModalEditDate: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: scale(60),
+  },
+  textInput: { backgroundColor: Colors.white },
   containerBotoesFiltro: {
     justifyContent: "center",
     backgroundColor: Colors.green,
@@ -38,7 +69,6 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: Colors.darkgreen,
     alignSelf: "center",
     borderRadius: 20,
     position: "relative",
@@ -223,9 +253,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.darkgreen,
   },
   containergeralmodal: {
-    flex: 1,
-    padding: scale(20),
     backgroundColor: Colors.darkgreen,
+    borderRadius: 10,
+    padding: scale(10),
   },
   chipSelected: {
     backgroundColor: "green",
