@@ -433,12 +433,6 @@ function RegistrosVendas({ navigation }) {
             >
               <AntDesign name="edit" size={scale(20)} color="white" />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.deleteButton}
-              onPress={handleDeletePress}
-            >
-              <AntDesign name="delete" size={scale(20)} color="white" />
-            </TouchableOpacity>
           </View>
         </TouchableOpacity>
         {shouldShowDetalhes && isItemSelected && (

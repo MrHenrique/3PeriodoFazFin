@@ -3,6 +3,16 @@ import { Buttons, Colors, Fonts, TextInput } from "../../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
+  modalVoltarContainer: {
+    flex: 0.6,
+    justifyContent: "flex-end",
+    marginBottom: verticalScale(10),
+  },
+  scroll: { flex: 1, paddingVertical: verticalScale(10) },
+  modalListContainer: { flex: 6 },
+  modalContainerSearch: {
+    flex: 1,
+  },
   campoTexto: {
     backgroundColor: Colors.white,
   },
@@ -25,17 +35,16 @@ const styles = StyleSheet.create({
   },
   search: {
     backgroundColor: Colors.white,
-    fontSize: verticalScale(15),
-    width: scale(300),
+    width: "90%",
+    fontSize: scale(15),
     justifyContent: "center",
     alignSelf: "center",
+    marginVertical: verticalScale(5),
   },
   modalContainer: {
+    flex: 1,
     backgroundColor: Colors.darkgreen,
-    position: "absolute",
-    top: verticalScale(10),
     alignSelf: "center",
-    height: verticalScale(550),
     width: scale(330),
     borderRadius: 20,
   },
@@ -169,20 +178,15 @@ const styles = StyleSheet.create({
     height: verticalScale(300),
   },
   botaopressM: {
-    borderRadius: 20,
+    ...Buttons.btnLargeRounded,
     backgroundColor: Colors.green,
-    width: scale(300),
-    height: verticalScale(40),
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    top: verticalScale(580),
-    position: "absolute",
+    paddingHorizontal: scale(80),
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
+    elevation: 10,
   },
-
   tituloBotao: {
-    fontSize: verticalScale(14),
-    fontWeight: "bold",
+    ...Fonts.txtMediumBold,
     color: Colors.white,
   },
   botaopress: {
