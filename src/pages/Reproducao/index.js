@@ -307,7 +307,10 @@ const Reproducao = ({ navigation }) => {
                 <Text style={styles.txtInfoCategoria}>{nextCio()}</Text>
               </View>
               <View>
-                <Divider bold="true" style={{ marginVertical: scale(4) }} />
+                <Divider
+                  bold="true"
+                  style={{ backgroundColor: "white", marginVertical: scale(4) }}
+                />
                 <Text style={styles.txtInfoCategoria}>Data selecionada</Text>
                 <View
                   style={{
@@ -372,7 +375,10 @@ const Reproducao = ({ navigation }) => {
                 </Text>
               </View>
               <View>
-                <Divider bold="true" style={{ marginVertical: scale(4) }} />
+                <Divider
+                  bold="true"
+                  style={{ backgroundColor: "white", marginVertical: scale(4) }}
+                />
                 <Text style={styles.txtInfoCategoria}>Data selecionada</Text>
                 <View
                   style={{
@@ -446,7 +452,10 @@ const Reproducao = ({ navigation }) => {
                 <Text style={styles.txtInfoCategoria}>{nextParto()}</Text>
               </View>
               <View>
-                <Divider bold="true" style={{ marginVertical: scale(4) }} />
+                <Divider
+                  bold="true"
+                  style={{ backgroundColor: "white", marginVertical: scale(4) }}
+                />
                 <Text style={styles.txtInfoCategoria}>Data selecionada</Text>
                 <View
                   style={{
