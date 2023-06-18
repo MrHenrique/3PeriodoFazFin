@@ -2,10 +2,17 @@ import { LineChart } from "react-native-chart-kit";
 import { scale, verticalScale } from "react-native-size-matters";
 import { AuthContext } from "../../../contexts/auth";
 import { useContext, useState } from "react";
-import { Modal, Text, TouchableOpacity, View, FlatList } from "react-native";
-import { StyleSheet } from "react-native";
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  FlatList,
+  StyleSheet,
+} from "react-native";
+import Modal from "react-native-modal";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Colors, Fonts } from "../../../styles";
+import { MD3Colors } from "react-native-paper";
 function Graficodetalhesvacas() {
   const { listaReceitasVaca, listaDespesasVaca } = useContext(AuthContext);
   const [modalReceitasVisible, setModalReceitasVisible] = useState(false);
@@ -169,10 +176,11 @@ function Graficodetalhesvacas() {
       {
         datasetsID: "receitas",
         data: Object.values(receitasPorVaca),
-        color: (opacity = 1) => `rgba(0, 255, 255, ${opacity})`, // cor da primeira linha
+        color: (opacity = 1) => `rgba(0, 200, 83, ${opacity})`, // cor da primeira linha
         strokeWidth: 3,
       },
-      {
+        // MD3Colors.error60,
+      { 
         datasetsID: "despesas",
         data: Object.values(despesasPorVaca),
         color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`, // cor da segunda linha
@@ -187,6 +195,9 @@ function Graficodetalhesvacas() {
     backgroundGradientFromOpacity: 0,
     backgroundGradientTo: "#08130d00",
     backgroundGradientToOpacity: 0,
+    propsForDots: {
+      r: scale(5),
+    },
   };
 
   //Cria um texto com a Data e o Valor daquela produção, usado na flatList
@@ -214,97 +225,90 @@ function Graficodetalhesvacas() {
 
         {isItemSelected && (
           <Modal
-            visible={modalDetReceitasVisible}
-            animationType="slide"
-            transparent={true}
+            isVisible={modalDetReceitasVisible}
+            statusBarTranslucent
+            backdropColor="#000"
+            backdropOpacity={0.3}
+            onBackdropPress={() => setModalDetReceitasVisible(false)}
+            animationIn="fadeInLeftBig"
+            animationInTiming={600}
+            animationOut={"fadeOutRightBig"}
+            animationOutTiming={600}
+            backdropTransitionInTiming={1000}
+            backdropTransitionOutTiming={1000}
           >
-            <SafeAreaView
-              style={{ flex: 1 }}
-              onTouchStart={() => setModalDetReceitasVisible(false)}
-            >
-              <View style={styles.modalContainer1}>
-                <>
-                  <View style={[styles.containerDetalhes]}>
-                    <View style={styles.modalHeader1}>
-                      <Text style={styles.modalTitle1}>
-                        Detalhes {checkTipo(item)}
-                      </Text>
-                      <TouchableOpacity
-                        onPress={() => setModalDetReceitasVisible(false)}
-                      >
-                        <Text style={styles.modalCloseButton1}>X</Text>
-                      </TouchableOpacity>
-                    </View>
-                    <View style={styles.modalContainerText}>
-                      {tipo === "Venda" ? (
-                        <View style={styles.modalContent}>
-                          <Text style={styles.textContent}>
-                            Nome do animal:{" "}
-                          </Text>
-                          <Text style={styles.textContent}>
-                            {item.nomeProd}
-                          </Text>
-                        </View>
-                      ) : null}
-                      <View style={styles.modalContent}>
-                        <Text style={styles.textContent}>Data: </Text>
-                        <Text style={styles.textContent}>
-                          {formatarResultado(item.createdAt, "data")}
-                        </Text>
-                      </View>
-                      <View style={styles.modalContent}>
-                        <Text style={styles.textContent}>Horário: </Text>
-                        <Text style={styles.textContent}>
-                          {item.createdAt.toLocaleTimeString()}
-                        </Text>
-                      </View>
-                      {tipo === "Leite" ? (
-                        <>
-                          <View style={styles.modalContent}>
-                            <Text style={styles.textContent}>Produção: </Text>
-                            <Text style={styles.textContent}>
-                              {formatarResultado(item.prodL, "litro")}
-                            </Text>
-                          </View>
-                          <View style={styles.modalContent}>
-                            <Text style={styles.textContent}>Preço: </Text>
-                            <Text style={styles.textContent}>
-                              {formatarResultado(item.precoL, "preco")}
-                            </Text>
-                          </View>
-                        </>
-                      ) : (
-                        <>
-                          <View style={styles.modalContent}>
-                            <Text style={styles.textContent}>Peso: </Text>
-                            <Text style={styles.textContent}>
-                              {formatarResultado(item.prodL, "peso")}
-                            </Text>
-                          </View>
-                          <View style={styles.modalContent}>
-                            <Text style={styles.textContent}>
-                              Preço por arroba:{" "}
-                            </Text>
-                            <Text style={styles.textContent}>
-                              {formatarResultado(item.precoL, "preco")}
-                            </Text>
-                          </View>
-                        </>
-                      )}
-                      <View style={styles.modalContent}>
-                        <Text style={styles.textContent}>Valor Total: </Text>
-                        <Text style={styles.textContent}>
-                          {formatarResultado(item.precoL * item.prodL, "preco")}
-                        </Text>
-                      </View>
-                      <Text style={styles.textContent}>
-                        Descrição: {item.description}
-                      </Text>
-                    </View>
+            <View style={{ flex: 1, justifyContent: "flex-start" }}>
+              <View style={[styles.containerDetalhes]}>
+                <View style={styles.modalHeader1}>
+                  <Text style={styles.modalTitle1}>Detalhes</Text>
+                  <TouchableOpacity
+                    onPress={() => setModalDetReceitasVisible(false)}
+                  >
+                    <Text style={styles.modalCloseButton1}>X</Text>
+                  </TouchableOpacity>
+                </View>
+                <View>
+                  <Text style={styles.tituloDetalhes}>{checkTipo(item)}</Text>
+                </View>
+                <View style={styles.modalContainerText}>
+                  <View style={styles.modalContentDet}>
+                    <Text style={styles.textContentTitulo}>Data: </Text>
+                    <Text style={styles.textContent}>
+                      {formatarResultado(item.createdAt, "data")}
+                    </Text>
                   </View>
-                </>
+                  <View style={styles.modalContentDet}>
+                    <Text style={styles.textContentTitulo}>Horário: </Text>
+                    <Text style={styles.textContent}>
+                      {item.createdAt.toLocaleTimeString()}
+                    </Text>
+                  </View>
+                  {tipo === "Leite" ? (
+                    <>
+                      <View style={styles.modalContentDet}>
+                        <Text style={styles.textContentTitulo}>Produção: </Text>
+                        <Text style={styles.textContent}>
+                          {formatarResultado(item.prodL, "litro")}
+                        </Text>
+                      </View>
+                      <View style={styles.modalContentDet}>
+                        <Text style={styles.textContentTitulo}>Preço: </Text>
+                        <Text style={styles.textContent}>
+                          {formatarResultado(item.precoL, "preco")}
+                        </Text>
+                      </View>
+                    </>
+                  ) : (
+                    <>
+                      <View style={styles.modalContentDet}>
+                        <Text style={styles.textContentTitulo}>Peso: </Text>
+                        <Text style={styles.textContent}>
+                          {formatarResultado(item.prodL, "peso")}
+                        </Text>
+                      </View>
+                      <View style={styles.modalContentDet}>
+                        <Text style={styles.textContentTitulo}>
+                          Preço por arroba:{" "}
+                        </Text>
+                        <Text style={styles.textContent}>
+                          {formatarResultado(item.precoL, "preco")}
+                        </Text>
+                      </View>
+                    </>
+                  )}
+                  <View style={styles.modalContentDet}>
+                    <Text style={styles.textContentTitulo}>Valor Total: </Text>
+                    <Text style={styles.textContent}>
+                      {formatarResultado(item.precoL * item.prodL, "preco")}
+                    </Text>
+                  </View>
+                  <View style={{ flexDirection: "column" }}>
+                    <Text style={styles.textContentTitulo}>Descrição:</Text>
+                    <Text style={styles.textContent}> {item.description}</Text>
+                  </View>
+                </View>
               </View>
-            </SafeAreaView>
+            </View>
           </Modal>
         )}
       </>
@@ -343,140 +347,148 @@ function Graficodetalhesvacas() {
 
         {isItemSelected && (
           <Modal
-            visible={modalDetDespesasVisible}
-            animationType="slide"
-            transparent={true}
+            isVisible={modalDetDespesasVisible}
+            statusBarTranslucent
+            backdropColor="#000"
+            backdropOpacity={0.3}
+            onBackdropPress={() => setModalDetDespesasVisible(false)}
+            animationIn="fadeInLeftBig"
+            animationInTiming={600}
+            animationOut={"fadeOutRightBig"}
+            animationOutTiming={600}
+            backdropTransitionInTiming={1000}
+            backdropTransitionOutTiming={1000}
           >
-            <SafeAreaView
-              style={{ flex: 1 }}
-              onTouchStart={() => setModalDetDespesasVisible(false)}
-            >
-              <View style={styles.modalContainer1}>
-                <>
-                  <View style={[styles.containerDetalhes]}>
-                    <View style={styles.modalHeader1}>
-                      <Text style={styles.modalTitle1}>Detalhes</Text>
-                      <TouchableOpacity
-                        onPress={() => setModalDetDespesasVisible(false)}
-                      >
-                        <Text style={styles.modalCloseButton1}>X</Text>
-                      </TouchableOpacity>
-                    </View>
-                    <View>
-                      <Text style={styles.tituloDetalhes}>
-                        {TipoAfter(item)}
-                      </Text>
-                    </View>
-                    <View style={styles.modalContainerText}>
-                      <View style={styles.modalContent}>
-                        <Text style={styles.textContent}>Nome: </Text>
-                        <Text style={styles.textContent}>
-                          {item.nomeProd.length < verticalScale(22)
-                            ? `${item.nomeProd}`
-                            : `${item.nomeProd.substring(
-                                0,
-                                verticalScale(22)
-                              )}...`}
-                        </Text>
-                      </View>
-                      <View style={styles.modalContent}>
-                        <Text style={styles.textContent}>Data: </Text>
-                        <Text style={styles.textContent}>
-                          {formatarResultado(item.createdAt, "data")}
-                        </Text>
-                      </View>
-                      <View style={styles.modalContent}>
-                        <Text style={styles.textContent}>Horario: </Text>
-                        <Text style={styles.textContent}>
-                          {item.createdAt.toLocaleTimeString()}
-                        </Text>
-                      </View>
-                      {categoriaProd === "Alimento" ? (
-                        <>
-                          <View style={styles.modalContent}>
-                            <Text style={styles.textContent}>
-                              Preço Unitário:{" "}
-                            </Text>
-                            <Text style={styles.textContent}>
-                              {formatarResultado(
-                                item.valorProd / item.pesoProd,
-                                "preco"
-                              )}
-                            </Text>
-                          </View>
-                          <View style={styles.modalContent}>
-                            <Text style={styles.textContent}>
-                              Peso Utilizado:{" "}
-                            </Text>
-                            <Text style={styles.textContent}>
-                              {formatarResultado(item.pesoProd, "peso")}
-                            </Text>
-                          </View>
-                          <View style={styles.modalContent}>
-                            <Text style={styles.textContent}>
-                              Valor Total:{" "}
-                            </Text>
-                            <Text style={styles.textContent}>
-                              {formatarResultado(item.valorProd, "preco")}
-                            </Text>
-                          </View>
-                          <Text style={styles.textContent}>
-                            Descrição: {item.obserProd}
-                          </Text>
-                        </>
-                      ) : categoriaProd === "Remédios" ? (
-                        <>
-                          <View style={styles.modalContent}>
-                            <Text style={styles.textContent}>
-                              Preço Unitário:{" "}
-                            </Text>
-                            <Text style={styles.textContent}>
-                              {formatarResultado(
-                                item.valorProd / item.volumeProd,
-                                "preco"
-                              )}
-                            </Text>
-                          </View>
-                          <View style={styles.modalContent}>
-                            <Text style={styles.textContent}>
-                              Volume Usado:{" "}
-                            </Text>
-                            <Text style={styles.textContent}>
-                              {formatarResultado(item.volumeProd, "litro")}
-                            </Text>
-                          </View>
-                          <View style={styles.modalContent}>
-                            <Text style={styles.textContent}>
-                              Valor Total:{" "}
-                            </Text>
-                            <Text style={styles.textContent}>
-                              {formatarResultado(item.valorProd, "preco")}
-                            </Text>
-                          </View>
-                          <Text style={styles.textContent}>
-                            Descrição: {item.obserProd}
-                          </Text>
-                        </>
-                      ) : categoriaProd === "Outras Despesas" ? (
-                        <>
-                          <View style={styles.modalContent}>
-                            <Text style={styles.textContent}>
-                              Valor Total:{" "}
-                            </Text>
-                            <Text style={styles.textContent}>
-                              {formatarResultado(item.valorProd, "preco")}
-                            </Text>
-                          </View>
-                          <Text style={styles.textContent}>
-                            Descrição: {item.obserProd}
-                          </Text>
-                        </>
-                      ) : null}
-                    </View>
+            <View style={{ flex: 1, justifyContent: "flex-start" }}>
+              <View style={[styles.containerDetalhes]}>
+                <View style={styles.modalHeader1}>
+                  <Text style={styles.modalTitle1}>Detalhes</Text>
+                  <TouchableOpacity
+                    onPress={() => setModalDetDespesasVisible(false)}
+                  >
+                    <Text style={styles.modalCloseButton1}>X</Text>
+                  </TouchableOpacity>
+                </View>
+                <View>
+                  <Text style={styles.tituloDetalhes}>{TipoAfter(item)}</Text>
+                </View>
+                <View style={styles.modalContainerText}>
+                  <View style={styles.modalContentDet}>
+                    <Text style={styles.textContentTitulo}>Nome: </Text>
+                    <Text style={styles.textContent}>
+                      {item.nomeProd.length < verticalScale(22)
+                        ? `${item.nomeProd}`
+                        : `${item.nomeProd.substring(0, verticalScale(22))}...`}
+                    </Text>
                   </View>
-                </>
+                  <View style={styles.modalContentDet}>
+                    <Text style={styles.textContentTitulo}>Data: </Text>
+                    <Text style={styles.textContent}>
+                      {formatarResultado(item.createdAt, "data")}
+                    </Text>
+                  </View>
+                  <View style={styles.modalContentDet}>
+                    <Text style={styles.textContentTitulo}>Horario: </Text>
+                    <Text style={styles.textContent}>
+                      {item.createdAt.toLocaleTimeString()}
+                    </Text>
+                  </View>
+                  {categoriaProd === "Alimento" ? (
+                    <>
+                      <View style={styles.modalContentDet}>
+                        <Text style={styles.textContentTitulo}>
+                          Preço Unitário:{" "}
+                        </Text>
+                        <Text style={styles.textContent}>
+                          {formatarResultado(
+                            item.valorProd / item.pesoProd,
+                            "preco"
+                          )}
+                        </Text>
+                      </View>
+                      <View style={styles.modalContentDet}>
+                        <Text style={styles.textContentTitulo}>
+                          Peso Utilizado:{" "}
+                        </Text>
+                        <Text style={styles.textContent}>
+                          {formatarResultado(item.pesoProd, "peso")}
+                        </Text>
+                      </View>
+                      <View style={styles.modalContentDet}>
+                        <Text style={styles.textContentTitulo}>
+                          Valor Total:{" "}
+                        </Text>
+                        <Text style={styles.textContent}>
+                          {formatarResultado(item.valorProd, "preco")}
+                        </Text>
+                      </View>
+                      <View style={{ flexDirection: "column" }}>
+                        <Text style={styles.textContentTitulo}>Descrição:</Text>
+                        <Text style={styles.textContent}>
+                          {" "}
+                          {item.obserProd}
+                        </Text>
+                      </View>
+                    </>
+                  ) : categoriaProd === "Remédios" ? (
+                    <>
+                      <View style={styles.modalContentDet}>
+                        <Text style={styles.textContentTitulo}>
+                          Preço Unitário:{" "}
+                        </Text>
+                        <Text style={styles.textContent}>
+                          {formatarResultado(
+                            item.valorProd / item.volumeProd,
+                            "preco"
+                          )}
+                        </Text>
+                      </View>
+                      <View style={styles.modalContentDet}>
+                        <Text style={styles.textContentTitulo}>
+                          Volume Usado:{" "}
+                        </Text>
+                        <Text style={styles.textContent}>
+                          {formatarResultado(item.volumeProd, "litro")}
+                        </Text>
+                      </View>
+                      <View style={styles.modalContentDet}>
+                        <Text style={styles.textContentTitulo}>
+                          Valor Total:{" "}
+                        </Text>
+                        <Text style={styles.textContent}>
+                          {formatarResultado(item.valorProd, "preco")}
+                        </Text>
+                      </View>
+                      <View style={{ flexDirection: "column" }}>
+                        <Text style={styles.textContentTitulo}>Descrição:</Text>
+                        <Text style={styles.textContent}>
+                          {" "}
+                          {item.obserProd}
+                        </Text>
+                      </View>
+                    </>
+                  ) : categoriaProd === "Outras Despesas" ? (
+                    <>
+                      <View style={styles.modalContentDet}>
+                        <Text style={styles.textContentTitulo}>
+                          Valor Total:{" "}
+                        </Text>
+                        <Text style={styles.textContent}>
+                          {formatarResultado(item.valorProd, "preco")}
+                        </Text>
+                      </View>
+                      <View style={{ flexDirection: "column" }}>
+                        <Text style={styles.textContentTitulo}>Descrição:</Text>
+                        <Text style={styles.textContent}>
+                          {" "}
+                          {item.obserProd}
+                        </Text>
+                      </View>
+                    </>
+                  ) : null}
+                </View>
               </View>
-            </SafeAreaView>
+            </View>
           </Modal>
         )}
       </>
@@ -496,9 +508,11 @@ function Graficodetalhesvacas() {
         onDataPointClick={handleDataPointClick}
       />
       <Modal
-        visible={modalReceitasVisible}
-        animationType="slide"
-        transparent={true}
+        isVisible={modalReceitasVisible}
+        statusBarTranslucent
+        backdropColor="#000"
+        backdropOpacity={0.3}
+        onBackdropPress={() => setModalReceitasVisible(false)}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalHeader}>
@@ -522,9 +536,11 @@ function Graficodetalhesvacas() {
       </Modal>
 
       <Modal
-        visible={modalDespesasVisible}
-        animationType="slide"
-        transparent={true}
+        isVisible={modalDespesasVisible}
+        statusBarTranslucent
+        backdropColor="#000"
+        backdropOpacity={0.3}
+        onBackdropPress={() => setModalDespesasVisible(false)}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalHeader}>
@@ -550,9 +566,12 @@ function Graficodetalhesvacas() {
   );
 }
 const styles = StyleSheet.create({
+  containerDet: {
+    flexDirection: "row",
+  },
   modalContainer: {
     flex: 0.7,
-    backgroundColor: "#fea",
+    backgroundColor: Colors.darkgreen,
     borderRadius: 10,
     margin: 20,
     padding: 20,
@@ -568,23 +587,37 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalCloseButton: {
-    color: "#ffaa41",
-    fontSize: 24,
+    color: Colors.white,
+    fontSize: scale(16),
     fontWeight: "bold",
   },
   modalTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
+    ...Fonts.txtLargeBold,
+    color: Colors.white,
   },
   modalContent: {
-    fontSize: 18,
-    paddingBottom: 15,
+    ...Fonts.txtMedium,
+    color: Colors.white,
+    backgroundColor: Colors.green,
+    paddingHorizontal: scale(10),
+    paddingVertical: verticalScale(4),
+    borderRadius: 10,
+    marginBottom: scale(5),
+  },
+  modalContentDet: {
+    width: "100%",
+    ...Fonts.txtMedium,
+    color: Colors.white,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.white,
   },
   flatListContainer: {
     borderRadius: 10,
-    backgroundColor: "#ffaa41",
-    //width: "90%",
-    paddingHorizontal: 10,
+    backgroundColor: Colors.green,
+    width: "100%",
+    paddingHorizontal: scale(5),
   },
   flatListContent: {
     fontSize: 16,
@@ -610,23 +643,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     marginBottom: 20,
+    paddingHorizontal: scale(10),
+    paddingTop: scale(5),
   },
   modalCloseButton1: {
-    color: "#ffaa41",
-    fontSize: 24,
+    color: Colors.white,
+    fontSize: scale(16),
     fontWeight: "bold",
   },
   modalTitle1: {
-    fontSize: 24,
-    fontWeight: "bold",
+    ...Fonts.txtLarge,
+    color: Colors.white,
   },
   modalContent1: {
     fontSize: 16,
   },
   listaDet: {
     borderRadius: 20,
-    backgroundColor: Colors.green,
-    width: scale(300),
+    backgroundColor: Colors.grey,
+    width: "100%",
     height: verticalScale(40),
     alignItems: "center",
     justifyContent: "center",
@@ -639,19 +674,18 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   tituloBotao: {
-    ...Fonts.txtMediumBold,
-    color: Colors.white,
+    ...Fonts.txtMedium,
+    color: Colors.black,
   },
   containerDetalhes: {
-    width: scale(300),
-    backgroundColor: "white",
+    width: "100%",
+    backgroundColor: Colors.darkgreen,
     borderRadius: 10,
     paddingHorizontal: 10,
-    alignSelf: "center",
   },
   tituloDetalhes: {
-    color: "black",
-    fontSize: verticalScale(20),
+    color: Colors.white,
+    ...Fonts.txtLarge,
     marginBottom: verticalScale(10),
     textAlign: "center",
     fontWeight: "bold",
@@ -660,12 +694,13 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 5,
   },
-  modalContent: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
   textContent: {
-    fontSize: 20,
+    ...Fonts.txtMedium,
+    color: Colors.white,
+  },
+  textContentTitulo: {
+    ...Fonts.txtMedium,
+    color: Colors.grey,
   },
 });
 export default Graficodetalhesvacas;
