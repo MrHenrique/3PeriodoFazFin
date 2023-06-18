@@ -172,8 +172,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   tituloDetalhes: {
-    color: "black",
-    fontSize: verticalScale(20),
+    color: Colors.white,
+    ...Fonts.txtLargeBold,
     marginBottom: verticalScale(10),
     textAlign: "center",
     fontWeight: "bold",
@@ -209,11 +209,10 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   containerDetalhes: {
-    width: scale(300),
-    backgroundColor: "white",
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    alignSelf: "center",
+    backgroundColor: Colors.green,
+    borderRadius: 20,
+    padding: scale(10),
+    marginHorizontal: scale(10),
   },
   modalContainerBotoes: {
     flexDirection: "row",
@@ -222,14 +221,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalContent: {
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.white,
     flexDirection: "row",
     justifyContent: "space-between",
   },
   textContent: {
-    fontSize: 20,
+    ...Fonts.txtMedium,
+    color: Colors.white,
+  },
+  textContentTitulo: {
+    ...Fonts.txtMedium,
+    color: Colors.grey,
   },
   modalContainerText: {
-    width: "100%",
+    flex: 1,
     padding: 5,
   },
   botaopressM: {

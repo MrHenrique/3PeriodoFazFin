@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import {
   View,
-  Dimensions,
   Text,
   TouchableOpacity,
   FlatList,
@@ -10,12 +9,9 @@ import {
   Alert,
 } from "react-native";
 import Animated, {
-  BounceInUp,
   FadeIn,
   FadeOut,
   FlipInEasyX,
-  PinwheelIn,
-  PinwheelOut,
 } from "react-native-reanimated";
 import { AuthContext } from "../../../contexts/auth";
 import Modal from "react-native-modal";
@@ -23,17 +19,11 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useMainContext } from "../../../contexts/RealmContext";
 import styles from "../styles";
 import uuid from "react-native-uuid";
-import {
-  TextInput,
-  MD3Colors,
-  IconButton,
-  HelperText,
-  Button,
-} from "react-native-paper";
+import { TextInput, MD3Colors, HelperText, Button } from "react-native-paper";
 import { Colors } from "../../../styles";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
-import { scale } from "react-native-size-matters";
+import { scale, verticalScale } from "react-native-size-matters";
 function EstoqueGeral({ navigation }) {
   const realm = useMainContext();
   function checkAlert(alertCheck) {
@@ -325,6 +315,13 @@ function EstoqueGeral({ navigation }) {
     return formattedResult;
   };
 
+  function functeste(valor) {
+    if (valor.length <= 8) {
+      return `${valor}`;
+    } else {
+      return `${valor.substring(0, scale(7))}...`;
+    }
+  }
   //renderiza flat list com transações de entrada
   const renderItemEntrada = ({ item }) => {
     const categoriaProd = TipoAfter(item);
@@ -339,33 +336,67 @@ function EstoqueGeral({ navigation }) {
     }`;
     const isItemSelected = item._id === selectedItemId;
     return (
-      <ScrollView>
+      <>
         <TouchableOpacity
-          style={styles.listaDet}
+          style={[
+            styles.listaDet,
+            shouldShowDetalhesEntrada && isItemSelected
+              ? {
+                  marginTop: verticalScale(5),
+                  marginBottom: 0,
+                  borderBottomLeftRadius: 0,
+                  borderBottomRightRadius: 0,
+                }
+              : { marginVertical: verticalScale(5) },
+          ]}
           onPress={() => handleItemPress(item._id)}
         >
-          <Text style={styles.font}>
-            {item.nomeProd} - {formattedValor}
+          <Text style={styles.fontNome}>
+            {item.nomeProd.length < 13
+              ? `${item.nomeProd}`
+              : `${item.nomeProd.substring(0, scale(13))}...`}{" "}
+            -{" "}
+            {item.nomeProd.length < 14
+              ? `${formattedValor}`
+              : formattedValor.length <= 8
+              ? `${valor}`
+              : `${valor.substring(0, scale(7))}...`}
           </Text>
         </TouchableOpacity>
         {shouldShowDetalhesEntrada && isItemSelected && (
-          <View style={[styles.containerDetalhes]}>
+          <TouchableOpacity
+            style={[
+              styles.containerDetalhes,
+              shouldShowDetalhesEntrada && isItemSelected
+                ? {
+                    borderTopWidth: 1,
+                    borderTopColor: "white",
+                    marginTop: 0,
+                    marginBottom: verticalScale(5),
+                    borderTopLeftRadius: 0,
+                    borderTopRightRadius: 0,
+                  }
+                : null,
+            ]}
+            onPress={() => handleItemPress(item._id)}
+            activeOpacity={0.9}
+          >
             <View>
               <Text style={styles.tituloDetalhes}>Detalhes</Text>
             </View>
             <View style={styles.modalContainerText}>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Data: </Text>
+                <Text style={styles.textContentTitulo}>Data: </Text>
                 <Text style={styles.textContent}>{formattedData}</Text>
               </View>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Horario: </Text>
+                <Text style={styles.textContentTitulo}>Horario: </Text>
                 <Text style={styles.textContent}>
                   {item.createdAt.toLocaleTimeString()}
                 </Text>
               </View>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Preço Unitário: </Text>
+                <Text style={styles.textContentTitulo}>Preço Unitário: </Text>
                 <Text style={styles.textContent}>
                   {formatarResultado(item.valorProd, "preco")}
                 </Text>
@@ -374,17 +405,17 @@ function EstoqueGeral({ navigation }) {
               {categoriaProd === "Alimentos" ? (
                 <>
                   <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Peso Unitário: </Text>
+                    <Text style={styles.textContentTitulo}>Peso Unitário:</Text>
                     <Text style={styles.textContent}>
                       {formatarResultado(item.pesoProd, "peso")}
                     </Text>
                   </View>
                   <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Quantidade: </Text>
+                    <Text style={styles.textContentTitulo}>Quantidade: </Text>
                     <Text style={styles.textContent}>{item.qtdProd}</Text>
                   </View>
                   <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Peso Total: </Text>
+                    <Text style={styles.textContentTitulo}>Peso Total: </Text>
                     <Text style={styles.textContent}>
                       {formatarResultado(item.pesoProd * item.qtdProd, "peso")}
                     </Text>
@@ -393,17 +424,19 @@ function EstoqueGeral({ navigation }) {
               ) : (
                 <>
                   <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Volume Unitário: </Text>
+                    <Text style={styles.textContentTitulo}>
+                      Volume Unitário:
+                    </Text>
                     <Text style={styles.textContent}>
                       {formatarResultado(item.volumeProd, "litro")}
                     </Text>
                   </View>
                   <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Quantidade: </Text>
+                    <Text style={styles.textContentTitulo}>Quantidade: </Text>
                     <Text style={styles.textContent}>{item.qtdProd}</Text>
                   </View>
                   <View style={styles.modalContent}>
-                    <Text style={styles.textContent}>Volume Total: </Text>
+                    <Text style={styles.textContentTitulo}>Volume Total: </Text>
                     <Text style={styles.textContent}>
                       {formatarResultado(
                         item.volumeProd * item.qtdProd,
@@ -415,18 +448,17 @@ function EstoqueGeral({ navigation }) {
               )}
 
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Valor Total: </Text>
+                <Text style={styles.textContentTitulo}>Valor Total: </Text>
                 <Text style={styles.textContent}>
                   {formatarResultado(item.valorProd * item.qtdProd, "preco")}
                 </Text>
               </View>
-              <Text style={styles.textContent}>
-                Descrição: {item.obserProd}
-              </Text>
+              <Text style={styles.textContentTitulo}>Descrição:</Text>
+              <Text style={styles.textContent}> {item.obserProd} </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         )}
-      </ScrollView>
+      </>
     );
   };
   //recebe volume ou peso, e retorna a categoria do produto

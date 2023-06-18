@@ -16,7 +16,7 @@ import { useMainContext } from "../../../../contexts/RealmContext";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { TextInput, MD3Colors, HelperText } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { scale } from "react-native-size-matters";
+import { scale, verticalScale } from "react-native-size-matters";
 import styles from "./styles";
 import { Colors } from "../../../../styles";
 import { ScrollView } from "react-native";
@@ -432,11 +432,21 @@ function RegistrosVendas({ navigation }) {
     return (
       <>
         <TouchableOpacity
-          style={styles.listaDet}
+          style={[
+            styles.listaDet,
+            shouldShowDetalhes && isItemSelected
+              ? {
+                  marginTop: verticalScale(5),
+                  borderBottomLeftRadius: 0,
+                  marginBottom: 0,
+                  borderBottomRightRadius: 0,
+                }
+              : { marginVertical: verticalScale(5) },
+          ]}
           onPress={() => handleItemPress(item._id)}
         >
           <View style={styles.itemContainer}>
-            <View style={[styles.indicador, { backgroundColor: "yellow" }]} />
+            <View style={[styles.indicador]} />
             <View style={styles.containerTextList}>
               <Text style={styles.itemText}>{formattedData}</Text>
               <Text style={styles.itemText}>{formattedResult}</Text>
@@ -450,48 +460,67 @@ function RegistrosVendas({ navigation }) {
           </View>
         </TouchableOpacity>
         {shouldShowDetalhes && isItemSelected && (
-          <View style={[styles.containerDetalhes]}>
+          <TouchableOpacity
+            onPress={() => handleItemPress(item._id)}
+            activeOpacity={0.9}
+            style={[
+              styles.containerDetalhes,
+              shouldShowDetalhes && isItemSelected
+                ? {
+                    marginTop: 0,
+                    borderTopLeftRadius: 0,
+                    borderTopRightRadius: 0,
+                    marginBottom: verticalScale(5),
+                  }
+                : null,
+            ]}
+          >
             <View>
               <Text style={styles.tituloDetalhes}>Detalhes</Text>
             </View>
             <View style={styles.modalContainerText}>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Nome do animal: </Text>
+                <Text style={styles.textContentTitulo}>Nome do animal: </Text>
                 <Text style={styles.textContent}>{item.nomeProd}</Text>
               </View>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Data: </Text>
+                <Text style={styles.textContentTitulo}>Data: </Text>
                 <Text style={styles.textContent}>{formattedData}</Text>
               </View>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Horario: </Text>
+                <Text style={styles.textContentTitulo}>Horario: </Text>
                 <Text style={styles.textContent}>
                   {item.createdAt.toLocaleTimeString()}
                 </Text>
               </View>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Peso: </Text>
+                <Text style={styles.textContentTitulo}>Peso: </Text>
                 <Text style={styles.textContent}>
                   {formatarResultado(item.prodL, "peso")}
                 </Text>
               </View>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Preço por arroba: </Text>
+                <Text style={styles.textContentTitulo}>Preço por arroba: </Text>
                 <Text style={styles.textContent}>
                   {formatarResultado(item.precoL, "preco")}
                 </Text>
               </View>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Valor Total: </Text>
+                <Text style={styles.textContentTitulo}>Valor Total: </Text>
                 <Text style={styles.textContent}>
                   {formatarResultado(item.precoL * item.prodL, "preco")}
                 </Text>
               </View>
-              <Text style={styles.textContent}>
-                Descrição: {item.description}
-              </Text>
+              <View
+                style={{
+                  alignItems: "center",
+                }}
+              >
+                <Text style={styles.textContentTitulo}>Descrição:</Text>
+                <Text style={styles.textContent}>{item.description}</Text>
+              </View>
             </View>
-          </View>
+          </TouchableOpacity>
         )}
       </>
     );
