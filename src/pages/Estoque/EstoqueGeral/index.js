@@ -198,10 +198,10 @@ function EstoqueGeral({ navigation }) {
           <th>${item.pesoProd > 0 ? "Alimentos" : "Remédios"}</th>
           <th>
             ${
-              item.pesoProd > 0 ? item.pesoProd + " KG" : item.volumeProd + " L"
+              item.pesoProd > 0 ? item.pesoProd.toFixed(2) + " KG" : item.volumeProd.toFixed(2) + " L"
             }
           </th>
-          <th>${"R$ " + item.valorProd}</th>
+          <th>${"R$ " + item.valorProd.toFixed(2)}</th>
           <th>
             ${
               item.pesoProd > 0
