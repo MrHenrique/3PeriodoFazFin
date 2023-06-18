@@ -9,8 +9,8 @@ import {
   SafeAreaView,
 } from "react-native";
 import Modal from "react-native-modal";
-import { Chip } from "react-native-paper";
-import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
+import { Button, Chip, Divider, IconButton } from "react-native-paper";
+import { AntDesign, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import { AuthContext } from "../../../contexts/auth";
 import { useMainContext } from "../../../contexts/RealmContext";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -18,7 +18,8 @@ import { Colors } from "../../../styles";
 import styles from "./styles";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { TextInput, MD3Colors, HelperText } from "react-native-paper";
-import { scale } from "react-native-size-matters";
+import { scale, verticalScale } from "react-native-size-matters";
+import { ScrollView } from "react-native";
 
 function RegistrosLeite({ navigation }) {
   const realm = useMainContext();
@@ -56,15 +57,29 @@ function RegistrosLeite({ navigation }) {
   const [valorChipValue, setValorChipValue] = React.useState(null);
   const [textValorChipValue, setTextValorChipValue] = useState("Valores");
   const [modalFiltrosVisible, setModalFiltrosVisible] = useState(false);
+  const [contadorFiltros, setContadorFiltros] = useState(0);
   //FIM STATES FILTROS
 
   //INICIO FILTROS
   useEffect(() => {
-    setListaFiltrada(lista);
-    setLista1(lista);
-  }, [lista]);
+    let count = 0;
+
+    if (dataChipValue != null) {
+      count++;
+    }
+    if (valorChipValue != null) {
+      count++;
+    }
+
+    setContadorFiltros(count);
+  }, [dataChipValue, valorChipValue]);
 
   useEffect(() => {
+    setLista1(lista);
+  }, [listaBuscada]);
+
+  useEffect(() => {
+    setValorChipValue(null);
     setLista(
       listaBuscada.sort((a, b) => {
         return new Date(a.createdAt) - new Date(b.createdAt);
@@ -190,7 +205,7 @@ function RegistrosLeite({ navigation }) {
       setLista1(lista);
       setListaFiltrada(lista);
     }
-  }, [dataChipValue]);
+  }, [dataChipValue, lista]);
 
   // Filtro por Valores
   useEffect(() => {
@@ -425,11 +440,31 @@ function RegistrosLeite({ navigation }) {
     return (
       <>
         <TouchableOpacity
-          style={styles.listaDet}
+          style={[
+            styles.listaDet,
+            shouldShowDetalhes && isItemSelected
+              ? {
+                  marginTop: verticalScale(5),
+                  marginBottom: 0,
+                  borderBottomLeftRadius: 0,
+                  borderBottomRightRadius: 0,
+                }
+              : { marginVertical: verticalScale(5) },
+          ]}
           onPress={() => handleItemPress(item._id)}
         >
           <View style={styles.itemContainer}>
-            <View style={[styles.indicador, { backgroundColor: "yellow" }]} />
+            <View
+              style={[
+                styles.indicador,
+                shouldShowDetalhes && isItemSelected
+                  ? {
+                      borderBottomLeftRadius: 0,
+                      borderBottomRightRadius: 0,
+                    }
+                  : null,
+              ]}
+            />
             <View style={styles.containerTextList}>
               <Text style={styles.itemText}>{formattedData}</Text>
               <Text style={styles.itemText}>{formattedResult}</Text>
@@ -438,55 +473,68 @@ function RegistrosLeite({ navigation }) {
               style={styles.editButton}
               onPress={handleEditPress(item)}
             >
-              <AntDesign name="edit" size={24} color="white" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.deleteButton}
-              onPress={handleDeletePress}
-            >
-              <AntDesign name="delete" size={24} color="white" />
+              <AntDesign name="edit" size={scale(20)} color="white" />
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
         {shouldShowDetalhes && isItemSelected && (
-          <View style={[styles.containerDetalhes]}>
+          <TouchableOpacity
+            onPress={() => handleItemPress(item._id)}
+            activeOpacity={0.9}
+            style={[
+              styles.containerDetalhes,
+              shouldShowDetalhes && isItemSelected
+                ? {
+                    marginTop: 0,
+                    marginBottom: verticalScale(5),
+                    borderTopLeftRadius: 0,
+                    borderTopRightRadius: 0,
+                  }
+                : null,
+            ]}
+          >
             <View>
               <Text style={styles.tituloDetalhes}>Detalhes</Text>
             </View>
             <View style={styles.modalContainerText}>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Data: </Text>
+                <Text style={styles.textContentTitulo}>Data: </Text>
                 <Text style={styles.textContent}>{formattedData}</Text>
               </View>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Horario: </Text>
+                <Text style={styles.textContentTitulo}>Horario: </Text>
                 <Text style={styles.textContent}>
                   {item.createdAt.toLocaleTimeString()}
                 </Text>
               </View>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Produção: </Text>
+                <Text style={styles.textContentTitulo}>Produção: </Text>
                 <Text style={styles.textContent}>
                   {formatarResultado(item.prodL, "prod")}
                 </Text>
               </View>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Preco: </Text>
+                <Text style={styles.textContentTitulo}>Preco: </Text>
                 <Text style={styles.textContent}>
                   {formatarResultado(item.precoL, "preco")}
                 </Text>
               </View>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Valor Total: </Text>
+                <Text style={styles.textContentTitulo}>Valor Total: </Text>
                 <Text style={styles.textContent}>
                   {formatarResultado(item.precoL * item.prodL, "preco")}
                 </Text>
               </View>
-              <Text style={styles.textContent}>
-                Descrição: {item.description}
-              </Text>
             </View>
-          </View>
+            <View
+              style={{
+                alignItems: "center",
+              }}
+            >
+              <Text style={styles.textContentTitulo}>Descrição:</Text>
+              <Text style={styles.textContent}>{item.description}</Text>
+            </View>
+          </TouchableOpacity>
         )}
       </>
     );
@@ -496,25 +544,43 @@ function RegistrosLeite({ navigation }) {
     <View style={styles.container}>
       <View style={styles.containergeral}>
         {/*filtros*/}
-        <View style={styles.containerChip}>
-          <View style={styles.testeFiltro}>
-            <Chip
+        <View style={styles.modalContainer}>
+          <View
+            style={{
+              flexDirection: "row",
+              margin: scale(10),
+            }}
+          >
+            <Button
+              contentStyle={{ marginVertical: scale(10) }}
               style={[
-                styles.chipFiltroReceita,
+                styles.chipFiltroReceitaFiltro,
                 (dataChipValue || valorChipValue) && styles.chipSelected,
               ]}
-              textStyle={{
+              textColor={Colors.white}
+              labelStyle={{
                 fontSize: scale(14),
                 color: Colors.white,
               }}
-              icon={() => <Icon name="filter" size={20} color="white" />}
+              icon={() => <Icon name="filter" size={26} color="white" />}
               onPress={() => {
                 setModalFiltrosVisible(true);
               }}
             >
-              <Text>Filtros</Text>
-            </Chip>
+              Filtros
+            </Button>
+          </View>
+          <ScrollView
+            style={{
+              maxHeight: scale(40),
+              marginHorizontal: scale(10),
+            }}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            fadingEdgeLength={100}
+          >
             <Chip
+              elevated="true"
               style={[
                 styles.chipFiltroReceita,
                 handleChipPress("data") && styles.chipSelected,
@@ -528,6 +594,7 @@ function RegistrosLeite({ navigation }) {
               <Text>{textDataChipValue}</Text>
             </Chip>
             <Chip
+              elevated="true"
               style={[
                 styles.chipFiltroReceita,
                 handleChipPress("valor") && styles.chipSelected,
@@ -542,271 +609,374 @@ function RegistrosLeite({ navigation }) {
             >
               <Text>{textValorChipValue}</Text>
             </Chip>
+          </ScrollView>
+
+          <Modal
+            statusBarTranslucent
+            coverScreen={true}
+            backdropColor={Colors.black}
+            backdropOpacity={0.5}
+            isVisible={modalFiltrosVisible}
+            onBackButtonPress={() => setModalFiltrosVisible(false)}
+            onBackdropPress={() => setModalFiltrosVisible(false)}
+            animationIn="fadeInLeftBig"
+            animationInTiming={600}
+            animationOut={"fadeOutRightBig"}
+            animationOutTiming={600}
+            backdropTransitionInTiming={1000}
+            backdropTransitionOutTiming={1000}
+          >
+            <SafeAreaView style={styles.containerFiltro}>
+              <View style={styles.modalContainerFiltro}>
+                <View style={styles.topFiltros}>
+                  <TouchableOpacity
+                    style={styles.BotaoLimparFiltro}
+                    onPress={() => {
+                      setDataChipValue(null);
+                      setValorChipValue(null);
+                      setListaFiltrada(listaBuscada);
+                    }}
+                  >
+                    {dataChipValue || valorChipValue ? (
+                      <Text style={styles.txtLimparFiltro}>
+                        Limpar ({contadorFiltros})
+                      </Text>
+                    ) : null}
+                  </TouchableOpacity>
+                  <View style={styles.containerTituloModalFiltro}>
+                    <Text style={styles.tituloinfo}>Filtros</Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => setModalFiltrosVisible(false)}
+                  >
+                    <AntDesign name="close" size={20} color={Colors.white} />
+                  </TouchableOpacity>
+                </View>
+                <Divider
+                  bold="true"
+                  style={{ backgroundColor: "white", marginVertical: scale(4) }}
+                />
+                <Text style={styles.tituloinfo1}>Período</Text>
+                <View style={styles.testeFiltro}>
+                  <Chip
+                    style={[
+                      styles.chipsFiltro,
+                      dataChipValue === 1 && styles.chipSelected,
+                    ]}
+                    onPress={() => handleDataChipPress(1)}
+                    textStyle={[
+                      styles.chipModalFiltro,
+                      dataChipValue === 1 && { color: "white" },
+                    ]}
+                  >
+                    <Text>7 dias</Text>
+                  </Chip>
+                  <Chip
+                    style={[
+                      styles.chipsFiltro,
+                      dataChipValue === 2 && styles.chipSelected,
+                    ]}
+                    onPress={() => handleDataChipPress(2)}
+                    textStyle={[
+                      styles.chipModalFiltro,
+                      dataChipValue === 2 && { color: "white" },
+                    ]}
+                  >
+                    <Text>Último mês</Text>
+                  </Chip>
+                  <Chip
+                    style={[
+                      styles.chipsFiltro,
+                      dataChipValue === 3 && styles.chipSelected,
+                    ]}
+                    onPress={() => handleDataChipPress(3)}
+                    textStyle={[
+                      styles.chipModalFiltro,
+                      dataChipValue === 3 && { color: "white" },
+                    ]}
+                  >
+                    <Text>3 meses</Text>
+                  </Chip>
+                  <Chip
+                    style={[
+                      styles.chipsFiltro,
+                      dataChipValue === 4 && styles.chipSelected,
+                    ]}
+                    onPress={() => handleDataChipPress(4)}
+                    textStyle={[
+                      styles.chipModalFiltro,
+                      dataChipValue === 4 && { color: "white" },
+                    ]}
+                  >
+                    <Text>6 meses</Text>
+                  </Chip>
+                  <Chip
+                    style={[
+                      styles.chipsFiltro,
+                      dataChipValue === 5 && styles.chipSelected,
+                    ]}
+                    onPress={() => handleDataChipPress(5)}
+                    textStyle={[
+                      styles.chipModalFiltro,
+                      dataChipValue === 5 && { color: "white" },
+                    ]}
+                  >
+                    <Text>Todas as datas</Text>
+                  </Chip>
+                  <Chip
+                    style={[
+                      styles.chipsFiltro,
+                      dataChipValue === 6 && styles.chipSelected,
+                    ]}
+                    onPress={() => handleDataChipPress(6)}
+                    textStyle={[
+                      styles.chipModalFiltro,
+                      dataChipValue === 6 && { color: "white" },
+                    ]}
+                  >
+                    <Text>Customizado</Text>
+                  </Chip>
+                </View>
+                {dataChipValue === 6 && (
+                  <>
+                    <View style={styles.containerBotoesFiltro}>
+                      <TouchableOpacity
+                        style={styles.botoes}
+                        onPress={showStartDatePicker}
+                      >
+                        <View
+                          style={{
+                            flex: 1,
+                          }}
+                        >
+                          <Text style={styles.textoFiltro}>
+                            {textStartDate}
+                          </Text>
+                        </View>
+                        <IconButton
+                          icon={"calendar"}
+                          size={20}
+                          color={Colors.black}
+                        />
+                      </TouchableOpacity>
+                      <DateTimePickerModal
+                        isVisible={isStartDatePickerVisible}
+                        mode="date"
+                        onConfirm={handleStartDateConfirm}
+                        onCancel={hideStartDatePicker}
+                        maximumDate={new Date()}
+                      />
+
+                      <TouchableOpacity
+                        style={styles.botoes}
+                        onPress={showEndDatePicker}
+                      >
+                        <View
+                          style={{
+                            flex: 1,
+                          }}
+                        >
+                          <Text style={styles.textoFiltro}>{textEndDate}</Text>
+                        </View>
+                        <IconButton
+                          icon={"calendar"}
+                          size={20}
+                          color={Colors.black}
+                        />
+                      </TouchableOpacity>
+                      <DateTimePickerModal
+                        isVisible={isEndDatePickerVisible}
+                        mode="date"
+                        onConfirm={handleEndDateConfirm}
+                        onCancel={hideEndDatePicker}
+                        maximumDate={new Date()}
+                      />
+                    </View>
+                    <View style={styles.containerBotoesFiltro}>
+                      <TouchableOpacity
+                        style={styles.botoes}
+                        onPress={() => {
+                          filtrarIntervalo();
+                          setValorChipValue(null);
+                        }}
+                      >
+                        <Text style={styles.textoFiltro}>Filtrar</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.botoes}
+                        onPress={() => {
+                          setStartDate("");
+                          setEndDate("");
+                          setTextStartDate("Data Inicial");
+                          setTextEndDate("Data Final");
+                          setLista1(lista);
+                          setListaFiltrada(lista);
+                        }}
+                      >
+                        <Text style={styles.textoFiltro}>Limpar</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </>
+                )}
+                <Divider
+                  bold="true"
+                  style={{ backgroundColor: "white", marginVertical: scale(4) }}
+                />
+                <Text style={styles.tituloinfo1}>Valores</Text>
+                <View style={styles.testeFiltro}>
+                  <Chip
+                    style={[
+                      styles.chipsFiltro,
+                      valorChipValue === 1 && styles.chipSelected,
+                    ]}
+                    onPress={() => handleValorChipPress(1)}
+                    textStyle={[
+                      styles.chipModalFiltro,
+                      valorChipValue === 1 && { color: "white" },
+                    ]}
+                  >
+                    <Text>Crescente</Text>
+                  </Chip>
+                  <Chip
+                    style={[
+                      styles.chipsFiltro,
+                      valorChipValue === 2 && styles.chipSelected,
+                    ]}
+                    onPress={() => handleValorChipPress(2)}
+                    textStyle={[
+                      styles.chipModalFiltro,
+                      valorChipValue === 2 && { color: "white" },
+                    ]}
+                  >
+                    <Text>Decrescente</Text>
+                  </Chip>
+                </View>
+              </View>
+            </SafeAreaView>
+          </Modal>
+          {/*FIM FILTROS*/}
+          <FlatList
+            style={[styles.lista]}
+            data={listaFiltrada}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id}
+          />
+
+          <View style={styles.containerButaoleitegeral}>
+            <TouchableOpacity
+              style={styles.botao}
+              onPress={() => navigation.navigate("Home")}
+            >
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={styles.font}>{"Voltar"}</Text>
+              </View>
+              <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
+            </TouchableOpacity>
           </View>
+          <Modal
+            statusBarTranslucent
+            coverScreen={true}
+            backdropColor="black"
+            backdropOpacity={0.5}
+            isVisible={modalEditarVisible}
+            animationType="slide"
+            transparent={true}
+            onBackButtonPress={() => setModalEditarVisible(!modalEditarVisible)}
+            onBackdropPress={() => setModalEditarVisible(!modalEditarVisible)}
+            animationIn="fadeInLeftBig"
+            animationInTiming={600}
+            animationOut="fadeOutRightBig"
+            animationOutTiming={600}
+            backdropTransitionInTiming={1000}
+            backdropTransitionOutTiming={1000}
+          >
+            <View style={styles.modalContainer}>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <View style={styles.containergeralmodal}>
+                  <View style={styles.containerinfos}>
+                    <TouchableOpacity
+                      style={styles.btnModalEditDate}
+                      onPress={showDatePicker}
+                    >
+                      <Text style={styles.TxtModalEditDate}>{text}</Text>
+                      <AntDesign
+                        name="calendar"
+                        size={scale(26)}
+                        color="white"
+                      />
+                    </TouchableOpacity>
+
+                    <DateTimePickerModal
+                      isVisible={isDatePickerVisible}
+                      date={date}
+                      mode="date"
+                      onConfirm={handleDateConfirm}
+                      onCancel={hideDatePicker}
+                      maximumDate={new Date()}
+                    />
+                  </View>
+                  <View style={styles.containerinfos}>
+                    <TextInput
+                      label="Litros de Leite"
+                      style={styles.textInput}
+                      placeholderTextColor={Colors.darkgrey}
+                      textColor={Colors.black}
+                      activeUnderlineColor={Colors.green}
+                      underlineColor={Colors.blue}
+                      underlineStyle={{ paddingBottom: 3 }}
+                      value={prodLV}
+                      onChangeText={handleVolumeProdChange}
+                      keyboardType="decimal-pad"
+                      inputMode="decimal"
+                      error={!isVolumeProdValid}
+                    />
+                    <HelperText
+                      type="error"
+                      style={{
+                        color: MD3Colors.error60,
+                        fontSize: 14,
+                        lineHeight: 12,
+                      }}
+                      visible={!isVolumeProdValid}
+                      padding="20"
+                    >
+                      Digite o volume da unidade do produto.
+                    </HelperText>
+                  </View>
+                  <View style={styles.containerinfos}>
+                    <TextInput
+                      label="Observações"
+                      style={styles.textInput}
+                      placeholderTextColor={Colors.darkgrey}
+                      textColor={Colors.black}
+                      activeUnderlineColor={Colors.green}
+                      underlineColor={Colors.blue}
+                      underlineStyle={{ paddingBottom: 3 }}
+                      value={description}
+                      onChangeText={setDescription}
+                    />
+                  </View>
+                  <View style={styles.modalContainerBotoes}>
+                    <TouchableOpacity
+                      style={styles.botaopressM}
+                      onPress={() => {
+                        validCheck();
+                      }}
+                    >
+                      <Text style={styles.textovoltar}>Confirmar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.botaopressM}
+                      onPress={() => setModalEditarVisible(false)}
+                    >
+                      <Text style={styles.textovoltar}>Voltar</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </Modal>
         </View>
-        <Modal
-          coverScreen={true}
-          backdropColor={"#000"}
-          onBackButtonPress={() => setModalFiltrosVisible(false)}
-          onBackdropPress={() => setModalFiltrosVisible(false)}
-          isVisible={modalFiltrosVisible}
-          animationType="slide"
-          statusBarTranslucent
-        >
-          <SafeAreaView style={styles.containerFiltro}>
-            <View style={styles.modalContainerFiltro}>
-              <View style={styles.topFiltros}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setDataChipValue(null);
-                    setValorChipValue(null);
-                    setListaFiltrada(listaBuscada);
-                  }}
-                >
-                  <Text>Limpar</Text>
-                </TouchableOpacity>
-                <Text style={styles.tituloinfo}>Filtros</Text>
-                <TouchableOpacity onPress={() => setModalFiltrosVisible(false)}>
-                  <AntDesign name="close" size={20} color={Colors.white} />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.tituloinfo1}>Período</Text>
-              <View style={styles.testeFiltro}>
-                <Chip
-                  style={[
-                    styles.chipsFiltro,
-                    dataChipValue === 1 && styles.chipSelected,
-                  ]}
-                  onPress={() => handleDataChipPress(1)}
-                >
-                  <Text>7 dias</Text>
-                </Chip>
-                <Chip
-                  style={[
-                    styles.chipsFiltro,
-                    dataChipValue === 2 && styles.chipSelected,
-                  ]}
-                  onPress={() => handleDataChipPress(2)}
-                >
-                  <Text>Último mês</Text>
-                </Chip>
-                <Chip
-                  style={[
-                    styles.chipsFiltro,
-                    dataChipValue === 3 && styles.chipSelected,
-                  ]}
-                  onPress={() => handleDataChipPress(3)}
-                >
-                  <Text>3 meses</Text>
-                </Chip>
-                <Chip
-                  style={[
-                    styles.chipsFiltro,
-                    dataChipValue === 4 && styles.chipSelected,
-                  ]}
-                  onPress={() => handleDataChipPress(4)}
-                >
-                  <Text>6 meses</Text>
-                </Chip>
-                <Chip
-                  style={[
-                    styles.chipsFiltro,
-                    dataChipValue === 5 && styles.chipSelected,
-                  ]}
-                  onPress={() => handleDataChipPress(5)}
-                >
-                  <Text>Todas as datas</Text>
-                </Chip>
-                <Chip
-                  style={[
-                    styles.chipsFiltro,
-                    dataChipValue === 6 && styles.chipSelected,
-                  ]}
-                  onPress={() => handleDataChipPress(6)}
-                >
-                  <Text>Customizado</Text>
-                </Chip>
-              </View>
-              {dataChipValue === 6 && (
-                <>
-                  <View style={styles.containerBotoesFiltro}>
-                    <TouchableOpacity
-                      style={styles.botoes}
-                      onPress={showStartDatePicker}
-                    >
-                      <Text style={styles.textoFitro}>{textStartDate}</Text>
-                    </TouchableOpacity>
-                    <DateTimePickerModal
-                      isVisible={isStartDatePickerVisible}
-                      mode="date"
-                      onConfirm={handleStartDateConfirm}
-                      onCancel={hideStartDatePicker}
-                      maximumDate={new Date()}
-                    />
-
-                    <TouchableOpacity
-                      style={styles.botoes}
-                      onPress={showEndDatePicker}
-                    >
-                      <Text style={styles.textoFitro}>{textEndDate}</Text>
-                    </TouchableOpacity>
-                    <DateTimePickerModal
-                      isVisible={isEndDatePickerVisible}
-                      mode="date"
-                      onConfirm={handleEndDateConfirm}
-                      onCancel={hideEndDatePicker}
-                      maximumDate={new Date()}
-                    />
-                  </View>
-                  <View style={styles.containerBotoesFiltro}>
-                    <TouchableOpacity
-                      style={styles.botoes}
-                      onPress={() => {
-                        filtrarIntervalo();
-                        setValorChipValue(null);
-                      }}
-                    >
-                      <Text style={styles.textoFitro}>Filtrar</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.botoes}
-                      onPress={() => {
-                        setStartDate("");
-                        setEndDate("");
-                        setTextStartDate("Data Inicial");
-                        setTextEndDate("Data Final");
-                        setLista1(lista);
-                        setListaFiltrada(lista);
-                      }}
-                    >
-                      <Text style={styles.textoFitro}>Limpar</Text>
-                    </TouchableOpacity>
-                  </View>
-                </>
-              )}
-              <Text style={styles.tituloinfo1}>Valores</Text>
-              <View style={styles.testeFiltro}>
-                <Chip
-                  style={[
-                    styles.chipsFiltro,
-                    valorChipValue === 1 && styles.chipSelected,
-                  ]}
-                  onPress={() => handleValorChipPress(1)}
-                >
-                  <Text>Crescente</Text>
-                </Chip>
-                <Chip
-                  style={[
-                    styles.chipsFiltro,
-                    valorChipValue === 2 && styles.chipSelected,
-                  ]}
-                  onPress={() => handleValorChipPress(2)}
-                >
-                  <Text>Decrescente</Text>
-                </Chip>
-              </View>
-            </View>
-          </SafeAreaView>
-        </Modal>
-        {/*FIM FILTROS*/}
-        <FlatList
-          style={[styles.lista]}
-          data={listaFiltrada}
-          renderItem={renderItem}
-          keyExtractor={(item) => item._id}
-        />
-        <TouchableOpacity
-          style={styles.botaopress}
-          onPress={() => navigation.navigate("Home")}
-        >
-          <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-        </TouchableOpacity>
-        <Modal
-          coverScreen={true}
-          backdropColor="black"
-          backdropOpacity={0.5}
-          visible={modalEditarVisible}
-          animationType="slide"
-          transparent={true}
-          statusBarTranslucent
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.containergeralmodal}>
-              <View style={styles.containerinfos}>
-                <TouchableOpacity style={styles.teste} onPress={showDatePicker}>
-                  <Text style={styles.tituloinfo}>{text}</Text>
-                  <AntDesign name="calendar" size={30} color="white" />
-                </TouchableOpacity>
-
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  date={date}
-                  mode="date"
-                  onConfirm={handleDateConfirm}
-                  onCancel={hideDatePicker}
-                  maximumDate={new Date()}
-                />
-              </View>
-              <View style={styles.containerinfos}>
-                <TextInput
-                  label="Litros de Leite"
-                  style={styles.textInput}
-                  placeholderTextColor={Colors.grey}
-                  textColor={Colors.black}
-                  activeUnderlineColor={Colors.green}
-                  underlineColor={Colors.blue}
-                  underlineStyle={{ paddingBottom: 3 }}
-                  value={prodLV}
-                  onChangeText={handleVolumeProdChange}
-                  keyboardType="decimal-pad"
-                  inputMode="decimal"
-                  error={!isVolumeProdValid}
-                />
-                <HelperText
-                  type="error"
-                  style={{
-                    color: MD3Colors.error60,
-                    fontSize: 14,
-                    lineHeight: 12,
-                  }}
-                  visible={!isVolumeProdValid}
-                  padding="20"
-                >
-                  Digite o volume da unidade do produto.
-                </HelperText>
-              </View>
-              <View style={styles.containerinfos}>
-                <TextInput
-                  label="Observações"
-                  style={styles.textInput}
-                  placeholderTextColor={Colors.grey}
-                  textColor={Colors.black}
-                  activeUnderlineColor={Colors.green}
-                  underlineColor={Colors.blue}
-                  underlineStyle={{ paddingBottom: 3 }}
-                  value={description}
-                  onChangeText={setDescription}
-                />
-              </View>
-              <View style={styles.modalContainerBotoes}>
-                <TouchableOpacity
-                  style={styles.botaopressM}
-                  onPress={() => {
-                    validCheck();
-                  }}
-                >
-                  <Text style={styles.textovoltar}>Confirmar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.botaopressM}
-                  onPress={() => setModalEditarVisible(false)}
-                >
-                  <Text style={styles.textovoltar}>Voltar</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
       </View>
     </View>
   );

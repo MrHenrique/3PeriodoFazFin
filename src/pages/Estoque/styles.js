@@ -64,6 +64,10 @@ const styles = StyleSheet.create({
     color: Colors.white,
     ...Fonts.txtLargeBold,
   },
+  fontNome: {
+    color: Colors.white,
+    ...Fonts.txtMediumBold,
+  },
   fontsubtitulo: {
     color: Colors.grey,
     ...Fonts.txtMediumBold,
@@ -326,7 +330,7 @@ const styles = StyleSheet.create({
   listaDet: {
     borderRadius: 20,
     backgroundColor: Colors.green,
-    width: scale(300),
+    width: "100%",
     height: verticalScale(40),
     alignItems: "center",
     justifyContent: "center",
@@ -361,29 +365,34 @@ const styles = StyleSheet.create({
     // backgroundColor: Colors.black,
   },
   modalContent: {
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.white,
     flexDirection: "row",
     justifyContent: "space-between",
   },
   textContent: {
-    fontSize: 20,
+    ...Fonts.txtMedium,
+    color: Colors.white,
+  },
+  textContentTitulo: {
+    ...Fonts.txtMedium,
+    color: Colors.grey,
   },
   modalContainerText: {
-    width: "100%",
+    flex: 1,
     padding: 5,
   },
   tituloDetalhes: {
-    color: "black",
-    fontSize: verticalScale(20),
+    color: Colors.white,
+    ...Fonts.txtLargeBold,
     marginBottom: verticalScale(10),
     textAlign: "center",
     fontWeight: "bold",
   },
   containerDetalhes: {
-    width: scale(300),
-    backgroundColor: "white",
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    alignSelf: "center",
+    backgroundColor: Colors.green,
+    borderRadius: 20,
+    padding: scale(10),
   },
   containerCheckBox: {
     flex: 1,

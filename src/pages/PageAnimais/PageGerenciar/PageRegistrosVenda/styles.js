@@ -3,6 +3,65 @@ import { Buttons, Colors, Fonts, TextInput } from "../../../../styles";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const styles = StyleSheet.create({
+  font: {
+    color: Colors.white,
+    ...Fonts.txtLargeBold,
+  },
+  botao: {
+    flex: 1,
+    marginBottom: verticalScale(10),
+    ...Buttons.btnLargeRounded,
+    backgroundColor: Colors.green,
+    paddingHorizontal: scale(80),
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
+    elevation: 10,
+  },
+  containerButaoVendasgeral: {
+    flex: 0.101,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    minHeight: scale(10),
+    marginTop: verticalScale(20),
+  },
+  TxtModalEditDate: {
+    ...Fonts.txtLargeBold,
+    color: Colors.white,
+  },
+  btnModalEditDate: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: scale(60),
+  },
+  textInput: { backgroundColor: Colors.white },
+  chipModalFiltro: {
+    ...Fonts.txtSmall,
+    color: Colors.black,
+  },
+  containerTituloModalFiltro: {
+    flex: 1,
+    textAlign: "center",
+  },
+  txtLimparFiltro: {
+    ...Fonts.txtMedium,
+    color: Colors.white,
+  },
+  BotaoLimparFiltro: {
+    zIndex: 10,
+    top: verticalScale(5),
+    left: scale(8),
+    position: "absolute",
+  },
+  chipFiltroReceitaFiltro: {
+    backgroundColor: Colors.green,
+    // paddingHorizontal: scale(15),
+    // paddingVertical: scale(3),
+    // height: verticalScale(40),
+    // width: scale(100),
+    marginHorizontal: scale(90),
+    flex: 1,
+    justifyContent: "center",
+  },
   teste: {
     paddingHorizontal: scale(20),
     flexDirection: "row",
@@ -68,6 +127,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   itemContainer: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -91,11 +151,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   indicador: {
-    padding: scale(8),
-    borderTopLeftRadius: 50,
-    borderBottomLeftRadius: 50,
+    padding: verticalScale(8),
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20,
     width: scale(10),
-    height: scale(34),
+    height: "100%",
   },
 
   textovoltar: {
@@ -105,12 +165,15 @@ const styles = StyleSheet.create({
   },
   tituloinfo: {
     color: "white",
-    fontSize: scale(20),
+    fontSize: verticalScale(20),
+    marginBottom: verticalScale(10),
+    textAlign: "center",
+    alignContent: "center",
     fontWeight: "bold",
   },
   tituloDetalhes: {
-    color: "black",
-    fontSize: verticalScale(20),
+    color: Colors.white,
+    ...Fonts.txtLargeBold,
     marginBottom: verticalScale(10),
     textAlign: "center",
     fontWeight: "bold",
@@ -141,19 +204,15 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    borderRadius: 10,
-    margin: 20,
-    padding: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "18%",
+    alignSelf: "center",
+    borderRadius: 20,
+    position: "relative",
   },
   containerDetalhes: {
-    width: scale(300),
-    backgroundColor: "white",
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    alignSelf: "center",
+    backgroundColor: Colors.green,
+    borderRadius: 20,
+    padding: scale(10),
+    marginHorizontal: scale(10),
   },
   modalContainerBotoes: {
     flexDirection: "row",
@@ -162,14 +221,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalContent: {
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.white,
     flexDirection: "row",
     justifyContent: "space-between",
   },
   textContent: {
-    fontSize: 20,
+    ...Fonts.txtMedium,
+    color: Colors.white,
+  },
+  textContentTitulo: {
+    ...Fonts.txtMedium,
+    color: Colors.grey,
   },
   modalContainerText: {
-    width: "100%",
+    flex: 1,
     padding: 5,
   },
   botaopressM: {
@@ -188,14 +254,15 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.darkgreen,
   },
   containergeralmodal: {
-    flex: 1,
-    padding: scale(20),
     backgroundColor: Colors.darkgreen,
+    borderRadius: 10,
+    padding: scale(10),
   },
   chipSelected: {
     backgroundColor: "green",
   },
   topFiltros: {
+    position: "relative",
     margin: 10,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -203,10 +270,12 @@ const styles = StyleSheet.create({
   chipsFiltro: {
     marginRight: 10,
     marginBottom: 10,
+    backgroundColor: Colors.grey,
   },
   testeFiltro: {
     flexDirection: "row",
     flexWrap: "wrap",
+    marginHorizontal: scale(5),
   },
   containerFiltro: {
     flex: 1,
@@ -214,26 +283,30 @@ const styles = StyleSheet.create({
   },
   modalContainerFiltro: {
     //flex: 0.6,
-    backgroundColor: Colors.Cyan,
+    backgroundColor: Colors.darkgreen,
   },
   containerBotoesFiltro: {
+    justifyContent: "center",
+    backgroundColor: Colors.green,
     flexDirection: "row",
-    padding: 3,
+    padding: 10,
   },
   botoes: {
-    flex: 1,
-    backgroundColor: Colors.green,
-    borderRadius: 30,
-    width: "50%",
-    height: verticalScale(30),
+    flexDirection: "row",
+    backgroundColor: Colors.white,
+    borderRadius: 20,
+    width: "42%",
+    height: scale(30),
     borderWidth: scale(1),
-    justifyContent: "center",
-    marginHorizontal: 3,
+    justifyContent: "space-around",
+    alignItems: "center",
+    padding: scale(2),
+    marginHorizontal: scale(5),
   },
-  textoFitro: {
-    color: Colors.white,
+  textoFiltro: {
+    ...Fonts.txtMedium,
+    color: Colors.black,
     textAlign: "center",
-    fontSize: scale(14),
   },
   containerChip: {
     flexDirection: "row",

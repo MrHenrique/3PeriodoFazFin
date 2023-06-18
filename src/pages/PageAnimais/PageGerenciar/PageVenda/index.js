@@ -56,6 +56,15 @@ function Venda({ navigation }) {
       }
     } else if (precoValido && prodValido) {
       handleAddVenda();
+      setDate(new Date());
+      let tempDate = new Date();
+      let fDate =
+        tempDate.getDate().toString().padStart(2, "0") +
+        "/" +
+        (tempDate.getMonth() + 1).toString().padStart(2, "0") +
+        "/" +
+        tempDate.getFullYear().toString().padStart(2, "0");
+      setText(fDate);
     }
   }
   const renderItem = ({ item, index }) => {
@@ -280,8 +289,9 @@ function Venda({ navigation }) {
               </View>
 
               <DateTimePickerModal
+                date={new Date()}
                 isVisible={isDatePickerVisible}
-                mode="datetime"
+                mode="date"
                 onConfirm={handleDateConfirm}
                 onCancel={hideDatePicker}
                 maximumDate={new Date()}
@@ -373,44 +383,59 @@ function Venda({ navigation }) {
                 <AntDesign name="right" size={scale(22)} color="white" />
                 <Modal
                   isVisible={isModalVisible}
-                  statusBarTranslucent
-                  backdropOpacity={0.5}
                   coverScreen={true}
+                  backdropOpacity={0.5}
                   backdropColor={"black"}
                   animationIn="slideInUp"
                   animationOut="slideOutDown"
+                  statusBarTranslucent
                 >
                   <View style={styles.modalContainer}>
-                    <Text style={styles.TituloM}>Selecione um animal</Text>
-                    <TouchableOpacity
-                      style={styles.filtroNome}
-                      onPress={handleFilterNome}
-                    >
-                      <Text style={styles.tituloBotao}>Filtrar por nome</Text>
-                    </TouchableOpacity>
-                    <TextInput
-                      style={styles.search}
-                      mode="flat"
-                      placeholder="Pesquise pelo nome."
-                      placeholderTextColor={Colors.greyColor}
-                      value={searchText}
-                      onChangeText={(t) => setSearchText(t)}
-                    ></TextInput>
-                    <FlatList
-                      style={styles.scroll}
-                      data={lista}
-                      renderItem={renderItem}
-                      keyExtractor={(item) => item._id}
-                    />
+                    <View style={styles.modalContainerSearch}>
+                      <Text style={styles.TituloM}>Selecione um animal</Text>
+                      <View style={{ flex: 1 }}>
+                        <TextInput
+                          style={styles.search}
+                          placeholder="Pesquise pelo nome."
+                          value={searchText}
+                          onChangeText={(t) => setSearchText(t)}
+                          right={
+                            <TextInput.Icon
+                              icon={"text-search"}
+                              onPress={() => {
+                                handleFilterNome;
+                              }}
+                            />
+                          }
+                        />
+                      </View>
+                    </View>
+                    <View style={styles.modalListContainer}>
+                      <FlatList
+                        style={styles.scroll}
+                        data={lista}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item._id}
+                      />
+                    </View>
+                    <View style={styles.modalVoltarContainer}>
+                      <TouchableOpacity
+                        style={styles.botaopressM}
+                        onPress={() => {
+                          toggleModal();
+                        }}
+                      >
+                        <View style={{ flex: 1, justifyContent: "center" }}>
+                          <Text style={styles.tituloBotao}>{"Voltar"}</Text>
+                        </View>
+                        <MaterialIcons
+                          name="arrow-back"
+                          size={scale(24)}
+                          color="white"
+                        />
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                  <TouchableOpacity
-                    style={styles.botaopressM}
-                    onPress={() => {
-                      toggleModal();
-                    }}
-                  >
-                    <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-                  </TouchableOpacity>
                 </Modal>
               </TouchableOpacity>
             </Animated.View>

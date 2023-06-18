@@ -11,7 +11,14 @@ import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { scale } from "react-native-size-matters";
 
 function Vacas({ navigation }) {
-  const { idVaca, rebID, machoFemea, Genero, ListaReceitasVaca, ListaDespesasVaca } = useContext(AuthContext);
+  const {
+    idVaca,
+    rebID,
+    machoFemea,
+    Genero,
+    ListaReceitasVaca,
+    ListaDespesasVaca,
+  } = useContext(AuthContext);
   const realm = useMainContext();
   const [lista, setLista] = useState([]);
   const [listaVacas, setListaVacas] = useState([]);
@@ -171,7 +178,7 @@ function Vacas({ navigation }) {
                   onPress={() => setEditMode(true)}
                 >
                   <View style={{ flex: 1, justifyContent: "center" }}>
-                    <Text style={styles.voltarfont}>{"Editar"}</Text>
+                    <Text style={styles.voltarfont}>Editar</Text>
                   </View>
                   <AntDesign name="edit" size={scale(24)} color="white" />
                 </TouchableOpacity>
@@ -181,7 +188,7 @@ function Vacas({ navigation }) {
                   onPress={() => navigation.navigate("PageAnimais")}
                 >
                   <View style={{ flex: 1, justifyContent: "center" }}>
-                    <Text style={styles.voltarfont}>{"Voltar"}</Text>
+                    <Text style={styles.voltarfont}>Voltar</Text>
                   </View>
                   <MaterialIcons
                     name="arrow-back"
@@ -306,14 +313,24 @@ function Vacas({ navigation }) {
                 style={styles.botao}
                 onPress={() => validCheck()}
               >
-                <Text style={styles.voltarfont}>{"Confirmar"}</Text>
+                <View style={{ flex: 1, justifyContent: "center" }}>
+                  <Text style={styles.voltarfont}>Confirmar</Text>
+                </View>
+                <MaterialIcons name="check" size={scale(24)} color="white" />
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.botao}
-                onPress={() => navigation.navigate("PageAnimais")}
+                onPress={() => setEditMode(false)}
               >
-                <Text style={styles.voltarfont}>{"Voltar"}</Text>
+                <View style={{ flex: 1, justifyContent: "center" }}>
+                  <Text style={styles.voltarfont}>Voltar</Text>
+                </View>
+                <MaterialIcons
+                  name="arrow-back"
+                  size={scale(24)}
+                  color="white"
+                />
               </TouchableOpacity>
             </View>
           </>

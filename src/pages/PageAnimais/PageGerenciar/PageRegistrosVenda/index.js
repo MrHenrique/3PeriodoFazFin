@@ -9,16 +9,17 @@ import {
   SafeAreaView,
 } from "react-native";
 import Modal from "react-native-modal";
-import { Chip } from "react-native-paper";
-import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
+import { Button, Chip, Divider, IconButton } from "react-native-paper";
+import { AntDesign, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import { AuthContext } from "../../../../contexts/auth";
 import { useMainContext } from "../../../../contexts/RealmContext";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { TextInput, MD3Colors, HelperText } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { scale } from "react-native-size-matters";
+import { scale, verticalScale } from "react-native-size-matters";
 import styles from "./styles";
 import { Colors } from "../../../../styles";
+import { ScrollView } from "react-native";
 
 function RegistrosVendas({ navigation }) {
   const realm = useMainContext();
@@ -56,15 +57,29 @@ function RegistrosVendas({ navigation }) {
   const [valorChipValue, setValorChipValue] = React.useState(null);
   const [textValorChipValue, setTextValorChipValue] = useState("Valores");
   const [modalFiltrosVisible, setModalFiltrosVisible] = useState(false);
+  const [contadorFiltros, setContadorFiltros] = useState(0);
   //FIM STATES FILTROS
 
   //INICIO FILTROS
   useEffect(() => {
-    setListaFiltrada(lista);
-    setLista1(lista);
-  }, [lista]);
+    let count = 0;
+
+    if (dataChipValue != null) {
+      count++;
+    }
+    if (valorChipValue != null) {
+      count++;
+    }
+
+    setContadorFiltros(count);
+  }, [dataChipValue, valorChipValue]);
 
   useEffect(() => {
+    setLista1(lista);
+  }, [listaBuscada]);
+
+  useEffect(() => {
+    setValorChipValue(null);
     setLista(
       listaBuscada.sort((a, b) => {
         return new Date(a.createdAt) - new Date(b.createdAt);
@@ -190,7 +205,7 @@ function RegistrosVendas({ navigation }) {
       setLista1(lista);
       setListaFiltrada(lista);
     }
-  }, [dataChipValue]);
+  }, [dataChipValue, lista]);
 
   // Filtro por Valores
   useEffect(() => {
@@ -395,7 +410,7 @@ function RegistrosVendas({ navigation }) {
     if (tipo == "preco") {
       const result = valorRecebido.toFixed(2);
       formattedResult = `R$ ${result.replace(".", ",")}`;
-    } else if (tipo == "prod") {
+    } else if (tipo == "peso") {
       const result = valorRecebido.toFixed(2);
       formattedResult = `${result.replace(".", ",")} @`;
     }
@@ -417,11 +432,21 @@ function RegistrosVendas({ navigation }) {
     return (
       <>
         <TouchableOpacity
-          style={styles.listaDet}
+          style={[
+            styles.listaDet,
+            shouldShowDetalhes && isItemSelected
+              ? {
+                  marginTop: verticalScale(5),
+                  borderBottomLeftRadius: 0,
+                  marginBottom: 0,
+                  borderBottomRightRadius: 0,
+                }
+              : { marginVertical: verticalScale(5) },
+          ]}
           onPress={() => handleItemPress(item._id)}
         >
           <View style={styles.itemContainer}>
-            <View style={[styles.indicador, { backgroundColor: "yellow" }]} />
+            <View style={[styles.indicador]} />
             <View style={styles.containerTextList}>
               <Text style={styles.itemText}>{formattedData}</Text>
               <Text style={styles.itemText}>{formattedResult}</Text>
@@ -430,55 +455,72 @@ function RegistrosVendas({ navigation }) {
               style={styles.editButton}
               onPress={handleEditPress(item)}
             >
-              <AntDesign name="edit" size={24} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.deleteButton}
-              onPress={handleDeletePress}
-            >
-              <AntDesign name="delete" size={24} color="black" />
+              <AntDesign name="edit" size={scale(20)} color="white" />
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
         {shouldShowDetalhes && isItemSelected && (
-          <View style={[styles.containerDetalhes]}>
+          <TouchableOpacity
+            onPress={() => handleItemPress(item._id)}
+            activeOpacity={0.9}
+            style={[
+              styles.containerDetalhes,
+              shouldShowDetalhes && isItemSelected
+                ? {
+                    marginTop: 0,
+                    borderTopLeftRadius: 0,
+                    borderTopRightRadius: 0,
+                    marginBottom: verticalScale(5),
+                  }
+                : null,
+            ]}
+          >
             <View>
               <Text style={styles.tituloDetalhes}>Detalhes</Text>
             </View>
             <View style={styles.modalContainerText}>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Data: </Text>
+                <Text style={styles.textContentTitulo}>Nome do animal: </Text>
+                <Text style={styles.textContent}>{item.nomeProd}</Text>
+              </View>
+              <View style={styles.modalContent}>
+                <Text style={styles.textContentTitulo}>Data: </Text>
                 <Text style={styles.textContent}>{formattedData}</Text>
               </View>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Horario: </Text>
+                <Text style={styles.textContentTitulo}>Horario: </Text>
                 <Text style={styles.textContent}>
                   {item.createdAt.toLocaleTimeString()}
                 </Text>
               </View>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Peso: </Text>
+                <Text style={styles.textContentTitulo}>Peso: </Text>
                 <Text style={styles.textContent}>
-                  {formatarResultado(item.prodL, "prod")}
+                  {formatarResultado(item.prodL, "peso")}
                 </Text>
               </View>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Preço por @: </Text>
+                <Text style={styles.textContentTitulo}>Preço por arroba: </Text>
                 <Text style={styles.textContent}>
                   {formatarResultado(item.precoL, "preco")}
                 </Text>
               </View>
               <View style={styles.modalContent}>
-                <Text style={styles.textContent}>Valor Total: </Text>
+                <Text style={styles.textContentTitulo}>Valor Total: </Text>
                 <Text style={styles.textContent}>
                   {formatarResultado(item.precoL * item.prodL, "preco")}
                 </Text>
               </View>
-              <Text style={styles.textContent}>
-                Descrição: {item.description}
-              </Text>
+              <View
+                style={{
+                  alignItems: "center",
+                }}
+              >
+                <Text style={styles.textContentTitulo}>Descrição:</Text>
+                <Text style={styles.textContent}>{item.description}</Text>
+              </View>
             </View>
-          </View>
+          </TouchableOpacity>
         )}
       </>
     );
@@ -488,80 +530,115 @@ function RegistrosVendas({ navigation }) {
     <View style={styles.container}>
       <View style={styles.containergeral}>
         {/*filtros*/}
-        <View style={styles.containerChip}>
-          <View style={styles.testeFiltro}>
-            <Chip
-              style={[
-                styles.chipFiltroReceita,
-                (dataChipValue || valorChipValue) && styles.chipSelected,
-              ]}
-              textStyle={{
-                fontSize: scale(14),
-                color: Colors.white,
-              }}
-              icon={() => <Icon name="filter" size={20} color="white" />}
-              onPress={() => {
-                setModalFiltrosVisible(true);
-              }}
-            >
-              <Text>Filtros</Text>
-            </Chip>
-            <Chip
-              style={[
-                styles.chipFiltroReceita,
-                handleChipPress("data") && styles.chipSelected,
-              ]}
-              textStyle={{
-                fontSize: scale(14),
-                color: Colors.white,
-              }}
-              icon={() => <Icon name="calendar" size={20} color="white" />}
-            >
-              <Text>{textDataChipValue}</Text>
-            </Chip>
-            <Chip
-              style={[
-                styles.chipFiltroReceita,
-                handleChipPress("valor") && styles.chipSelected,
-              ]}
-              textStyle={{
-                fontSize: scale(14),
-                color: Colors.white,
-              }}
-              icon={() => (
-                <FontAwesome5 name="dollar-sign" size={20} color="white" />
-              )}
-            >
-              <Text>{textValorChipValue}</Text>
-            </Chip>
-          </View>
+        <View
+          style={{
+            flexDirection: "row",
+            margin: scale(10),
+          }}
+        >
+          <Button
+            contentStyle={{ marginVertical: scale(10) }}
+            style={[
+              styles.chipFiltroReceitaFiltro,
+              (dataChipValue || valorChipValue) && styles.chipSelected,
+            ]}
+            textColor={Colors.white}
+            labelStyle={{
+              fontSize: scale(14),
+              color: Colors.white,
+            }}
+            icon={() => <Icon name="filter" size={26} color="white" />}
+            onPress={() => {
+              setModalFiltrosVisible(true);
+            }}
+          >
+            Filtros
+          </Button>
         </View>
+        <ScrollView
+          style={{
+            maxHeight: scale(40),
+            marginHorizontal: scale(10),
+          }}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          fadingEdgeLength={100}
+        >
+          <Chip
+            elevated="true"
+            style={[
+              styles.chipFiltroReceita,
+              handleChipPress("data") && styles.chipSelected,
+            ]}
+            textStyle={{
+              fontSize: scale(14),
+              color: Colors.white,
+            }}
+            icon={() => <Icon name="calendar" size={20} color="white" />}
+          >
+            <Text>{textDataChipValue}</Text>
+          </Chip>
+          <Chip
+            elevated="true"
+            style={[
+              styles.chipFiltroReceita,
+              handleChipPress("valor") && styles.chipSelected,
+            ]}
+            textStyle={{
+              fontSize: scale(14),
+              color: Colors.white,
+            }}
+            icon={() => (
+              <FontAwesome5 name="dollar-sign" size={20} color="white" />
+            )}
+          >
+            <Text>{textValorChipValue}</Text>
+          </Chip>
+        </ScrollView>
+
         <Modal
+          statusBarTranslucent
           coverScreen={true}
           backdropColor={"#000"}
+          backdropOpacity={0.5}
           onBackButtonPress={() => setModalFiltrosVisible(false)}
           onBackdropPress={() => setModalFiltrosVisible(false)}
           isVisible={modalFiltrosVisible}
-          animationType="slide"
-          statusBarTranslucent
+          animationIn="fadeInLeftBig"
+          animationInTiming={600}
+          animationOut={"fadeOutRightBig"}
+          animationOutTiming={600}
+          backdropTransitionInTiming={1000}
+          backdropTransitionOutTiming={1000}
         >
           <SafeAreaView style={styles.containerFiltro}>
             <View style={styles.modalContainerFiltro}>
               <View style={styles.topFiltros}>
                 <TouchableOpacity
+                  style={styles.BotaoLimparFiltro}
                   onPress={() => {
                     setDataChipValue(null);
                     setValorChipValue(null);
                     setListaFiltrada(listaBuscada);
                   }}
                 >
-                  <Text>Limpar</Text>
+                  {dataChipValue || valorChipValue ? (
+                    <Text style={styles.txtLimparFiltro}>
+                      Limpar ({contadorFiltros})
+                    </Text>
+                  ) : null}
                 </TouchableOpacity>
-                <Text style={styles.tituloinfo}>Filtros</Text>
+                <View style={styles.containerTituloModalFiltro}>
+                  <Text style={styles.tituloinfo}>Filtros</Text>
+                </View>
                 <TouchableOpacity onPress={() => setModalFiltrosVisible(false)}>
                   <AntDesign name="close" size={20} color={Colors.white} />
                 </TouchableOpacity>
               </View>
+              <Divider
+                bold="true"
+                style={{ backgroundColor: "white", marginVertical: scale(4) }}
+              />
               <Text style={styles.tituloinfo1}>Período</Text>
               <View style={styles.testeFiltro}>
                 <Chip
@@ -570,6 +647,10 @@ function RegistrosVendas({ navigation }) {
                     dataChipValue === 1 && styles.chipSelected,
                   ]}
                   onPress={() => handleDataChipPress(1)}
+                  textStyle={[
+                    styles.chipModalFiltro,
+                    dataChipValue === 1 && { color: "white" },
+                  ]}
                 >
                   <Text>7 dias</Text>
                 </Chip>
@@ -579,6 +660,10 @@ function RegistrosVendas({ navigation }) {
                     dataChipValue === 2 && styles.chipSelected,
                   ]}
                   onPress={() => handleDataChipPress(2)}
+                  textStyle={[
+                    styles.chipModalFiltro,
+                    dataChipValue === 2 && { color: "white" },
+                  ]}
                 >
                   <Text>Último mês</Text>
                 </Chip>
@@ -588,6 +673,10 @@ function RegistrosVendas({ navigation }) {
                     dataChipValue === 3 && styles.chipSelected,
                   ]}
                   onPress={() => handleDataChipPress(3)}
+                  textStyle={[
+                    styles.chipModalFiltro,
+                    dataChipValue === 3 && { color: "white" },
+                  ]}
                 >
                   <Text>3 meses</Text>
                 </Chip>
@@ -597,6 +686,10 @@ function RegistrosVendas({ navigation }) {
                     dataChipValue === 4 && styles.chipSelected,
                   ]}
                   onPress={() => handleDataChipPress(4)}
+                  textStyle={[
+                    styles.chipModalFiltro,
+                    dataChipValue === 4 && { color: "white" },
+                  ]}
                 >
                   <Text>6 meses</Text>
                 </Chip>
@@ -606,6 +699,10 @@ function RegistrosVendas({ navigation }) {
                     dataChipValue === 5 && styles.chipSelected,
                   ]}
                   onPress={() => handleDataChipPress(5)}
+                  textStyle={[
+                    styles.chipModalFiltro,
+                    dataChipValue === 5 && { color: "white" },
+                  ]}
                 >
                   <Text>Todas as datas</Text>
                 </Chip>
@@ -615,6 +712,10 @@ function RegistrosVendas({ navigation }) {
                     dataChipValue === 6 && styles.chipSelected,
                   ]}
                   onPress={() => handleDataChipPress(6)}
+                  textStyle={[
+                    styles.chipModalFiltro,
+                    dataChipValue === 6 && { color: "white" },
+                  ]}
                 >
                   <Text>Customizado</Text>
                 </Chip>
@@ -626,7 +727,18 @@ function RegistrosVendas({ navigation }) {
                       style={styles.botoes}
                       onPress={showStartDatePicker}
                     >
-                      <Text style={styles.textoFitro}>{textStartDate}</Text>
+                      <View
+                        style={{
+                          flex: 1,
+                        }}
+                      >
+                        <Text style={styles.textoFiltro}>{textStartDate}</Text>
+                      </View>
+                      <IconButton
+                        icon={"calendar"}
+                        size={20}
+                        color={Colors.black}
+                      />
                     </TouchableOpacity>
                     <DateTimePickerModal
                       isVisible={isStartDatePickerVisible}
@@ -640,7 +752,18 @@ function RegistrosVendas({ navigation }) {
                       style={styles.botoes}
                       onPress={showEndDatePicker}
                     >
-                      <Text style={styles.textoFitro}>{textEndDate}</Text>
+                      <View
+                        style={{
+                          flex: 1,
+                        }}
+                      >
+                        <Text style={styles.textoFiltro}>{textEndDate}</Text>
+                      </View>
+                      <IconButton
+                        icon={"calendar"}
+                        size={20}
+                        color={Colors.black}
+                      />
                     </TouchableOpacity>
                     <DateTimePickerModal
                       isVisible={isEndDatePickerVisible}
@@ -658,7 +781,7 @@ function RegistrosVendas({ navigation }) {
                         setValorChipValue(null);
                       }}
                     >
-                      <Text style={styles.textoFitro}>Filtrar</Text>
+                      <Text style={styles.textoFiltro}>Filtrar</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={styles.botoes}
@@ -671,11 +794,15 @@ function RegistrosVendas({ navigation }) {
                         setListaFiltrada(lista);
                       }}
                     >
-                      <Text style={styles.textoFitro}>Limpar</Text>
+                      <Text style={styles.textoFiltro}>Limpar</Text>
                     </TouchableOpacity>
                   </View>
                 </>
               )}
+              <Divider
+                bold="true"
+                style={{ backgroundColor: "white", marginVertical: scale(4) }}
+              />
               <Text style={styles.tituloinfo1}>Valores</Text>
               <View style={styles.testeFiltro}>
                 <Chip
@@ -684,6 +811,10 @@ function RegistrosVendas({ navigation }) {
                     valorChipValue === 1 && styles.chipSelected,
                   ]}
                   onPress={() => handleValorChipPress(1)}
+                  textStyle={[
+                    styles.chipModalFiltro,
+                    valorChipValue === 1 && { color: "white" },
+                  ]}
                 >
                   <Text>Crescente</Text>
                 </Chip>
@@ -693,6 +824,10 @@ function RegistrosVendas({ navigation }) {
                     valorChipValue === 2 && styles.chipSelected,
                   ]}
                   onPress={() => handleValorChipPress(2)}
+                  textStyle={[
+                    styles.chipModalFiltro,
+                    valorChipValue === 2 && { color: "white" },
+                  ]}
                 >
                   <Text>Decrescente</Text>
                 </Chip>
@@ -707,94 +842,111 @@ function RegistrosVendas({ navigation }) {
           renderItem={renderItem}
           keyExtractor={(item) => item._id}
         />
-        <TouchableOpacity
-          style={styles.botaopress}
-          onPress={() => navigation.navigate("Home")}
-        >
-          <Text style={styles.tituloBotao}>{"Voltar"}</Text>
-        </TouchableOpacity>
+        <View style={styles.containerButaoVendasgeral}>
+          <TouchableOpacity
+            style={styles.botao}
+            onPress={() => navigation.navigate("Home")}
+          >
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text style={styles.font}>{"Voltar"}</Text>
+            </View>
+            <MaterialIcons name="arrow-back" size={scale(24)} color="white" />
+          </TouchableOpacity>
+        </View>
         <Modal
+          statusBarTranslucent
           coverScreen={true}
           backdropColor="black"
           backdropOpacity={0.5}
-          visible={modalEditarVisible}
-          animationType="slide"
+          isVisible={modalEditarVisible}
           transparent={true}
-          statusBarTranslucent
+          onBackButtonPress={() => setModalEditarVisible(!modalEditarVisible)}
+          onBackdropPress={() => setModalEditarVisible(!modalEditarVisible)}
+          animationIn="fadeInLeftBig"
+          animationInTiming={600}
+          animationOut="fadeOutRightBig"
+          animationOutTiming={600}
+          backdropTransitionInTiming={1000}
+          backdropTransitionOutTiming={1000}
         >
           <View style={styles.modalContainer}>
-            <View style={styles.containergeralmodal}>
-              <View style={styles.containerinfos}>
-                <TouchableOpacity style={styles.teste} onPress={showDatePicker}>
-                  <Text style={styles.tituloinfo}>{text}</Text>
-                  <AntDesign name="calendar" size={30} color="white" />
-                </TouchableOpacity>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <View style={styles.containergeralmodal}>
+                <View style={styles.containerinfos}>
+                  <TouchableOpacity
+                    style={styles.btnModalEditDate}
+                    onPress={showDatePicker}
+                  >
+                    <Text style={styles.TxtModalEditDate}>{text}</Text>
+                    <AntDesign name="calendar" size={scale(26)} color="white" />
+                  </TouchableOpacity>
 
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  date={date}
-                  mode="date"
-                  onConfirm={handleDateConfirm}
-                  onCancel={hideDatePicker}
-                  maximumDate={new Date()}
-                />
-              </View>
-              <View style={styles.containerinfos}>
-                <TextInput
-                  label="Peso do Animal"
-                  style={styles.textInput}
-                  placeholderTextColor={Colors.grey}
-                  textColor={Colors.black}
-                  activeUnderlineColor={Colors.green}
-                  underlineColor={Colors.blue}
-                  underlineStyle={{ paddingBottom: 3 }}
-                  value={prodLV}
-                  onChangeText={handleVolumeProdChange}
-                  keyboardType="decimal-pad"
-                  inputMode="decimal"
-                  error={!isVolumeProdValid}
-                />
-                <HelperText
-                  type="error"
-                  style={{
-                    color: MD3Colors.error60,
-                    fontSize: 14,
-                    lineHeight: 12,
-                  }}
-                  visible={!isVolumeProdValid}
-                  padding="20"
-                >
-                  Digite o novo peso do animal.
-                </HelperText>
-              </View>
-              <View style={styles.containerinfos}>
-                <TextInput
-                  label="Observações"
-                  style={styles.textInput}
-                  placeholderTextColor={Colors.grey}
-                  textColor={Colors.black}
-                  activeUnderlineColor={Colors.green}
-                  underlineColor={Colors.blue}
-                  underlineStyle={{ paddingBottom: 3 }}
-                  value={description}
-                  onChangeText={setDescription}
-                />
-              </View>
-              <View style={styles.modalContainerBotoes}>
-                <TouchableOpacity
-                  style={styles.botaopressM}
-                  onPress={() => {
-                    validCheck();
-                  }}
-                >
-                  <Text style={styles.textovoltar}>Confirmar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.botaopressM}
-                  onPress={() => setModalEditarVisible(false)}
-                >
-                  <Text style={styles.textovoltar}>Voltar</Text>
-                </TouchableOpacity>
+                  <DateTimePickerModal
+                    isVisible={isDatePickerVisible}
+                    date={date}
+                    mode="date"
+                    onConfirm={handleDateConfirm}
+                    onCancel={hideDatePicker}
+                    maximumDate={new Date()}
+                  />
+                </View>
+                <View style={styles.containerinfos}>
+                  <TextInput
+                    label="Peso do Animal"
+                    style={styles.textInput}
+                    placeholderTextColor={Colors.grey}
+                    textColor={Colors.black}
+                    activeUnderlineColor={Colors.green}
+                    underlineColor={Colors.blue}
+                    underlineStyle={{ paddingBottom: 3 }}
+                    value={prodLV}
+                    onChangeText={handleVolumeProdChange}
+                    keyboardType="decimal-pad"
+                    inputMode="decimal"
+                    error={!isVolumeProdValid}
+                  />
+                  <HelperText
+                    type="error"
+                    style={{
+                      color: MD3Colors.error60,
+                      fontSize: 14,
+                      lineHeight: 12,
+                    }}
+                    visible={!isVolumeProdValid}
+                    padding="20"
+                  >
+                    Digite o novo peso do animal.
+                  </HelperText>
+                </View>
+                <View style={styles.containerinfos}>
+                  <TextInput
+                    label="Observações"
+                    style={styles.textInput}
+                    placeholderTextColor={Colors.grey}
+                    textColor={Colors.black}
+                    activeUnderlineColor={Colors.green}
+                    underlineColor={Colors.blue}
+                    underlineStyle={{ paddingBottom: 3 }}
+                    value={description}
+                    onChangeText={setDescription}
+                  />
+                </View>
+                <View style={styles.modalContainerBotoes}>
+                  <TouchableOpacity
+                    style={styles.botaopressM}
+                    onPress={() => {
+                      validCheck();
+                    }}
+                  >
+                    <Text style={styles.textovoltar}>Confirmar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.botaopressM}
+                    onPress={() => setModalEditarVisible(false)}
+                  >
+                    <Text style={styles.textovoltar}>Voltar</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>

@@ -5,6 +5,7 @@ import { scale, verticalScale } from "react-native-size-matters";
 const styles = StyleSheet.create({
   chipModalFiltro: {
     ...Fonts.txtSmall,
+    color: Colors.black,
   },
   containerTituloModalFiltro: {
     flex: 1,
