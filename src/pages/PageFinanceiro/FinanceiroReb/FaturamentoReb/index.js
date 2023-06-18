@@ -45,9 +45,26 @@ function FaturamentoReb({ navigation }) {
   const [valorChipValue, setValorChipValue] = React.useState(null);
   const [textValorChipValue, setTextValorChipValue] = useState("Valores");
   const [modalFiltrosVisible, setModalFiltrosVisible] = useState(false);
+  const [contadorFiltros, setContadorFiltros] = useState(0);
   //FIM STATES FILTROS
 
   //INICIO FILTROS
+  useEffect(() => {
+    let count = 0;
+
+    if (tipoChipValue != null) {
+      count++;
+    }
+    if (dataChipValue != null) {
+      count++;
+    }
+    if (valorChipValue != null) {
+      count++;
+    }
+
+    setContadorFiltros(count);
+  }, [tipoChipValue, dataChipValue, valorChipValue]);
+
   useEffect(() => {
     setListaFiltrada(lista);
     setLista1(lista);
@@ -576,6 +593,7 @@ function FaturamentoReb({ navigation }) {
                       <View style={styles.modalContainerFiltro}>
                         <View style={styles.topFiltros}>
                           <TouchableOpacity
+                            style={styles.BotaoLimparFiltro}
                             onPress={() => {
                               setTipoChipValue(null);
                               setDataChipValue(null);
@@ -583,7 +601,13 @@ function FaturamentoReb({ navigation }) {
                               setListaFiltrada(listaLeiteReb);
                             }}
                           >
-                            <Text style={styles.txtLimparFiltro}>Limpar</Text>
+                            {tipoChipValue ||
+                            dataChipValue ||
+                            valorChipValue ? (
+                              <Text style={styles.txtLimparFiltro}>
+                                Limpar ({contadorFiltros})
+                              </Text>
+                            ) : null}
                           </TouchableOpacity>
                           <View style={styles.containerTituloModalFiltro}>
                             <Text style={styles.tituloinfo}>Filtros</Text>

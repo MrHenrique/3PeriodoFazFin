@@ -57,9 +57,23 @@ function RegistrosVendas({ navigation }) {
   const [valorChipValue, setValorChipValue] = React.useState(null);
   const [textValorChipValue, setTextValorChipValue] = useState("Valores");
   const [modalFiltrosVisible, setModalFiltrosVisible] = useState(false);
+  const [contadorFiltros, setContadorFiltros] = useState(0);
   //FIM STATES FILTROS
 
   //INICIO FILTROS
+  useEffect(() => {
+    let count = 0;
+
+    if (dataChipValue != null) {
+      count++;
+    }
+    if (valorChipValue != null) {
+      count++;
+    }
+
+    setContadorFiltros(count);
+  }, [dataChipValue, valorChipValue]);
+
   useEffect(() => {
     setListaFiltrada(lista);
     setLista1(lista);
@@ -579,7 +593,11 @@ function RegistrosVendas({ navigation }) {
                     setListaFiltrada(listaBuscada);
                   }}
                 >
-                  <Text style={styles.txtLimparFiltro}>Limpar</Text>
+                  {dataChipValue || valorChipValue ? (
+                    <Text style={styles.txtLimparFiltro}>
+                      Limpar ({contadorFiltros})
+                    </Text>
+                  ) : null}
                 </TouchableOpacity>
                 <View style={styles.containerTituloModalFiltro}>
                   <Text style={styles.tituloinfo}>Filtros</Text>

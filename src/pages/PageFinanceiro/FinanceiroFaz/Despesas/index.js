@@ -48,9 +48,26 @@ function Despesas({ navigation }) {
   const [textValorChipValue, setTextValorChipValue] = useState("Valores");
   const [modalFiltrosVisible, setModalFiltrosVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [contadorFiltros, setContadorFiltros] = useState(0);
   //FIM STATES FILTROS
 
   //INICIO FILTROS
+  useEffect(() => {
+    let count = 0;
+
+    if (tipoChipValue != null) {
+      count++;
+    }
+    if (dataChipValue != null) {
+      count++;
+    }
+    if (valorChipValue != null) {
+      count++;
+    }
+
+    setContadorFiltros(count);
+  }, [tipoChipValue, dataChipValue, valorChipValue]);
+
   useEffect(() => {
     if (searchText === "") {
       setListaFiltrada(lista);
@@ -642,7 +659,11 @@ function Despesas({ navigation }) {
                             setListaFiltrada(listaAli);
                           }}
                         >
-                          <Text style={styles.txtLimparFiltro}>Limpar</Text>
+                          {tipoChipValue || dataChipValue || valorChipValue ? (
+                            <Text style={styles.txtLimparFiltro}>
+                              Limpar ({contadorFiltros})
+                            </Text>
+                          ) : null}
                         </TouchableOpacity>
                         <View style={styles.topFiltros}>
                           <View style={styles.containerTituloModalFiltro}>
