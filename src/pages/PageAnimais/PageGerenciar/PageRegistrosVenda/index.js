@@ -75,11 +75,11 @@ function RegistrosVendas({ navigation }) {
   }, [dataChipValue, valorChipValue]);
 
   useEffect(() => {
-    setListaFiltrada(lista);
     setLista1(lista);
-  }, [lista]);
+  }, [listaBuscada]);
 
   useEffect(() => {
+    setValorChipValue(null);
     setLista(
       listaBuscada.sort((a, b) => {
         return new Date(a.createdAt) - new Date(b.createdAt);
@@ -205,7 +205,7 @@ function RegistrosVendas({ navigation }) {
       setLista1(lista);
       setListaFiltrada(lista);
     }
-  }, [dataChipValue]);
+  }, [dataChipValue, lista]);
 
   // Filtro por Valores
   useEffect(() => {
