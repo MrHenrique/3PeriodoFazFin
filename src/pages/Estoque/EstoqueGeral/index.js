@@ -188,15 +188,28 @@ function EstoqueGeral({ navigation }) {
           <th>${item.pesoProd > 0 ? "Alimentos" : "Remédios"}</th>
           <th>
             ${
-              item.pesoProd > 0 ? item.pesoProd.toFixed(2) + " KG" : item.volumeProd.toFixed(2) + " L"
+              item.pesoProd || item.volumeProd
+                ? item.pesoProd > 0
+                  ? item.pesoProd.toFixed(2) + " KG"
+                  : item.volumeProd.toFixed(2) + " L"
+                : 0
             }
           </th>
-          <th>${"R$ " + item.valorProd.toFixed(2)}</th>
+          <th>${
+            "R$ " +
+            (item.valorProd && typeof item.valorProd === "number"
+              ? item.valorProd.toFixed(2)
+              : "0,00")
+          }</th>
           <th>
             ${
-              item.pesoProd > 0
-                ? "R$ " + (item.valorProd / item.pesoProd).toFixed(2)
-                : "R$ " + (item.valorProd / item.volumeProd).toFixed(2)
+              (item.pesoProd || item.volumeProd) &&
+              item.valorProd &&
+              typeof item.valorProd === "number"
+                ? item.pesoProd > 0
+                  ? "R$ " + (item.valorProd / item.pesoProd).toFixed(2)
+                  : "R$ " + (item.valorProd / item.volumeProd).toFixed(2)
+                : "R$0,00"
             }
           </th>
           <th>${item.obserProd}</th>
