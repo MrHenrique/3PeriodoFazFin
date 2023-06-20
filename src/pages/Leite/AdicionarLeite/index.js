@@ -217,6 +217,7 @@ function AdicionarLeite({ navigation }) {
 
   // Códido para pegar a data ....
   const [date, setDate] = useState(new Date());
+  const [dateTemp, setDateTemp] = useState(new Date());
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [text, setText] = useState(
     new Date().getDate().toString().padStart(2, "0") +
@@ -225,6 +226,10 @@ function AdicionarLeite({ navigation }) {
       "/" +
       new Date().getFullYear().toString().padStart(2, "0")
   );
+
+  useEffect(() => {
+    setDate(dateTemp);
+  }, [dateTemp]);
 
   const showDatePicker = () => {
     setIsDatePickerVisible(true);
@@ -241,7 +246,7 @@ function AdicionarLeite({ navigation }) {
       "/" +
       tempDate.getFullYear().toString().padStart(2, "0");
     setText(fDate);
-    setDate(selectedDate);
+    setDateTemp(selectedDate);
     hideDatePicker();
   };
   //Fim do código da data .....
@@ -350,7 +355,7 @@ function AdicionarLeite({ navigation }) {
               </View>
 
               <DateTimePickerModal
-                date={new Date()}
+                date={date}
                 isVisible={isDatePickerVisible}
                 mode="date"
                 onConfirm={handleDateConfirm}
