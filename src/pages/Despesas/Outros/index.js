@@ -87,8 +87,8 @@ export default function Outros({ navigation }) {
   useEffect(() => {
     if (realm) {
       let dataVaca = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-      setListaVaca(dataVaca.vacas.sorted("nomeVaca"));
-      dataVaca.vacas.sorted("nomeVaca").addListener((values) => {
+      setListaVaca(dataVaca.vacas);
+      dataVaca.vacas.addListener((values) => {
         setListaVaca([...values]);
       });
     }
@@ -411,6 +411,8 @@ export default function Outros({ navigation }) {
                           <FlatList
                             style={styles.scroll}
                             data={lista}
+                            maxToRenderPerBatch={14}
+                            initialNumToRender={14}
                             renderItem={renderItem}
                             keyExtractor={(item) => item._id}
                           />

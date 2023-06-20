@@ -199,9 +199,9 @@ function AdicionarLeite({ navigation }) {
   useEffect(() => {
     if (realm) {
       let dataVaca = realm.objectForPrimaryKey("RebanhoSchema", rebID);
-      setListaVaca(dataVaca.vacas.filtered("genero == 1").sorted("nomeVaca"));
+      setListaVaca(dataVaca.vacas.filtered("genero == 1"));
       dataVaca.vacas.addListener((values) => {
-        setListaVaca([...values.filtered("genero == 1").sorted("nomeVaca")]);
+        setListaVaca([...values.filtered("genero == 1")]);
       });
     }
   }, [realm]);
@@ -500,6 +500,8 @@ function AdicionarLeite({ navigation }) {
                           <FlatList
                             style={styles.scroll}
                             data={lista}
+                            maxToRenderPerBatch={14}
+                            initialNumToRender={14}
                             renderItem={renderItem}
                             keyExtractor={(item) => item._id}
                           />
